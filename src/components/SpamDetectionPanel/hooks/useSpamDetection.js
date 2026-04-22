@@ -7,7 +7,7 @@ import logger from '../../../utils/logger';
 
 const DEFAULT_STATS = {
     totalDetected: 0,
-    togünDetected: 0,
+    todayDetected: 0,
     actionsTaken: { warn: 0, mute: 0, kick: 0, ban: 0 },
     topOffenders: [],
     recentDetections: [],

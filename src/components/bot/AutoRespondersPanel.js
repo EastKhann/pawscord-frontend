@@ -33,7 +33,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
                         <FaRobot className="icon-primary-mr10" />
                         <h2 style={styles.title}>{t('autoResponder.title')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -164,7 +164,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
                                             )}
                                         </button>
                                         <button
-                                            aria-label="Sil"
+                                            aria-label={t('autoResponder.delete', 'Delete auto-responder')}
                                             onClick={() => deleteResponder(resp.id)}
                                             style={styles.deleteButton}
                                             title="Sil"

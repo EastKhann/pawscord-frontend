@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
 
 // -- extracted inline style constants --
@@ -26,19 +27,20 @@ const _st10 = { color: '#b5bac1', fontSize: '12px' };
 const _st11 = { color: '#dbdee1', margin: 0, fontSize: '14px' };
 
 const BookmarksTab = ({ bookmarks: rawBM }) => {
+    const { t } = useTranslation();
     const bookmarks = rawBM || [];
     const styles = profileStyles;
     const [error, setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (
-        <div aria-label="bookmarks tab" style={styles.card}>
+        <div aria-label={t('aria.bookmarksTab', 'Bookmarks')} style={styles.card}>
             <h3 style={styles.sectionTitle}>🔖 Bookmarks</h3>
 
             {bookmarks.length === 0 ? (
                 <div style={_st1}>
                     <div style={_st2}>🔖</div>
-                    <h4 style={_st3}>Henüz yer imi yok</h4>
+                    <h4 style={_st3}>{t('bookmarksTab.noBookmarks', 'No bookmarks yet')}</h4>
                     <p style={_st4}>Bookmark messages to add them here</p>
                 </div>
             ) : (

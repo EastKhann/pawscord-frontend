@@ -1,6 +1,7 @@
 ﻿// frontend/src/VoiceUserList/ConnectionQualityIndicator.js
 import React from 'react';
 import PropTypes from 'prop-types';
+import i18n from '../i18n';
 
 /**
  * 🔥 Bağlantı Kalitesi Göstergesi — sinyal çubukları (1-4 bar)
@@ -31,7 +32,7 @@ const ConnectionQualityIndicator = ({ quality, rtt, packetLossRate, qualityScore
     const tooltip = [
         config.label,
         rtt != null ? `RTT: ${Math.round(rtt)}ms` : null,
-        packetLossRate != null ? `Kayıp: ${packetLossRate.toFixed(1)}%` : null,
+        packetLossRate != null ? `Loss: ${packetLossRate.toFixed(1)}%` : null,
         qualityScore != null ? `Skor: ${qualityScore}/100` : null,
     ]
         .filter(Boolean)
@@ -39,7 +40,7 @@ const ConnectionQualityIndicator = ({ quality, rtt, packetLossRate, qualityScore
 
     return (
         <div
-            aria-label="connection quality indicator"
+            aria-label={i18n.t('aria.connectionQuality', { defaultValue: 'Connection Quality' })}
             title={tooltip}
             style={{
                 display: 'inline-flex',

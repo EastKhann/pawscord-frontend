@@ -129,7 +129,7 @@ const MessageSearch = ({ messages, onResultClick, onClose }) => {
                     />
                     {searchQuery && (
                         <button
-                            aria-label="Close"
+                            aria-label={t('search.clearQuery', 'Clear search')}
                             onClick={() => setSearchQuery('')}
                             style={styles.clearButton}
                         >
@@ -138,13 +138,13 @@ const MessageSearch = ({ messages, onResultClick, onClose }) => {
                     )}
                 </div>
                 <button
-                    aria-label="Filter"
+                    aria-label={showFilters ? t('search.hideFilters', 'Hide filters') : t('search.showFilters', 'Show filters')}
                     onClick={() => setShowFilters(!showFilters)}
                     style={filterButtonStyle}
                 >
                     <FaFilter />
                 </button>
-                <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                     <FaTimes />
                 </button>
             </div>
@@ -179,10 +179,10 @@ const MessageSearch = ({ messages, onResultClick, onClose }) => {
                                         {type === 'file'
                                             ? t('search.file')
                                             : type === 'image'
-                                              ? t('search.image')
-                                              : type === 'video'
-                                                ? t('search.video')
-                                                : t('search.link')}
+                                                ? t('search.image')
+                                                : type === 'video'
+                                                    ? t('search.video')
+                                                    : t('search.link')}
                                     </span>
                                 </label>
                             ))}

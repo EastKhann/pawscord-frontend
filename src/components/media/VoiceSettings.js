@@ -7,12 +7,14 @@ import { FaMicrophone, FaTimes, FaHeadphones, FaVolumeUp, FaVideo, FaCog, FaExcl
 import { getApiBase } from '../../utils/apiEndpoints';
 import confirmDialog from '../../utils/confirmDialog';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 
 // -- extracted inline style constants --
 
 
 const VoiceSettings = ({ userId, onClose }) => {
+    const { t } = useTranslation();
     const [devices, setDevices] = useState({ input: [], output: [], video: [] });
     const [selectedInput, setSelectedInput] = useState('');
     const [selectedOutput, setSelectedOutput] = useState('');
@@ -158,7 +160,7 @@ const VoiceSettings = ({ userId, onClose }) => {
     }, []);
 
     const resetToDefaults = async () => {
-        if (!await confirmDialog('Tüm ses ayarlarını varsayılana sıfırlamak istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog(t('voice.resetConfirm', 'Reset all audio settings to defaults?'))) return;
 
         try {
             const data = await fetchWithAuth(`${getApiBase()}/voice/${userId}/reset/`, {
@@ -191,7 +193,7 @@ const VoiceSettings = ({ userId, onClose }) => {
             <div className="voice-settings-overlay">
                 <div className="voice-settings-panel loading">
                     <div className="spinner" />
-                    <p>Ses Ayarları yükleniyor...</p>
+                    <p>{t('voice.loading', 'Loading Voice Settings...')}</p>
                 </div>
             </div>
         );
@@ -202,7 +204,7 @@ const VoiceSettings = ({ userId, onClose }) => {
             <div className="voice-settings-panel">
                 <div className="panel-header">
                     <h2><FaMicrophone /> Voice & Video Settings</h2>
-                    <button aria-label="Close" onClick={onClose} className="btn-close">
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} className="btn-close">
                         <FaTimes />
                     </button>
                 </div>
@@ -238,7 +240,7 @@ const VoiceSettings = ({ userId, onClose }) => {
 
                     <div className="mic-test">
                         <button
-                            aria-label="testing stop Testing test Microphone"
+                            aria-label={testing ? t('voiceSettings.stopMicTest', 'Stop microphone test') : t('voiceSettings.testMic', 'Test microphone')}
                             onClick={testing ? stopTesting : testMicrophone}
                             className={`btn-test ${testing ? 'active' : ''}`}>
                             {testing ? 'Testi Durdur' : 'Mikrofonu Test Et'}
@@ -305,7 +307,7 @@ const VoiceSettings = ({ userId, onClose }) => {
             </div>
 
             <div className="form-group">
-                <label>Kare Hızı</label>
+                <label>{t('voice.frameRate', 'Frame Rate')}</label>
                 <select value={frameRate} onChange={(e) => setFrameRate(Number(e.target.value))}
                                     <option value={15}>15 FPS</option>
                 <option value={30}>30 FPS</option>
@@ -322,8 +324,8 @@ const VoiceSettings = ({ userId, onClose }) => {
                         <div className="toggle-group">
                             <div className="toggle-item">
                                 <div>
-                                    <h4>Gürültü Bastırma</h4>
-                                    <p>Arka plan gürültüsünü azalt</p>
+                                    <h4>{t('voice.noiseSuppTitle', 'Noise Suppression')}</h4>
+                                    <p>{t('voice.noiseSuppDesc', 'Reduce background noise')}</p>
                                 </div>
                                 <label className="toggle">
                                     <input
@@ -338,7 +340,7 @@ const VoiceSettings = ({ userId, onClose }) => {
                             {/* 🔥 YENİ: Gürültü Blockme Seviyesi */}
                             {noiseSupression && (
                                 <div className="form-group">
-                                    <label>Gürültü Bastırma Seviyesi</label>
+                                    <label>{t('voice.noiseBlockLevel', 'Noise Suppression Level')}</label>
                                     <select
                                         value={localStorage.getItem('pawscord_noise_level') || 'medium'}
                                         onChange={(e) => {
@@ -349,10 +351,10 @@ const VoiceSettings = ({ userId, onClose }) => {
                                             vs.audio.noiseSuppressionLevel = e.target.value;
                                             localStorage.setItem('voice_settings', JSON.stringify(vs));
                                         }}>
-                                        <option value="low">Düşük (En İyi Ses Kalitesi)</option>
+                                        <option value="low">{t('voice.noiseLow', 'Low (Best Audio Quality)')}</option>
                                         <option value="medium">Orta (Dengeli)</option>
-                                        <option value="high">Yüksek (Daha Fazla Gürültü Azaltma)</option>
-                                        <option value="aggressive">Agresif (Maksimum Gürültü Azaltma)</option>
+                                        <option value="high">{t('voice.noiseHigh', 'High (More Noise Reduction)')}</option>
+                                        <option value="aggressive">{t('voice.noiseAggressive', 'Aggressive (Maximum Noise Reduction)')}</option>
                                     </select>
                                     <small>
                                         💡 If you hear crackling, try "Low" or "Medium"
@@ -362,8 +364,8 @@ const VoiceSettings = ({ userId, onClose }) => {
 
                             <div className="toggle-item">
                                 <div>
-                                    <h4>Yankı Engelleme</h4>
-                                    <p>Ses geri beslemesini önle</p>
+                                    <h4>{t('voice.echoCancelTitle', '🔇 Echo Cancellation')}</h4>
+                                    <p>{t('voice.echoCancelDesc', 'Prevent audio feedback')}</p>
                                 </div>
                                 <label className="toggle">
                                     <input
@@ -377,7 +379,7 @@ const VoiceSettings = ({ userId, onClose }) => {
 
                             <div className="toggle-item">
                                 <div>
-                                    <h4>Otomatik Ses Seviyesi Kontrolü</h4>
+                                    <h4>{t('voice.autoGainTitle', '📊 Auto Gain Control')}</h4>
                                     <p>Ses seviyesini otomatik olarak ayarla</p>
                                 </div>
                                 <label className="toggle">
@@ -398,8 +400,8 @@ const VoiceSettings = ({ userId, onClose }) => {
         <div className="warning-box">
             <FaExclamationTriangle />
             <div>
-                <h4>Mikrofon Algılanamadı</h4>
-                <p>Ses özelliklerini kullanmak için bir mikrofon bağlayın</p>
+                <h4>{t('voice.noMicTitle', '🎤 Microphone Not Found')}</h4>
+                <p>{t('voice.noMicDesc', 'Connect a microphone to use audio features')}</p>
             </div>
         </div>
     )
@@ -408,12 +410,12 @@ const VoiceSettings = ({ userId, onClose }) => {
 
     <div className="settings-actions">
         <button
-            aria-label="reset To Defaults" onClick={resetToDefaults} className="btn-reset">
-            Varsayılana Sıfırla
+            aria-label={t('voiceSettings.resetDefaults', 'Reset to defaults')} onClick={resetToDefaults} className="btn-reset">
+            {t('voice.resetToDefault', 'Reset to Default')}
         </button>
         <button
-            aria-label="update Settings" onClick={updateSettings} className="btn-save">
-            Ayarları Kaydet
+            aria-label={t('voiceSettings.saveSettings', 'Save settings')} onClick={updateSettings} className="btn-save">
+            {t('voice.saveSettings', 'Save Settings')}
         </button>
     </div>
             </div >

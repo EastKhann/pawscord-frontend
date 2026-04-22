@@ -466,7 +466,7 @@ const MessageInput = ({
             )}
 
             {replyingTo && (
-                <div style={styles.replyPreview} role="status" aria-label="Replynan message">
+                <div style={styles.replyPreview} role="status" aria-label={t('msgInput.replyingTo', 'Replying to message')}>
                     <div style={styles.replyContent}>
                         <strong>@{replyingTo.author}</strong>
                         <span>{replyingTo.content?.substring(0, 50)}...</span>
@@ -474,7 +474,7 @@ const MessageInput = ({
                     <button
                         onClick={onCancelReply}
                         style={styles.cancelButton}
-                        aria-label="Cancel reply"
+                        aria-label={t('msgInput.cancelReply', 'Cancel reply')}
                     >
                         <FaTimes />
                     </button>
@@ -485,14 +485,14 @@ const MessageInput = ({
                 <div
                     style={styles.editPreview}
                     role="status"
-                    aria-label="Editing message"
+                    aria-label={t('msgInput.editingMessage', 'Editing message')}
                     id="edit-hint"
                 >
                     <span>📝 {t('chat.editingMessage', 'Mesaj düzenleniyor')}</span>
                     <button
                         onClick={onCancelEdit}
                         style={styles.cancelButton}
-                        aria-label="Cancel edit"
+                        aria-label={t('msgInput.cancelEdit', 'Cancel edit')}
                     >
                         <FaTimes />
                     </button>
@@ -536,8 +536,8 @@ const MessageInput = ({
                             setUrlPreview(null);
                         }}
                         style={S.bg}
-                        title="Önizlemeyi kapat"
-                        aria-label="URL önizlemesini kapat"
+                        title={t('common.close', 'Close')}
+                        aria-label={t('common.close', 'Close')}
                     >
                         ×
                     </button>
@@ -592,8 +592,8 @@ const MessageInput = ({
                         editingMessage
                             ? 'Mesaj edit'
                             : replyingTo
-                              ? `${replyingTo.author} kullanıcısına yanıt yaz`
-                              : placeholder
+                                ? `${t('msgInput.replyingTo', 'Reply to')} ${replyingTo.author}`
+                                : placeholder
                     }
                     aria-multiline="true"
                     aria-describedby={editingMessage ? 'edit-hint' : undefined}

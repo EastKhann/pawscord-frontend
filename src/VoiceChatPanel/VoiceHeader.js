@@ -1,7 +1,7 @@
 // frontend/src/VoiceChatPanel/VoiceHeader.js
 // 🎨 Voice chat header bar with status badges and network quality
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { StatusBadges } from './StatusBadges';
@@ -97,8 +97,6 @@ const VoiceHeader = React.memo(
         networkType,
     }) => {
         const { t } = useTranslation();
-        const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
         return (
             <div style={_st1}>
                 <div style={_st2} />

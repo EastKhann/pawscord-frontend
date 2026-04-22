@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 const BotListView = ({ bots, onSelect, onCreateView, formatNumber }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="bot list view" className="bots-list">
+        <div aria-label={t('botDeveloper.listView', 'Bot list')} className="bots-list">
             {bots.length > 0 ? (
                 <div className="bots-grid">
                     {bots.map((bot) => (

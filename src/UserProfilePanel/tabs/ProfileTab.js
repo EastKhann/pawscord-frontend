@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import { ABSOLUTE_HOST_URL } from '../../utils/constants';
 
@@ -44,6 +45,7 @@ const ProfileTab = ({
 
     setPhoneNumber,
 }) => {
+    const { t } = useTranslation();
     const styles = profileStyles;
 
     const isLoading = loading ? Object.values(loading).some(Boolean) : false;
@@ -56,7 +58,7 @@ const ProfileTab = ({
                 <div className="profile-card-header">
                     <div className="profile-card-title">
                         <span className="profile-card-icon">👤</span>
-                        Profil Bilgileri
+                        {t('profile.profileInfo')}
                     </div>
                 </div>
 
@@ -65,11 +67,11 @@ const ProfileTab = ({
                         src={
                             formData.avatar_url && typeof formData.avatar_url === 'string'
                                 ? (formData.avatar_url.startsWith('http')
-                                      ? formData.avatar_url
-                                      : `${BASE_URL}${formData.avatar_url}`) + `?t=${Date.now()}`
+                                    ? formData.avatar_url
+                                    : `${BASE_URL}${formData.avatar_url}`) + `?t=${Date.now()}`
                                 : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect fill="%235865f2" width="100" height="100"/%3E%3Ctext x="50" y="50" font-size="45" text-anchor="middle" dy=".35em" fill="white" font-family="Arial"%3E👤%3C/text%3E%3C/svg%3E'
                         }
-                        alt="Avatar"
+                        alt={t('alt.userAvatar', 'User Avatar')}
                         style={styles.avatar}
                         key={formData.avatar_url}
                         onError={(e) => {
@@ -92,11 +94,11 @@ const ProfileTab = ({
                         <div>
                             <button
                                 style={styles.button('secondary')}
-                                aria-label="action-button"
+                                aria-label={t('profile.changeAvatar')}
                                 onClick={() => fileInputRef.current?.click()}
                                 disabled={loading.avatar}
                             >
-                                {loading.avatar ? ' Yükleniyor...' : '📷 Avatar Değiştir'}
+                                {loading.avatar ? t('profile.uploading') : `📷 ${t('profile.changeAvatar')}`}
                             </button>
 
                             <input
@@ -106,14 +108,14 @@ const ProfileTab = ({
                                 onChange={handleAvatarUpload}
                             />
 
-                            <p>Max 5MB • PNG, JPG, GIF</p>
+                            <p>{t('profile.maxFileSize')}</p>
                         </div>
                     )}
                 </div>
 
                 <div style={styles.inputGroup}>
                     <label htmlFor="profile-username" style={styles.label}>
-                        Username
+                        {t('profile.username')}
                     </label>
 
                     <input
@@ -124,13 +126,13 @@ const ProfileTab = ({
                         onChange={handleInputChange}
                         style={styles.input}
                         disabled={!isOwnProfile}
-                        aria-label="Username"
+                        aria-label={t('common.username', 'Username')}
                     />
                 </div>
 
                 <div style={styles.inputGroup}>
                     <label htmlFor="profile-email" style={styles.label}>
-                        Email
+                        {t('common.email')}
                     </label>
 
                     <div>
@@ -139,17 +141,17 @@ const ProfileTab = ({
                             id="profile-email"
                             value={formData.email}
                             disabled
-                            aria-label="Email"
+                            aria-label={t('common.email', 'Email')}
                         />
 
                         {isOwnProfile && !emailVerified && (
                             <button
                                 style={styles.button('secondary')}
-                                aria-label="resendVerificationEmail"
+                                aria-label={t('profile.resendEmail', 'Resend verification email')}
                                 onClick={resendVerificationEmail}
                                 disabled={loading.resendEmail}
                             >
-                                {loading.resendEmail ? '' : '✉ Verify'}
+                                {loading.resendEmail ? '' : `✉ ${t('profile.verify')}`}
                             </button>
                         )}
 
@@ -159,7 +161,7 @@ const ProfileTab = ({
 
                 <div style={styles.inputGroup}>
                     <label htmlFor="profile-status" style={styles.label}>
-                        Durum Mesajı
+                        {t('profile.statusMessage')}
                     </label>
 
                     <input
@@ -168,16 +170,16 @@ const ProfileTab = ({
                         name="status_message"
                         value={formData.status_message}
                         onChange={handleInputChange}
-                        placeholder="How are you today?"
+                        placeholder={t('profile.statusPlaceholder')}
                         style={styles.input}
                         disabled={!isOwnProfile}
-                        aria-label="Status Message"
+                        aria-label={t('profile.statusMessage', 'Status Message')}
                     />
                 </div>
 
                 <div style={styles.inputGroup}>
                     <label htmlFor="profile-phone" style={styles.label}>
-                        📱 Phone Number
+                        📱 {t('profile.phoneNumber')}
                     </label>
 
                     <div>
@@ -186,13 +188,13 @@ const ProfileTab = ({
                             id="profile-phone"
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
-                            placeholder="+90 555 123 4567"
-                            aria-label="Phone Number"
+                            placeholder={t('profile.phonePlaceholder', '+90 555 123 4567')}
+                            aria-label={t('profile.phoneNumber', 'Phone Number')}
                         />
 
                         <button
                             style={styles.button('secondary')}
-                            aria-label="handlePhoneUpdate"
+                            aria-label={t('profile.updatePhone', 'Update phone number')}
                             onClick={handlePhoneUpdate}
                             disabled={loading.phoneUpdate}
                         >
@@ -206,11 +208,11 @@ const ProfileTab = ({
                 {isOwnProfile && (
                     <button
                         style={styles.button('primary')}
-                        aria-label="handleSaveProfile"
+                        aria-label={t('profile.save', 'Save profile')}
                         onClick={handleSaveProfile}
                         disabled={loading.saveProfile}
                     >
-                        {loading.saveProfile ? ' Kaydediliyor...' : '💾 Kaydet'}
+                        {loading.saveProfile ? t('profile.saving') : `💾 ${t('profile.save')}`}
                     </button>
                 )}
             </div>
@@ -219,7 +221,7 @@ const ProfileTab = ({
 
             {isOwnProfile && (
                 <div style={styles.card}>
-                    <h3 style={styles.sectionTitle}>🎭 Default Avatars</h3>
+                    <h3 style={styles.sectionTitle}>🎭 {t('profile.defaultAvatars')}</h3>
 
                     <div>
                         {defaultAvatars.map((avatar, idx) => {
@@ -288,70 +290,68 @@ const ProfileTab = ({
             )}
 
             <div style={styles.card}>
-                <h3 style={styles.sectionTitle}> Social Connections</h3>
+                <h3 style={styles.sectionTitle}>{t('profile.socialConnections')}</h3>
 
                 {/*  OAuth with Connect Butonu */}
 
                 <div>
                     <div>
-                        <h4>🎮 Connect Your Accounts</h4>
+                        <h4>🎮 {t('profile.connectAccounts')}</h4>
 
-                        <p>Spotify, Steam, Epic Games, Twitch, Xbox and more</p>
+                        <p>{t('profile.connectDesc')}</p>
                     </div>
 
                     <button
-                        aria-label="action-button"
+                        aria-label={t('profile.manageConnections', 'Manage connections')}
                         onClick={() => {
-                            // ConnectionsPanel'i openmak for global event gÃnder
-
                             window.dispatchEvent(new CustomEvent('openConnectionsPanel'));
                         }}
                         onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
                         onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
                     >
-                        Manage Connections
+                        {t('profile.manageConnections')}
                     </button>
                 </div>
 
                 <div style={styles.inputGroup}>
-                    <label style={styles.label}>🎮 Steam ID</label>
+                    <label style={styles.label}>🎮 {t('profile.steamId')}</label>
 
                     <input
                         type="text"
                         name="steam_id"
                         value={formData.steam_id}
                         onChange={handleInputChange}
-                        placeholder="76561198012345678"
+                        placeholder={t('profile.steamIdPlaceholder', '76561198012345678')}
                         style={styles.input}
-                        aria-label="Steam Id"
+                        aria-label={t('profile.steamId', 'Steam ID')}
                     />
                 </div>
 
                 <div style={styles.inputGroup}>
-                    <label style={styles.label}>🎵 Spotify Username</label>
+                    <label style={styles.label}>🎵 {t('profile.spotifyUsername', 'Spotify Username')}</label>
 
                     <input
                         type="text"
                         name="spotify_username"
                         value={formData.spotify_username}
                         onChange={handleInputChange}
-                        placeholder="spotify_username"
+                        placeholder={t('profile.spotifyPlaceholder', 'spotify_username')}
                         style={styles.input}
-                        aria-label="Spotify Username"
+                        aria-label={t('profile.spotifyUsername', 'Spotify Username')}
                     />
                 </div>
 
                 <div style={styles.inputGroup}>
-                    <label style={styles.label}>📸 Instagram</label>
+                    <label style={styles.label}>📸 {t('profile.instagram', 'Instagram')}</label>
 
                     <input
                         type="text"
                         name="instagram_username"
                         value={formData.instagram_username}
                         onChange={handleInputChange}
-                        placeholder="@instagram"
+                        placeholder={t('profile.instagramPlaceholder', '@instagram')}
                         style={styles.input}
-                        aria-label="Instagram Username"
+                        aria-label={t('profile.instagram', 'Instagram')}
                     />
                 </div>
 
@@ -363,23 +363,23 @@ const ProfileTab = ({
                         name="x_username"
                         value={formData.x_username}
                         onChange={handleInputChange}
-                        placeholder="@x_username"
+                        placeholder={t('profile.xUsernamePlaceholder', '@x_username')}
                         style={styles.input}
-                        aria-label="X Username"
+                        aria-label={t('profile.xUsername', 'X (Twitter) username')}
                     />
                 </div>
 
                 <div style={styles.inputGroup}>
-                    <label style={styles.label}>🎮 Xbox Gamertag</label>
+                    <label style={styles.label}>🎮 {t('profile.xboxGamertag', 'Xbox Gamertag')}</label>
 
                     <input
                         type="text"
                         name="xbox_gamertag"
                         value={formData.xbox_gamertag}
                         onChange={handleInputChange}
-                        placeholder="XboxGamerTag"
+                        placeholder={t('profile.xboxPlaceholder', 'XboxGamerTag')}
                         style={styles.input}
-                        aria-label="Xbox Gamertag"
+                        aria-label={t('profile.xboxGamertag', 'Xbox Gamertag')}
                     />
                 </div>
             </div>

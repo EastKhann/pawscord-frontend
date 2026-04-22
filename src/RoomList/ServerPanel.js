@@ -1,7 +1,8 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+﻿/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 // frontend/src/RoomList/ServerPanel.js
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaChevronDown, FaPlus, FaCog, FaVolumeUp, FaUserPlus } from '../utils/iconOptimization';
 import VoiceUserList from '../VoiceUserList';
@@ -62,6 +63,7 @@ const ServerPanel = ({
     handleKickUserFromChannel,
     onViewUserProfile,
 }) => {
+    const { t } = useTranslation();
     // 🚀 Prefetch all text channels when user clicks a server
     useEffect(() => {
         if (!onPrefetchChat || !selectedServerId || !servers) return;
@@ -119,7 +121,7 @@ const ServerPanel = ({
                                     }}
                                 >
                                     <button
-                                        aria-label="Davet Linki"
+                                        aria-label={t('server.inviteLink', 'Invite Link')}
                                         style={styles.iconBtn}
                                         onClick={(e) => handleCreateInvite(e, server)}
                                         title="Davet Linki"
@@ -128,7 +130,7 @@ const ServerPanel = ({
                                     </button>
                                     {isOwner && (
                                         <button
-                                            aria-label="Kategori Ekle"
+                                            aria-label={t('server.createCategory', 'Create Category')}
                                             style={styles.iconBtn}
                                             onClick={(e) => {
                                                 e.stopPropagation();
@@ -141,14 +143,14 @@ const ServerPanel = ({
                                     )}
                                     {canManage && (
                                         <button
-                                            aria-label="Sunucu Ayarları"
+                                            aria-label={t('server.settings', 'Server Settings')}
                                             style={styles.iconBtn}
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 if (onOpenServerSettings)
                                                     onOpenServerSettings(server);
                                             }}
-                                            title="Sunucu Ayarları"
+                                            title={t('server.settings', 'Server Settings')}
                                         >
                                             <FaCog />
                                         </button>
@@ -165,22 +167,22 @@ const ServerPanel = ({
                                     {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                                     <input
                                         autoFocus
-                                        placeholder="Kategori Adı..."
-                                        aria-label="Category name"
+                                        placeholder={t('server.categoryNamePlaceholder', 'Category Name...')}
+                                        aria-label={t('server.categoryName', 'Category Name')}
                                         value={newCategoryName}
                                         onChange={(e) => setNewCategoryName(e.target.value)}
                                         style={styles.addRoomInput}
                                     />
                                     <div style={styles.addRoomControls}>
                                         <button
-                                            aria-label="Ekle"
+                                            aria-label={t('common.add')}
                                             type="submit"
                                             style={styles.addRoomButton}
                                         >
                                             Ekle
                                         </button>
                                         <button
-                                            aria-label="İptal"
+                                            aria-label={t('common.cancel')}
                                             type="button"
                                             onClick={() => setActiveServerIdForCategory(null)}
                                         >
@@ -370,7 +372,7 @@ const CategorySection = React.memo(
                                     {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                                     <input
                                         autoFocus
-                                        aria-label="Edit category name"
+                                        aria-label={t('server.editCategoryName', 'Edit category name')}
                                         value={editName}
                                         onChange={(e) => setEditName(e.target.value)}
                                         onBlur={handleEditBlur}
@@ -402,14 +404,14 @@ const CategorySection = React.memo(
                             <button
                                 style={styles.iconBtn}
                                 onClick={handleCategoryActionMenu}
-                                aria-label="Category settings"
+                                aria-label={t('server.categorySettings', 'Category settings')}
                             >
                                 <FaCog size={10} />
                             </button>
                             <button
                                 style={styles.iconBtn}
                                 onClick={handleAddRoomClick}
-                                aria-label="Add channel"
+                                aria-label={t('server.createChannel', 'Create Channel')}
                             >
                                 <FaPlus size={10} />
                             </button>
@@ -423,8 +425,8 @@ const CategorySection = React.memo(
                         {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                         <input
                             autoFocus
-                            placeholder="Kanal Adı..."
-                            aria-label="Channel name"
+                            placeholder={t('channel.namePlaceholder', 'Channel Name...')}
+                            aria-label={t('server.channelName', 'Channel Name')}
                             value={newRoomName}
                             onChange={(e) => setNewRoomName(e.target.value)}
                             style={styles.addRoomInput}
@@ -439,11 +441,11 @@ const CategorySection = React.memo(
                             <option value="kanban">📋 Kanban Board</option>
                         </select>
                         <div style={styles.addRoomControls}>
-                            <button aria-label="Ekle" type="submit" style={styles.addRoomButton}>
+                            <button aria-label={t('common.add')} type="submit" style={styles.addRoomButton}>
                                 Ekle
                             </button>
                             <button
-                                aria-label="handle Cancel Add Room"
+                                aria-label={t('common.cancel')}
                                 type="button"
                                 onClick={handleCancelAddRoom}
                             >
@@ -725,7 +727,7 @@ const ChannelItem = React.memo(
                                     {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                                     <input
                                         autoFocus
-                                        aria-label="Edit channel name"
+                                        aria-label={t('server.editChannelName', 'Edit channel name')}
                                         value={editName}
                                         onChange={(e) => setEditName(e.target.value)}
                                         onBlur={handleEditBlur}
@@ -778,7 +780,7 @@ const ChannelItem = React.memo(
                             }}
                         >
                             <button
-                                aria-label="handle Room Action Menu"
+                                aria-label={t('server.roomActionMenu', 'Room actions')}
                                 style={styles.iconBtn}
                                 onClick={handleRoomActionMenu}
                             >

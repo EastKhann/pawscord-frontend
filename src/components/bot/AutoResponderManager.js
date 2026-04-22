@@ -75,7 +75,7 @@ const AutoResponderManager = ({
         <>
             {!showCreate && (
                 <button
-                    aria-label="Create"
+                    aria-label={t('common.create', 'Create')}
                     onClick={() => setShowCreate(true)}
                     style={styles.createButton}
                 >
@@ -114,14 +114,14 @@ const AutoResponderManager = ({
                     </label>
                     <div className="flex-gap-10">
                         <button
-                            aria-label="handle Create"
+                            aria-label={t('autoResponder.create', 'Create auto-responder')}
                             onClick={handleCreate}
                             style={styles.submitButton}
                         >
                             {t('common.create')}
                         </button>
                         <button
-                            aria-label="Create"
+                            aria-label={t('common.cancel')}
                             onClick={() => setShowCreate(false)}
                             style={styles.cancelButton}
                         >
@@ -175,7 +175,7 @@ const AutoResponderManager = ({
                     <h2 style={styles.title}>
                         <FaRobot /> {t('autoResponder.title')}
                     </h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>

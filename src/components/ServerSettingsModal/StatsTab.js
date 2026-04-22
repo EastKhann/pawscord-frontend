@@ -58,7 +58,7 @@ const StatsTab = ({ server, fetchWithAuth, apiBaseUrl, roles }) => {
                 </div>
                 <button
                     onClick={loadServerStats}
-                    aria-label="Refresh server stats"
+                    aria-label={t('serverSettings.refreshStats', 'Refresh server stats')}
                     className={css.actionBtnPrimary}
                 >
                     <FaUndo /> Refresh
@@ -130,14 +130,14 @@ const StatsTab = ({ server, fetchWithAuth, apiBaseUrl, roles }) => {
                                         label: 'Created',
                                         value: serverStats.created_at
                                             ? new Date(serverStats.created_at).toLocaleDateString(
-                                                  'tr-TR',
-                                                  { year: 'numeric', month: 'long', day: 'numeric' }
-                                              )
+                                                'tr-TR',
+                                                { year: 'numeric', month: 'long', day: 'numeric' }
+                                            )
                                             : server.created_at
-                                              ? new Date(server.created_at).toLocaleDateString(
+                                                ? new Date(server.created_at).toLocaleDateString(
                                                     'tr-TR'
                                                 )
-                                              : 'Bilinmiyor',
+                                                : 'Bilinmiyor',
                                     },
                                     {
                                         label: 'Privacy',
@@ -206,10 +206,10 @@ const StatsTab = ({ server, fetchWithAuth, apiBaseUrl, roles }) => {
                                     value:
                                         serverStats.online_members && serverStats.total_members
                                             ? Math.round(
-                                                  (serverStats.online_members /
-                                                      serverStats.total_members) *
-                                                      100
-                                              )
+                                                (serverStats.online_members /
+                                                    serverStats.total_members) *
+                                                100
+                                            )
                                             : null,
                                     color: '#23a559',
                                     suffix: '%',
@@ -226,9 +226,9 @@ const StatsTab = ({ server, fetchWithAuth, apiBaseUrl, roles }) => {
                                     label: 'Members per Channel',
                                     value: serverStats.total_channels
                                         ? Math.round(
-                                              (serverStats.total_members || 0) /
-                                                  serverStats.total_channels
-                                          )
+                                            (serverStats.total_members || 0) /
+                                            serverStats.total_channels
+                                        )
                                         : null,
                                     color: '#f0b232',
                                     suffix: ':1',

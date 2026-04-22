@@ -6,7 +6,7 @@ const STAT_CARDS = [
     { icon: '🏰', key: 'servers_count', label: 'Server' },
     { icon: '👥', key: 'users_count', label: 'User' },
     { icon: '💬', key: 'messages_sent', label: 'Mesaj' },
-    { icon: '📡', key: 'api_calls', label: 'API Çağrısı' },
+    { icon: '📡', key: 'api_calls', label: t('botDetails.apiCalls', 'API Calls') },
 ];
 
 const BotDetailsView = ({
@@ -22,11 +22,11 @@ const BotDetailsView = ({
 }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="bot details view" className="bot-details">
+        <div aria-label={t('botDeveloper.detailsView', 'Bot details')} className="bot-details">
             {showCredentials && (
                 <div className="credentials-alert">
                     <h4>⚠️ Bot Kimlik Bilgileri</h4>
-                    <p>Bu bilgileri güvenli bir yerde saklayın! Bir daha gösterilmeyecek.</p>
+                    <p>{t('botDetails.storeSecure', 'Store this information in a safe place! It will not be shown again.')}</p>
                     {[
                         { label: 'Client ID', value: selectedBot.client_id },
                         { label: 'Client Secret', value: selectedBot.client_secret },
@@ -40,9 +40,7 @@ const BotDetailsView = ({
                             </div>
                         </div>
                     ))}
-                    <button className="dismiss-btn" onClick={() => setShowCredentials(false)}>
-                        Anladım
-                    </button>
+                    <button className="dismiss-btn" onClick={() => setShowCredentials(false)}>{t('common.understood', 'Got it')}</button>
                 </div>
             )}
 
@@ -98,7 +96,7 @@ const BotDetailsView = ({
                                 <div className="webhook-info">
                                     <div className="webhook-url">{wh.url}</div>
                                     <div className="webhook-meta">
-                                        Oluşturulma:{' '}
+                                        {t('apiKeys.created', 'Created:')}{' '}
                                         {new Date(wh.created_at).toLocaleDateString('tr-TR')}
                                     </div>
                                 </div>
@@ -107,7 +105,7 @@ const BotDetailsView = ({
                     </div>
                 ) : (
                     <div className="no-webhooks">
-                        <p>Henüz webhook yok</p>
+                        <p>{t('botDetails.noWebhooks', 'No webhooks yet')}</p>
                     </div>
                 )}
             </div>

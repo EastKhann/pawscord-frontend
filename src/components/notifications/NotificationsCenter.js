@@ -139,7 +139,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
     };
 
     const clearAll = async () => {
-        if (!(await confirmDialog('Tüm bildirimleri temizlemek istediğinizden emin misiniz?')))
+        if (!(await confirmDialog(t('notifs.clearAllConfirm2', 'Are you sure you want to clear all notifications?'))))
             return;
 
         try {
@@ -223,7 +223,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
         return date.toLocaleDateString();
     };
 
-    const showToast = (message, type = 'success') => {};
+    const showToast = (message, type = 'success') => { };
 
     if (loading) {
         return (
@@ -241,7 +241,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
             <div
                 className="notifications-panel"
                 role="region"
-                aria-label="Notifications"
+                aria-label={t('notifCenter.panel', 'Notifications')}
                 aria-live="polite"
             >
                 <div className="panel-header">
@@ -303,7 +303,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                     type="checkbox"
                                     checked={pushEnabled}
                                     onChange={handlePushChange}
-                                    aria-label="checkbox"
+                                    aria-label={t('notifCenter.pushToggle', 'Toggle push notifications')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -322,7 +322,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                     type="checkbox"
                                     checked={emailEnabled}
                                     onChange={handleEmailChange}
-                                    aria-label="checkbox"
+                                    aria-label={t('notifCenter.emailToggle', 'Toggle email notifications')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -341,7 +341,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                     type="checkbox"
                                     checked={soundEnabled}
                                     onChange={handleSoundChange}
-                                    aria-label="checkbox"
+                                    aria-label={t('notifCenter.soundToggle', 'Toggle notification sounds')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -360,7 +360,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                     type="checkbox"
                                     checked={mentionsOnly}
                                     onChange={handleMentionsChange}
-                                    aria-label="checkbox"
+                                    aria-label={t('notifCenter.mentionsToggle', 'Toggle mentions only')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -379,7 +379,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                     type="checkbox"
                                     checked={dndEnabled}
                                     onChange={handleDndChange}
-                                    aria-label="checkbox"
+                                    aria-label={t('notifCenter.dndToggle', 'Toggle do not disturb')}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -420,7 +420,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                         <div
                             className="notifications-list"
                             role="list"
-                            aria-label="Notification items"
+                            aria-label={t('notifCenter.list', 'Notification items')}
                         >
                             {notifications.map((notification) => (
                                 <div

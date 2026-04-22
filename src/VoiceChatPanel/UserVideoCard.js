@@ -5,6 +5,7 @@
 // Sub-components: useVideoAudio, VideoDisplay, UserOverlay, HoverControls
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useVideoAudio from './UserVideoCard/useVideoAudio';
 import VideoDisplay from './UserVideoCard/VideoDisplay';
@@ -64,9 +65,8 @@ const UserVideoCard = React.memo(
         getUserAvatar,
     }) => {
         const { videoRef, audioRef } = useVideoAudio(stream, user);
+        const { t } = useTranslation();
         const [showFullControls, setShowFullControls] = useState(false);
-        const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
 
         // 🔥 FIX: Native fullscreen overlay — exit button appears on mouse move
         const [isNativeFullscreen, setIsNativeFullscreen] = useState(false);
@@ -80,7 +80,7 @@ const UserVideoCard = React.memo(
                 const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
                 setIsNativeFullscreen(
                     (fsEl && cardRef.current && cardRef.current.contains(fsEl)) ||
-                        fsEl === cardRef.current
+                    fsEl === cardRef.current
                 );
                 if (!fsEl) setShowFsControls(false);
             };
@@ -143,8 +143,8 @@ const UserVideoCard = React.memo(
                     border: isActive
                         ? '3px solid #23a559'
                         : isPinned
-                          ? '3px solid #5865f2'
-                          : '1px solid rgba(255, 255, 255, 0.1)',
+                            ? '3px solid #5865f2'
+                            : '1px solid rgba(255, 255, 255, 0.1)',
                     boxShadow: isActive
                         ? '0 0 20px rgba(67, 181, 129, 0.5)'
                         : '0 4px 16px rgba(0, 0, 0, 0.3)',
@@ -203,7 +203,7 @@ const UserVideoCard = React.memo(
                             {user.streamType === 'screen' ? '🖥️ Screen Share' : ''}
                         </span>
                         <button
-                            aria-label="Tam ekrandan çık"
+                            aria-label={t('common.exitFullscreen', 'Exit fullscreen')}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 if (document.exitFullscreen) document.exitFullscreen();

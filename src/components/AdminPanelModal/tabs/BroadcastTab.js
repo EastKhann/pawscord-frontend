@@ -23,18 +23,18 @@ const BroadcastTab = () => {
                 />
                 <div className="flex-gap-10">
                     <button
-                        aria-label="Send broadcast"
+                        aria-label={t('admin.sendBroadcast', 'Send broadcast')}
                         onClick={handleBroadcast}
                         style={styles.actionBtnBlueLg}
                     >
-                        <FaPaperPlane /> Send
+                        <FaPaperPlane /> {t('admin.send', 'Send')}
                     </button>
                     <button
-                        aria-label="Schedule broadcast"
+                        aria-label={t('admin.scheduleBroadcast', 'Schedule broadcast')}
                         style={styles.actionBtnGrayLg}
                         onClick={() => toast.info(t('common.comingSoon'))}
                     >
-                        <FaClock /> Schedule
+                        <FaClock /> {t('admin.schedule', 'Schedule')}
                     </button>
                 </div>
             </div>

@@ -83,7 +83,7 @@ const SavedMessagesModal = ({
                     <h2 style={styles.title}>
                         {getIcon()} {getTitle()}
                     </h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -92,7 +92,7 @@ const SavedMessagesModal = ({
                     {loading ? (
                         <div style={styles.loading}>{t('common.loading')}</div>
                     ) : messages.length === 0 ? (
-                        <div style={styles.empty}>Henüz kaydedilmiş mesaj yok</div>
+                        <div style={styles.empty}>{t('savedMsgs.empty', 'No saved messages yet')}</div>
                     ) : (
                         <div style={styles.messageList}>
                             {messages.map((msg) => (
@@ -114,12 +114,10 @@ const SavedMessagesModal = ({
                                     </div>
                                     <div style={styles.actions}>
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('savedMessages.goToMessage', 'Go to message')}
                                             onClick={() => {
-                                                if (onScrollToMessage) {
-                                                    onScrollToMessage(msg.id);
-                                                    onClose();
-                                                }
+                                                onScrollToMessage(msg.id);
+                                                onClose();
                                             }}
                                             style={styles.actionButton}
                                             title="Mesaja git"
@@ -127,10 +125,10 @@ const SavedMessagesModal = ({
                                             →
                                         </button>
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('savedMessages.removeMessage', 'Remove saved message')}
                                             onClick={() => handleRemove(msg.id)}
                                             style={removeActionButtonStyle}
-                                            title="Kaldır"
+                                            title={t('common.remove', 'Remove')}
                                         >
                                             <FaTrash />
                                         </button>
@@ -141,7 +139,7 @@ const SavedMessagesModal = ({
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

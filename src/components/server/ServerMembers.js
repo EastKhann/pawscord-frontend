@@ -120,7 +120,7 @@ const ServerMembers = ({ members, roles, serverId, fetchWithAuth, apiBaseUrl, on
                 <FaSearch style={styles.searchIcon} />
                 <input
                     type="text"
-                    placeholder="Üye ara..."
+                    placeholder={t('common.searchMembers', 'Search members...')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     style={styles.searchInput}
@@ -129,7 +129,7 @@ const ServerMembers = ({ members, roles, serverId, fetchWithAuth, apiBaseUrl, on
 
             {/* Member Sayısı */}
             <div style={styles.memberCount}>
-                {filteredMembers.length} Üye {loading && '(Yükleniyor...)'}
+                {filteredMembers.length} {t('serverMembers.members','Members')} {loading && t('common.loadingParen','(Loading...)')}
             </div>
 
             {/* Member Listesi */}

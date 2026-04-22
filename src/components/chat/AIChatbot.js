@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
 import './AIChatbot.css';
 import { API_BASE_URL } from '../../utils/apiEndpoints';
+import { useTranslation } from 'react-i18next';
 
 /**
  * GPT-4 AI Chatbot Component
  */
 const AIChatbot = ({ channelId, channelName, onClose }) => {
+    const { t } = useTranslation();
     const [messages, setMessages] = useState([
         {
             id: 1,
@@ -137,19 +139,19 @@ const AIChatbot = ({ channelId, channelName, onClose }) => {
             <div className="chatbot-header">
                 <div className="header-left">
                     <span className="bot-badge">🤖 AI</span>
-                    <h3>PawsCord Asistanı</h3>
+                    <h3>{t('aiChatbot.title', 'PawsCord Assistant')}</h3>
                     {channelName && <span className="channel-tag">{channelName}</span>}
                 </div>
                 <div className="header-actions">
                     <button
-                        aria-label="get Summarization"
+                        aria-label={t('aiChat.getSummary', 'Get conversation summary')}
                         onClick={getSummarization}
                         disabled={isLoading}
                         className="summary-btn"
                     >
                         📋 Summarize
                     </button>
-                    <button aria-label="Close" onClick={onClose} className="close-btn">
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} className="close-btn">
                         ×
                     </button>
                 </div>
@@ -206,12 +208,12 @@ const AIChatbot = ({ channelId, channelName, onClose }) => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={handleKeyPress}
-                    placeholder="Bana her şeyi sorabilirsin..."
+                    placeholder={t('ai.placeholder', 'Ask me anything...')}
                     rows={1}
                     disabled={isLoading}
                 />
                 <button
-                    aria-label="send Message"
+                    aria-label={t('aiChat.sendMessage', 'Send message')}
                     onClick={sendMessage}
                     disabled={!inputText.trim() || isLoading}
                     className="send-btn"
@@ -221,7 +223,7 @@ const AIChatbot = ({ channelId, channelName, onClose }) => {
             </div>
 
             <div className="chatbot-footer">
-                <small>GPT-4 ile destekleniyor • Yanıtlar her zaman doğru olmayabilir</small>
+                <small>{t('aiChatbot.subtitle', 'Powered by GPT-4 • Responses may not always be accurate')}</small>
             </div>
         </div>
     );

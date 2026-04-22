@@ -214,8 +214,10 @@ export default defineConfig({
     // Sourcemap (production'da false)
     sourcemap: false,
 
-    // Chunk size warnings
-    chunkSizeWarningLimit: 500,  // ⚡ Catch large chunks early
+    // Chunk size warnings — raised to 1100 because dash.all.min (~1MB) and hls.js (~540KB)
+    // are 3rd-party streaming libraries that cannot be split further. Feature chunks are
+    // already split by manualChunks below so the app code itself stays lean.
+    chunkSizeWarningLimit: 1100,
 
     // Rollup optimizations
     rollupOptions: {
@@ -365,6 +367,25 @@ export default defineConfig({
             if (id.includes('Moderation') || id.includes('RaidProtection') ||
               id.includes('SpamDetection') || id.includes('AutoMod')) {
               return 'feature-moderation';
+            }
+            // Crypto signals — chart-heavy, only for subscribed users
+            if (id.includes('CryptoSignal') || id.includes('CryptoDashboard') ||
+              id.includes('CryptoStore')) {
+              return 'feature-crypto';
+            }
+            // English learning hub — grammar quiz data is large
+            if (id.includes('EnglishHub') || id.includes('GrammarQuiz') ||
+              id.includes('/data/grammarQuestions')) {
+              return 'feature-english';
+            }
+            // Forum feature — rich text editing, not always visited
+            if (id.includes('Forum') || id.includes('ForumPanel')) {
+              return 'feature-forum';
+            }
+            // Settings panels — loaded only when user opens settings
+            if (id.includes('SettingsPanel') || id.includes('SecuritySettings') ||
+              id.includes('PrivacySettings') || id.includes('AppearanceSettings')) {
+              return 'feature-settings';
             }
           }
         },

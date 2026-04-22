@@ -4,13 +4,15 @@
 import { useState, useEffect, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 const S = {
-  size: {maxHeight: '200px', overflowY: 'auto'},
-  rel: {position: 'relative', display: 'inline-block', marginLeft: '5px'},
+    size: { maxHeight: '200px', overflowY: 'auto' },
+    rel: { position: 'relative', display: 'inline-block', marginLeft: '5px' },
 };
 
 export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAuth }) => {
+    const { t } = useTranslation();
     const [history, setHistory] = useState([]);
     const [showHistory, setShowHistory] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +43,7 @@ export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAu
     }, [showHistory, messageId, messageEditHistoryUrl, fetchWithAuth]);
 
     return (
-        <div aria-label="handle click outside" style={S.rel}>ref={historyRef}>
+        <div aria-label={t('message.editHistory', 'Edit history')} style={S.rel}>ref={historyRef}>
             <span
                 onClick={(e) => { e.stopPropagation(); setShowHistory(!showHistory); }}
                 style={styles.editedLabel}>

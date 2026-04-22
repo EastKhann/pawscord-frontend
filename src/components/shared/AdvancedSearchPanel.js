@@ -81,8 +81,8 @@ const AdvancedSearchPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId, roo
     };
 
     return (
-        <div style={styles.overlay}>
-            <div style={styles.modal}>
+        <div style={styles.overlay} role="presentation" onClick={(e) => e.target === e.currentTarget && onClose()}>
+            <div style={styles.modal} role="dialog" aria-modal="true" aria-label={t('search.advancedSearch', 'Advanced Search')}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaSearch className="icon-primary-mr10" />
@@ -92,7 +92,7 @@ const AdvancedSearchPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId, roo
                         </h2>
                     </div>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -105,11 +105,12 @@ const AdvancedSearchPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId, roo
                         onKeyDown={(e) => e.key === 'Enter' && search()}
                         placeholder={t('search.searchMessages', 'Mesaj ara...')}
                         style={styles.searchInput}
-                        aria-label="Query"
+                        aria-label={t('search.searchMessages', 'Mesaj ara...')}
+                        autoFocus
                     />
 
                     <button
-                        aria-label="search"
+                        aria-label={t('common.search')}
                         onClick={search}
                         style={styles.searchButton}
                         disabled={loading}
@@ -140,7 +141,7 @@ const AdvancedSearchPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId, roo
                                 onChange={(e) => setFilters({ ...filters, author: e.target.value })}
                                 placeholder={t('search.username', 'Username')}
                                 style={styles.filterInput}
-                                aria-label="Author"
+                                aria-label={t('search.authorFilter', 'Filter by author')}
                             />
                         </div>
 

@@ -78,7 +78,7 @@ const DraftsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => {
                         <FaEdit className="icon-primary-mr10" />
                         <h2 style={styles.title}>{t('drafts.title', 'Mesaj Taslakları')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -89,7 +89,7 @@ const DraftsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => {
                             {drafts.length} {drafts.length === 1 ? 'draft' : 'drafts'}
                         </div>
                         <button
-                            aria-label="delete All Drafts"
+                            aria-label={t('drafts.deleteAll', 'Delete all drafts')}
                             onClick={deleteAllDrafts}
                             style={styles.deleteAllButton}
                         >
@@ -110,7 +110,7 @@ const DraftsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => {
                             <div style={styles.emptySubtext}>
                                 {t(
                                     'drafts.emptyHint',
-                                    'Bir mesaj yazmaya başlayın, otomatik olarak taslak olarak kaydedilecektir'
+                                    t('drafts.hint', 'Start writing a message and it will be automatically saved as a draft')
                                 )}
                             </div>
                         </div>
@@ -141,10 +141,9 @@ const DraftsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => {
                                         )}
                                     </div>
                                     <button
-                                        aria-label="Action button"
-                                        onClick={() => deleteDraft(draft.id)}
+                                        aria-label={t('drafts.deleteDraft', 'Delete draft')}
                                         style={styles.deleteButton}
-                                        title="Taslağı sil"
+                                        title={t('common.deleteDraft', 'Delete draft')}
                                     >
                                         <FaTrash />
                                     </button>

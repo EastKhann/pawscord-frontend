@@ -77,15 +77,15 @@ export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
     }
 
     return (
-        <div aria-label="calendar view" className="calendar-view">
+        <div aria-label={t('calendar.calendarView', 'Calendar view')} className="calendar-view">
             <div className="cv-header">
-                <button aria-label="Previous month" onClick={prevMonth}>
+                <button aria-label={t('calendar.prevMonth', 'Previous month')} onClick={prevMonth}>
                     <FaChevronLeft />
                 </button>
                 <h3>
                     {monthNames[month]} {year}
                 </h3>
-                <button aria-label="Next month" onClick={nextMonth}>
+                <button aria-label={t('calendar.nextMonth', 'Next month')} onClick={nextMonth}>
                     <FaChevronRight />
                 </button>
             </div>

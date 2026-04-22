@@ -63,14 +63,14 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline
     if (inline) {
         return (
             <div className="mt-8">
-                <p style={styles.info}>Bu not sadece sen görebilirsin</p>
+                <p style={styles.info}>{t('userNotes.onlyYouCanSee', 'Only you can see this note')}</p>
 
                 <div style={styles.colorPicker}>
                     <label style={styles.label}>Color:</label>
                     <div style={styles.colors}>
                         {colors.map((c) => (
                             <button
-                                aria-label="Action button"
+                                aria-label={t('userNotes.selectColor', 'Select color {{name}}', { name: c.name })}
                                 key={c.name}
                                 onClick={() => setColor(c.name)}
                                 style={{
@@ -86,7 +86,7 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline
                 <textarea
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
-                    placeholder="Notunu buraya yaz..."
+                    placeholder={t('userNotes.placeholder', 'Write your note here...')}
                     style={{
                         ...styles.textarea,
                         backgroundColor: colors.find((c) => c.name === color)?.value,
@@ -97,12 +97,12 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline
                 <div style={styles.footer}>
                     <span style={styles.charCount}>{note.length}/500</span>
                     <button
-                        aria-label="save Note"
+                        aria-label={t('common.save', 'Save')}
                         onClick={saveNote}
                         disabled={saving}
                         style={styles.saveButton}
                     >
-                        {saving ? t('common.saving') : '💾 Kaydet'}
+                        {saving ? t('common.saving') : '💾 ' + t('common.save', 'Save')}
                     </button>
                 </div>
             </div>
@@ -114,22 +114,22 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3 style={styles.title}>
-                        <FaStickyNote /> {targetUser} About Not
+                        <FaStickyNote /> {t('userNotes.noteAbout', 'Note about {{user}}', { user: targetUser })}
                     </h3>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.content}>
-                    <p style={styles.info}>Bu not sadece sen görebilirsin</p>
+                    <p style={styles.info}>{t('userNotes.onlyYouCanSee', 'Only you can see this note')}</p>
 
                     <div style={styles.colorPicker}>
                         <label style={styles.label}>Color:</label>
                         <div style={styles.colors}>
                             {colors.map((c) => (
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('userNotes.selectColor', 'Select color {{name}}', { name: c.name })}
                                     key={c.name}
                                     onClick={() => setColor(c.name)}
                                     style={{
@@ -145,7 +145,7 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline
                     <textarea
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
-                        placeholder="Notunu buraya yaz..."
+                        placeholder={t('userNotes.placeholder', 'Write your note here...')}
                         style={{
                             ...styles.textarea,
                             backgroundColor: colors.find((c) => c.name === color)?.value,
@@ -156,12 +156,12 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline
                     <div style={styles.footer}>
                         <span style={styles.charCount}>{note.length}/500</span>
                         <button
-                            aria-label="save Note"
+                            aria-label={t('common.save', 'Save')}
                             onClick={saveNote}
                             disabled={saving}
                             style={styles.saveButton}
                         >
-                            <FaSave /> {saving ? t('common.saving') : 'Save'}
+                            <FaSave /> {saving ? t('common.saving') : t('common.save', 'Save')}
                         </button>
                     </div>
                 </div>

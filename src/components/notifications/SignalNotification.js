@@ -55,7 +55,7 @@ const SignalNotification = () => {
 
     return (
         <div
-            aria-label="signal notification"
+            aria-label={t('signalNotification.container', 'Signal notification')}
             style={styles.container}
             className="slide-in-notification"
         >

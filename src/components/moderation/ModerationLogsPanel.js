@@ -151,7 +151,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
 
     const handleRevertAction = async (logId) => {
         if (
-            !(await confirmDialog('Bu moderasyon işlemini geri almak istediğinizden emin misiniz?'))
+            !(await confirmDialog(t('moderation.revertConfirm', 'Are you sure you want to revert this moderation action?')))
         )
             return;
 
@@ -223,7 +223,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                     <h2>
                         <FaShieldAlt /> Moderation Logs
                     </h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -262,15 +262,14 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                 <div className="filters-section">
                     <div className="filters-header">
                         <button
-                            aria-label="Filter"
-                            className="filter-toggle"
+                            aria-label={t('modLogs.toggleFilters', 'Toggle filters')}
                             onClick={() => setShowFilters(!showFilters)}
                         >
                             <FaFilter /> Filterr
                             {showFilters ? <FaChevronUp /> : <FaChevronDown />}
                         </button>
                         <button
-                            aria-label="handle Export"
+                            aria-label={t('modLogs.exportLogs', 'Export logs')}
                             className="export-btn"
                             onClick={handleExport}
                         >
@@ -281,7 +280,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                     {showFilters && (
                         <div className="filters-content">
                             <div className="filter-group">
-                                <label>Eylem Typeü</label>
+                                <label>{t('moderation.actionType', 'Action Type')}</label>
                                 <select
                                     value={filters.action_type}
                                     onChange={(e) => {
@@ -290,20 +289,20 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                     }}
                                 >
                                     <option value="all">All</option>
-                                    <option value="ban">Banma</option>
-                                    <option value="kick">Atma</option>
-                                    <option value="timeout">Zaman Amı</option>
-                                    <option value="mute">Sessize alma</option>
-                                    <option value="warn">Uyarı</option>
-                                    <option value="delete_messages">Mesajları Sil</option>
+                                    <option value="ban">{t('moderation.banAction', 'Ban')}</option>
+                                    <option value="kick">{t('moderation.kickAction', 'Kick')}</option>
+                                    <option value="timeout">{t('moderation.timeoutAction', 'Timeout')}</option>
+                                    <option value="mute">{t('moderation.muteAction', 'Mute')}</option>
+                                    <option value="warn">{t('moderation.warnAction', 'Warn')}</option>
+                                    <option value="delete_messages">{t('moderation.deleteMessages', 'Delete Messages')}</option>
                                     <option value="automod">AutoMod</option>
                                 </select>
                             </div>
                             <div className="filter-group">
-                                <label>Moderatör</label>
+                                <label>{t('moderation.moderator', 'Moderator')}</label>
                                 <input
                                     type="text"
-                                    placeholder="Kullanıcı adı"
+                                    placeholder={t('common.username', 'Username')}
                                     value={filters.moderator}
                                     onChange={(e) => {
                                         setFilters({ ...filters, moderator: e.target.value });
@@ -312,10 +311,10 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                 />
                             </div>
                             <div className="filter-group">
-                                <label>Hedef Kullanıcı</label>
+                                <label>{t('moderation.targetUser', 'Target User')}</label>
                                 <input
                                     type="text"
-                                    placeholder="Kullanıcı adı"
+                                    placeholder={t('common.username', 'Username')}
                                     value={filters.target_user}
                                     onChange={(e) => {
                                         setFilters({ ...filters, target_user: e.target.value });
@@ -324,7 +323,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                 />
                             </div>
                             <div className="filter-group">
-                                <label>Başlangıç</label>
+                                <label>{t('moderation.start', 'Start')}</label>
                                 <input
                                     type="date"
                                     value={filters.date_from}
@@ -335,7 +334,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                 />
                             </div>
                             <div className="filter-group">
-                                <label>Bitiş</label>
+                                <label>{t('moderation.end', 'End')}</label>
                                 <input
                                     type="date"
                                     value={filters.date_to}
@@ -356,7 +355,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                     ) : filteredLogs.length === 0 ? (
                         <div className="empty-state">
                             <FaShieldAlt />
-                            <p>Moderasyon logu bulunamadı</p>
+                            <p>{t('moderation.noLogsFound', 'No moderation logs found')}</p>
                         </div>
                     ) : (
                         <div className="logs-list">
@@ -374,7 +373,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                             </span>
                                             {log.reverted && (
                                                 <span className="reverted-badge">
-                                                    <FaUndo /> Geri Alındı
+                                                    {t('moderation.reverted', 'Reverted')}
                                                 </span>
                                             )}
                                             <span className="log-time">
@@ -422,19 +421,19 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                                 <div className="log-details">
                                                     {log.details.duration && (
                                                         <span>
-                                                            <strong>Süre:</strong>{' '}
+                                                            <strong>{t('moderation.duration', 'Duration:')}</strong>{' '}
                                                             {log.details.duration}
                                                         </span>
                                                     )}
                                                     {log.details.message_count && (
                                                         <span>
-                                                            <strong>Silinen Mesajlar:</strong>{' '}
+                                                            <strong>{t('moderation.deletedMessages', 'Deleted Messages:')}</strong>{' '}
                                                             {log.details.message_count}
                                                         </span>
                                                     )}
                                                     {log.details.warning_count && (
                                                         <span>
-                                                            <strong>Toplam Uyarı:</strong>{' '}
+                                                            <strong>{t('moderation.totalWarnings', 'Total Warnings:')}</strong>{' '}
                                                             {log.details.warning_count}
                                                         </span>
                                                     )}
@@ -446,7 +445,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                                     )}
                                                     {log.details.evidence && (
                                                         <div className="evidence">
-                                                            <strong>Kanıtlar:</strong>
+                                                            <strong>{t('moderation.evidence', 'Evidence:')}</strong>
                                                             <ul>
                                                                 {log.details.evidence.map(
                                                                     (e, i) => (
@@ -465,8 +464,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                     <div className="log-actions">
                                         {Object.keys(log.details || {}).length > 0 && (
                                             <button
-                                                aria-label="Action button"
-                                                className="detail-btn"
+                                                aria-label={t('modLogs.revertAction', 'Revert action')}
                                                 onClick={() =>
                                                     setExpandedLog(
                                                         expandedLog === log.id ? null : log.id
@@ -486,7 +484,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                                 log.action_type
                                             ) && (
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('modLogs.revertAction', 'Revert action')}
                                                     className="revert-btn"
                                                     onClick={() => handleRevertAction(log.id)}
                                                     title="Geri Al"
@@ -500,12 +498,12 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
 
                             {hasMore && (
                                 <button
-                                    aria-label="Navigate"
+                                    aria-label={t('modLogs.loadMore', 'Load more logs')}
                                     className="load-more-btn"
                                     onClick={() => setPage((p) => p + 1)}
                                     disabled={loading}
                                 >
-                                    {loading ? 'Yükleniyor...' : 'Daha Fazla'}
+                                    {loading ? t('common.loading', 'Loading...') : t('common.loadMore', 'Load More')}
                                 </button>
                             )}
                         </div>

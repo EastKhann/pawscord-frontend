@@ -1,4 +1,4 @@
-﻿/* eslint-disable no-undef */
+/* eslint-disable no-undef */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect, useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
@@ -227,7 +227,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                     <h2>
                         <FaStar /> {t('showcase.title')}
                     </h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -245,7 +245,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                         <div className="empty-state">
                             <FaStar />
                             <p>{t('showcase.empty')}</p>
-                            <button aria-label="handle Open Add Modal" onClick={handleOpenAddModal}>
+                            <button aria-label={t('showcase.addFirst', 'Add first item')} onClick={handleOpenAddModal}>
                                 <FaPlus /> {t('showcase.addFirst')}
                             </button>
                         </div>
@@ -256,14 +256,14 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                                 <div key={item.id} className="showcase-item">
                                     <div className="item-drag">
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('showcase.moveUp', 'Move up')}
                                             onClick={() => handleReorder(item.id, 'up')}
                                             disabled={index === 0}
                                         >
                                             <FaArrowUp />
                                         </button>
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('showcase.moveDown', 'Move down')}
                                             onClick={() => handleReorder(item.id, 'down')}
                                             disabled={index === showcases.length - 1}
                                         >
@@ -297,13 +297,13 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                                     </div>
                                     <div className="item-actions">
                                         <button
-                                            aria-label="Edit"
+                                            aria-label={t('common.edit')}
                                             onClick={() => openEditModal(item)}
                                         >
                                             <FaEdit />
                                         </button>
                                         <button
-                                            aria-label="Delete"
+                                            aria-label={t('common.delete')}
                                             onClick={() => handleDelete(item.id)}
                                         >
                                             <FaTrash />
@@ -319,7 +319,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                 {showcases.length < 6 && showcases.length > 0 && (
                     <div className="add-section">
                         <button
-                            aria-label="handle Open Add Modal"
+                            aria-label={t('showcase.addNew', 'Add new item')}
                             className="add-btn"
                             onClick={handleOpenAddModal}
                         >
@@ -358,7 +358,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                                 <div className="type-selector">
                                     {showcaseTypes.map((type) => (
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={type.label}
                                             key={type.key}
                                             className={`type-btn ${formData.type === type.key ? 'selected' : ''}`}
                                             style={_s({ '--color': type.color })}
@@ -402,35 +402,23 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                                 <input
                                     type="text"
                                     name="image_url"
-                                    placeholder="https://..."
+                                    placeholder={t('profileShowcase.url', 'https://...')}
                                     value={formData.image_url}
                                     onChange={handleFormInput}
-                                    aria-label="https://..."
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Bağlantı URL'si</label>
-                                <input
-                                    type="text"
-                                    name="link_url"
-                                    placeholder="https://..."
-                                    value={formData.link_url}
-                                    onChange={handleFormInput}
-                                    aria-label="https://..."
+                                    aria-label={t('showcase.imageUrlInput', 'Image URL')}
                                 />
                             </div>
 
                             <div className="modal-actions">
                                 <button
-                                    aria-label="reset Form"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-btn"
                                     onClick={resetForm}
                                 >
                                     {t('common.cancel')}
                                 </button>
                                 <button
-                                    aria-label="editing Item handle Edit handle Add"
+                                    aria-label={editingItem ? t('common.update', 'Update item') : t('common.add', 'Add item')}
                                     className="save-btn"
                                     onClick={editingItem ? handleEdit : handleAdd}
                                 >

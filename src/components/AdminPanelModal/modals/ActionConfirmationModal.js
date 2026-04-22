@@ -18,9 +18,9 @@ const ActionConfirmationModal = ({
     const { t } = useTranslation();
 
     const onClose = useCallback(() => setActionModal(null), [setActionModal]);
-    const { modalRef, overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Eylem Onayı' });
+    const { modalRef, overlayProps, dialogProps } = useModalA11y({ onClose, label: t('adminModal.actionConfirm','Action Confirmation') });
     return (
-        <div aria-label="Eylem onayı modalı" className={css.absoOverlay8} {...overlayProps}>
+        <div aria-label={t('admin.actionConfirmationModal', 'Action confirmation')} className={css.absoOverlay8} {...overlayProps}>
             <div className={css.modalCard420} {...dialogProps}>
                 <h3
                     style={{
@@ -31,16 +31,16 @@ const ActionConfirmationModal = ({
                     {actionModal.type === 'delete'
                         ? t('ui.useryi_delete')
                         : actionModal.type === 'ban'
-                          ? t('ui.useryi_ban')
-                          : `⚠️ ${t('adminActions.actionConfirm')}`}
+                            ? t('ui.useryi_ban')
+                            : `⚠️ ${t('adminActions.actionConfirm')}`}
                 </h3>
                 <p style={S.txt}>
                     <strong className="text-white">{actionModal.user?.username}</strong>
                     {actionModal.type === 'delete'
                         ? ` ${t('adminActions.deleteConfirmMsg')}`
                         : actionModal.type === 'ban'
-                          ? ` ${t('adminActions.banConfirmMsg')}`
-                          : ` ${t('adminActions.generalConfirmMsg')}`}
+                            ? ` ${t('adminActions.banConfirmMsg')}`
+                            : ` ${t('adminActions.generalConfirmMsg')}`}
                 </p>
                 <div className="flex-gap-8-mt16">
                     <button

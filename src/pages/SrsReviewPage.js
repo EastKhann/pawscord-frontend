@@ -74,7 +74,7 @@ const QUALITY_LABELS_BASE = [
     {
         q: 0,
         key: 'srs.dontKnow',
-        fallback: 'Hiç bilmiyorum',
+        fallback: t('srs.dontKnow','I have no idea'),
         emoji: '😞',
         color: '#f23f42',
         bg: 'rgba(242,63,66,0.12)',
@@ -98,7 +98,7 @@ const QUALITY_LABELS_BASE = [
     {
         q: 3,
         key: 'srs.remembered',
-        fallback: 'Hatırladım',
+        fallback: t('srs.remembered','Remembered'),
         emoji: '🙂',
         color: '#5865f2',
         bg: 'rgba(88,101,242,0.12)',
@@ -114,7 +114,7 @@ const QUALITY_LABELS_BASE = [
     {
         q: 5,
         key: 'srs.veryEasy',
-        fallback: 'Çok kolay!',
+        fallback: t('srs.tooEasy','Too easy!'),
         emoji: '🔥',
         color: '#e779c1',
         bg: 'rgba(231,121,193,0.12)',
@@ -243,7 +243,7 @@ function SrsReviewPage() {
                     <Link to="/eng-learn" style={S.backLink}>
                         <FaArrowLeft />
                     </Link>
-                    <span style={S.topTitle}>SRS Tekrarı</span>
+                    <span style={S.topTitle}>{t('srs.title','SRS Review')}</span>
                 </div>
                 <div style={S.center}>
                     <div style={_st1034}>
@@ -286,7 +286,7 @@ function SrsReviewPage() {
                                 ? t('srs.greatJob', 'Harika iş çıkardın! 🎉')
                                 : t(
                                       'srs.addNewWords',
-                                      'SRS sistemini kullanmak için yeni kelimeler ekle.'
+                                      t('srs.addWords','Add new words to use the SRS system.')
                                   )}
                         </p>
                         <div>
@@ -304,7 +304,7 @@ function SrsReviewPage() {
 
     return (
         <div
-            aria-label="get token"
+            aria-label={t('aria.srsReview', 'SRS Review')}
             style={{
                 ...S.root,
                 animation:
@@ -320,7 +320,7 @@ function SrsReviewPage() {
                 <Link to="/eng-learn" style={S.backLink}>
                     <FaArrowLeft />
                 </Link>
-                <span style={S.topTitle}>SRS Tekrarı</span>
+                <span style={S.topTitle}>{t('srs.title','SRS Review')}</span>
                 <div style={S.topBadges}>
                     {sessionStats.streak >= 2 && (
                         <span style={S.streakBadge}>

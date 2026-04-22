@@ -92,13 +92,13 @@ const NotificationSoundSettings = ({ settings, onSave }) => {
     const [masterEnabled, setMasterEnabled] = useState(settings?.masterEnabled !== false);
     const [eventSettings, setEventSettings] = useState(
         settings?.events ||
-            SOUND_EVENTS.reduce(
-                (acc, e) => ({
-                    ...acc,
-                    [e.key]: { enabled: true, volume: 100, sound: 'default' },
-                }),
-                {}
-            )
+        SOUND_EVENTS.reduce(
+            (acc, e) => ({
+                ...acc,
+                [e.key]: { enabled: true, volume: 100, sound: 'default' },
+            }),
+            {}
+        )
     );
     const [playingSound, setPlayingSound] = useState(null);
 
@@ -141,9 +141,7 @@ const NotificationSoundSettings = ({ settings, onSave }) => {
             <div style={S.masterSection}>
                 <div style={S.masterRow}>
                     <button
-                        aria-label="Action button"
-                        type="button"
-                        style={S.toggleBtn}
+                        aria-label={t('notifSound.masterToggle', 'Toggle all sounds')}
                         onClick={() => setMasterEnabled(!masterEnabled)}
                     >
                         {masterEnabled ? <FaToggleOn /> : <FaToggleOff className="icon-gray-24" />}
@@ -221,9 +219,7 @@ const NotificationSoundSettings = ({ settings, onSave }) => {
 
                                 {/* Play button */}
                                 <button
-                                    aria-label="Action button"
-                                    type="button"
-                                    style={S.playBtn}
+                                    aria-label={isPlaying ? t('notifSound.stopPreview', 'Stop preview') : t('notifSound.playPreview', 'Play preview')}
                                     onClick={() => handlePlaySound(event.key)}
                                     disabled={!masterEnabled || !es.enabled}
                                 >
@@ -236,9 +232,7 @@ const NotificationSoundSettings = ({ settings, onSave }) => {
 
                                 {/* Toggle */}
                                 <button
-                                    aria-label="Action button"
-                                    type="button"
-                                    style={S.toggleSmall}
+                                    aria-label={t('notifSound.toggleEvent', 'Toggle sound event')}
                                     onClick={() => updateEvent(event.key, 'enabled', !es.enabled)}
                                     disabled={!masterEnabled}
                                 >
@@ -250,7 +244,7 @@ const NotificationSoundSettings = ({ settings, onSave }) => {
                 })}
             </div>
 
-            <button aria-label="handle Save" type="button" style={S.saveBtn} onClick={handleSave}>
+            <button aria-label={t('notifSound.saveSettings', 'Save sound settings')} type="button" style={S.saveBtn} onClick={handleSave}>
                 <FaSave /> {t('notifications.sounds.saveSettings')}
             </button>
         </div>

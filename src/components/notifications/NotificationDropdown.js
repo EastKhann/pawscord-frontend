@@ -97,7 +97,7 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
     };
 
     const clearAll = async () => {
-        if (!(await confirmDialog('Tüm bildirimleri silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('notifs.clearAllConfirm', 'Are you sure you want to delete all notifications?')))) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/notifications/clear_all/`, {
@@ -152,7 +152,7 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
             ref={dropdownRef}
             style={styles.dropdown}
             role="dialog"
-            aria-label="Notifications"
+            aria-label={t('notifications.header', 'Notifications')}
             aria-modal="true"
         >
             {/* Header */}
@@ -215,7 +215,7 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
                                 !notification.is_read &&
                                 markAsRead(notification.id)
                             }
-                            aria-label={`${notification.message} — ${formatTime(notification.created_at)}${notification.is_read ? '' : ' (okunmamış)'}`}
+                            aria-label={`${notification.message} — ${formatTime(notification.created_at)}${notification.is_read ? '' : ` (${t('notifs.unread', 'unread')})`}`}
                         >
                             <div style={styles.notificationIcon}>
                                 {getNotificationIcon(notification.notification_type)}
@@ -249,7 +249,7 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
                                     }}
                                     style={styles.iconButton}
                                     title={t('delete')}
-                                    aria-label="Reportimi delete"
+                                    aria-label={t('notifications.deleteReport', 'Delete report')}
                                 >
                                     <FaTimes />
                                 </button>

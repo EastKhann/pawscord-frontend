@@ -193,8 +193,8 @@ const CryptoDashboard = () => {
                         </div>
                     )}
 
-                    <button aria-label="Yeniden dene" onClick={api.fetchData} style={_st1007}>
-                        Yeniden Dene
+                    <button aria-label={t('common.retry', 'Retry')} onClick={api.fetchData} style={_st1007}>
+                        {t('common.retry', 'Yeniden Dene')}
                     </button>
                 </div>
             ) : (
@@ -203,7 +203,7 @@ const CryptoDashboard = () => {
 
                     <div style={styles.modeToggleContainer}>
                         <button
-                            aria-label="Bakiye moduna geç"
+                            aria-label={t('crypto.balanceMode', 'Switch to balance mode')}
                             onClick={handleBalanceMode}
                             style={{
                                 ...styles.modeToggleBtn,
@@ -222,7 +222,7 @@ const CryptoDashboard = () => {
                         </button>
 
                         <button
-                            aria-label="Kazanç oranı moduna geç"
+                            aria-label={t('crypto.winrateMode', 'Switch to win rate mode')}
                             onClick={handleWinrateMode}
                             style={{
                                 ...styles.modeToggleBtn,
@@ -268,10 +268,10 @@ const CryptoDashboard = () => {
 
                                                 ...(isActive
                                                     ? {
-                                                          ...styles.activeTab,
-                                                          backgroundColor: config.color,
-                                                          borderColor: config.color,
-                                                      }
+                                                        ...styles.activeTab,
+                                                        backgroundColor: config.color,
+                                                        borderColor: config.color,
+                                                    }
                                                     : {}),
                                             }}
                                         >
@@ -313,14 +313,14 @@ const CryptoDashboard = () => {
                                 type="text"
                                 value={api.searchQuery}
                                 onChange={handleSearchChange}
-                                placeholder="Coin search... (BTC, ETH, SOL)"
+                                placeholder={t('crypto.searchPlaceholder', 'Coin search... (BTC, ETH, SOL)')}
                                 style={styles.searchInput}
-                                aria-label="Arama sorgusu"
+                                aria-label={t('common.searchQuery', 'Search query')}
                             />
 
                             {api.searchQuery && (
                                 <button
-                                    aria-label="Aramayı temizle"
+                                    aria-label={t('common.clearSearch', 'Clear search')}
                                     onClick={handleClearSearch}
                                     style={styles.clearSearchBtn}
                                 >
@@ -417,7 +417,7 @@ const CryptoDashboard = () => {
                                     <tr>
                                         <td colSpan={api.isPositionsTab ? 15 : 13}>
                                             {api.searchQuery
-                                                ? 'Sonuç bulunamadı.'
+                                                ? t('common.noResults', 'No results found.')
                                                 : 'Bu sekmede veri yok.'}
                                         </td>
                                     </tr>
@@ -442,8 +442,8 @@ const CryptoDashboard = () => {
                                                     transition: 'background-color 0.2s',
                                                 }}
                                                 onMouseEnter={(e) =>
-                                                    (e.currentTarget.style.backgroundColor =
-                                                        'rgba(88,101,242,0.08)')
+                                                (e.currentTarget.style.backgroundColor =
+                                                    'rgba(88,101,242,0.08)')
                                                 }
                                                 onMouseLeave={(e) =>
                                                     (e.currentTarget.style.backgroundColor = rowBg)
@@ -543,7 +543,7 @@ const CryptoDashboard = () => {
 
                                                 <td>
                                                     <button
-                                                        aria-label={`${coinSymbol} al/sat`}
+                                                        aria-label={`${coinSymbol} ${t('crypto.buySell', 'buy/sell')}`}
                                                         onClick={() =>
                                                             api.setTradeData({
                                                                 coin: coinSymbol,
@@ -582,7 +582,7 @@ const CryptoDashboard = () => {
                     {api.totalPages > 1 && (
                         <div style={styles.pagination}>
                             <button
-                                aria-label="Önceki sayfa"
+                                aria-label={t('common.prevPage', 'Previous page')}
                                 onClick={handlePrevPage}
                                 disabled={api.page === 1}
                                 style={{ ...styles.pageBtn, opacity: api.page === 1 ? 0.4 : 1 }}
@@ -602,7 +602,7 @@ const CryptoDashboard = () => {
 
                                     return (
                                         <button
-                                            aria-label={`Sayfa ${pageNum}`}
+                                            aria-label={t('common.page', 'Page') + ' ' + pageNum}
                                             key={pageNum}
                                             onClick={() => api.setPage(pageNum)}
                                             style={{
@@ -620,7 +620,7 @@ const CryptoDashboard = () => {
                             </div>
 
                             <button
-                                aria-label="Sonraki sayfa"
+                                aria-label={t('common.nextPage', 'Next page')}
                                 onClick={handleNextPage}
                                 disabled={api.page === api.totalPages}
                                 style={{

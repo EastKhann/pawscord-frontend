@@ -87,7 +87,7 @@ function VanityInviteScreen({ vanityPath, fetchWithAuth, onClose, apiBaseUrl }) 
             <div style={styles.container}>
                 <div style={styles.card}>
                     <div style={styles.loadingSpinner}>🔄</div>
-                    <p style={styles.loadingText}>Sunucu bilgileri yükleniyor...</p>
+                    <p style={styles.loadingText}>{t('vanityInvite.loading', 'Loading server information...')}</p>
                 </div>
             </div>
         );
@@ -97,11 +97,10 @@ function VanityInviteScreen({ vanityPath, fetchWithAuth, onClose, apiBaseUrl }) 
         return (
             <div style={styles.container}>
                 <div style={styles.card}>
-                    <h1 style={styles.errorTitle}>❌ Find Serverunamadı</h1>
+                    <h1 style={styles.errorTitle}>{t('vanityInvite.notFound', '❌ Server Not Found')}</h1>
                     <p style={styles.errorText}>{error}</p>
                     <button
-                        aria-label="Action button"
-                        style={styles.backButton}
+                        aria-label={t('vanityInvite.returnHome', 'Return to home')}
                         onClick={() => {
                             if (onClose) onClose();
                             else window.location.hash = '#/';
@@ -158,7 +157,7 @@ function VanityInviteScreen({ vanityPath, fetchWithAuth, onClose, apiBaseUrl }) 
 
                 {/* Join Butonu */}
                 <button
-                    aria-label="handle Join"
+                    aria-label={t('vanityInvite.join', 'Join server')}
                     style={{
                         ...styles.joinButton,
                         ...(joining ? styles.joinButtonDisabled : {}),

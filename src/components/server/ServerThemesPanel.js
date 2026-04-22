@@ -201,14 +201,14 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaPalette className="icon-primary" />
-                        <h2 className="m-0">Sunucu Temaları</h2>
+                        <h2 className="m-0">{t('serverThemes.title', 'Server Themes')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
 
                 <div style={styles.content}>
                     <section style={styles.section}>
-                        <h3 style={styles.sectionTitle}>Hazır Temalar</h3>
+                        <h3 style={styles.sectionTitle}>{t('serverThemes.presets', 'Preset Themes')}</h3>
                         <div style={styles.themeGrid}>
                             {presetThemes.map((theme, index) => (
                                 <div
@@ -238,15 +238,15 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                     </section>
 
                     <section style={styles.section}>
-                        <h3 style={styles.sectionTitle}>Özel Tema Oluştur</h3>
+                        <h3 style={styles.sectionTitle}>{t('serverThemes.createCustom', 'Create Custom Theme')}</h3>
                         <div style={styles.customForm}>
                             <input
                                 type="text"
-                                placeholder="Tema Ad\u0131"
+                                placeholder={t('serverThemes.themeName', 'Theme Name')}
                                 value={customTheme.name}
                                 onChange={handleNameChange}
                                 style={styles.input}
-                                aria-label="Tema Ad\u0131"
+                                aria-label={t('serverThemes.themeName', 'Theme name')}
                             />
                             <div style={styles.colorGrid}>
                                 <div style={styles.colorField}>
@@ -256,57 +256,44 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                                         value={customTheme.primary_color}
                                         onChange={handlePrimaryChange}
                                         style={styles.colorInput}
-                                        aria-label="color"
+                                        aria-label={t('serverThemes.primaryColor', 'Primary color')}
                                     />
-                                </div>
-                                <div style={styles.colorField}>
-                                    <label>İkinci Color</label>
                                     <input
                                         type="color"
                                         value={customTheme.secondary_color}
                                         onChange={handleSecondaryChange}
                                         style={styles.colorInput}
-                                        aria-label="color"
+                                        aria-label={t('serverThemes.secondaryColor', 'Secondary color')}
                                     />
-                                </div>
-                                <div style={styles.colorField}>
-                                    <label>Arkaplan</label>
                                     <input
                                         type="color"
                                         value={customTheme.background_color}
                                         onChange={handleBgChange}
                                         style={styles.colorInput}
-                                        aria-label="color"
+                                        aria-label={t('serverThemes.backgroundColor', 'Background color')}
                                     />
-                                </div>
-                                <div style={styles.colorField}>
-                                    <label>Metin</label>
                                     <input
                                         type="color"
                                         value={customTheme.text_color}
                                         onChange={handleTextColorChange}
                                         style={styles.colorInput}
-                                        aria-label="color"
+                                        aria-label={t('serverThemes.textColor', 'Text color')}
                                     />
-                                </div>
-                                <div style={styles.colorField}>
-                                    <label>Vurgu</label>
                                     <input
                                         type="color"
                                         value={customTheme.accent_color}
                                         onChange={handleAccentChange}
                                         style={styles.colorInput}
-                                        aria-label="color"
+                                        aria-label={t('serverThemes.accentColor', 'Accent color')}
                                     />
+                                    <button
+                                        onClick={saveCustomTheme}
+                                        style={styles.saveBtn}
+                                    >
+                                        <FaPlus /> {t('serverThemes.saveTheme', 'Save Theme')}
+                                    </button>
                                 </div>
                             </div>
-                            <button
-                                aria-label="save Custom Theme"
-                                onClick={saveCustomTheme}
-                                style={styles.saveBtn}
-                            >
-                                <FaPlus /> Temayı Kaydet
-                            </button>
                         </div>
                     </section>
                 </div>

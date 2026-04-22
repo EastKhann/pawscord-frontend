@@ -79,7 +79,7 @@ const ConnectionQualityIndicator = ({ stats, username, compact = false, showDeta
 
     // Detaylı mod
     return (
-        <div aria-label="connection quality indicator" style={styles.container}>
+        <div aria-label={t('connectionQuality.indicator', 'Connection quality indicator')} style={styles.container}>
             {/* Kalite barları */}
             <div style={styles.barsContainer}>
                 {[1, 2, 3, 4].map((bar) => (
@@ -105,13 +105,13 @@ const ConnectionQualityIndicator = ({ stats, username, compact = false, showDeta
                         <span style={styles.detailValue}>{Math.round(stats.rtt || 0)}ms</span>
                     </div>
                     <div style={styles.detailRow}>
-                        <span style={styles.detailLabel}>Bağlantı:</span>
+                        <span style={styles.detailLabel}>{t('connQuality.connection', 'Connection:')}</span>
                         <span style={styles.detailValue}>{stats.connectionType || 'N/A'}</span>
                     </div>
                     {stats.audio && (
                         <>
                             <div style={styles.detailRow}>
-                                <span style={styles.detailLabel}>Paket Kaybı:</span>
+                                <span style={styles.detailLabel}>{t('connQuality.packetLoss', 'Packet Loss:')}</span>
                                 <span style={styles.detailValue}>
                                     {stats.audio.packetsLost || 0} /{' '}
                                     {stats.audio.packetsReceived || 0}
@@ -152,8 +152,8 @@ const ConnectionQualityIndicator = ({ stats, username, compact = false, showDeta
                                     stats.iceConnectionState === 'connected'
                                         ? '#23a559'
                                         : stats.iceConnectionState === 'checking'
-                                          ? '#f0b232'
-                                          : '#f23f42',
+                                            ? '#f0b232'
+                                            : '#f23f42',
                             }}
                         >
                             {stats.iceConnectionState || 'N/A'}

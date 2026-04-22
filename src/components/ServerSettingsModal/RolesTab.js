@@ -110,7 +110,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
     };
 
     const handleDeleteRole = async (roleId) => {
-        if (!(await confirmDialog('Bu rolü silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('roles.deleteConfirm', 'Are you sure you want to delete this role?')))) return;
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/roles/${roleId}/delete/`, {
                 method: 'DELETE',
@@ -130,7 +130,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
         <div style={S.flex}>
             {/* SOL: ROL LİSTESİ */}
             <div style={styles.rolesSidebar}>
-                <button onClick={resetForm} aria-label="Create new role" style={styles.newRoleBtn}>
+                <button onClick={resetForm} aria-label={t('rolesTab.createRole', 'Create new role')} style={styles.newRoleBtn}>
                     <FaPlus />
                     {t('new_role')}
                 </button>
@@ -180,7 +180,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
                             style={colorPreviewStyle}
                             role="button"
                             tabIndex={0}
-                            aria-label="Select color"
+                            aria-label={t('rolesTab.selectColor', 'Select role color')}
                             onClick={() => setShowColorPicker(!showColorPicker)}
                             onKeyDown={(e) =>
                                 (e.key === 'Enter' || e.key === ' ') &&
@@ -277,7 +277,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
                     {editingRole && (
                         <button
                             onClick={() => handleDeleteRole(editingRole.id)}
-                            aria-label="Delete role"
+                            aria-label={t('rolesTab.deleteRole', 'Delete role')}
                             style={styles.deleteBtn}
                         >
                             <FaTrash />
@@ -286,7 +286,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
                     )}
                     <button
                         onClick={handleSaveRole}
-                        aria-label="Save role"
+                        aria-label={t('serverSettings.saveRole', 'Save role')}
                         style={styles.saveBtn}
                         disabled={loading}
                     >

@@ -1,9 +1,6 @@
-﻿import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const MiniButton = ({ icon, active, danger, onClick, title }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     return (
         <button
             onClick={onClick}

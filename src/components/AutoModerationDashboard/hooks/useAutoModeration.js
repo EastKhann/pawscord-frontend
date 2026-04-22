@@ -80,7 +80,7 @@ export const useAutoModeration = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     };
 
     const deleteRule = async (ruleId) => {
-        if (!(await confirmDialog('Bu kuralı silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog('Are you sure you want to delete this rule?'))) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/moderation/rules/${ruleId}/`, {

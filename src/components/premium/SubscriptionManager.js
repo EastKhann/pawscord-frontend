@@ -98,7 +98,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
     };
 
     const handleCancel = async (subId) => {
-        if (await confirmDialog('Bu aboneliği iptal etmek istediğinizden emin misiniz?')) {
+        if (await confirmDialog(t('premium.cancelConfirm', 'Are you sure you want to cancel this subscription?'))) {
             setSubscriptions((prev) =>
                 prev.map((s) => (s.id === subId ? { ...s, status: 'cancelled' } : s))
             );
@@ -115,7 +115,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
         {
             name: 'Free',
             price: '$0',
-            features: ['Temel Sohbet', '8MB Yükleme', 'Standart Ses'],
+            features: [t('premium.basicChat', 'Basic Chat'), t('premium.upload8mb', '8MB Upload'), t('premium.standardVoice', 'Standard Voice')],
             color: '#80848e',
             current: false,
         },
@@ -123,9 +123,9 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
             name: 'Nitro Basic',
             price: '$2.99/month',
             features: [
-                '50MB Yükleme',
+                t('premium.upload50mb', '50MB Upload'),
                 t('ui.custom_emoji_kullanimi'),
-                'Profil Başlığı',
+                t('premium.profileBanner', 'Profile Banner'),
                 'HD Video',
             ],
             color: '#5865f2',
@@ -135,12 +135,12 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
             name: 'Nitro',
             price: '$9.99/month',
             features: [
-                '100MB Yükleme',
+                t('premium.upload100mbFeature', '100MB Upload'),
                 t('ui.tum_emojiler'),
-                'Profil Başlığı',
-                '2 Sunucu Artırma',
+                t('premium.profileBanner', 'Profile Banner'),
+                t('premium.serverBoost2', '2 Server Boosts'),
                 'HD Video 4K',
-                'Özel Etiket',
+                t('premium.customTag', 'Custom Tag'),
             ],
             color: '#eb459e',
             current: true,
@@ -148,10 +148,10 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
     ];
 
     const tabs = [
-        { id: 'current', label: 'Mevcut Abonelikler', icon: <FaCrown /> },
-        { id: 'plans', label: 'Planlar', icon: <FaGift /> },
-        { id: 'history', label: 'Ödeme Geçmişi', icon: <FaHistory /> },
-        { id: 'payment', label: 'Ödeme Yöntemleri', icon: <FaCreditCard /> },
+        { id: 'current', label: t('premium.currentSubscriptions', 'Current Subscriptions'), icon: <FaCrown /> },
+        { id: 'plans', label: t('premium.plans', 'Plans'), icon: <FaGift /> },
+        { id: 'history', label: t('premium.paymentHistory', 'Payment History'), icon: <FaHistory /> },
+        { id: 'payment', label: t('premium.paymentMethods', 'Payment Methods'), icon: <FaCreditCard /> },
     ];
 
     return (
@@ -164,8 +164,8 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
         >
             <div style={styles.modal}>
                 <div style={styles.header}>
-                    <h2 style={styles.title}>📋 Subscription Yönetimi</h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <h2 style={styles.title}>{t('premium.managerTitle', '📋 Subscription Management')}</h2>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -173,8 +173,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                 <div style={styles.tabs}>
                     {tabs.map((tab) => (
                         <button
-                            aria-label="Action button"
-                            key={tab.id}
+                            aria-label={tab.label}
                             onClick={() => setActiveTab(tab.id)}
                             style={{
                                 ...styles.tab,
@@ -196,7 +195,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                 <div style={styles.subscriptionsList}>
                                     {subscriptions.length === 0 ? (
                                         <div style={styles.empty}>
-                                            Aktif aboneliğiniz bulunmuyor
+                                            {t('premium.noActiveSubscription', 'No active subscription')}
                                         </div>
                                     ) : (
                                         subscriptions.map((sub) => (
@@ -223,8 +222,8 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                                         }}
                                                     >
                                                         {sub.status === 'active'
-                                                            ? 'Active'
-                                                            : 'Cancel Edildi'}
+                                                            ? t('common.active', 'Active')
+                                                            : t('premium.cancelled', 'Cancelled')}
                                                     </span>
                                                 </div>
                                                 <div style={styles.subFeatures}>
@@ -239,23 +238,23 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                                 </div>
                                                 <div style={styles.subFooter}>
                                                     <span style={styles.nextBilling}>
-                                                        Sonraki fatura: {sub.nextBilling}
+                                                        {t('premium.nextBilling', 'Next billing:').replace('{{date}}', sub.nextBilling)}
                                                     </span>
                                                     {sub.status === 'active' ? (
                                                         <button
-                                                            aria-label="Close"
+                                                            aria-label={t('subManager.cancelSub', 'Cancel subscription')}
                                                             onClick={() => handleCancel(sub.id)}
                                                             style={styles.cancelBtn}
                                                         >
-                                                            <FaBan /> İptal Et
+                                                            <FaBan /> {t('premium.cancel', 'Cancel')}
                                                         </button>
                                                     ) : (
                                                         <button
-                                                            aria-label="Go forward"
+                                                            aria-label={t('subManager.resumeSub', 'Resume subscription')}
                                                             onClick={() => handleResume(sub.id)}
                                                             style={styles.resumeBtn}
                                                         >
-                                                            <FaArrowRight /> Continuetir
+                                                            <FaArrowRight /> {t('premium.resume', 'Resume')}
                                                         </button>
                                                     )}
                                                 </div>
@@ -277,7 +276,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                                     : '1px solid rgba(255,255,255,0.1)',
                                             }}
                                         >
-                                            {plan.current && <div>Mevcut Plan</div>}
+                                            {plan.current && <div>{t('premium.currentPlan', 'Current Plan')}</div>}
                                             <h3>{plan.name}</h3>
                                             <div style={styles.planPrice}>{plan.price}</div>
                                             <div style={styles.planFeatures}>
@@ -294,7 +293,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                                 ))}
                                             </div>
                                             {!plan.current && (
-                                                <button aria-label="Action button">Yükselt</button>
+                                                <button aria-label={t('premium.upgrade', 'Upgrade')} onClick={() => { }}>{t('premium.upgrade', 'Upgrade')}</button>
                                             )}
                                         </div>
                                     ))}
@@ -308,7 +307,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                             <tr>
                                                 <th style={styles.th}>Date</th>
                                                 <th style={styles.th}>Description</th>
-                                                <th style={styles.th}>Tutar</th>
+                                                <th style={styles.th}>{t('premium.amount', 'Amount')}</th>
                                                 <th style={styles.th}>Status</th>
                                             </tr>
                                         </thead>
@@ -320,7 +319,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                                     <td style={styles.td}>{item.amount}</td>
                                                     <td style={styles.td}>
                                                         <span style={styles.paidBadge}>
-                                                            ✅ Ödendi
+                                                            {t('premium.paid', '✅ Paid')}
                                                         </span>
                                                     </td>
                                                 </tr>
@@ -332,7 +331,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
 
                             {activeTab === 'payment' && (
                                 <div style={styles.paymentSection}>
-                                    <h3 style={styles.sectionTitle}>Kayıtlı Ödeme Yöntemleri</h3>
+                                    <h3 style={styles.sectionTitle}>{t('premium.savedPaymentMethods', 'Saved Payment Methods')}</h3>
                                     <div style={styles.paymentMethods}>
                                         <div style={styles.paymentCard}>
                                             <FaCreditCard className="icon-primary-24" />
@@ -345,8 +344,8 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                             <span style={styles.defaultBadge}>Default</span>
                                         </div>
                                     </div>
-                                    <button aria-label="Action button" style={styles.addPaymentBtn}>
-                                        <FaCreditCard /> Yeni Ödeme Yöntemi Ekle
+                                    <button aria-label={t('premium.addPaymentMethod', 'Add New Payment Method')} style={styles.addPaymentBtn}>
+                                        <FaCreditCard /> {t('premium.addPaymentMethod', '+ Add New Payment Method')}
                                     </button>
                                 </div>
                             )}

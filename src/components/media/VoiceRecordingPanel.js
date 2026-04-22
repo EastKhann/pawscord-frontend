@@ -53,28 +53,28 @@ const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
                     <div className="channel-info">
                         <FaHashtag /> {channelName || t('server.voiceChannel')}
                     </div>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div className="tabs">
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('voiceRec.recordTab', 'Record')}
                         className={`tab ${activeTab === 'record' ? 'active' : ''}`}
                         onClick={() => setActiveTab('record')}
                     >
                         <FaMicrophone /> {t('ui.record_tab')}
                     </button>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('voiceRec.recordingsTab', 'Recordings')}
                         className={`tab ${activeTab === 'recordings' ? 'active' : ''}`}
                         onClick={() => setActiveTab('recordings')}
                     >
                         <FaHistory /> {t('ui.recordings_tab')} ({recordings.length})
                     </button>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('voiceRec.settingsTab', 'Settings')}
                         className={`tab ${activeTab === 'settings' ? 'active' : ''}`}
                         onClick={() => setActiveTab('settings')}
                     >

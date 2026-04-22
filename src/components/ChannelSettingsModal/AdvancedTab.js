@@ -58,7 +58,7 @@ const AdvancedTab = ({
                             <option value="all">{t('all')}</option>
                         </select>
                         <button
-                            aria-label="Delete message history"
+                            aria-label={t('channelSettings.deleteHistory', 'Delete message history')}
                             style={styles.dangerBtnSmall}
                             onClick={async () => {
                                 if (
@@ -128,7 +128,7 @@ const AdvancedTab = ({
             {/* İstatistikler */}
             <div style={styles.advancedSection}>
                 <h5 style={styles.advancedSectionTitle}>
-                    <FaChartLine /> Kanal İstatistikleri
+                    <FaChartLine /> {t('chanAdvanced.stats', 'Channel Statistics')}
                 </h5>
                 <div style={styles.statsGrid}>
                     <div style={styles.statBox}>
@@ -151,7 +151,7 @@ const AdvancedTab = ({
             {/* Tehlikeli Bölge */}
             <div style={styles.dangerZone}>
                 <h5 style={styles.dangerZoneTitle}>
-                    <FaExclamationTriangle /> Tehlikeli Bölge
+                    <FaExclamationTriangle /> {t('chanAdvanced.dangerZone', 'Danger Zone')}
                 </h5>
                 <div style={styles.advancedOption}>
                     <div>
@@ -161,7 +161,7 @@ const AdvancedTab = ({
                         </p>
                     </div>
                     <button onClick={handleDelete} style={styles.dangerBtnLarge}>
-                        <FaTrash /> Kanalı Sil
+                        <FaTrash /> {t('chanAdvanced.deleteChannel', 'Delete Channel')}
                     </button>
                 </div>
             </div>

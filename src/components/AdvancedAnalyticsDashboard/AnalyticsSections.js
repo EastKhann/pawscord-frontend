@@ -26,7 +26,7 @@ export const ChartsSection = ({ memberActivity, messageActivity, peakHours }) =>
             });
         const max = Math.max(...hours.map((h) => h.value));
         return (
-            <div aria-label="charts section" className="peak-hours-chart">
+            <div aria-label={t('analytics.chartsSection', 'Charts section')} className="peak-hours-chart">
                 {hours.map((h, idx) => {
                     const hourBarStyle = {
                         height: `${max > 0 ? (h.value / max) * 100 : 0}%`,
@@ -34,8 +34,8 @@ export const ChartsSection = ({ memberActivity, messageActivity, peakHours }) =>
                             h.value > max * 0.8
                                 ? '#23a559'
                                 : h.value > max * 0.5
-                                  ? '#5865f2'
-                                  : '#1e2024',
+                                    ? '#5865f2'
+                                    : '#1e2024',
                     };
                     return (
                         <div
@@ -57,7 +57,7 @@ export const ChartsSection = ({ memberActivity, messageActivity, peakHours }) =>
             <div className="chart-card">
                 <div className="chart-header">
                     <h3>
-                        <FaUsers /> Üye Aktivitesi
+                        <FaUsers /> {t('advAnalytics.memberActivity', 'Member Activity')}
                     </h3>
                 </div>
                 <div className="chart-body">
@@ -86,10 +86,10 @@ export const ChartsSection = ({ memberActivity, messageActivity, peakHours }) =>
             <div className="chart-card wide">
                 <div className="chart-header">
                     <h3>
-                        <FaClock /> Yoğunluk Saatleri
+                        <FaClock /> {t('advAnalytics.peakHours', 'Peak Hours')}
                     </h3>
                     <span className="chart-info">
-                        <FaInfoCircle /> En yoğun saatler yeşil ile gösterilir
+                        <FaInfoCircle /> {t('advAnalytics.peakHint', 'Peak hours are shown in green')}
                     </span>
                 </div>
                 <div className="chart-body">
@@ -138,7 +138,7 @@ export const ListsSection = ({ topChannels, topMembers, reactionStats, geoData }
         <div className="list-card">
             <div className="list-header">
                 <h3>
-                    <FaUsers /> En Active Üyeler
+                    <FaUsers /> {t('advAnalytics.mostActiveMembers', 'Most Active Members')}
                 </h3>
             </div>
             <div className="list-body">
@@ -163,7 +163,7 @@ export const ListsSection = ({ topChannels, topMembers, reactionStats, geoData }
         <div className="list-card">
             <div className="list-header">
                 <h3>
-                    <FaHeart /> En Çok Kullanılan Tepkiler
+                    <FaHeart /> {t('advAnalytics.topReactions', 'Top Reactions')}
                 </h3>
             </div>
             <div className="list-body">
@@ -184,7 +184,7 @@ export const ListsSection = ({ topChannels, topMembers, reactionStats, geoData }
         <div className="list-card">
             <div className="list-header">
                 <h3>
-                    <FaGlobe /> Coğrafi Dağılım
+                    <FaGlobe /> {t('advAnalytics.geoDistribution', 'Geographic Distribution')}
                 </h3>
             </div>
             <div className="list-body">
@@ -216,12 +216,12 @@ export const LinkClicksSection = ({ linkClicks }) => {
     return (
         <div className="links-section">
             <h3>
-                <FaLink /> Link Tıklamaları
+                <FaLink /> {t('advAnalytics.linkClicks', 'Link Clicks')}
             </h3>
             <div className="links-table">
                 <div className="table-header">
                     <span>{t('url')}</span>
-                    <span>Tıklama</span>
+                    <span>{t('advAnalytics.clicks', 'Clicks')}</span>
                     <span>{t('benzersiz')}</span>
                 </div>
                 {linkClicks.map((link, idx) => (

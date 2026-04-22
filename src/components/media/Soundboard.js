@@ -171,7 +171,7 @@ const Soundboard = ({ serverId, onClose }) => {
     };
 
     const deleteSound = async (soundId) => {
-        if (!(await confirmDialog('Bu sesi silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('soundboard.deleteConfirm', 'Are you sure you want to delete this sound?')))) return;
 
         try {
             const token = getToken();
@@ -227,7 +227,7 @@ const Soundboard = ({ serverId, onClose }) => {
                 <div className="soundboard-header">
                     <h2>🔊 Soundboard</h2>
 
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -241,11 +241,11 @@ const Soundboard = ({ serverId, onClose }) => {
 
                             <input
                                 type="text"
-                                placeholder="Ses ara..."
+                                placeholder={t('soundboard.searchPlaceholder', 'Search sounds...')}
                                 value={searchQuery}
                                 onChange={handleSearchChange}
                                 className="search-input"
-                                aria-label="Search sounds..."
+                                aria-label={t('soundboard.search', 'Search sounds')}
                             />
                         </div>
 
@@ -260,30 +260,30 @@ const Soundboard = ({ serverId, onClose }) => {
                                 value={volume}
                                 onChange={handleVolumeChange}
                                 className="volume-slider"
-                                aria-label="range"
+                                aria-label={t('music.progressBar', 'Volume')}
                             />
 
                             <span className="volume-value">{Math.round(volume * 100)}%</span>
                         </div>
 
                         <button
-                            aria-label="handle Show Upload"
+                            aria-label={t('soundboard.uploadBtn', 'Upload sound')}
                             className="upload-sound-btn"
                             onClick={handleShowUpload}
                         >
-                            ➕ Upload
+                            ➕ {t('common.upload', 'Upload')}
                         </button>
                     </div>
 
                     {/* Sounds Grid */}
 
                     {loading ? (
-                        <div className="loading-spinner">Sesler yükleniyor...</div>
+                        <div className="loading-spinner">{t('soundboard.loading', 'Loading sounds...')}</div>
                     ) : filteredSounds.length === 0 ? (
                         <div className="empty-state">
                             <div className="empty-icon">🔊</div>
 
-                            <h3>{searchQuery ? 'Ses Bulunamadı' : 'Henüz Ses Yok'}</h3>
+                            <h3>{searchQuery ? t('soundboard.notFound', 'Sound Not Found') : t('soundboard.noSounds', 'No Sounds Yet')}</h3>
 
                             <p>
                                 {searchQuery
@@ -296,9 +296,7 @@ const Soundboard = ({ serverId, onClose }) => {
                             {filteredSounds.map((sound) => (
                                 <div key={sound.id} className="sound-card">
                                     <button
-                                        aria-label="Action button"
-                                        className="sound-play-btn"
-                                        onClick={() => playSound(sound.id, sound.url)}
+                                        aria-label={t('soundboard.playSound', 'Play {{name}}', { name: sound.name })}
                                     >
                                         ▶▶
                                     </button>
@@ -318,10 +316,10 @@ const Soundboard = ({ serverId, onClose }) => {
                                     </div>
 
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('soundboard.deleteSound', 'Delete {{name}}', { name: sound.name })}
                                         className="delete-sound-btn"
                                         onClick={() => deleteSound(sound.id)}
-                                        title="Sil"
+                                        title={t('common.delete', 'Delete')}
                                     >
                                         🗑
                                     </button>
@@ -352,28 +350,27 @@ const Soundboard = ({ serverId, onClose }) => {
                             className="upload-modal"
                             role="dialog"
                             aria-modal="true"
-                            aria-label="Upload Sound"
+                            aria-label={t('soundboard.uploadTitle', 'Upload Sound')}
                             onClick={handleStopPropagation}
                         >
                             <h3>➕ Upload Sound</h3>
 
                             <div className="form-group">
-                                <label>Ses Adı</label>
+                                <label>{t('soundboard.soundName', 'Sound Name')}</label>
 
                                 <input
                                     type="text"
                                     value={soundName}
                                     onChange={handleSoundNameChange}
-                                    placeholder="Airhorn"
+                                    placeholder={t('soundboard.namePlaceholder', 'e.g. Airhorn')}
                                     maxLength={32}
                                     className="sound-name-input"
-                                    aria-label="Airhorn"
-                                    aria-label="Sound Name"
+                                    aria-label={t('soundboard.soundName', 'Sound Name')}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label>Ses Dosyası</label>
+                                <label>{t('soundboard.soundFile', 'Sound File')}</label>
 
                                 <div
                                     className="file-upload-area"
@@ -399,7 +396,7 @@ const Soundboard = ({ serverId, onClose }) => {
                                         <>
                                             <div className="upload-icon">📤</div>
 
-                                            <p>Ses dosyası seçmek için tıklayın</p>
+                                            <p>{t('soundboard.clickToSelect', 'Click to select a sound file')}</p>
 
                                             <p className="upload-hint">
                                                 MP3, WAV, OGG • Max 1MB • 5 seconds recommended
@@ -414,26 +411,26 @@ const Soundboard = ({ serverId, onClose }) => {
                                     accept="audio/*"
                                     onChange={handleFileSelect}
                                     className="display-none"
-                                    aria-label="sound file"
+                                    aria-label={t('soundboard.fileInput', 'Sound file input')}
                                 />
                             </div>
 
                             <div className="modal-actions">
                                 <button
-                                    aria-label="handle Hide Upload"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-btn"
                                     onClick={handleHideUpload}
                                 >
-                                    Cancel
+                                    {t('common.cancel', 'Cancel')}
                                 </button>
 
                                 <button
-                                    aria-label="upload Sound"
+                                    aria-label={t('soundboard.uploadBtn', 'Upload sound')}
                                     className="upload-btn"
                                     onClick={uploadSound}
                                     disabled={uploading || !soundName || !soundFile}
                                 >
-                                    {uploading ? t('panels.uploading') : 'Upload'}
+                                    {uploading ? t('panels.uploading') : t('common.upload', 'Upload')}
                                 </button>
                             </div>
                         </div>

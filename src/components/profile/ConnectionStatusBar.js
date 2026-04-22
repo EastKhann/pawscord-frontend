@@ -80,7 +80,7 @@ const ConnectionStatusBar = () => {
 
     return (
         <div
-            aria-label="connection status bar"
+            aria-label={t('connectionStatus.bar', 'Connection status bar')}
             style={{
                 ...S.bar,
                 background: c.bg,

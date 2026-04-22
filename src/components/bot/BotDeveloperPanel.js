@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useBotDeveloper from '../BotDeveloperPanel/useBotDeveloper';
 import BotListView from '../BotDeveloperPanel/BotListView';
@@ -7,6 +8,7 @@ import BotDetailsView from '../BotDeveloperPanel/BotDetailsView';
 import './BotDeveloperPanel.css';
 
 const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
+    const { t } = useTranslation();
     const [error, setError] = useState(null);
     const {
         bots,
@@ -48,7 +50,7 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
                 >
                     <div className="bot-loading">
                         <div className="spinner" />
-                        <p>Yükleniyor...</p>
+                        <p>{t('common.loading', 'Loading...')}</p>
                     </div>
                 </div>
             </div>
@@ -71,30 +73,30 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="bot-header">
-                    <h2>🤖 Bot Geliştirici Paneli</h2>
+                    <h2>{t('botDev.title', '🤖 Bot Developer Panel')}</h2>
                     <div className="header-actions">
                         {view !== 'list' && (
                             <button
-                                aria-label="Switch view"
+                                aria-label={t('botDeveloper.switchView', 'Switch view')}
                                 className="back-to-list-btn"
                                 onClick={() => {
                                     setView('list');
                                     setSelectedBot(null);
                                 }}
                             >
-                                ← My Bots
+                                ← {t('bot.myBots', 'My Bots')}
                             </button>
                         )}
                         {view === 'list' && (
                             <button
-                                aria-label="Create"
+                                aria-label={t('common.create')}
                                 className="create-bot-btn"
                                 onClick={() => setView('create')}
                             >
-                                ➕ Yeni Bot
+                                ➕ {t('bot.newBot', 'New Bot')}
                             </button>
                         )}
-                        <button aria-label="on Close" className="close-btn" onClick={onClose}>
+                        <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                             ✕
                         </button>
                     </div>

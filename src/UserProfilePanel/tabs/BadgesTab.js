@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
 const _s = (o) => o;
 
@@ -41,6 +42,7 @@ const BadgesTab = ({
     storeBalance,
     userStats,
 }) => {
+    const { t } = useTranslation();
     const badges = rawBadges || [];
     const achievements = rawAch || [];
     const styles = profileStyles;
@@ -49,7 +51,7 @@ const BadgesTab = ({
 
     return (
         <>
-            <div aria-label="badges tab" style={styles.card}>
+            <div aria-label={t('aria.badgesTab', 'Badges')} style={styles.card}>
                 <h3 style={styles.sectionTitle}>🏆 Rozetler & XP</h3>
 
                 <div style={_st1}>
@@ -72,7 +74,7 @@ const BadgesTab = ({
                 <h4 style={_st7}>🎖️ Earned Badges</h4>
 
                 {badges.length === 0 && (
-                    <p style={_st8}>Henüz rozet kazanılmadı. Daha fazla aktivite göster!</p>
+                    <p style={_st8}>{t('badgesTab.noBadges', 'No badges earned yet. Show more activity!')}</p>
                 )}
 
                 <div style={_st9}>
@@ -87,7 +89,7 @@ const BadgesTab = ({
             <div style={styles.card}>
                 <h3 style={styles.sectionTitle}>🎯 Achievements</h3>
 
-                {achievements.length === 0 && <p style={_st8}>Henüz başarım kazanılmadı.</p>}
+                {achievements.length === 0 && <p style={_st8}>{t('badgesTab.noAchievements', 'No achievements earned yet.')}</p>}
 
                 <div style={_st10}>
                     {achievements.map((achievement, idx) => (

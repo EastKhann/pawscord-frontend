@@ -20,14 +20,14 @@ bot.connect();`;
 const BotDocsView = ({ copyToClipboard }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="bot docs view" className="docs-view">
+        <div aria-label={t('botDeveloper.docsView', 'Bot documentation')} className="docs-view">
             <h3>
-                <FaBook /> Bot API Dokümantasyonu
+                <FaBook /> {t('botDocs.title', 'Bot API Documentation')}
             </h3>
 
             <div className="docs-section">
-                <h4>🚀 Hızlı Başlangıç</h4>
-                <p>PAWSCORD Bot API ile kendi botunuzu oluşturabilirsiniz.</p>
+                <h4>🚀 {t('botDocs.quickStart', 'Quick Start')}</h4>
+                <p>{t('botDocs.intro', 'You can create your own bot with the PAWSCORD Bot API.')}</p>
                 <div className="code-block">
                     <div className="code-header">
                         <span>JavaScript (Node.js)</span>
@@ -50,7 +50,7 @@ const BotDocsView = ({ copyToClipboard }) => {
                     <div className="endpoint">
                         <span className="method post">{t('post')}</span>
                         <code>{t('api_messages_send')}</code>
-                        <span>Mesaj gönder</span>
+                        <span>{t('botDocs.sendMessage', 'Send message')}</span>
                     </div>
                     <div className="endpoint">
                         <span className="method post">{t('post')}</span>
@@ -70,19 +70,19 @@ const BotDocsView = ({ copyToClipboard }) => {
                 <div className="event-list">
                     <div className="event">
                         <code>{t('message_create')}</code>
-                        <span>Yeni mesaj gönderildiğinde</span>
+                        <span>{t('botDocs.onNewMessage', 'When a new message is sent')}</span>
                     </div>
                     <div className="event">
                         <code>{t('reaction_add')}</code>
-                        <span>Tepki eklendiğinde</span>
+                        <span>{t('botDocs.onReaction', 'When a reaction is added')}</span>
                     </div>
                     <div className="event">
                         <code>{t('member_join')}</code>
-                        <span>Üye sunucuya katıldığında</span>
+                        <span>{t('botDocs.onMemberJoin', 'When a member joins the server')}</span>
                     </div>
                     <div className="event">
                         <code>{t('voice_state_update')}</code>
-                        <span>Ses durumu değiştiğinde</span>
+                        <span>{t('botDocs.onVoiceState', 'When voice state changes')}</span>
                     </div>
                 </div>
             </div>

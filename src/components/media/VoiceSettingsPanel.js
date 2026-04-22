@@ -51,7 +51,7 @@ const VoiceSettingsPanel = ({ onClose, channelId }) => {
             >
                 <div className="voice-settings-header">
                     <h2>🎙️ {t('voiceTabs.title')}</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -59,7 +59,7 @@ const VoiceSettingsPanel = ({ onClose, channelId }) => {
                 <div className="settings-tabs">
                     {TABS.map((tab) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={t(tab.label)}
                             key={tab.id}
                             className={`tab-btn ${api.activeTab === tab.id ? 'active' : ''}`}
                             onClick={() => api.setActiveTab(tab.id)}

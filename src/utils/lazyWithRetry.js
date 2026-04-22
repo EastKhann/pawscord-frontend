@@ -46,7 +46,7 @@ export function lazyWithRetry(importFn, retries = 2) {
                     .then(resolve)
                     .catch((error) => {
                         if (retriesLeft > 0 && isChunkLoadError(error)) {
-                            logger.warn(`⚠️ Chunk load hatası, retry... (${retriesLeft} kalan)`);
+                            logger.warn(`⚠️ Chunk load error, retrying... (${retriesLeft} remaining)`);
                             // Cache-bust with tekrar dene
                             setTimeout(() => attempt(retriesLeft - 1), 800);
                         } else if (isChunkLoadError(error)) {
@@ -86,7 +86,7 @@ export function handleChunkReload() {
     }
 
     logger.warn(
-        `🔄 Yeni versiyon algılandı, page yenileniyor... (${reloadCount + 1}/${MAX_RELOADS})`
+        `🔄 New version detected, reloading page... (${reloadCount + 1}/${MAX_RELOADS})`
     );
     sessionStorage.setItem(CHUNK_RELOAD_KEY, now.toString());
     sessionStorage.setItem(CHUNK_RELOAD_COUNT_KEY, (reloadCount + 1).toString());

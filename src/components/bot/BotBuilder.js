@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaRobot, FaPlus, FaSave } from 'react-icons/fa';
@@ -46,7 +46,7 @@ const BotBuilder = ({ onClose, serverSlug, token, isMobile }) => {
             >
                 <div style={styles.header}>
                     <h2 style={styles.title}>
-                        <FaRobot /> Özel Bot Oluşturucu
+                        <FaRobot /> {t('botBuilder.title', 'Custom Bot Builder')}
                     </h2>
                 </div>
 
@@ -55,23 +55,23 @@ const BotBuilder = ({ onClose, serverSlug, token, isMobile }) => {
                     <div style={styles.section}>
                         <h3 style={styles.sectionTitle}>🤖 Temel Bilgiler</h3>
                         <div style={styles.inputGroup}>
-                            <label style={styles.label}>Bot Adı</label>
+                            <label style={styles.label}>{t('botBuilder.botName', 'Bot Name')}</label>
                             <input
                                 type="text"
                                 value={botName}
                                 onChange={(e) => setBotName(e.target.value)}
-                                placeholder="Harika Botum"
+                                placeholder={t('botBuilder.namePlaceholder', 'My Awesome Bot')}
                                 style={styles.input}
                                 maxLength={32}
                             />
                         </div>
                         <div style={styles.inputGroup}>
-                            <label style={styles.label}>Bot Avatarı (Emoji)</label>
+                            <label style={styles.label}>{t('botBuilder.botAvatar', 'Bot Avatar (Emoji)')}</label>
                             <input
                                 type="text"
                                 value={botAvatar}
                                 onChange={(e) => setBotAvatar(e.target.value)}
-                                placeholder="🤖"
+                                placeholder={t('botBuilder.avatarPlaceholder', '🤖')}
                                 style={styles.input}
                                 maxLength={2}
                             />
@@ -92,8 +92,8 @@ const BotBuilder = ({ onClose, serverSlug, token, isMobile }) => {
                                 canRemove={commands.length > 1}
                             />
                         ))}
-                        <button aria-label="Komut Ekle" onClick={addCommand} style={styles.addBtn}>
-                            <FaPlus /> Komut Ekle
+                        <button aria-label={t('botBuilder.addCommand', 'Add command')} onClick={addCommand} style={styles.addBtn}>
+                            <FaPlus /> {t('botBuilder.addCommand', 'Add Command')}
                         </button>
                     </div>
 
@@ -130,16 +130,16 @@ const BotBuilder = ({ onClose, serverSlug, token, isMobile }) => {
                 </div>
 
                 <div style={styles.footer}>
-                    <button aria-label="on Close" onClick={onClose} style={styles.cancelBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.cancelBtn}>
                         {t('common.cancel')}
                     </button>
                     <button
-                        aria-label="handle Save"
+                        aria-label={t('botBuilder.createBot', 'Create bot')}
                         onClick={handleSave}
                         disabled={isSaving}
                         style={styles.saveBtn}
                     >
-                        <FaSave /> {isSaving ? 'Creating...' : 'Create Bot'}
+                        <FaSave /> {isSaving ? t('common.creating', 'Creating...') : t('botBuilder.createBot', 'Create Bot')}
                     </button>
                 </div>
             </div>

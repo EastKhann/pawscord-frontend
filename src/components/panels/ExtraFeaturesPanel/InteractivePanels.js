@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-﻿// ExtraFeaturesPanel/InteractivePanels.js
+// ExtraFeaturesPanel/InteractivePanels.js
 
 // Panels 26-30: MemberLevels, WelcomeMessages, PrivacySettings, UserConnections, ActivityStatus
 
@@ -150,22 +150,22 @@ export const WelcomeMessagesPanel = memo(({ serverId, onClose }) => {
 
                 <div className="setting-row">
 
-                    <label><input type="checkbox" checked={config.enabled} onChange={handleEnabledChange} aria-label="checkbox" />{t('welcome_message_aktif')}</label>
+                    <label><input type="checkbox" checked={config.enabled} onChange={handleEnabledChange} aria-label={t('interactivePanel.enabledToggle', 'Enable welcome message')} />{t('welcome_message_aktif')}</label>
 
                 </div>
 
                 <div className="setting-row">
                     <label>{t('mesaj')}</label>
 
-                    <textarea value={config.message} onChange={handleMessageChange} placeholder={t('welcome_user')} aria-label="textarea" />
+                    <textarea value={config.message} onChange={handleMessageChange} placeholder={t('welcome_user')} aria-label={t('interactivePanel.messageInput', 'Welcome message')} />
 
-                    <small>Username for {'{user}'} yazın</small>
+                    <small>{t('interactivePanel.usernameFor', "Username for {'{user}'}")} {t('interactivePanel.type', 'type')}</small>
 
                 </div>
 
                 <div className="setting-row">
 
-                    <label><input type="checkbox" checked={config.dm_enabled} onChange={handleDmEnabledChange} aria-label="checkbox" />{t('dm_with_de_gnder')}</label>
+                    <label><input type="checkbox" checked={config.dm_enabled} onChange={handleDmEnabledChange} aria-label={t('interactivePanel.dmToggle', 'Enable DM welcome')} />{t('dm_with_de_gnder')}</label>
 
                 </div>
 
@@ -236,7 +236,7 @@ export const PrivacySettingsPanel = memo(({ onClose }) => {
 
             <div className="panel-content">
 
-                <div className="privacy-option" role="button" tabIndex={0} onClick={() => toggleSetting('show_online_status')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}><span>Çevrimiiçi durumunu göster</span><div className={`toggle ${settings.show_online_status ? 'on' : 'off'}`} /></div>
+                <div className="privacy-option" role="button" tabIndex={0} onClick={() => toggleSetting('show_online_status')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}><span>{t('privacy.showOnlineStatus', 'Show online status')}</span><div className={`toggle ${settings.show_online_status ? 'on' : 'off'}`} /></div>
 
                 <div className="privacy-option" role="button" tabIndex={0} onClick={() => toggleSetting('allow_dms_from_strangers')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}><span>{t('yabanclardan_dm_al')}</span><div className={`toggle ${settings.allow_dms_from_strangers ? 'on' : 'off'}`} /></div>
 
@@ -331,7 +331,7 @@ export const UserConnectionsPanel = memo(({ onClose }) => {
 
         <div className="feature-panel user-connections">
 
-            <div className="panel-header"><h3>{'🔗'} Bağlı Hesaplar</h3><button onClick={onClose} className="close-btn">✕</button></div>
+            <div className="panel-header"><h3>{'🔗'} {t('interactivePanel.connectedAccounts', 'Connected Accounts')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
 
             <div className="panel-content">
 
@@ -476,9 +476,9 @@ export const ActivityStatusPanel = memo(({ onClose }) => {
 
                 </div>
 
-                <input value={activity.name} onChange={handleNameChange} placeholder={t('oyun_mzik_video_ad')} aria-label="oyun mzik video ad" />
+                <input value={activity.name} onChange={handleNameChange} placeholder={t('oyun_mzik_video_ad')} aria-label={t('interactivePanel.activityName', 'Activity name')} />
 
-                <input value={activity.details} onChange={handleDetailsChange} placeholder={t('detaylar')} aria-label="detaylar" />
+                <input value={activity.details} onChange={handleDetailsChange} placeholder={t('detaylar')} aria-label={t('interactivePanel.activityDetails', 'Activity details')} />
 
                 <button onClick={updateActivity} className="save-btn">{t("common.save")}</button>
 
@@ -779,7 +779,7 @@ export const StreakTrackerPanel = ({ onClose }) => {
 
                         <span className="streak-number">{streak.current_streak}</span>
 
-                        <span className="streak-label">gün</span>
+                        <span className="streak-label">{t('interactivePanel.days', 'days')}</span>
 
                     </div>
 

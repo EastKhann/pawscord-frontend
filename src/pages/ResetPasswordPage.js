@@ -82,7 +82,7 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
                 setStatus('error');
             }
         } catch (error) {
-            setError('Bağlantı hatası oluştu');
+            setError(t('common.connectionError','A connection error occurred'));
             setStatus('error');
         }
     };

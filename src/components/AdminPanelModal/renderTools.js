@@ -12,7 +12,7 @@ import styles from './styles';
 const renderTools = () => {
     const { t } = useTranslation();
     return (
-        <div aria-label="render tools">
+        <div aria-label={t('admin.tools', 'Tools')}>
             <h2 className="white-18-mb16">{t('🔧_admin_araçları')}</h2>
 
             <div className="grid-3col">

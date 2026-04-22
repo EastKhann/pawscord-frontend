@@ -4,6 +4,7 @@
 
 import { useState, useRef, useCallback, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import { getFreshActivity } from '../../utils/activityUtils';
 
@@ -98,6 +99,7 @@ const UserCardPopover = ({
     useEffect(() => {
         if (!show) return;
         const handleEsc = (e) => {
+            const { t } = useTranslation();
             if (e.key === 'Escape') {
                 setShow(false);
                 triggerRef.current?.focus();
@@ -196,12 +198,12 @@ const UserCardPopover = ({
                             <>
                                 <div style={S.divider} />
                                 <div style={S.section}>
-                                    <span style={S.sectionLabel}>🎵 MÜZİK DİNLİYOR</span>
+                                    <span style={S.sectionLabel}>{t('userCard.listeningTo', '🎵 LISTENING TO')}</span>
                                     <div style={S.activityCard}>
                                         {(activity.spotify.album_art) && (
                                             <img
                                                 src={activity.spotify.album_art}
-                                                alt="album"
+                                                alt={t('alt.albumArt', 'Album Art')}
                                                 style={S.albumArt}
                                                 onError={(e) => { e.target.style.display = 'none'; }}
                                             />
@@ -259,7 +261,7 @@ const UserCardPopover = ({
                         {/* Member since */}
                         {memberSince && (
                             <div style={S.section}>
-                                <span style={S.sectionLabel}>ÜYELİK</span>
+                                <span style={S.sectionLabel}>{t('userCard.memberSince', 'MEMBER SINCE')}</span>
                                 <span style={S.memberSince}>{memberSince}'dan beri</span>
                             </div>
                         )}
@@ -268,14 +270,14 @@ const UserCardPopover = ({
                         <div style={S.actions}>
                             {handleStartDM && (
                                 <button
-                                    aria-label="Toggle visibility" style={S.actionBtn} onClick={() => { setShow(false); handleStartDM(username); }}>
+                                    aria-label={t('userCard.sendMessage', 'Send message')} style={S.actionBtn} onClick={() => { setShow(false); handleStartDM(username); }}>
                                     Send Message
                                 </button>
                             )}
                             {handleViewProfile && (
                                 <button
-                                    aria-label="Toggle visibility" style={S.actionBtnSec} onClick={() => { setShow(false); handleViewProfile(username); }}>
-                                    Profili Gör
+                                    aria-label={t('userCard.viewProfile', 'View profile')} style={S.actionBtnSec} onClick={() => { setShow(false); handleViewProfile(username); }}>
+                                    {t('userCard.viewProfile', 'View Profile')}
                                 </button>
                             )}
                         </div>

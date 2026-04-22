@@ -9,7 +9,7 @@ const SystemHealthTab = () => {
     const { systemHealth } = useAdminAPIContext();
     const { t } = useTranslation();
     return (
-        <div aria-label="system health tab">
+        <div aria-label={t('admin.systemHealthTab', 'System health tab')}>
             <h2 className={css.sectionTitle}>{t('admin.panel.systemHealth')}</h2>
 
             {/* Health Bars */}

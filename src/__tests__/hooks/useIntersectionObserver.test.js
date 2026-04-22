@@ -15,7 +15,7 @@ describe('useIntersectionObserver', () => {
             disconnect: vi.fn(),
         };
 
-        window.IntersectionObserver = vi.fn((callback) => {
+        window.IntersectionObserver = vi.fn(function (callback) {
             observerCallback = callback;
             return observeInstance;
         });
@@ -44,17 +44,20 @@ describe('useIntersectionObserver', () => {
     // ── 3. Creates IntersectionObserver with correct options ──
     it('should create IntersectionObserver with provided options', () => {
         const div = document.createElement('div');
-        const { result } = renderHook(() =>
-            useIntersectionObserver({ threshold: 0.5, rootMargin: '10px' })
+        let opts = { threshold: 0.5, rootMargin: '10px' };
+        const { result, rerender } = renderHook(() =>
+            useIntersectionObserver(opts)
         );
 
-        // Attach the ref manually to trigger observer
+        // Attach the ref manually
         act(() => {
             result.current[0].current = div;
         });
 
-        // Re-render to trigger the effect
-        // IntersectionObserver was called in the initial render
+        // Change a dep to force effect re-run with ref attached
+        opts = { threshold: 0.6, rootMargin: '10px' };
+        rerender();
+
         expect(window.IntersectionObserver).toHaveBeenCalled();
     });
 
@@ -80,11 +83,15 @@ describe('useIntersectionObserver', () => {
     // ── 5. Updates isIntersecting when entry fires ──
     it('should update isIntersecting when IntersectionObserver fires', () => {
         const div = document.createElement('div');
-        const { result, rerender } = renderHook(() => useIntersectionObserver());
+        let opts = {};
+        const { result, rerender } = renderHook(() => useIntersectionObserver(opts));
 
         act(() => {
             result.current[0].current = div;
         });
+
+        // Change a dep to force effect re-run with ref attached
+        opts = { threshold: 0.5 };
         rerender();
 
         // Simulate intersection
@@ -101,11 +108,15 @@ describe('useIntersectionObserver', () => {
     // ── 6. Updates to not intersecting ──
     it('should update isIntersecting to false when element leaves viewport', () => {
         const div = document.createElement('div');
-        const { result, rerender } = renderHook(() => useIntersectionObserver());
+        let opts = {};
+        const { result, rerender } = renderHook(() => useIntersectionObserver(opts));
 
         act(() => {
             result.current[0].current = div;
         });
+
+        // Change a dep to force effect re-run with ref attached
+        opts = { threshold: 0.5 };
         rerender();
 
         if (observerCallback) {
@@ -126,11 +137,15 @@ describe('useIntersectionObserver', () => {
     // ── 7. Disconnects on unmount ──
     it('should disconnect observer on unmount', () => {
         const div = document.createElement('div');
-        const { result, unmount, rerender } = renderHook(() => useIntersectionObserver());
+        let opts = {};
+        const { result, unmount, rerender } = renderHook(() => useIntersectionObserver(opts));
 
         act(() => {
             result.current[0].current = div;
         });
+
+        // Force effect re-run with ref attached
+        opts = { threshold: 0.2 };
         rerender();
 
         unmount();

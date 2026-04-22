@@ -192,7 +192,7 @@ const QuizResult = ({ score, totalQuestions, resetQuiz, isLoading = false, error
 
                     <div style={styles.resultBtnGroup}>
                         <button
-                            aria-label="reset Quiz"
+                            aria-label={t('quiz.resetQuiz', 'Reset quiz')}
                             onClick={resetQuiz}
                             style={styles.primaryBtn}
                         >

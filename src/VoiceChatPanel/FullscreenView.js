@@ -2,6 +2,7 @@
 // 🎨 Fullscreen expanded-user view for voice chat
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import VideoFeed from './VideoFeed';
 import ControlBar from './ControlBar';
@@ -63,6 +64,7 @@ const FullscreenView = React.memo(
         leaveVoice,
     }) => {
         const [isLoading, setIsLoading] = useState(false);
+        const { t } = useTranslation();
         const [error, setError] = useState(null);
         const streamKey =
             expandedUser.streamType === 'screen'
@@ -74,7 +76,7 @@ const FullscreenView = React.memo(
             <div style={_st1}>
                 {/* FULLSCREEN HEADER */}
                 <div style={_st2}>
-                    <button aria-label="on Back" onClick={onBack} style={_st3}>
+                    <button aria-label={t('common.back', 'Back')} onClick={onBack} style={_st3}>
                         ⬅️ Geri
                     </button>
                     <h3 style={_st4}>

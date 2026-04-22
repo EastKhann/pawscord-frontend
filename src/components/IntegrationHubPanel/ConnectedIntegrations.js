@@ -15,7 +15,7 @@ const ConnectedIntegrations = ({
 
     if (integrations.length === 0) {
         return (
-            <div aria-label="connected integrations" className="empty-state">
+            <div aria-label={t('integrations.connected', 'Connected integrations')} className="empty-state">
                 <FaUnlink />
                 <p>{t('not_yet_bağlı_entegrasyon_yok')}</p>
                 <span className="hint">{t('mevcut_sekmesinden_entegrasyon_addyin')}</span>
@@ -38,14 +38,14 @@ const ConnectedIntegrations = ({
                             <h4>{integration.name}</h4>
                             <div className="connection-info">
                                 <span className="status connected">
-                                    <FaCheck /> Bağlı
+                                    <FaCheck /> {t('integrations.connected', 'Connected')}
                                 </span>
                                 {integration.account_name && (
                                     <span className="account">@{integration.account_name}</span>
                                 )}
                             </div>
                             <div className="last-sync">
-                                Son senkronizasyon: {integration.last_sync || 'Hiçbir zaman'}
+                                {t('integrations.lastSync', 'Last sync')}: {integration.last_sync || t('common.never', 'Never')}
                             </div>
                         </div>
                         <div className="integration-actions">

@@ -57,14 +57,14 @@ const ServersTab = () => {
                         </div>
                         <div className="flex-gap-6">
                             <button
-                                aria-label="View server details"
+                                aria-label={t('common.viewDetails', 'View server details')}
                                 style={styles.actionBtnBlueBlock}
                                 onClick={() => handleServerDetails(server)}
                             >
-                                <FaEye /> View
+                                <FaEye /> {t('common.view', 'View')}
                             </button>
                             <button
-                                aria-label="Delete server"
+                                aria-label={t('common.delete', 'Delete server')}
                                 style={styles.actionBtnRedBlock}
                                 onClick={() =>
                                     setDeleteConfirm({

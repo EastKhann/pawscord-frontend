@@ -22,7 +22,7 @@ const renderSecurity = () => {
         fontWeight: '600',
     };
     return (
-        <div aria-label="render security">
+        <div aria-label={t('admin.security', 'Security')}>
             <h2 className="white-18-mb16">{t('🔒_security_merkezi')}</h2>
 
             <div style={maintenanceCardStyle}>

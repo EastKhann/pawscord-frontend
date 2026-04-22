@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import i18n from '../i18n';
 const _s = (o) => o;
 
 const VideoFeed = ({ stream, fullscreen }) => {
@@ -15,7 +16,7 @@ const VideoFeed = ({ stream, fullscreen }) => {
 
     return (
         <video
-            aria-label="voice chat video feed"
+            aria-label={i18n.t('aria.videoChatFeed', { defaultValue: 'Video' })}
             ref={videoRef}
             autoPlay
             playsInline

@@ -59,7 +59,7 @@ const MessageSchedulePicker = ({ onSchedule, onClose }) => {
     const handleSchedule = useCallback(() => {
         const scheduled = new Date(`${date}T${time}`);
         if (scheduled <= new Date()) {
-            setError('Geçmiş zaman seçemezsiniz');
+            setError(t('schedulePicker.pastTimeError', 'You cannot select a past time'));
             return;
         }
         onSchedule?.(scheduled.toISOString());
@@ -85,7 +85,7 @@ const MessageSchedulePicker = ({ onSchedule, onClose }) => {
                         <FaClock className="icon-primary" />
                         <span>Mesaj Zamanlama</span>
                     </div>
-                    <button aria-label="Close" style={S.closeBtn} onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} style={S.closeBtn} onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -94,7 +94,7 @@ const MessageSchedulePicker = ({ onSchedule, onClose }) => {
                 <div style={S.quickOptions}>
                     {QUICK_OPTIONS.map((opt, i) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={opt.label}
                             key={`item-${i}`}
                             style={S.quickBtn}
                             onClick={() => handleQuickOption(opt)}
@@ -108,7 +108,7 @@ const MessageSchedulePicker = ({ onSchedule, onClose }) => {
 
                 {/* Custom date/time */}
                 <div style={S.customSection}>
-                    <span style={S.sectionLabel}>ÖZEL TARİH & SAAT</span>
+                    <span style={S.sectionLabel}>{t('schedulePicker.customDateTime', 'CUSTOM DATE & TIME')}</span>
                     <div style={S.inputs}>
                         <div style={S.inputGroup}>
                             <FaCalendar style={S.inputIcon} />
@@ -144,7 +144,7 @@ const MessageSchedulePicker = ({ onSchedule, onClose }) => {
                     <strong>{new Date(`${date}T${time}`).toLocaleString('tr-TR')}</strong>
                 </div>
 
-                <button aria-label="handle Schedule" style={S.scheduleBtn} onClick={handleSchedule}>
+                <button aria-label={t('schedulePicker.schedule', 'Schedule message')} style={S.scheduleBtn} onClick={handleSchedule}>
                     <FaPaperPlane /> Zamanla
                 </button>
             </div>

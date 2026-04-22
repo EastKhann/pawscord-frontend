@@ -4,6 +4,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import i18n from '../i18n';
 
 const REACTION_EMOJI_LIST = ['👍', '❤️', '😂', '😮', '😢', '🙏', '🔥', '🚀'];
 
@@ -28,7 +29,7 @@ const ReactionPicker = ({ onEmojiSelect, onClose }) => {
     };
 
     return (
-        <div aria-label="reaction picker" ref={pickerRef} style={styles.pickerContainer}>
+        <div aria-label={i18n.t('aria.reactionPicker', { defaultValue: 'Reaction Picker' })} ref={pickerRef} style={styles.pickerContainer}>
             {REACTION_EMOJI_LIST.map((emoji) => (
                 <span
                     key={emoji}

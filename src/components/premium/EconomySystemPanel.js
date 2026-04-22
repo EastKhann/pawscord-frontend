@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import './EconomySystemPanel.css';
 import { FaCoins, FaPaperPlane, FaHistory, FaWallet, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
+    const { t } = useTranslation();
     const [balance, setBalance] = useState(0);
     const [history, setHistory] = useState([]);
     const [recipient, setRecipient] = useState('');
@@ -122,14 +124,14 @@ function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
 
             <div className="transfer-section">
                 <h3>
-                    <FaPaperPlane /> Coin Gönder
+                    <FaPaperPlane /> {t('economy.sendCoin', 'Send Coin')}
                 </h3>
                 <div className="transfer-form">
                     <div className="form-group">
-                        <label>Alıcı Kullanıcı Adı:</label>
+                        <label>{t('economy.recipientUsername', 'Recipient Username:')}</label>
                         <input
                             type="text"
-                            placeholder="Kullanıcı adı girin..."
+                            placeholder={t('common.usernameEnter', 'Enter username...')}
                             value={recipient}
                             onChange={(e) => setRecipient(e.target.value)}
                             className="form-input"
@@ -144,7 +146,7 @@ function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
                                 step="1"
                                 min="1"
                                 max={balance}
-                                placeholder="0"
+                                placeholder={t('economy.amount', '0')}
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                                 className="form-input amount-input"
@@ -153,22 +155,22 @@ function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
                         <div className="balance-hint">Mevcut: {formatCoins(balance)} coin</div>
                     </div>
                     <div className="form-group">
-                        <label>Not (isteğe bağlı):</label>
+                        <label>{t('economy.noteOptional', 'Note (optional):')}</label>
                         <input
                             type="text"
-                            placeholder="Mesaj ekleyin..."
+                            placeholder={t('economy.message', 'Add a message...')}
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
                             className="form-input"
                         />
                     </div>
                     <button
-                        aria-label="transfer Coins"
+                        aria-label={t('economy.transferCoins', 'Transfer coins')}
                         className="transfer-btn"
                         onClick={transferCoins}
                         disabled={loading || !recipient || !amount}
                     >
-                        <FaPaperPlane /> Coin Gönder
+                        <FaPaperPlane /> {t('economy.sendCoin', 'Send Coin')}
                     </button>
                 </div>
             </div>
@@ -178,11 +180,11 @@ function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
                     <FaHistory /> Transaction History
                 </h3>
                 {loading && history.length === 0 ? (
-                    <div className="loading">Geçmiş yükleniyor...</div>
+                    <div className="loading">{t('economy.historyLoading', 'Loading history...')}</div>
                 ) : history.length === 0 ? (
                     <div className="empty-history">
                         <FaHistory className="empty-icon" />
-                        <p>Henüz işlem yok</p>
+                        <p>{t('economy.noTransactions', 'No transactions yet')}</p>
                     </div>
                 ) : (
                     <div className="history-list">

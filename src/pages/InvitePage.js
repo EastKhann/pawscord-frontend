@@ -41,7 +41,7 @@ const InvitePage = () => {
             const contentType = res.headers.get('content-type') || '';
             if (!contentType.includes('application/json')) {
                 logger.error('❌ [Invite Page] Non-JSON response:', contentType);
-                setError('Davet bulunamadı veya geçersiz');
+                setError(t('invite.notFound','Invitation not found or invalid'));
                 setLoading(false);
                 return;
             }
@@ -51,7 +51,7 @@ const InvitePage = () => {
             if (res.ok) {
                 setInviteInfo(data);
             } else {
-                setError(data.error || 'Davet bulunamadı');
+                setError(data.error || t('invite.notFound2','Invitation not found'));
                 logger.error('❌ [Invite Page] Error:', data.error);
             }
         } catch (err) {
@@ -129,11 +129,11 @@ const InvitePage = () => {
 
     if (loading) {
         return (
-            <div aria-label="invite page" style={styles.container}>
+            <div aria-label={t('aria.invitePage', 'Invite')} style={styles.container}>
                 <div style={styles.backgroundGradient}></div>
                 <div style={styles.card}>
                     <div style={styles.spinner}></div>
-                    <p style={styles.loadingText}>Davet yükleniyor...</p>
+                    <p style={styles.loadingText}>{t('invite.loading', 'Loading invite...')}</p>
                 </div>
             </div>
         );
@@ -205,7 +205,7 @@ const InvitePage = () => {
                 {inviteInfo.max_uses > 0 && (
                     <div style={styles.infoRow}>
                         <span>
-                            Kullanım: {inviteInfo.uses} / {inviteInfo.max_uses}
+                            {t('invite.uses','Usage')}: {inviteInfo.uses} / {inviteInfo.max_uses}
                         </span>
                     </div>
                 )}
@@ -226,7 +226,7 @@ const InvitePage = () => {
                 </button>
 
                 {!isAuthenticated && (
-                    <p style={styles.loginHint}>* Serverya katılmak for giriş yapmanız gerekiyor</p>
+                    <p style={styles.loginHint}>{t('invite.loginRequired','* You need to log in to join the server')}</p>
                 )}
             </div>
         </div>

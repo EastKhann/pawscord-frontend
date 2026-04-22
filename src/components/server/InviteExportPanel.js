@@ -46,10 +46,10 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                 inv.code,
                 inv.creator_username,
                 inv.uses,
-                inv.max_uses || 'Sınırsız',
+                inv.max_uses || t('common.unlimited', 'Unlimited'),
                 new Date(inv.created_at).toLocaleString(),
-                inv.expires_at ? new Date(inv.expires_at).toLocaleString() : 'Hiçbir zaman',
-                inv.revoked ? 'İptal edildi' : inv.is_expired ? 'Süresi doldu' : 'Aktif',
+                inv.expires_at ? new Date(inv.expires_at).toLocaleString() : t('dataRetention.never', 'Never'),
+                inv.revoked ? t('invite.revoked', 'Revoked') : inv.is_expired ? t('invite.expired', 'Expired') : t('invite.active', 'Active'),
             ]),
         ]
             .map((row) => row.map((cell) => `"${cell}"`).join(','))
@@ -89,9 +89,9 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaDownload className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Davetleri Dışa Aktar</h2>
+                        <h2 style={styles.title}>{t('inviteExport.title', 'Export Invites')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -104,7 +104,7 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                                 checked={includeExpired}
                                 onChange={(e) => setIncludeExpired(e.target.checked)}
                             />
-                            <span style={styles.checkboxLabel}>Süresi dolanları dahil et</span>
+                            <span style={styles.checkboxLabel}>{t('inviteExport.includeExpired', 'Include expired')}</span>
                         </label>
                         <label style={styles.checkbox}>
                             <input
@@ -112,12 +112,12 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                                 checked={includeRevoked}
                                 onChange={(e) => setIncludeRevoked(e.target.checked)}
                             />
-                            <span style={styles.checkboxLabel}>İptal edilenleri dahil et</span>
+                            <span style={styles.checkboxLabel}>{t('inviteExport.includeRevoked', 'Include revoked')}</span>
                         </label>
                     </div>
                     <div style={styles.exportButtons}>
                         <button
-                            aria-label="export C S V"
+                            aria-label={t('inviteExport.exportCSV', 'Export as CSV')}
                             onClick={exportCSV}
                             style={styles.exportButton}
                         >
@@ -125,7 +125,7 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                             CSV'ye Aktar
                         </button>
                         <button
-                            aria-label="export J S O N"
+                            aria-label={t('inviteExport.exportJSON', 'Export as JSON')}
                             onClick={exportJSON}
                             style={exportJsonButtonStyle}
                         >
@@ -137,9 +137,9 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Davetler yükleniyor...</div>
+                        <div style={styles.loading}>{t('inviteExport.loading', 'Loading invites...')}</div>
                     ) : invites.length === 0 ? (
-                        <div style={styles.empty}>Davet bulunamadı</div>
+                        <div style={styles.empty}>{t('inviteExport.notFound', 'No invites found')}</div>
                     ) : (
                         <>
                             <div style={styles.summary}>
@@ -157,7 +157,7 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                                     <div style={styles.summaryValue}>
                                         {invites.reduce((sum, i) => sum + i.uses, 0)}
                                     </div>
-                                    <div style={styles.summaryLabel}>Toplam Kullanım</div>
+                                    <div style={styles.summaryLabel}>{t('admin.totalUsage', 'Total Usage')}</div>
                                 </div>
                             </div>
 

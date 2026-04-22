@@ -173,7 +173,7 @@ const DiscoveryModal = ({
             setSearchQuery('');
             onClose();
         },
-        label: 'Sunucu Keşfet',
+        label: t('discovery.title', 'Discover Servers'),
         isOpen,
     });
 
@@ -232,7 +232,7 @@ const DiscoveryModal = ({
                     <p style={_st5}>
                         {t(
                             'joinServer.inviteHint',
-                            'Davet kodun veya linkin varsa aşağıya yapıştır.'
+                            t('discovery.pasteInvite', 'If you have an invite code or link, paste it below.')
                         )}
                     </p>
 
@@ -240,8 +240,8 @@ const DiscoveryModal = ({
                         <input
                             value={inviteCodeInput}
                             onChange={(e) => setInviteCodeInput(e.target.value)}
-                            aria-label="Davet kodu"
-                            placeholder="https://www.pawscord.com/invite/..."
+                            aria-label={t('server.inviteLink', 'Invite Link')}
+                            placeholder={t('joinServer.inviteUrlPlaceholder', 'https://pawscord.com/invite/...')}
                             style={_st7}
                         />
 
@@ -267,7 +267,7 @@ const DiscoveryModal = ({
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder={t('joinServer.searchPlaceholder', '🔍 Sunucu ara...')}
                         style={_st12}
-                        aria-label="Arama"
+                        aria-label={t('common.search', 'Search')}
                     />
                 </div>
 
@@ -275,9 +275,9 @@ const DiscoveryModal = ({
                     <p style={_st13}>
                         {!publicServers || publicServers.length === 0
                             ? t(
-                                  'joinServer.noPublic',
-                                  'Şu anda katılabileceğiniz herkese açık sunucu yok.'
-                              )
+                                'joinServer.noPublic',
+                                t('discovery.noPublicServers', 'There are no public servers you can join right now.')
+                            )
                             : t('joinServer.noMatch', 'Aramanızla eşleşen sunucu bulunamadı.')}
                     </p>
                 ) : (
@@ -310,11 +310,11 @@ const DiscoveryModal = ({
                                     <span style={_st22}>✓ Membersin</span>
                                 ) : (
                                     <button
-                                        aria-label="Katıl"
+                                        aria-label={t('joinServer.join', 'Katıl')}
                                         onClick={() => onJoinServer(srv.id)}
                                         style={_st23}
                                     >
-                                        Katıl
+                                        {t('common.join', 'Join')}
                                     </button>
                                 )}
                             </div>

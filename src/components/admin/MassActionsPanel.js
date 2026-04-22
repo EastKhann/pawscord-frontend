@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/MassActionsPanel.js
 
 import { useState } from 'react';
@@ -126,7 +126,7 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
 
                 <div style={styles.content}>
                     <div style={styles.field}>
-                        <label style={styles.label}>Eylem Türü</label>
+                        <label style={styles.label}>{t('admin.actionType', 'Action Type')}</label>
 
                         <select
                             value={actionType}
@@ -153,7 +153,7 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
                         <textarea
                             value={userIds}
                             onChange={(e) => setUserIds(e.target.value)}
-                            placeholder="123456789&#10;987654321&#10;555555555"
+                            placeholder={t('massActions.userIds', 'User IDs (one per line)')}
                             style={styles.textarea}
                             rows={8}
                         />
@@ -161,50 +161,50 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
 
                     {(actionType === 'mute' || actionType === 'timeout') && (
                         <div style={styles.field}>
-                            <label style={styles.label}>Süre (dakika)</label>
+                            <label style={styles.label}>{t('admin.durationMinutes', 'Duration (minutes)')}</label>
 
                             <input
                                 type="number"
                                 value={duration}
                                 onChange={(e) => setDuration(e.target.value)}
-                                placeholder="60"
+                                placeholder={t('massActions.duration', '60')}
                                 style={styles.input}
                             />
                         </div>
                     )}
 
                     <div style={styles.field}>
-                        <label style={styles.label}>Sebep (isteğe bağlı)</label>
+                        <label style={styles.label}>{t('admin.reasonOptional', 'Reason (optional)')}</label>
 
                         <input
                             type="text"
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder="Spam, kural ihlali, vb."
+                            placeholder={t('massActions.reason', 'Spam, rule violation, etc.')}
                             style={styles.input}
-                            aria-label="Sebep"
+                            aria-label={t('common.reason', 'Reason')}
                         />
                     </div>
 
                     <div style={styles.warning}>
                         ⚠️ Bu eylem{' '}
                         <strong>{userIds.split('\n').filter((id) => id.trim()).length}</strong>{' '}
-                        kullanıcıyı etkileyecek!
+                        {t('massActions.usersAffected','users will be affected!')}
                     </div>
                 </div>
 
                 <div style={styles.footer}>
-                    <button aria-label="Kapat" onClick={onClose} style={styles.cancelBtn}>
-                        İptal
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.cancelBtn}>
+                        {t('common.cancel','Cancel')}
                     </button>
 
                     <button
-                        aria-label="Eylemi uygula"
+                        aria-label={t('admin.applyAction', 'Apply action')}
                         onClick={executeAction}
                         disabled={processing}
                         style={styles.executeBtn}
                     >
-                        {processing ? 'İşleniyor...' : 'Uygula'}
+                        {processing ? t('common.processing','Processing...') : t('common.apply','Apply')}
                     </button>
                 </div>
             </div>

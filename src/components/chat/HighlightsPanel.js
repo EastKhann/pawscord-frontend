@@ -105,7 +105,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
     };
 
     const clearHighlights = async () => {
-        if (!(await confirmDialog('Tüm vurgu geçmişini temizlemek istediğinizden emin misiniz?')))
+        if (!(await confirmDialog(t('highlights.clearConfirm', 'Are you sure you want to clear all highlight history?'))))
             return;
 
         try {
@@ -143,7 +143,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                 <div className="highlights-header">
                     <h2>✨ Highlight Sistemi</h2>
 
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -183,11 +183,14 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                                             value={newKeyword}
                                             onChange={(e) => setNewKeyword(e.target.value)}
                                             onKeyDown={(e) => e.key === 'Enter' && addKeyword()}
-                                            placeholder="Kelime ekle..."
-                                            aria-label="New Keyword"
+                                            placeholder={t('highlights.addKeyword', 'Add keyword...')}
+                                            aria-label={t('highlights.keywordInput', 'New keyword')}
                                         />
 
-                                        <button aria-label="add Keyword" onClick={addKeyword}>
+                                        <button
+                                            aria-label={t('highlights.addKeywordBtn', 'Add keyword')}
+                                            onClick={addKeyword}
+                                        >
                                             ➕
                                         </button>
                                     </div>
@@ -199,7 +202,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                                                     <span>{keyword}</span>
 
                                                     <button
-                                                        aria-label="Delete"
+                                                        aria-label={t('common.delete')}
                                                         onClick={() => removeKeyword(keyword)}
                                                     >
                                                         ×
@@ -224,7 +227,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                                                 }
                                             />
 
-                                            <span>DM bildirimlerini gönder</span>
+                                            <span>{t('highlights.sendDmNotifs', 'Send DM notifications')}</span>
                                         </label>
                                     </div>
 
@@ -245,7 +248,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                                 </div>
 
                                 <button
-                                    aria-label="save Config"
+                                    aria-label={t('highlights.saveConfig', 'Save highlight settings')}
                                     className="save-btn"
                                     onClick={saveConfig}
                                 >
@@ -255,11 +258,11 @@ const HighlightsPanel = ({ serverId, onClose }) => {
 
                             <div className="highlights-section">
                                 <div className="section-header">
-                                    <h3> Highlight Geçmişi ({highlights.length})</h3>
+                                    <h3> {t('highlights.history', 'Highlight History')} ({highlights.length})</h3>
 
                                     {highlights.length > 0 && (
                                         <button
-                                            aria-label="clear Highlights"
+                                            aria-label={t('highlights.clearHighlights', 'Clear highlights')}
                                             className="clear-btn"
                                             onClick={clearHighlights}
                                         >
@@ -272,7 +275,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                                     <div className="empty-state">
                                         <span className="empty-icon">✨</span>
 
-                                        <p>Henüz öne çıkan yok</p>
+                                        <p>{t('highlights.none', 'No highlights yet')}</p>
                                     </div>
                                 ) : (
                                     <div className="highlights-list">
@@ -310,13 +313,13 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                                                             __html: DOMPurify.sanitize(
                                                                 config.keywords.length > 0
                                                                     ? hl.content.replace(
-                                                                          new RegExp(
-                                                                              `(${config.keywords.map(escapeRegex).join('|')})`,
-                                                                              'gi'
-                                                                          ),
+                                                                        new RegExp(
+                                                                            `(${config.keywords.map(escapeRegex).join('|')})`,
+                                                                            'gi'
+                                                                        ),
 
-                                                                          `<mark style="background: ${config.highlight_color}; color: #000; padding: 2px 4px; border-radius: 4px;">$1</mark>`
-                                                                      )
+                                                                        `<mark style="background: ${config.highlight_color}; color: #000; padding: 2px 4px; border-radius: 4px;">$1</mark>`
+                                                                    )
                                                                     : hl.content
                                                             ),
                                                         }}
@@ -331,7 +334,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

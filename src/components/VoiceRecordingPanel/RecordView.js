@@ -133,7 +133,7 @@ const RecordView = ({
                         className="save-modal"
                         role="dialog"
                         aria-modal="true"
-                        aria-label="Save Recording"
+                        aria-label={t('voiceRecording.saveRecording', 'Save recording')}
                     >
                         <h3>{t('kaydı_save')}</h3>
                         {/* eslint-disable-next-line jsx-a11y/no-autofocus */}

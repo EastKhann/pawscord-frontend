@@ -19,49 +19,49 @@ const StoreTab = ({ styles, storeItems, userInventory, handleBuyItem, loading })
     const defaultStoreItems = [
         {
             id: 1,
-            name: 'Özel Emoji Paketi',
+            name: t('store.emojiPack'),
             price: 9.99,
-            description: '50 premium emoji',
+            description: t('store.emojiPackDesc'),
             icon: '😎',
             type: 'one_time',
         },
         {
             id: 2,
-            name: 'Profil Teması',
+            name: t('store.profileTheme'),
             price: 14.99,
-            description: t('ui.ozel_profile_arka_plani', 'Özel profil arka planı'),
+            description: t('ui.ozel_profile_arka_plani', t('store.profileTheme')),
             icon: '🎨',
             type: 'one_time',
         },
         {
             id: 3,
-            name: 'Sunucu Güçlendirme',
+            name: t('store.serverBoostItem'),
             price: 19.99,
-            description: t('ui.servernu_guclendir_1_month', '1 aylık sunucu güçlendirme'),
+            description: t('store.serverBoostDesc'),
             icon: '🚀',
             type: 'subscription',
         },
         {
             id: 4,
-            name: t('ui.ozel_rozet', 'Özel Rozet'),
+            name: t('ui.ozel_rozet'),
             price: 24.99,
-            description: 'Kendi rozetini yükle',
+            description: t('store.customBadgeDesc'),
             icon: '⭐',
             type: 'one_time',
         },
         {
             id: 5,
-            name: 'Ses Efektleri',
+            name: t('store.soundEffects'),
             price: 12.99,
-            description: '10 ses efekti paketi',
+            description: t('store.soundEffectsDesc'),
             icon: '🎵',
             type: 'one_time',
         },
         {
             id: 6,
-            name: 'Hareketli Çıkartma Paketi',
+            name: t('store.animatedStickers'),
             price: 16.99,
-            description: '30 hareketli çıkartma',
+            description: t('store.animatedStickersDesc'),
             icon: '✨',
             type: 'one_time',
         },
@@ -69,8 +69,8 @@ const StoreTab = ({ styles, storeItems, userInventory, handleBuyItem, loading })
     const displayItems = storeItems.length > 0 ? storeItems : defaultStoreItems;
 
     return (
-        <div aria-label="store tab" style={styles.storeTab}>
-            <h3 style={styles.sectionTitle}>{t('mağaza_ürünleri')}</h3>
+        <div aria-label={t('premiumStore.storeTab', 'Store tab')} style={styles.storeTab}>
+            <h3 style={styles.sectionTitle}>{t('store.storeItems')}</h3>
             <div style={styles.storeGrid}>
                 {displayItems.map((item) => {
                     const isOwned = inventoryItems.some(
@@ -90,7 +90,7 @@ const StoreTab = ({ styles, storeItems, userInventory, handleBuyItem, loading })
 
                             {isOwned ? (
                                 <button disabled style={ownedButtonStyle}>
-                                    ✓ Sahip
+                                    ✓ {t('store.owned', 'Owned')}
                                 </button>
                             ) : STORE_PURCHASES_ENABLED ? (
                                 <button
@@ -98,11 +98,11 @@ const StoreTab = ({ styles, storeItems, userInventory, handleBuyItem, loading })
                                     style={styles.buyButton}
                                     disabled={loading}
                                 >
-                                    {loading ? 'Yükleniyor...' : 'Satın Al'}
+                                    {loading ? t('common.loading') : t('store.buyNow', 'Buy Now')}
                                 </button>
                             ) : (
                                 <button disabled style={comingSoonButtonStyle}>
-                                    🔒 Çok Yakında
+                                    {t('store.comingSoonBtn')}
                                 </button>
                             )}
                         </div>

@@ -2,6 +2,7 @@
 // 🔧 Maintenance Mode Banner
 
 import { useState, useEffect, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaTimes, FaTools } from 'react-icons/fa';
 
@@ -29,6 +30,7 @@ const S = {
  * @param {() => void} [props.onDismiss] - Callback to dismiss the banner
  */
 const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
+    const { t } = useTranslation();
     const [timeLeft, setTimeLeft] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -90,8 +92,8 @@ const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
                         {level === 'critical'
                             ? '🚨 Critical Maintenance'
                             : level === 'warning'
-                              ? '⚠️ Scheduled Maintenance'
-                              : 'ℹ️ Maintenance Notice'}
+                                ? '⚠️ Scheduled Maintenance'
+                                : 'ℹ️ Maintenance Notice'}
                     </div>
                     <div style={S.txt}>
                         {message}
@@ -101,7 +103,7 @@ const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
             </div>
             {onDismiss && (
                 <button
-                    aria-label="on Dismiss"
+                    aria-label={t('common.dismiss', 'Dismiss')}
                     onClick={onDismiss}
                     style={S.bg}
                     onMouseEnter={(e) => (e.target.style.background = 'rgba(255,255,255,0.1)')}

@@ -70,22 +70,20 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                             <span className="status-badge lockdown">🔒 Lockdown</span>
                         )}
                     </div>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div className="dashboard-nav">
                     <button
-                        aria-label="Switch view"
-                        className={`nav-btn ${view === 'overview' ? 'active' : ''}`}
+                        aria-label={t('raidDash.overviewTab', 'Overview')}
                         onClick={() => setView('overview')}
                     >
-                        <FaChartLine /> General Bakış
+                        <FaChartLine /> {t('raidDash.overview', 'Overview')}
                     </button>
                     <button
-                        aria-label="Switch view"
-                        className={`nav-btn ${view === 'verify' ? 'active' : ''}`}
+                        aria-label={t('raidDash.verifyTab', 'Verification')}
                         onClick={() => setView('verify')}
                     >
                         <FaUserShield /> Verification
@@ -94,15 +92,13 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                         )}
                     </button>
                     <button
-                        aria-label="Switch view"
-                        className={`nav-btn ${view === 'logs' ? 'active' : ''}`}
+                        aria-label={t('raidDash.logsTab', 'Logs')}
                         onClick={() => setView('logs')}
                     >
                         <FaHistory /> Loglar
                     </button>
                     <button
-                        aria-label="Switch view"
-                        className={`nav-btn ${view === 'settings' ? 'active' : ''}`}
+                        aria-label={t('raidDash.settingsTab', 'Settings')}
                         onClick={() => setView('settings')}
                     >
                         <FaCog /> Ayarlar
@@ -139,7 +135,7 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                                                 <h4>{user.username}</h4>
                                                 <div className="user-meta">
                                                     <span>
-                                                        <FaClock /> Joinım:{' '}
+                                                        <FaClock /> {t('raidDash.joined', 'Joined:')}{' '}
                                                         {new Date(
                                                             user.joined_at
                                                         ).toLocaleDateString('tr-TR')}
@@ -167,7 +163,7 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                                             </div>
                                             <div className="verification-actions">
                                                 <button
-                                                    aria-label="Confirm"
+                                                    aria-label={t('common.confirm')}
                                                     className="approve-btn"
                                                     onClick={() =>
                                                         handleVerifyUser(user.id, 'approve')
@@ -176,7 +172,7 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                                                     <FaCheck /> Confirm
                                                 </button>
                                                 <button
-                                                    aria-label="Ban"
+                                                    aria-label={t('raidDash.banUser', 'Ban user')}
                                                     className="reject-btn"
                                                     onClick={() =>
                                                         handleVerifyUser(user.id, 'reject')
@@ -191,7 +187,7 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                             ) : (
                                 <div className="no-verifications">
                                     <FaUserShield className="empty-icon" />
-                                    <p>Bekleyen doğrulama yok</p>
+                                    <p>{t('raidDash.noPending', 'No pending verifications')}</p>
                                 </div>
                             )}
                         </div>
@@ -200,7 +196,7 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                     {view === 'logs' && (
                         <div className="logs-view">
                             <h3>
-                                <FaHistory /> Raid Logları
+                                <FaHistory /> {t('raidDash.raidLogs', 'Raid Logs')}
                             </h3>
                             {raidLogs.length > 0 ? (
                                 <div className="logs-list">
@@ -229,7 +225,7 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                                             <p className="log-description">{log.description}</p>
                                             {log.affected_users && (
                                                 <span className="affected-count">
-                                                    {log.affected_users} kullanıcı etkwithndi
+                                                    {log.affected_users} {t('raidDash.usersAffected', 'users affected')}
                                                 </span>
                                             )}
                                         </div>
@@ -238,7 +234,7 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
                             ) : (
                                 <div className="no-logs">
                                     <FaHistory className="empty-icon" />
-                                    <p>Henüz kayıt yok</p>
+                                    <p>{t('raidDash.noLogs', 'No logs yet')}</p>
                                 </div>
                             )}
                         </div>

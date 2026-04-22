@@ -25,7 +25,7 @@ export const MessageHeader = memo(
         const [isLoading, setIsLoading] = useState(false);
         const [error, setError] = useState(null);
         return (
-            <div aria-label="message header" style={styles.messageHeader}>
+            <div aria-label={t('message.header', 'Message header')} style={styles.messageHeader}>
                 <span
                     role="button"
                     tabIndex={0}
@@ -35,8 +35,8 @@ export const MessageHeader = memo(
                             msg.username === '⚡ Signal Bot'
                                 ? '#5865f2'
                                 : isAdmin
-                                  ? '#f0b232'
-                                  : '#fff',
+                                    ? '#f0b232'
+                                    : '#fff',
                         fontWeight: 'bold',
                     }}
                     onClick={() => onViewProfile(msg.username)}

@@ -54,7 +54,7 @@ class CSRFTokenManager {
         const isValid = token === currentToken;
 
         if (!isValid) {
-            logger.error('❌ [CSRF] Token geçersiz!');
+            logger.error('❌ [CSRF] Token invalid!');
         }
 
         return isValid;
@@ -107,7 +107,7 @@ export const fetchWithCSRF = async (url, options = {}) => {
 
         // 403 Forbidden durumunda token'ı yenile
         if (response.status === 403) {
-            logger.warn('⚠️ [CSRF] Token geçersiz, yenileniyor...');
+            logger.warn('⚠️ [CSRF] Token invalid, refreshing...');
             csrfManager.refreshToken();
 
             // Try again
@@ -117,7 +117,7 @@ export const fetchWithCSRF = async (url, options = {}) => {
 
         return response;
     } catch (error) {
-        logger.error('❌ [CSRF] Fetch hatası:', error);
+        logger.error('❌ [CSRF] Fetch error:', error);
         throw error;
     }
 };

@@ -44,6 +44,16 @@ vi.mock('../../stores/useVoiceStore', () => ({
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key) => key, i18n: { language: 'en', changeLanguage: vi.fn() } }),
     Trans: ({ children }) => children,
+    I18nextProvider: ({ children }) => children,
+    withTranslation: () => (Component) => {
+        const Wrapped = (props) => {
+            const tFn = (key, fallback) => (typeof fallback === 'string' ? fallback : key);
+            return React.createElement(Component, { ...props, t: tFn, i18n: { language: 'en' } });
+        };
+        Wrapped.displayName = `withI18n(${Component.displayName || Component.name})`;
+        return Wrapped;
+    },
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
 }));
 
 // ── Tests ───────────────────────────────────────────────────────
@@ -75,7 +85,7 @@ describe('ErrorBoundary', () => {
         };
 
         // Suppress console.error for expected error
-        const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const spy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
         render(
             <ErrorBoundary>
@@ -84,7 +94,8 @@ describe('ErrorBoundary', () => {
         );
 
         // ErrorBoundary should catch and display fallback
-        expect(screen.queryByText(/error|something went wrong/i)).toBeTruthy();
+        const errorElements = screen.queryAllByText(/error|something went wrong/i);
+        expect(errorElements.length).toBeGreaterThan(0);
         spy.mockRestore();
     });
 });

@@ -21,7 +21,7 @@ const CreateGiveawayModal = ({
         <div className="create-modal-overlay" {...overlayProps}>
             <div className="create-modal" {...dialogProps}>
                 <div className="modal-header">
-                    <h3>Yeni Çekiliş Oluştur</h3>
+                    <h3>{t('giveaway.createNew','Create New Giveaway')}</h3>
                     <button className="close-btn" onClick={onClose}>
                         ×
                     </button>
@@ -29,7 +29,7 @@ const CreateGiveawayModal = ({
 
                 <div className="modal-body">
                     <div className="form-group">
-                        <label>Başlık *</label>
+                        <label>{t('admin.reportTitleLabel', 'Title *')}</label>
                         <input
                             type="text"
                             placeholder={t('discord_nitro_çekilişi')}
@@ -49,7 +49,7 @@ const CreateGiveawayModal = ({
                     </div>
 
                     <div className="form-group">
-                        <label>Ödül *</label>
+                        <label>{t('giveaway.prize','Prize *')}</label>
                         <input
                             type="text"
                             placeholder={t('1_monthly_discord_nitro')}
@@ -65,7 +65,7 @@ const CreateGiveawayModal = ({
                                 value={newGiveaway.channel_id}
                                 onChange={(e) => update('channel_id', e.target.value)}
                             >
-                                <option value="">Kanal Seçin</option>
+                                <option value="">{t('giveaway.selectChannel','Select Channel')}</option>
                                 {channels.map((ch) => (
                                     <option key={ch.id} value={ch.id}>
                                         {ch.name}
@@ -74,7 +74,7 @@ const CreateGiveawayModal = ({
                             </select>
                         </div>
                         <div className="form-group">
-                            <label>Kazanan Sayısı</label>
+                            <label>{t('giveaway.winnerCount','Winner Count')}</label>
                             <input
                                 type="number"
                                 min="1"
@@ -86,7 +86,7 @@ const CreateGiveawayModal = ({
                     </div>
 
                     <div className="form-group">
-                        <label>Süre</label>
+                        <label>{t('common.duration','Duration')}</label>
                         <select
                             value={newGiveaway.duration}
                             onChange={(e) => update('duration', parseInt(e.target.value))}
@@ -100,7 +100,7 @@ const CreateGiveawayModal = ({
                     </div>
 
                     <div className="requirements-section">
-                        <h4>Katılım Gereksinimleri (Opsiyonel)</h4>
+                        <h4>{t('giveaway.requirements','Entry Requirements (Optional)')}</h4>
 
                         <div className="form-group">
                             <label>{t('gerekli_role')}</label>
@@ -119,7 +119,7 @@ const CreateGiveawayModal = ({
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Minimum Mesaj Sayısı</label>
+                                <label>{t('giveaway.minMessages','Minimum Message Count')}</label>
                                 <input
                                     type="number"
                                     min="0"
@@ -130,7 +130,7 @@ const CreateGiveawayModal = ({
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Minimum Davet Sayısı</label>
+                                <label>{t('giveaway.minInvites','Minimum Invite Count')}</label>
                                 <input
                                     type="number"
                                     min="0"
@@ -151,7 +151,7 @@ const CreateGiveawayModal = ({
                                         update('allow_multiple_entries', e.target.checked)
                                     }
                                 />
-                                <span>Birden fazla katılıma izin ver</span>
+                                <span>{t('giveaway.allowMultiEntry','Allow multiple entries')}</span>
                             </label>
                         </div>
                     </div>
@@ -159,7 +159,7 @@ const CreateGiveawayModal = ({
 
                 <div className="modal-footer">
                     <button className="cancel-btn" onClick={onClose}>
-                        İptal
+                        {t('common.cancel','Cancel')}
                     </button>
                     <button className="submit-btn" onClick={onCreate}>
                         🎉 Create Giveaway

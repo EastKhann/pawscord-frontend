@@ -59,7 +59,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                 </div>
                 {logins.length > 1 && (
                     <button
-                        aria-label="on Revoke All"
+                        aria-label={t('security.endAllSessions', 'End all sessions')}
                         type="button"
                         style={S.revokeAllBtn}
                         onClick={onRevokeAll}
@@ -117,7 +117,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                                 <div style={S.loginInfo}>
                                     <div style={S.loginTitle}>
                                         <span style={S.deviceName}>
-                                            {login.os || 'Bilinmeyen İşletim Sistemi'}
+                                            {login.os || t('loginHistory.unknownOS', 'Unknown Operating System')}
                                         </span>
                                         {isCurrent && (
                                             <span style={S.currentBadge}>Mevcut oturum</span>
@@ -184,7 +184,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                                     </div>
                                     {!isCurrent && isSuccess && (
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('loginHistory.revokeSession', 'Revoke session')}
                                             type="button"
                                             style={S.revokeBtn}
                                             onClick={() => handleRevoke(login.id)}
@@ -201,7 +201,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                 {logins.length === 0 && (
                     <div style={S.empty}>
                         <FaShieldAlt className="icon-gray-24" />
-                        <span>Giriş geçmişi bulunamadı</span>
+                        <span>{t('loginHistory.notFound', 'No login history found')}</span>
                     </div>
                 )}
             </div>

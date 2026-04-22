@@ -18,6 +18,7 @@ const FILTERS = [
 ];
 
 const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) => {
+    const { t } = useTranslation();
     const [error, setError] = useState(null);
     const {
         scanResults,
@@ -35,9 +36,9 @@ const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaShieldAlt className="icon-primary-mr10" />
-                        <h2 style={styles.title}>İçerik Tarayıcı Sonuçları</h2>
+                        <h2 style={styles.title}>{t('contentScanner.title', 'Content Scanner Results')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -45,7 +46,7 @@ const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) 
                 <div style={styles.filters}>
                     {FILTERS.map((f) => (
                         <button
-                            aria-label="Filter"
+                            aria-label={f.label}
                             key={f.key}
                             onClick={() => setFilter(f.key)}
                             style={S.el}
@@ -59,7 +60,7 @@ const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) 
                         </button>
                     ))}
                     <button
-                        aria-label="export Results"
+                        aria-label={t('contentScanner.exportResults', 'Export results')}
                         onClick={exportResults}
                         style={styles.exportButton}
                     >
@@ -69,9 +70,9 @@ const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) 
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Tarama sonuçları yükleniyor...</div>
+                        <div style={styles.loading}>{t('contentScanner.loading', 'Loading scan results...')}</div>
                     ) : filteredResults.length === 0 ? (
-                        <div style={styles.empty}>Tarama sonucu bulunamadı</div>
+                        <div style={styles.empty}>{t('contentScanner.noResults', 'No scan results found')}</div>
                     ) : (
                         <div style={styles.resultsList}>
                             {filteredResults.map((result, index) => (

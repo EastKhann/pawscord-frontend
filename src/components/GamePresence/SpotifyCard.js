@@ -23,7 +23,7 @@ export const SpotifyCard = ({ activity }) => {
     if (!activity || activity.type !== 'listening') return null;
 
     return (
-        <div aria-label="spotify card" className="spotify-card">
+        <div aria-label={t('gamePresence.spotifyCard', 'Spotify card')} className="spotify-card">
             <div className="spotify-header">
                 <FaSpotify className="spotify-icon" />
                 <span>{t('listening_to_spotify')}</span>

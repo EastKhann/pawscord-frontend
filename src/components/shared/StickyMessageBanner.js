@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaBullhorn, FaTimes } from 'react-icons/fa';
 
@@ -30,6 +31,7 @@ const S = {
 };
 
 const StickyMessageBanner = ({ message, type = 'info', onDismiss }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     if (!message) return null;
@@ -75,7 +77,7 @@ const StickyMessageBanner = ({ message, type = 'info', onDismiss }) => {
 
             {onDismiss && (
                 <button
-                    aria-label="on Dismiss"
+                    aria-label={t('common.dismiss', 'Dismiss')}
                     onClick={onDismiss}
                     style={S.flex2}
                     onMouseEnter={(e) =>

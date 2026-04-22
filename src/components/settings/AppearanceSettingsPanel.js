@@ -1,4 +1,5 @@
 ﻿import { useState, useCallback, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import './AppearanceSettingsPanel.css';
 import useAppearanceSettings, {
@@ -39,6 +40,7 @@ const ACCESSIBILITY_TOGGLES = [
 ];
 
 const AppearanceSettingsPanel = ({ onClose }) => {
+    const { t } = useTranslation();
     const [error, setError] = useState(null);
     const { settings, loading, updateSetting, toggleSetting, resetToDefaults } =
         useAppearanceSettings();
@@ -84,7 +86,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                 <div className="appearance-settings-panel">
                     <div className="loading-state">
                         <div className="spinner"></div>
-                        <p>Görünüm ayarları yükleniyor...</p>
+                        <p>{t('appearance.loading', 'Loading appearance settings...')}</p>
                     </div>
                 </div>
             </div>
@@ -108,8 +110,8 @@ const AppearanceSettingsPanel = ({ onClose }) => {
             >
                 {/* Header */}
                 <div className="appearance-settings-header">
-                    <h2>🎨 Görünüm Ayarları</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <h2>🎨 {t('appearance.title', 'Appearance Settings')}</h2>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -173,15 +175,15 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                                 value={settings.accent_color}
                                 onChange={handleAccentColorChange}
                                 className="custom-color-input"
-                                title="Özel renk seç"
-                                aria-label="renk seçici"
+                                title={t('common.pickCustomColor', 'Pick custom color')}
+                                aria-label={t('common.colorPicker', 'Color picker')}
                             />
                         </div>
                     </div>
 
                     {/* Message Display */}
                     <div className="settings-section">
-                        <h3>💬 Mesaj Görünümü</h3>
+                        <h3>💬 {t('appearance.messageDisplay', 'Message Display')}</h3>
                         <div className="settings-group">
                             <div className="setting-item">
                                 <div className="setting-info">
@@ -193,14 +195,14 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                                 </div>
                                 <div className="display-mode-selector">
                                     <button
-                                        aria-label="handle Set Cozy Mode"
+                                        aria-label={t('appearance.cozyMode', 'Cozy mode')}
                                         className={`mode-btn ${settings.message_display_mode === 'cozy' ? 'active' : ''}`}
                                         onClick={handleSetCozyMode}
                                     >
                                         Cozy
                                     </button>
                                     <button
-                                        aria-label="handle Set Compact Mode"
+                                        aria-label={t('appearance.compactMode', 'Compact mode')}
                                         className={`mode-btn ${settings.message_display_mode === 'compact' ? 'active' : ''}`}
                                         onClick={handleSetCompactMode}
                                     >
@@ -214,7 +216,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                                     <div className="setting-label">
                                         Font size: {settings.font_size}px
                                     </div>
-                                    <div className="setting-desc">Mesaj yazı tipi boyutu</div>
+                                    <div className="setting-desc">{t('appearance.fontSize', 'Message font size')}</div>
                                 </div>
                                 <input
                                     type="range"
@@ -223,134 +225,124 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                                     value={settings.font_size}
                                     onChange={handleFontSizeChange}
                                     className="font-size-slider"
-                                    aria-label="range"
+                                    aria-label={t('appearance.fontSizeSlider', 'Font size')}
                                 />
                             </div>
+                            <div className="setting-desc">{t('appearance.messageSpacing', 'Message spacing')}</div>
+                        </div>
+                        <select
+                            value={settings.message_group_spacing}
+                            onChange={handleSpacingChange}
+                            className="spacing-select"
+                            aria-label={t('appearance.spacingSelect', 'Select message spacing')}>
+                            <option value="default">Default</option>
+                            <option value="spacious">Spacious</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-                            <div className="setting-item">
-                                <div className="setting-info">
-                                    <div className="setting-label">Mesaj yoğunluğu</div>
-                                    <div className="setting-desc">Mesajlar arası boşluk</div>
-                                </div>
-                                <select
-                                    value={settings.message_group_spacing}
-                                    onChange={handleSpacingChange}
-                                    className="spacing-select"
-                                    aria-label="select"
-                                >
-                                    <option value="compact">Compact</option>
-                                    <option value="default">Default</option>
-                                    <option value="spacious">Spacious</option>
-                                </select>
+            {/* Chat Features */}
+            <div className="settings-section">
+                <h3>✨ {t('appearance.chatFeatures', 'Chat Features')}</h3>
+                <div className="settings-group">
+                    {CHAT_TOGGLES.map((t) => (
+                        <SettingToggle
+                            key={t.key}
+                            label={t.label}
+                            desc={t.desc}
+                            checked={settings[t.key]}
+                            onChange={() => toggleSetting(t.key)}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* Accessibility */}
+            <div className="settings-section">
+                <h3>♿ Accessibility</h3>
+                <div className="settings-group">
+                    {ACCESSIBILITY_TOGGLES.map((t) => (
+                        <SettingToggle
+                            key={t.key}
+                            label={t.label}
+                            desc={t.desc}
+                            checked={settings[t.key]}
+                            onChange={() => toggleSetting(t.key)}
+                        />
+                    ))}
+
+                    <div className="setting-item">
+                        <div className="setting-info">
+                            <div className="setting-label">
+                                Color saturation: {settings.saturate_colors}%
                             </div>
+                            <div className="setting-desc">{t('appearance.colorVibrance', 'Adjust color vibrance')}</div>
                         </div>
-                    </div>
-
-                    {/* Chat Features */}
-                    <div className="settings-section">
-                        <h3>✨ Sohbet Özellikleri</h3>
-                        <div className="settings-group">
-                            {CHAT_TOGGLES.map((t) => (
-                                <SettingToggle
-                                    key={t.key}
-                                    label={t.label}
-                                    desc={t.desc}
-                                    checked={settings[t.key]}
-                                    onChange={() => toggleSetting(t.key)}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Accessibility */}
-                    <div className="settings-section">
-                        <h3>♿ Accessibility</h3>
-                        <div className="settings-group">
-                            {ACCESSIBILITY_TOGGLES.map((t) => (
-                                <SettingToggle
-                                    key={t.key}
-                                    label={t.label}
-                                    desc={t.desc}
-                                    checked={settings[t.key]}
-                                    onChange={() => toggleSetting(t.key)}
-                                />
-                            ))}
-
-                            <div className="setting-item">
-                                <div className="setting-info">
-                                    <div className="setting-label">
-                                        Color saturation: {settings.saturate_colors}%
+                        <input
+                            type="range"
+                            min="0"
+                            max="200"
+                            value={settings.saturate_colors}
+                            onChange={handleSaturationChange}
+                            className="saturation-slider"
+                            aria-label={t('appearance.saturationSlider', 'Color saturation')}
+                        />
+                        <div className="settings-section">
+                            <h3>🌍 Language & Region</h3>
+                            <div className="settings-group">
+                                <div className="setting-item">
+                                    <div className="setting-info">
+                                        <div className="setting-label">Language</div>
+                                        <div className="setting-desc">Uygulama dili</div>
                                     </div>
-                                    <div className="setting-desc">Renk canlılığını ayarla</div>
+                                    <select
+                                        value={settings.language}
+                                        onChange={handleLanguageChange}
+                                        className="language-select"
+                                        aria-label={t('appearance.languageSelect', 'Select language')}
+                                    >
+                                        <option value="tr">🇹🇷 Turkish</option>
+                                        <option value="en">🇺🇸 English</option>
+                                        <option value="de">🇩🇪 Deutsch</option>
+                                        <option value="fr">{t('lang.fr', '🇫🇷 French')}</option>
+                                        <option value="es">🇪🇸 Español</option>
+                                    </select>
                                 </div>
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="200"
-                                    value={settings.saturate_colors}
-                                    onChange={handleSaturationChange}
-                                    className="saturation-slider"
-                                    aria-label="range"
-                                />
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* Language */}
-                    <div className="settings-section">
-                        <h3>🌍 Language & Region</h3>
-                        <div className="settings-group">
-                            <div className="setting-item">
-                                <div className="setting-info">
-                                    <div className="setting-label">Language</div>
-                                    <div className="setting-desc">Uygulama dili</div>
-                                </div>
-                                <select
-                                    value={settings.language}
-                                    onChange={handleLanguageChange}
-                                    className="language-select"
-                                    aria-label="select"
-                                >
-                                    <option value="tr">🇹🇷 Turkish</option>
-                                    <option value="en">🇺🇸 English</option>
-                                    <option value="de">🇩🇪 Deutsch</option>
-                                    <option value="fr">🇫🇷 Français</option>
-                                    <option value="es">🇪🇸 Español</option>
-                                </select>
-                            </div>
-
-                            <div className="setting-item">
-                                <div className="setting-info">
-                                    <div className="setting-label">Timezone</div>
-                                    <div className="setting-desc">
-                                        Mesaj zaman damgası saat dilimi
+                                <div className="setting-item">
+                                    <div className="setting-info">
+                                        <div className="setting-label">Timezone</div>
+                                        <div className="setting-desc">
+                                            {t('appearance.timestampTimezone', 'Message timestamp timezone')}
+                                        </div>
                                     </div>
+                                    <select
+                                        value={settings.timezone}
+                                        onChange={handleTimezoneChange}
+                                        className="timezone-select"
+                                        aria-label={t('appearance.timezoneSelect', 'Select timezone')}
+                                    >
+                                        <option value="Europe/Istanbul">Istanbul (UTC+3)</option>
+                                        <option value="Europe/London">London (UTC+0)</option>
+                                        <option value="America/New_York">New York (UTC-5)</option>
+                                        <option value="America/Los_Angeles">Los Angeles (UTC-8)</option>
+                                        <option value="Asia/Tokyo">Tokyo (UTC+9)</option>
+                                    </select>
                                 </div>
-                                <select
-                                    value={settings.timezone}
-                                    onChange={handleTimezoneChange}
-                                    className="timezone-select"
-                                    aria-label="select"
-                                >
-                                    <option value="Europe/Istanfind">Istanbul (UTC+3)</option>
-                                    <option value="Europe/London">London (UTC+0)</option>
-                                    <option value="America/New_York">New York (UTC-5)</option>
-                                    <option value="America/Los_Angeles">Los Angeles (UTC-8)</option>
-                                    <option value="Asia/Tokyo">Tokyo (UTC+9)</option>
-                                </select>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Reset */}
-                    <div className="settings-section">
-                        <button
-                            aria-label="reset To Defaults"
-                            className="reset-btn"
-                            onClick={resetToDefaults}
-                        >
-                            🔄 Reset to Defaults
-                        </button>
+                        {/* Reset */}
+                        <div className="settings-section">
+                            <button
+                                aria-label={t('appearance.resetDefaults', 'Reset to defaults')}
+                                className="reset-btn"
+                                onClick={resetToDefaults}
+                            >
+                                🔄 Reset to Defaults
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

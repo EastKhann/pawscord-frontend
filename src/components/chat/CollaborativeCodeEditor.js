@@ -52,7 +52,7 @@ const CollaborativeCodeEditor = ({
             <div style={styles.header}>
                 <div style={styles.headerLeft}>
                     <FaCode style={styles.headerIcon} />
-                    <h2 style={styles.title}>Kod Editörü</h2>
+                    <h2 style={styles.title}>{t('codeEditor.title', 'Code Editor')}</h2>
                     <select
                         value={language}
                         onChange={(e) => changeLanguage(e.target.value)}
@@ -71,7 +71,7 @@ const CollaborativeCodeEditor = ({
                         <span>{collaborators.length + 1}</span>
                     </div>
                     <button
-                        aria-label="Kodu kopyala"
+                        aria-label={t('codeEditor.copyCode', 'Copy code')}
                         onClick={copyCode}
                         style={styles.actionButton}
                         title="Kopyala"
@@ -79,15 +79,15 @@ const CollaborativeCodeEditor = ({
                         <FaCopy />
                     </button>
                     <button
-                        aria-label="Kodu indir"
+                        aria-label={t('codeEditor.downloadCode', 'Download code')}
                         onClick={downloadCode}
                         style={styles.actionButton}
-                        title="İndir"
+                        title={t('common.download', 'Download')}
                     >
                         <FaDownload />
                     </button>
                     <button
-                        aria-label="Kodu kaydet"
+                        aria-label={t('codeEditor.saveCode', 'Save code')}
                         onClick={saveCode}
                         disabled={saving}
                         style={S.el}
@@ -96,7 +96,7 @@ const CollaborativeCodeEditor = ({
                         <FaSave />
                     </button>
                     <button
-                        aria-label="run Code"
+                        aria-label={t('codeEditor.runCode', 'Run code')}
                         onClick={runCode}
                         disabled={running}
                         style={S.el2}

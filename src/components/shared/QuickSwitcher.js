@@ -181,7 +181,7 @@ const QuickSwitcher = ({ onClose, onNavigate, channels = [], users = [], convers
                     />
                     {query && (
                         <button
-                            aria-label="Clear"
+                            aria-label={t('quickSwitcher.clear', 'Clear search')}
                             className="clear-btn"
                             onClick={() => { setQuery(''); setSelectedIndex(0); }}
                         >

@@ -1,4 +1,4 @@
-// frontend/src/components/AdminAnalyticsPanel.js
+﻿// frontend/src/components/AdminAnalyticsPanel.js
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaChartLine, FaUsers, FaCrown, FaServer, FaDownload, FaTimes } from 'react-icons/fa';
@@ -56,7 +56,7 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
         return (
             <div style={styles.overlay}>
                 <div style={styles.modal}>
-                    <div style={styles.error}>Analitik veriler yüklenemedi</div>
+                    <div style={styles.error}>{t('adminAnalytics.loadError','Failed to load analytics data')}</div>
                 </div>
             </div>
         );
@@ -92,12 +92,12 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                         <button
                             onClick={exportData}
                             style={styles.exportButton}
-                            title="JSON olarak dışa aktar"
-                            aria-label="JSON olarak dışa aktar"
+                            title={t('admin.exportAsJson', 'Export as JSON')}
+                            aria-label={t('admin.exportAsJson', 'Export as JSON')}
                         >
                             <FaDownload />
                         </button>
-                        <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                        <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                             <FaTimes />
                         </button>
                     </div>

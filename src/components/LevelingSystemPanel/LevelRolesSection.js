@@ -30,7 +30,7 @@ const LevelRolesSection = ({
                     onChange={(e) => setNewRole({ ...newRole, role_id: e.target.value })}
                     className="role-select"
                 >
-                    <option value="">Role seçin</option>
+                    <option value="">{t('leveling.selectRole','Select role')}</option>
                     {roles.map((r) => (
                         <option key={r.id} value={r.id}>
                             {r.name}
@@ -57,7 +57,7 @@ const LevelRolesSection = ({
                     ))}
                 </div>
             ) : (
-                <p className="no-data">Henüz seviye rolü yok</p>
+                <p className="no-data">{t('leveling.noLevelRoles','No level roles yet')}</p>
             )}
         </div>
     );

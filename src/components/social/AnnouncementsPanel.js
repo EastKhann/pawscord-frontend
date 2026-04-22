@@ -135,7 +135,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
     };
 
     const deleteAnnouncement = async (id) => {
-        if (!(await confirmDialog('Bu duyuruyu silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('announcements.deleteConfirm', 'Are you sure you want to delete this announcement?')))) return;
         try {
             const response = await fetch(`${apiBaseUrl}/announcements/${id}/delete/`, {
                 method: 'DELETE',
@@ -200,18 +200,18 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
             >
                 <div className="announcements-header">
                     <h2>📢 Announcements</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
 
                 <div className="announcements-content">
                     <button
-                        aria-label="handle Show Create Modal"
+                        aria-label={t('announcements.create', 'Create announcement')}
                         className="create-announcement-btn"
                         onClick={handleShowCreateModal}
                     >
-                        + Yeni Duyuru Oluştur
+                        {t('announcements.create', '+ Create New Announcement')}
                     </button>
 
                     {loading ? (
@@ -222,7 +222,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                     ) : announcements.length === 0 ? (
                         <div className="empty-state">
                             <span className="empty-icon">📢</span>
-                            <p>Henüz duyuru yok</p>
+                            <p>{t('announcements.none', 'No announcements yet')}</p>
                         </div>
                     ) : (
                         <div className="announcements-list">
@@ -246,16 +246,16 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                     </div>
                                     <div className="announcement-actions">
                                         <button
-                                            aria-label="📤 Şimdi Gönder"
+                                            aria-label={t('announcements.send', 'Send Now')}
                                             onClick={() => sendNow(ann.id)}
                                         >
-                                            📤 Şimdi Gönder
+                                            {t('announcements.send', 'Send Now')}
                                         </button>
                                         <button
-                                            aria-label="🗑️ Delete"
+                                            aria-label={t('common.delete', 'Delete')}
                                             onClick={() => deleteAnnouncement(ann.id)}
                                         >
-                                            🗑️ Delete
+                                            🗑️ {t('common.delete', 'Delete')}
                                         </button>
                                     </div>
                                 </div>
@@ -279,13 +279,13 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                             className="create-modal"
                             role="dialog"
                             aria-modal="true"
-                            aria-label="Create Announcement"
+                            aria-label={t('announcements.createModal', 'Create announcement')}
                             onClick={handleStopPropagation}
                         >
                             <div className="modal-header">
                                 <h3>Yeni Duyuru</h3>
                                 <button
-                                    aria-label="Close"
+                                    aria-label={t('common.close', 'Close')}
                                     className="close-btn"
                                     onClick={handleHideCreateModal}
                                 >
@@ -298,7 +298,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                     <input
                                         value={newAnnouncement.title}
                                         onChange={handleTitleChange}
-                                        aria-label="input"
+                                        aria-label={t('announcements.titleInput', 'Announcement title')}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -307,7 +307,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                         value={newAnnouncement.content}
                                         onChange={handleContentChange}
                                         rows="4"
-                                        aria-label="textarea"
+                                        aria-label={t('announcements.contentInput', 'Announcement content')}
                                     />
                                 </div>
                                 <div className="form-row">
@@ -316,7 +316,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                         <select
                                             value={newAnnouncement.channel_id}
                                             onChange={handleChannelChange}
-                                            aria-label="select"
+                                            aria-label={t('announcements.channelSelect', 'Select channel')}
                                         >
                                             <option value="">Selectin</option>
                                             {channels.map((ch) => (
@@ -331,7 +331,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                         <select
                                             value={newAnnouncement.mention_role_id}
                                             onChange={handleMentionChange}
-                                            aria-label="select"
+                                            aria-label={t('announcements.mentionSelect', 'Select role to mention')}
                                         >
                                             <option value="">Role yok</option>
                                             {roles.map((r) => (
@@ -349,7 +349,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                             type="datetime-local"
                                             value={newAnnouncement.schedule_time}
                                             onChange={handleScheduleChange}
-                                            aria-label="datetime-local"
+                                            aria-label={t('announcements.scheduleInput', 'Schedule date and time')}
                                         />
                                     </div>
                                     <div className="form-group">
@@ -357,11 +357,9 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                         <select
                                             value={newAnnouncement.repeat}
                                             onChange={handleRepeatChange}
-                                            aria-label="select"
-                                        >
-                                            <option value="once">Bir kez</option>
-                                            <option value="daily">Günlük</option>
-                                            <option value="weekly">Haftalık</option>
+                                            aria-label={t('announcements.repeatSelect', 'Repeat schedule')}Bir kez</option>
+                                            <option value="daily">{t('common.daily','Daily')}</option>
+                                            <option value="weekly">{t('common.weekly','Weekly')}</option>
                                             <option value="monthly">Monthly</option>
                                         </select>
                                     </div>
@@ -372,33 +370,34 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                             type="checkbox"
                                             checked={newAnnouncement.embed}
                                             onChange={handleEmbedToggle}
-                                            aria-label="checkbox"
+                                            aria-label={t('announcements.sendAsEmbed', 'Send as embed')}
                                         />
-                                        <span>Embed olarak gönder</span>
+                                        <span>{t('announcements.sendAsEmbed','Send as embed')}</span>
                                     </label>
                                 </div>
                             </div>
                             <div className="modal-footer">
                                 <button
-                                    aria-label="handle Hide Create Modal"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-btn"
                                     onClick={handleHideCreateModal}
                                 >
                                     {t('common.cancel')}
                                 </button>
                                 <button
-                                    aria-label="create Announcement"
+                                    aria-label={t('announcements.create', 'Create announcement')}
                                     className="submit-btn"
                                     onClick={createAnnouncement}
                                 >
-                                    📢 Oluştur
+                                    {t('announcements.send','📢 Create')}
                                 </button>
                             </div>
                         </div>
-                    </div>
-                )}
-            </div>
         </div>
+    )
+}
+            </div> 
+        </div >
     );
 };
 

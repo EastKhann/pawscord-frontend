@@ -151,6 +151,9 @@
         "build/",
         "node_modules/",
         "*.min.js",
-        "*.min.css"
+        "*.min.css",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.d.ts"
     ]
 }

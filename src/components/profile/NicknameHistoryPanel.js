@@ -34,18 +34,18 @@ const NicknameHistoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaHistory className="icon-primary-mr10" />
-                        <h2 style={styles.title}>{username} - Gözkadı Geçmişi</h2>
+                        <h2 style={styles.title}>{username} - {t('nicknameHistory.title', 'Nickname History')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Geçmiş yükleniyor...</div>
+                        <div style={styles.loading}>{t('nicknameHistory.loading', 'Loading history...')}</div>
                     ) : history.length === 0 ? (
-                        <div style={styles.empty}>Kayıtlı gözkadı değişikliği bulunamadı</div>
+                        <div style={styles.empty}>{t('nicknameHistory.noHistory', 'No recorded nickname changes found')}</div>
                     ) : (
                         <div style={styles.timeline}>
                             {history.map((entry, idx) => (
@@ -54,11 +54,11 @@ const NicknameHistoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                                     <div style={styles.timelineContent}>
                                         <div style={styles.nicknameChange}>
                                             <div style={styles.oldNickname}>
-                                                {entry.old_nickname || 'Gözkadı yok'}
+                                                {entry.old_nickname || t('nicknameHistory.noNickname', 'No nickname')}
                                             </div>
                                             <div style={styles.arrow}>→</div>
                                             <div style={styles.newNickname}>
-                                                {entry.new_nickname || 'Gözkadı yok'}
+                                                {entry.new_nickname || t('nicknameHistory.noNickname', 'No nickname')}
                                             </div>
                                         </div>
                                         <div style={styles.changeInfo}>

@@ -27,7 +27,7 @@ import toast from '../../utils/toast';
 
 // ── Test data ──────────────────────────────────────
 const mockTiers = [
-    { id: 'free', name: 'Ücretsiz', price: 0, price_illy: 0, features: ['Basic chat'] },
+    { id: 'free', name: 'Free', price: 0, price_illy: 0, features: ['Basic chat'] },
     {
         id: 'premium',
         name: 'Premium',

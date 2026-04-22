@@ -58,7 +58,7 @@ export const ExtraFeaturesPanel = ({ onClose, onOpenFeature }) => {
     ];
 
     return (
-        <div aria-label="extra features panel" className="extra-features-panel">
+        <div aria-label={t('extraFeaturesPanel.panel', 'Extra features panel')} className="extra-features-panel">
             <div className="panel-header">
                 <h2>{t('🚀_ekstra_özellikler_20')}</h2>
                 <button onClick={onClose} className="close-btn">

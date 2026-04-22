@@ -13,10 +13,10 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
     const timeRanges = [
         { value: '24h', label: 'Son 24 Saat' },
-        { value: '7d', label: 'Son 7 Gün' },
-        { value: '30d', label: 'Son 30 Gün' },
-        { value: '90d', label: 'Son 90 Gün' },
-        { value: 'all', label: 'Tüm Zamanlar' },
+        { value: '7d', label: t('common.last7days', 'Last 7 Days') },
+        { value: '30d', label: t('common.last30days', 'Last 30 Days') },
+        { value: '90d', label: t('common.last90days', 'Last 90 Days') },
+        { value: 'all', label: t('common.allTime', 'All Time') },
     ];
 
     useEffect(() => {
@@ -60,7 +60,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
         : 1;
 
     return (
-        <div aria-label="growth metrics panel" style={styles.overlay}>
+        <div aria-label={t('analytics.growthMetrics', 'Growth metrics panel')} style={styles.overlay}>
             <div style={styles.modal}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
@@ -124,10 +124,10 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                         <div style={styles.statSubtext}>
                                             {metrics.total_members
                                                 ? (
-                                                      (metrics.active_members /
-                                                          metrics.total_members) *
-                                                      100
-                                                  ).toFixed(1)
+                                                    (metrics.active_members /
+                                                        metrics.total_members) *
+                                                    100
+                                                ).toFixed(1)
                                                 : 0}
                                             % of total
                                         </div>

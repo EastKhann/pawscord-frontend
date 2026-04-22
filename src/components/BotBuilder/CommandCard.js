@@ -62,7 +62,7 @@ const CommandCard = ({ cmd, styles, onUpdate, onRemove, onTest, canRemove }) => 
                     type="text"
                     value={cmd.trigger}
                     onChange={(e) => onUpdate(cmd.id, 'trigger', e.target.value)}
-                    placeholder="!command"
+                    placeholder={t('commandCard.trigger', '!command')}
                     style={styles.input}
                 />
             </div>

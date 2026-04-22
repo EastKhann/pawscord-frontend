@@ -47,7 +47,7 @@ export const SUPPORTED_LANGUAGES = [
     { code: 'en', name: 'English', flag: '🇬🇧', dir: 'ltr' },
     { code: 'tr', name: 'Turkish', flag: '🇹🇷', dir: 'ltr' },
     { code: 'de', name: 'Deutsch', flag: '🇩🇪', dir: 'ltr' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷', dir: 'ltr' },
+    { code: 'fr', name: 'French', flag: '🇫🇷', dir: 'ltr' },
     { code: 'es', name: 'Español', flag: '🇪🇸', dir: 'ltr' },
     { code: 'pt', name: 'Português', flag: '🇧🇷', dir: 'ltr' },
     { code: 'it', name: 'Italiano', flag: '🇮🇹', dir: 'ltr' },

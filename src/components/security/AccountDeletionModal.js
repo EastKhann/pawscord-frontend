@@ -57,7 +57,7 @@ const AccountDeletionModal = ({
                     </div>
                     <h2 style={styles.title}>{t('accountDeletion.title')}</h2>
                     <button
-                        aria-label="handle Close"
+                        aria-label={t('common.close', 'Close')}
                         style={styles.closeButton}
                         onClick={handleClose}
                     >
@@ -82,14 +82,14 @@ const AccountDeletionModal = ({
                         </div>
                         <div style={styles.buttonGroup}>
                             <button
-                                aria-label="handle Close"
+                                aria-label={t('common.cancel', 'Cancel')}
                                 style={styles.cancelButton}
                                 onClick={handleClose}
                             >
                                 {t('accountDeletion.cancel')}
                             </button>
                             <button
-                                aria-label="handle Proceed To Confirm"
+                                aria-label={t('accountDeletion.proceed', 'Proceed to confirm')}
                                 style={styles.dangerButton}
                                 onClick={handleProceedToConfirm}
                             >
@@ -139,15 +139,12 @@ const AccountDeletionModal = ({
                         </div>
                         <div style={styles.buttonGroup}>
                             <button
-                                aria-label="Action button"
-                                style={styles.cancelButton}
-                                onClick={() => setStep(1)}
-                                disabled={isDeleting}
+                                aria-label={t('common.back', 'Back')}
                             >
                                 {t('accountDeletion.back')}
                             </button>
                             <button
-                                aria-label="handle Delete"
+                                aria-label={t('accountDeletion.deleteAccount', 'Delete account')}
                                 style={{
                                     ...styles.deleteButton,
                                     opacity: isDeleteDisabled ? 0.5 : 1,

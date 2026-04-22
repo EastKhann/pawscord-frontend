@@ -139,7 +139,7 @@ const ServerHealthPanel = ({ onClose, fetchWithAuth }) => {
     if (loading) {
         return (
             <div
-                aria-label="server health panel"
+                aria-label={t('serverHealth.panel', 'Server health panel')}
                 className="server-health-overlay"
                 role="button"
                 tabIndex={0}
@@ -211,7 +211,7 @@ const ServerHealthPanel = ({ onClose, fetchWithAuth }) => {
                             {getStatusIcon(health?.status)}
                             <span>
                                 {health?.status === 'healthy'
-                                    ? 'Tüm Sistemler Çalışıyor'
+                                    ? t('serverHealth.allSystemsOk', 'All Systems Operational')
                                     : health?.status}
                             </span>
                         </div>

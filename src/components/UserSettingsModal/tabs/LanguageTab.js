@@ -19,7 +19,7 @@ const LanguageTab = () => {
     };
 
     return (
-        <div aria-label="language tab">
+        <div aria-label={t('settings.languageTab', 'Language tab')}>
             <SettingSection title={t('settings.tabs.language.appLanguage')}>
                 <p className={ut.mutedMdMb16}>{t('settings.tabs.language.selectDesc')}</p>
                 <div className={ut.flexColGap4}>

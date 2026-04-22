@@ -5,8 +5,10 @@ import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
 import './ScreenShare.css';
 import { API_BASE_URL } from '../../utils/apiEndpoints';
+import { useTranslation } from 'react-i18next';
 
 const ScreenShare = ({ serverId, onClose }) => {
+    const { t } = useTranslation();
     const [screens, setScreens] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sharing, setSharing] = useState(false);
@@ -131,7 +133,7 @@ const ScreenShare = ({ serverId, onClose }) => {
             >
                 <div className="screen-share-header">
                     <h2>🖥️ Screen Share</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -142,7 +144,7 @@ const ScreenShare = ({ serverId, onClose }) => {
                         <div className="sharing-active">
                             <div className="sharing-indicator">
                                 <div className="live-badge">🔴 SHARING</div>
-                                <p>Ekranınız paylaşılıyor</p>
+                                <p>{t('screenShare2.sharing', 'Your screen is being shared')}</p>
                             </div>
 
                             <div className="active-source">
@@ -170,7 +172,7 @@ const ScreenShare = ({ serverId, onClose }) => {
                             </div>
 
                             <button
-                                aria-label="stop Share"
+                                aria-label={t('screenShare.stop', 'Stop screen share')}
                                 className="stop-share-btn"
                                 onClick={stopShare}
                             >
@@ -182,10 +184,10 @@ const ScreenShare = ({ serverId, onClose }) => {
                         <>
                             {/* Source Selection */}
                             <div className="source-selection">
-                                <h3>Ekran veya Pencere Seçin</h3>
+                                <h3>{t('screenShare2.selectSource', 'Select Screen or Window')}</h3>
 
                                 {loading ? (
-                                    <div className="loading-spinner">Kaynaklar yükleniyor...</div>
+                                    <div className="loading-spinner">{t('screenShare2.loadingSources', 'Loading sources...')}</div>
                                 ) : (
                                     <div className="sources-grid">
                                         {screens.map((source) => (
@@ -237,7 +239,7 @@ const ScreenShare = ({ serverId, onClose }) => {
                                         </div>
 
                                         <div className="setting-group">
-                                            <label>Kare Hızı</label>
+                                            <label>{t('screenShare2.frameRate', 'Frame Rate')}</label>
                                             <select
                                                 value={shareSettings.fps}
                                                 onChange={(e) =>
@@ -281,7 +283,7 @@ const ScreenShare = ({ serverId, onClose }) => {
                             {/* Action Button */}
                             <div className="share-actions">
                                 <button
-                                    aria-label="start Share"
+                                    aria-label={t('screenShare.start', 'Start screen share')}
                                     className="start-share-btn"
                                     onClick={startShare}
                                     disabled={!selectedSource}

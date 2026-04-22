@@ -14,7 +14,7 @@ import './pages/LoginPage.css';
 import App from './App';
 import NotFoundPage from './pages/NotFoundPage';
 
-import lazyWithRetry from './utils/lazyWithRetry';
+import lazyWithRetry, { isChunkLoadError, handleChunkReload, CHUNK_RELOAD_COUNT_KEY } from './utils/lazyWithRetry';
 
 // ⚡ OPTIMIZATION: Lazy load verify/invite pages (rarely visited)
 // ⚡ OPTIMIZATION: Lazy load ALL feature pages (with retry)
@@ -211,7 +211,7 @@ const RootApp = () => {
                     <ErrorBoundary>
                         <HashRouter>
                             <a href="#main-content" className="skip-nav">
-                                İçeriğe Atla
+                                Skip to Content
                             </a>
                             <ConnectionStatusBanner />
                             <SignalNotification />
@@ -614,7 +614,6 @@ const RootApp = () => {
 
 // 🔄 UNIFIED chunk load error handler — single source of truth
 // Uses the same keys as lazyWithRetry + ErrorBoundary (no competing handlers)
-import { isChunkLoadError, handleChunkReload, CHUNK_RELOAD_COUNT_KEY } from './utils/lazyWithRetry';
 import ErrorReporter from './utils/errorReporter';
 import PropTypes from 'prop-types';
 import logger from './utils/logger';

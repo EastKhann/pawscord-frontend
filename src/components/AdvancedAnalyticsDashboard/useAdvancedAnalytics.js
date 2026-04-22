@@ -33,7 +33,7 @@ export const renderSimpleChart = (data, color = '#5865f2', height = 60) => {
     const max = Math.max(...data.map((d) => d.value));
     const width = 100 / data.length;
     return (
-        <div aria-label="format number" className="simple-chart" style={S.size}>
+        <div aria-label={t('analytics.simpleChart', 'Chart')} className="simple-chart" style={S.size}>
             {data.map((item, idx) => {
                 const barStyle = {
                     width: `${width}%`,

@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/WatchPartyEnhanced.js
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -72,10 +72,10 @@ const WatchPartyEnhanced = ({
             <div style={styles.header}>
                 <div style={styles.headerLeft}>
                     <FaUsers size={18} color="#5865f2" />
-                    <span style={styles.title}>İzleme Partisi</span>
+                    <span style={styles.title}>{t('watchParty.title', 'Watch Party')}</span>
                     <span style={styles.participantCount}>{participants.length} watching</span>
                 </div>
-                <button aria-label="on Close" onClick={onClose} style={styles.closeButton}>
+                <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                     <FaTimes size={20} />
                 </button>
             </div>
@@ -122,14 +122,13 @@ const WatchPartyEnhanced = ({
                                     {isHost && (
                                         <>
                                             <button
-                                                aria-label="Action button"
-                                                onClick={() => handleSkip(-10)}
+                                                aria-label={t('watchParty.skipBack', 'Skip backward 10 seconds')}
                                                 style={styles.controlButton}
                                             >
                                                 <FaBackward size={16} />
                                             </button>
                                             <button
-                                                aria-label="is Playing handle Pause handle Play"
+                                                aria-label={isPlaying ? t('watchParty.pause', 'Pause') : t('watchParty.play', 'Play')}
                                                 onClick={isPlaying ? handlePause : handlePlay}
                                                 style={styles.controlButton}
                                             >
@@ -140,8 +139,7 @@ const WatchPartyEnhanced = ({
                                                 )}
                                             </button>
                                             <button
-                                                aria-label="Action button"
-                                                onClick={() => handleSkip(10)}
+                                                aria-label={t('watchParty.skipForward', 'Skip forward 10 seconds')}
                                                 style={styles.controlButton}
                                             >
                                                 <FaForward size={16} />
@@ -149,7 +147,7 @@ const WatchPartyEnhanced = ({
                                         </>
                                     )}
                                     <button
-                                        aria-label="toggle Mute"
+                                        aria-label={isMuted ? t('watchParty.unmute', 'Unmute') : t('watchParty.mute', 'Mute')}
                                         onClick={toggleMute}
                                         style={styles.controlButton}
                                     >
@@ -174,7 +172,7 @@ const WatchPartyEnhanced = ({
                                 <div style={styles.controlsRight}>
                                     {!isHost && (
                                         <button
-                                            aria-label="Senkronize Et"
+                                            aria-label={t('watchParty.syncVideo', 'Sync video')}
                                             onClick={requestSync}
                                             style={styles.syncButton}
                                         >
@@ -183,14 +181,14 @@ const WatchPartyEnhanced = ({
                                         </button>
                                     )}
                                     <button
-                                        aria-label="Toggle visibility"
+                                        aria-label={t('watchParty.toggleSettings', 'Toggle settings')}
                                         onClick={() => setShowSettings(!showSettings)}
                                         style={styles.controlButton}
                                     >
                                         <FaCog size={18} />
                                     </button>
                                     <button
-                                        aria-label="toggle Fullscreen"
+                                        aria-label={isFullscreen ? t('watchParty.exitFullscreen', 'Exit fullscreen') : t('watchParty.enterFullscreen', 'Enter fullscreen')}
                                         onClick={toggleFullscreen}
                                         style={styles.controlButton}
                                     >
@@ -208,8 +206,7 @@ const WatchPartyEnhanced = ({
                     <div style={styles.quickReactions}>
                         {QUICK_EMOJIS.map((emoji) => (
                             <button
-                                aria-label="Action button"
-                                key={emoji}
+                                aria-label={t('watchParty.sendReaction', 'Send reaction')}
                                 onClick={() => sendReaction(emoji)}
                                 style={styles.reactionButton}
                             >
@@ -221,7 +218,7 @@ const WatchPartyEnhanced = ({
 
                 <div style={styles.chatSection}>
                     <div style={styles.chatHeader}>
-                        <span>Canlı Sohbet</span>
+                        <span>{t('watchParty.liveChat', 'Live Chat')}</span>
                     </div>
                     <div ref={chatRef} style={styles.chatMessages}>
                         {chatMessages.map((msg, i) => (
@@ -240,11 +237,11 @@ const WatchPartyEnhanced = ({
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && sendChatMessage()}
-                            placeholder="Mesaj yazın..."
+                            placeholder={t('common.typeMessage', 'Type a message...')}
                             style={styles.chatInputField}
                         />
                         <button
-                            aria-label="send Chat Message"
+                            aria-label={t('watchParty.sendMessage', 'Send chat message')}
                             onClick={sendChatMessage}
                             style={styles.sendButton}
                         >
@@ -258,7 +255,7 @@ const WatchPartyEnhanced = ({
                 <div style={styles.settingsPanel}>
                     <h3 style={styles.settingsTitle}>{t('common.settings')}</h3>
                     <div style={styles.settingItem}>
-                        <label>Oynatma Hızı</label>
+                        <label>{t('watchParty.playbackSpeed', 'Playback Speed')}</label>
                         <select
                             value={playbackRate}
                             onChange={(e) => handlePlaybackRateChange(parseFloat(e.target.value))}

@@ -10,7 +10,7 @@ const ToolsTab = () => {
     const { handleBackup, handleClearCache } = useAdminAPIContext();
     const { t } = useTranslation();
     return (
-        <div aria-label="tools tab">
+        <div aria-label={t('admin.toolsTab', 'Tools tab')}>
             <h2 className={css.sectionTitle}>{t('admin.panel.tools')}</h2>
 
             <div className="grid-3col">
@@ -18,7 +18,7 @@ const ToolsTab = () => {
                     {
                         icon: <FaCloudUploadAlt />,
                         title: 'Yedekle',
-                        desc: 'Veritabanı Yedekle',
+                        desc: t('adminTools.backupDb', 'Backup Database'),
                         color: '#5865f2',
                         action: handleBackup,
                     },
@@ -52,8 +52,8 @@ const ToolsTab = () => {
                     },
                     {
                         icon: <FaFileExport />,
-                        title: 'Dışa Aktar',
-                        desc: 'Veri Dışa Aktar',
+                        title: t('adminTools.export', 'Export'),
+                        desc: t('adminTools.exportData', 'Export Data'),
                         color: '#1abc9c',
                         action: handleBackup,
                     },

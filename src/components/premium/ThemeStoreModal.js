@@ -23,7 +23,7 @@ const ThemeStoreModal = ({ onClose, currentTheme, onThemeChange }) => {
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <FaPalette style={S.txt} />
-                    <h2 className="m-0">Tema Mağazası</h2>
+                    <h2 className="m-0">{t('themeStore.title','Theme Store')}</h2>
                 </div>
 
                 <div style={styles.grid}>
@@ -65,7 +65,7 @@ const ThemeStoreModal = ({ onClose, currentTheme, onThemeChange }) => {
                     })}
                 </div>
 
-                <button aria-label="on Close" onClick={onClose} style={styles.closeButton}>
+                <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                     {t('common.close')}
                 </button>
             </div>

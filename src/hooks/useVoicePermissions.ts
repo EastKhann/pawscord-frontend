@@ -98,18 +98,18 @@ export const useVoicePermissions = (apiBaseUrl, fetchWithAuth) => {
                 const perms = channelPermissions[channel.id];
 
                 if (perms?.deniedUsers?.includes(user.id)) {
-                    return 'Bu kanala girmeniz yasaklanmış';
+                    return 'You are banned from this channel';
                 }
 
                 if (perms?.isPrivate) {
-                    return 'Bu kanala giriş izniniz yok';
+                    return 'You do not have permission to enter this channel';
                 }
 
                 return 'Bu kanala giremezsiniz';
             }
 
             if (isChannelFull(channel, currentUserCount)) {
-                return `Channel dolu (${channelPermissions[channel.id].maxUsers} kişi)`;
+                return `Channel is full (${channelPermissions[channel.id].maxUsers} people)`;
             }
 
             return null;

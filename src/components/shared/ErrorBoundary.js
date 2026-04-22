@@ -1,9 +1,9 @@
 // components/ErrorBoundary.js
 // 🛡️ Error Boundary - Crash Prevention
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 import { isChunkLoadError, handleChunkErrorInBoundary } from '../../utils/lazyWithRetry';
 import logger from '../../utils/logger';
 
@@ -53,7 +53,7 @@ class ErrorBoundary extends React.Component {
                     userAgent: navigator.userAgent,
                     timestamp: new Date().toISOString(),
                 }),
-            }).catch(() => {}); // Sessiz hata
+            }).catch(() => { }); // Sessiz hata
         } catch (e) {
             logger.warn('Could not report error:', e);
         }
@@ -70,22 +70,22 @@ class ErrorBoundary extends React.Component {
                 <div style={styles.container}>
                     <div style={styles.content}>
                         <div style={styles.icon}>💥</div>
-                        <h1 style={styles.title}>Oops! Bir şeyler ters gitti</h1>
+                        <h1 style={styles.title}>{i18n.t('errorBoundary.title', { defaultValue: 'Oops! Something went wrong' })}</h1>
                         <p style={styles.message}>
-                            Sorry, the application encountered an unexpected error.
+                            {i18n.t('errorBoundary.message', { defaultValue: 'Sorry, the application encountered an unexpected error.' })}
                         </p>
 
                         <div style={styles.actions}>
                             <button
-                                aria-label="this handle Reset"
+                                aria-label={i18n.t('errors.restart', { defaultValue: 'Restart application' })}
                                 onClick={this.handleReset}
                                 style={styles.button}
                             >
                                 🔄 Restart
                             </button>
                             <button
-                                aria-label="Action button"
-                                onClick={() => (window.location.href = '/')}
+                                aria-label={i18n.t('errors.returnHome', { defaultValue: 'Return to home' })}
+                                onClick={() => { window.location.hash = '#/'; }}
                                 style={S.el}
                             >
                                 🏠 Return to Home

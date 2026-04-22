@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import './SplashScreen.css';
 import { LOGO_URL } from '../utils/cdn';
+import i18n from '../i18n';
 
 const R2_LOGO_URL = LOGO_URL;
 
@@ -28,7 +29,7 @@ const PawLogo = () => {
     return (
         <img
             src={R2_LOGO_URL}
-            alt="Pawscord"
+            alt={i18n.t('alt.pawscordLogo', { defaultValue: 'Pawscord' })}
             className="splash-logo"
             onError={() => setImgError(true)}
         />
@@ -64,7 +65,7 @@ const SplashScreen = ({ animationState }) => {
     );
 
     return (
-        <div aria-label="Pawscord loading" className={`splash-screen ${animationState}`}>
+        <div aria-label={i18n.t('aria.pawscordLoading', { defaultValue: 'Pawscord Loading' })} className={`splash-screen ${animationState}`}>
             {/* Mesh gradient background */}
             <div className="splash-bg-mesh" />
 

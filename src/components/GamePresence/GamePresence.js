@@ -55,7 +55,7 @@ const GamePresence = ({ userId, username, showStats = false }) => {
     if (isLoading) return <div className="game-presence-loading">{t('common.loading')}</div>;
 
     return (
-        <div aria-label="game presence" className="game-presence">
+        <div aria-label={t('gamePresence.container', 'Game presence')} className="game-presence">
             {customStatus && (
                 <div className="gp-custom-status">
                     {customStatus.emoji && (

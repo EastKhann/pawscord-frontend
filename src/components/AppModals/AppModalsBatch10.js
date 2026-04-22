@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BATCH10_MODALS } from './batch10Config';
 
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 /**
  * AppModalsBatch10 — BATCH 10: 50 Essential Features
@@ -10,6 +11,7 @@ import PropTypes from 'prop-types';
 const AppModalsBatch10 = (props) => {
     const { modals, closeModal } = props;
 
+    const { t } = useTranslation();
     return (
         <>
             {BATCH10_MODALS.map(({ key, C, fb, cond, props: getProps }) => {
@@ -19,7 +21,7 @@ const AppModalsBatch10 = (props) => {
                     <Suspense
                         key={key}
                         fallback={
-                            <div role="region" aria-label="App Modals Batch10">
+                            <div role="region" aria-label={t('appModals.batch10', 'App modals batch 10')}>
                                 {fb || 'Loading...'}
                             </div>
                         }

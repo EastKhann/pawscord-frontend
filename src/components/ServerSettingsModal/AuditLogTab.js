@@ -74,7 +74,7 @@ const AuditLogTab = ({ server, fetchWithAuth, apiBaseUrl }) => {
                 </div>
                 <div className={css.flexGap8}>
                     <select
-                        aria-label="Filter by action type"
+                        aria-label={t('auditLog.filterByType', 'Filter by action type')}
                         value={auditFilter}
                         onChange={(e) => {
                             setAuditFilter(e.target.value);
@@ -95,7 +95,7 @@ const AuditLogTab = ({ server, fetchWithAuth, apiBaseUrl }) => {
                     </select>
                     <button
                         onClick={() => loadAuditLogs(auditFilter)}
-                        aria-label="Refresh audit logs"
+                        aria-label={t('auditLog.refresh', 'Refresh audit logs')}
                         style={S.bg2}
                     >
                         <FaUndo />
@@ -171,11 +171,11 @@ const AuditLogTab = ({ server, fetchWithAuth, apiBaseUrl }) => {
                                 <div style={S.txt2}>
                                     {log.timestamp
                                         ? new Date(log.timestamp).toLocaleString('tr-TR', {
-                                              month: 'short',
-                                              day: 'numeric',
-                                              hour: '2-digit',
-                                              minute: '2-digit',
-                                          })
+                                            month: 'short',
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                        })
                                         : ''}
                                 </div>
                             </div>

@@ -72,7 +72,7 @@ const TwoFactorLoginPage = () => {
             }
         } catch (error) {
             logger.error('❌ [2FA] Network error:', error);
-            setError('Bağlantı hatası oluştu');
+            setError(t('common.connectionError', 'A connection error occurred'));
         } finally {
             setLoading(false);
         }
@@ -102,7 +102,7 @@ const TwoFactorLoginPage = () => {
                             <input
                                 type="text"
                                 maxLength={6}
-                                placeholder="000000"
+                                placeholder={t('twoFactor.code', '000000')}
                                 value={code}
                                 onChange={(e) => {
                                     const value = e.target.value.replace(/\D/g, '');

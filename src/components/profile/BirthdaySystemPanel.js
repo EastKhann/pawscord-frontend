@@ -21,7 +21,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
         remove_role_after_day: true,
     });
     const [birthdays, setBirthdays] = useState([]);
-    const [upcomingBirthdays, setUpcomingBirthgüns] = useState([]);
+    const [upcomingBirthdays2, setUpcomingBirthdays2] = useState([]);
     const [channels, setChannels] = useState([]);
     const [roles, setRoles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -63,7 +63,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
             if (response.ok) {
                 const data = await response.json();
                 setBirthdays(data.all_birthdays);
-                setUpcomingBirthgüns(data.upcoming);
+                setUpcomingBirthdays2(data.upcoming);
             }
         } catch (error) {
             logger.error('Error:', error);
@@ -167,7 +167,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
             >
                 <div className="birthday-header">
                     <h2>🎂 {t('birthday.title')}</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -289,14 +289,14 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
 
                                 <div className="config-actions">
                                     <button
-                                        aria-label="save Config"
+                                        aria-label={t('birthday.saveConfig', 'Save birthday configuration')}
                                         className="save-btn"
                                         onClick={saveConfig}
                                     >
                                         💾 {t('common.save')}
                                     </button>
                                     <button
-                                        aria-label="test Message"
+                                        aria-label={t('birthday.testMessage', 'Send test birthday message')}
                                         className="test-btn"
                                         onClick={testMessage}
                                     >

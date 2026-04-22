@@ -113,9 +113,7 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
 
     const handleDisableE2EE = async () => {
         if (
-            !(await confirmDialog(
-                "⚠️ E2EE'yi devre dı bırakmak istediğinizden emin misiniz?\n\nBu işlem:\n• Tüm şifreli mesajlarınızı siler\n• Anahtarlarınızı kaldırır\n• Geri alınamaz!"
-            ))
+            !(await confirmDialog(t('e2ee.disableConfirm', 'Are you sure you want to disable E2EE?')))
         ) {
             return;
         }
@@ -140,7 +138,7 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
     };
 
     const formatDate = (date) => {
-        if (!date) return 'Hiçbir zaman';
+        if (!date) return t('e2ee.never', 'Never');
         return date.toLocaleDateString('tr-TR', {
             year: 'numeric',
             month: 'long',
@@ -171,10 +169,9 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
 
                 <div style={styles.disabledState}>
                     <FaExclamationTriangle size={48} color="#f0b232" />
-                    <h4>E2EE Devre Dışı</h4>
+                    <h4>{t('e2ee.disabled', 'E2EE Disabled')}</h4>
                     <p>
-                        Şu anda E2EE kullanmıyorsunuz. Mesajlarınızı şifrelemek için ayarlardan
-                        etkinleştirin.
+                        {t('e2ee.disabledDesc', 'You are not currently using E2EE. Enable it in settings to encrypt your messages.')}
                     </p>
                 </div>
             </div>
@@ -185,7 +182,7 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
         <div style={styles.container}>
             <div style={styles.header}>
                 <FaLock size={24} />
-                <h3 style={styles.title}>E2EE Ayarları</h3>
+                <h3 style={styles.title}>{t('e2ee.settings', 'E2EE Settings')}</h3>
             </div>
 
             {/* Status Card */}
@@ -197,12 +194,12 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
                 <div style={styles.statusInfo}>
                     <div style={styles.infoRow}>
                         <FaClock />
-                        <span>Kurulum: {formatDate(setupDate)}</span>
+                        <span>{t('e2ee.setup', 'Setup:')} {formatDate(setupDate)}</span>
                     </div>
                     {keyRotationDate && (
                         <div style={styles.infoRow}>
                             <FaSync />
-                            <span>Son Refreshme: {formatDate(keyRotationDate)}</span>
+                            <span>{t('e2ee.lastRefresh', 'Last Refresh:')} {formatDate(keyRotationDate)}</span>
                         </div>
                     )}
                 </div>
@@ -213,10 +210,9 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
                 <div style={styles.warningCard}>
                     <FaExclamationTriangle />
                     <div>
-                        <strong>Anahtar Refreshme Önerilir</strong>
+                        <strong>{t('e2ee.keyRefreshRecommended', 'Key Refresh Recommended')}</strong>
                         <p>
-                            Son anahtar yenilemeden {daysSince} day geçti. Security for
-                            anahtarlarınızı yenileyin.
+                            {t('e2ee.keyRefreshDesc', '{{days}} days have passed since last key rotation.').replace('{{days}}', daysSince)}
                         </p>
                     </div>
                 </div>
@@ -225,23 +221,23 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
             {/* Actions */}
             <div style={styles.actions}>
                 <button
-                    aria-label="handle Rotate Keys"
+                    aria-label={t('e2ee.rotateKeys', 'Rotate encryption keys')}
                     onClick={handleRotateKeys}
                     disabled={loading}
                     style={styles.rotateButton}
                 >
                     <FaSync />
-                    {loading ? 'Refreshniyor...' : t('ui.anahtarlari_refresh')}
+                    {loading ? t('e2ee.refreshing', 'Refreshing...') : t('ui.anahtarlari_refresh')}
                 </button>
 
                 <button
-                    aria-label="handle Disable E2 E E"
+                    aria-label={t('e2ee.disable', 'Disable end-to-end encryption')}
                     onClick={handleDisableE2EE}
                     disabled={loading}
                     style={styles.disableButton}
                 >
                     <FaTrash />
-                    E2EE\'yi Devre Dı Bırak
+                    {t('e2ee.disableE2ee', "Disable E2EE")}
                 </button>
             </div>
 
@@ -252,11 +248,11 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
                     E2EE About
                 </h4>
                 <ul style={styles.infoList}>
-                    <li>✅ Mesajlarınız uçtan uca şifrelenir</li>
-                    <li>✅ Sadece siz ve karşınızdaki kişi okuyabilir</li>
-                    <li>✅ Sunucu bile mesajları göremez</li>
-                    <li>⚠️ Anahtarlarınızı if you lose your keys messages become unreadable</li>
-                    <li>🔑 90 dayde bir anahtar yenileme önerilir</li>
+                    <li>{t('e2ee.activeFeature1', '✅ Your messages are end-to-end encrypted')}</li>
+                    <li>{t('e2ee.activeFeature2', '✅ Only you and the other party can read them')}</li>
+                    <li>{t('e2ee.activeFeature3', '✅ Even the server cannot see messages')}</li>
+                    <li>{t('e2ee.activeWarning', '⚠️ If you lose your keys, messages become unreadable')}</li>
+                    <li>{t('e2ee.rotationRecommended', '🔑 Key rotation every 90 days is recommended')}</li>
                 </ul>
             </div>
 

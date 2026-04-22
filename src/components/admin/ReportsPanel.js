@@ -1,4 +1,4 @@
-import { getToken } from '../../utils/tokenStorage';
+﻿import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/ReportsPanel.js
 import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -108,7 +108,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
     const getStatusBadge = (status) => {
         const badges = {
             pending: { label: 'Bekliyor', className: 'status-pending' },
-            resolved: { label: 'Çözüldü', className: 'status-resolved' },
+            resolved: { label: t('reports.resolved','Resolved'), className: 'status-resolved' },
             dismissed: { label: 'Reddedildi', className: 'status-dismissed' },
         };
         return badges[status] || { label: status, className: '' };
@@ -167,7 +167,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
             >
                 <div className="reports-header">
                     <h2>🚨 {t('reports.title', 'Rapor Yönetimi')}</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -184,7 +184,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                     </div>
                     <div className="stat-item resolved">
                         <span className="stat-value">{stats.resolved}</span>
-                        <span className="stat-label">Çözüldü</span>
+                        <span className="stat-label">{t('admin.resolved', 'Resolved')}</span>
                     </div>
                     <div className="stat-item dismissed">
                         <span className="stat-value">{stats.dismissed}</span>
@@ -195,28 +195,28 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                 {/* Filters */}
                 <div className="reports-filters">
                     <button
-                        aria-label="Tüm raporlar"
+                        aria-label={t('admin.allReports')}
                         className={filter === 'all' ? 'active' : ''}
                         onClick={() => setFilter('all')}
                     >
-                        Tümü ({stats.total})
+                        {t('common.all','All')} ({stats.total})
                     </button>
                     <button
-                        aria-label="Bekleyen raporlar"
+                        aria-label={t('admin.pendingReports')}
                         className={filter === 'pending' ? 'active' : ''}
                         onClick={() => setFilter('pending')}
                     >
                         Bekliyor ({stats.pending})
                     </button>
                     <button
-                        aria-label="Çözülen raporlar"
+                        aria-label={t('admin.resolvedReports')}
                         className={filter === 'resolved' ? 'active' : ''}
                         onClick={() => setFilter('resolved')}
                     >
                         {t('reports.resolved', 'Çözüldü')} ({stats.resolved})
                     </button>
                     <button
-                        aria-label="Reddedilen raporlar"
+                        aria-label={t('admin.rejectedReports')}
                         className={filter === 'dismissed' ? 'active' : ''}
                         onClick={() => setFilter('dismissed')}
                     >
@@ -234,7 +234,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                         <div className="empty-state">
                             <div className="empty-icon">🎉</div>
                             <h3>Rapor yok</h3>
-                            <p>Bu filtre için rapor bulunamadı</p>
+                            <p>{t('admin.noReportsFilter', 'No reports found for this filter')}</p>
                         </div>
                     ) : (
                         <div className="reports-list">
@@ -288,7 +288,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
 
                                             {report.description && (
                                                 <div className="report-description">
-                                                    <strong>Açıklama:</strong>
+                                                    <strong>{t('admin.descriptionColon', 'Description:')}</strong>
                                                     <p>{report.description}</p>
                                                 </div>
                                             )}
@@ -297,19 +297,19 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                         {report.status === 'pending' ? (
                                             <div className="report-actions">
                                                 <button
-                                                    aria-label="Kullanıcıyı banla"
+                                                    aria-label={t('admin.banUser')}
                                                     className="action-btn ban"
                                                     onClick={() => {
                                                         const reason = prompt('Banma sebebi:');
                                                         if (reason)
                                                             handleReport(report.id, 'ban', reason);
                                                     }}
-                                                    title="Kullanıcıyı Banla"
+                                                    title={t('moderation.banUser', 'Ban User')}
                                                 >
                                                     🚫 Banla
                                                 </button>
                                                 <button
-                                                    aria-label="Kullanıcıyı uyar"
+                                                    aria-label={t('admin.warnUser')}
                                                     className="action-btn warn"
                                                     onClick={() =>
                                                         handleReport(
@@ -318,12 +318,12 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                                             'Warning issued'
                                                         )
                                                     }
-                                                    title="Kullanıcıyı Uyar"
+                                                    title={t('moderation.warnUser', 'Warn User')}
                                                 >
                                                     ⚠️ Uyar
                                                 </button>
                                                 <button
-                                                    aria-label="Mesajı sil"
+                                                    aria-label={t('admin.deleteMessage')}
                                                     className="action-btn delete"
                                                     onClick={() =>
                                                         handleReport(
@@ -332,12 +332,12 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                                             'Message deleted'
                                                         )
                                                     }
-                                                    title="Mesajı Sil"
+                                                    title={t('common.deleteMessage', 'Delete Message')}
                                                 >
-                                                    🗑️ Mesajı Sil
+                                                    {t('reports.deleteMsg','🗑️ Delete Message')}
                                                 </button>
                                                 <button
-                                                    aria-label="Raporu reddet"
+                                                    aria-label={t('admin.rejectReport')}
                                                     className="action-btn dismiss"
                                                     onClick={() =>
                                                         handleReport(
@@ -353,7 +353,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                             </div>
                                         ) : (
                                             <div className="report-resolution">
-                                                <span className="resolution-label">Çözüm:</span>
+                                                <span className="resolution-label">{t('admin.resolution', 'Resolution:')}</span>
                                                 <span className="resolution-value">
                                                     {getActionLabel(report.resolution)}
                                                 </span>

@@ -66,11 +66,11 @@ const baseMock = {
     handleTrade: vi.fn(),
     modeData: {
         tabs: {
-            TUM_STRATEJILER: { title: 'Tüm Stratejiler', count: 5, data: [] },
+            ALL_STRATEGIES: { title: 'All Strategies', count: 5, data: [] },
             ACIK_POZISYONLAR: { title: 'Open Pozisyonlar', count: 2, data: [] },
         },
     },
-    tabInfo: { title: 'Tüm Stratejiler', count: 5 },
+    tabInfo: { title: 'All Strategies', count: 5 },
     processedData: [],
     pagedData: [
         {
@@ -152,7 +152,7 @@ describe('CryptoDashboard Orchestrator', () => {
     it('should render tab buttons', () => {
         renderDashboard();
         const buttons = screen.getAllByRole('button');
-        const tabBtn = buttons.find((b) => b.textContent.includes('Tüm Stratejiler'));
+        const tabBtn = buttons.find((b) => b.textContent.includes('All Strategies'));
         expect(tabBtn).toBeDefined();
     });
 
@@ -165,7 +165,9 @@ describe('CryptoDashboard Orchestrator', () => {
 
     it('should show loading state', () => {
         renderDashboard({ loading: true, data: null });
-        expect(screen.getByText(/Kripto Verforward/)).toBeDefined();
+        // Loading state renders a spinner div with class 'spin'
+        const spinner = document.querySelector('.spin');
+        expect(spinner).not.toBeNull();
     });
 
     it('should show error state', () => {

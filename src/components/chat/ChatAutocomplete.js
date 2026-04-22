@@ -331,7 +331,7 @@ const ChatAutocomplete = ({
     const getLabel = (type, item) => {
         if (type === 'mention') {
             return (
-                <div aria-label="chat autocomplete" className="flex-align-8">
+                <div aria-label={t('chat.autocomplete', 'Chat autocomplete')} className="flex-align-8">
                     {item.avatar ? (
                         <img src={item.avatar} alt="" className="w-20h-20-round" />
                     ) : (

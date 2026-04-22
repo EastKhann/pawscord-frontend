@@ -141,7 +141,7 @@ ${transcript.text}
                         <h2 style={styles.title}>{t('transcripts.title', 'Ses Transkriptleri')}</h2>
                     </div>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -156,11 +156,11 @@ ${transcript.text}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder={t('transcripts.searchPlaceholder', 'Transkript ara...')}
                             style={styles.searchInput}
-                            aria-label="Search Query"
+                            aria-label={t('voiceTranscripts.searchInput', 'Search transcripts')}
                         />
                     </div>
 
-                    <button aria-label="export All" onClick={exportAll} style={styles.exportButton}>
+                    <button aria-label={t('voiceTranscripts.exportAll', 'Export all transcripts')} onClick={exportAll} style={styles.exportButton}>
                         <FaDownload className="mr-6" />
 
                         {t('transcripts.exportAll', 'Tümünü Dışa Aktar')}
@@ -202,8 +202,8 @@ ${transcript.text}
                                                         transcript.confidence >= 0.8
                                                             ? '#23a559'
                                                             : transcript.confidence >= 0.6
-                                                              ? '#f0b232'
-                                                              : '#f23f42',
+                                                                ? '#f0b232'
+                                                                : '#f23f42',
                                                 }}
                                             >
                                                 {(transcript.confidence * 100).toFixed(1)}%
@@ -221,21 +221,20 @@ ${transcript.text}
                                     )}
 
                                     <button
-                                        aria-label="Action button"
-                                        onClick={() => downloadTranscript(transcript)}
-                                        style={styles.downloadButton}
+                                        aria-label={t('voiceTranscripts.download', 'Download transcript')}
+                                    style={styles.downloadButton}
                                     >
-                                        <FaFileAlt className="mr-6" />
+                                    <FaFileAlt className="mr-6" />
 
-                                        {t('transcripts.download', 'Download')}
-                                    </button>
+                                    {t('transcripts.download', 'Download')}
+                                </button>
                                 </div>
-                            ))}
-                        </div>
-                    )}
+                    ))}
                 </div>
+                    )}
             </div>
         </div>
+        </div >
     );
 };
 

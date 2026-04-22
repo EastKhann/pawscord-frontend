@@ -144,15 +144,15 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="templates-header">
-                    <h2>Sunucu Şablonları</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <h2>{t('serverTemplates.title', 'Server Templates')}</h2>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
 
                 <div className="category-filters">
                     <button
-                        aria-label="Action button"
+                        aria-label={t('serverTemplates.allCategories', 'All categories')}
                         className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
                         onClick={() => setSelectedCategory('all')}
                     >
@@ -160,7 +160,7 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
                     </button>
                     {categories.map((cat) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={cat.name}
                             key={cat.id}
                             className={`category-btn ${selectedCategory === cat.slug ? 'active' : ''}`}
                             onClick={() => setSelectedCategory(cat.slug)}
@@ -202,14 +202,14 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
                                 </div>
                                 <div className="template-actions">
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('serverTemplates.preview', 'Preview template')}
                                         className="btn-preview"
                                         onClick={() => getTemplateDetails(template.id)}
                                     >
                                         Preview
                                     </button>
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('serverTemplates.useTemplate', 'Use template')}
                                         className="btn-use"
                                         onClick={() => useTemplate(template.id)}
                                     >
@@ -243,7 +243,7 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
                             <div className="preview-header">
                                 <h3>{previewTemplate.name}</h3>
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('common.close', 'Close')}
                                     onClick={() => setPreviewTemplate(null)}
                                 >
                                     ×
@@ -284,14 +284,14 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
                             </div>
                             <div className="preview-actions">
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('serverTemplates.useThis', 'Use This Template')}
                                     className="btn-use-large"
                                     onClick={() => {
                                         useTemplate(previewTemplate.id);
                                         setPreviewTemplate(null);
                                     }}
                                 >
-                                    <FaCheck /> Bu Şablonu Kullan
+                                    <FaCheck /> {t('serverTemplates.useThis', 'Use This Template')}
                                 </button>
                             </div>
                         </div>

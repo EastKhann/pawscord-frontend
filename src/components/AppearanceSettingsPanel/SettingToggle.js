@@ -12,7 +12,7 @@ const SettingToggle = ({ label, desc, checked, onChange }) => {
                     type="checkbox"
                     checked={checked}
                     onChange={onChange}
-                    aria-label="checkbox"
+                    aria-label={label || 'toggle'}
                 />
                 <span className="slider"></span>
             </label>

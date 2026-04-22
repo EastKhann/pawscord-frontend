@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿import { useTranslation } from 'react-i18next';
+import React from 'react';
 import PropTypes from 'prop-types';
 import profileStyles from '../styles';
 const _s = (o) => o;
@@ -47,17 +48,18 @@ const InventoryTab = ({ equipItem, equippedItems: rawEq, inventory: rawInv, uneq
     const equippedItems = rawEq || [];
     const inventory = rawInv || [];
     const styles = profileStyles;
+    const { t } = useTranslation();
     const [error, setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (
         <div style={styles.card}>
-            <h3 style={styles.sectionTitle}>🎒 Envanter & Ekipman</h3>
+            <h3 style={styles.sectionTitle}>🎒 {t('inventory.title', 'Inventory & Equipment')}</h3>
 
             <div style={_st1}>
                 <h4 style={_st2}>⚡ Equipped Items</h4>
                 {equippedItems.length === 0 ? (
-                    <p style={_st3}>Henüz donanımlı eşya yok.</p>
+                    <p style={_st3}>{t('inventory.noEquipped', 'No equipped items yet.')}</p>
                 ) : (
                     <div style={_st4}>
                         {equippedItems.map((item, idx) => (
@@ -66,10 +68,10 @@ const InventoryTab = ({ equipItem, equippedItems: rawEq, inventory: rawInv, uneq
                                 <h5 style={_st7}>{item.name}</h5>
                                 <button
                                     style={_st1112}
-                                    aria-label="action-button"
+                                    aria-label={t('inventory.unequip', 'Remove item')}
                                     onClick={() => unequipItem(item.id)}
                                 >
-                                    ❌ Remove
+                                    ❌ {t('inventory.remove', 'Remove')}
                                 </button>
                             </div>
                         ))}
@@ -78,12 +80,12 @@ const InventoryTab = ({ equipItem, equippedItems: rawEq, inventory: rawInv, uneq
             </div>
 
             <div>
-                <h4 style={_st2}>📦 Tüm Ürünler</h4>
+                <h4 style={_st2}>{t('inventory.allItems', '📦 All Items')}</h4>
                 {inventory.length === 0 ? (
                     <div style={_st8}>
                         <div style={_st9}>🎒</div>
-                        <h4 style={_st10}>Envanter boş</h4>
-                        <p style={_st11}>Premium Mağaza'dan ürün satın alabilirsiniz</p>
+                        <h4 style={_st10}>{t('inventory.empty', 'Inventory empty')}</h4>
+                        <p style={_st11}>{t('inventory.buyHint', 'You can purchase items from the Premium Store')}</p>
                     </div>
                 ) : (
                     <div style={_st4}>
@@ -108,10 +110,10 @@ const InventoryTab = ({ equipItem, equippedItems: rawEq, inventory: rawInv, uneq
                                 {!item.is_equipped && (
                                     <button
                                         style={_st1113}
-                                        aria-label="action-button"
+                                        aria-label={t('inventory.equip', 'Equip item')}
                                         onClick={() => equipItem(item.id)}
                                     >
-                                        ✅ Ekip
+                                        ✅ {t('inventory.equipBtn', 'Equip')}
                                     </button>
                                 )}
                             </div>

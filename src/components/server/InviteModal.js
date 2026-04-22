@@ -6,6 +6,7 @@ import useModalA11y from '../../hooks/useModalA11y';
 import useInviteLogic from '../InviteModal/useInviteLogic';
 import FriendList from '../InviteModal/FriendList';
 import LinkSection from '../InviteModal/LinkSection';
+import { useTranslation } from 'react-i18next';
 
 injectInviteStyles();
 
@@ -18,6 +19,7 @@ injectInviteStyles();
  * @param {Object} props.currentUser - Current user object
  */
 const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }) => {
+    const { t } = useTranslation();
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Invite' });
     const logic = useInviteLogic({ server, fetchWithAuth, apiBaseUrl, currentUser });
 
@@ -30,9 +32,9 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
                             <FaHashtag className="text-b5-14" />
                             <span style={st.serverLabel}>{server?.name || 'Server'}</span>
                         </div>
-                        <h2 style={st.title}>Arkadaşlarını Invite</h2>
+                        <h2 style={st.title}>{t('inviteModal.title', 'Invite Your Friends')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={st.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={st.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>

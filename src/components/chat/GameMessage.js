@@ -28,7 +28,7 @@ const GameMessage = ({ gameId, state, currentUser, onMove }) => {
 
     return (
         <div style={styles.container}>
-            <div style={styles.header}>🎮 Taş Kağıt Makas</div>
+            <div style={styles.header}>{t('gameMsg.rpsTitle', '🎮 Rock Paper Scissors')}</div>
 
             <div style={styles.players}>
                 <div style={styles.player}>
@@ -55,7 +55,7 @@ const GameMessage = ({ gameId, state, currentUser, onMove }) => {
             {!isFinished && isPlayer && !myMove && (
                 <div style={styles.controls}>
                     <button
-                        aria-label="Tas"
+                        aria-label={t('game.rock', 'Rock')}
                         onClick={() => handleMove('rock')}
                         style={styles.moveBtn}
                         title={t('ui.tas')}
@@ -63,7 +63,7 @@ const GameMessage = ({ gameId, state, currentUser, onMove }) => {
                         🪨
                     </button>
                     <button
-                        aria-label="Kagit"
+                        aria-label={t('game.paper', 'Paper')}
                         onClick={() => handleMove('paper')}
                         style={styles.moveBtn}
                         title={t('ui.kagit')}
@@ -71,7 +71,7 @@ const GameMessage = ({ gameId, state, currentUser, onMove }) => {
                         📄
                     </button>
                     <button
-                        aria-label="Makas"
+                        aria-label={t('game.scissors', 'Scissors')}
                         onClick={() => handleMove('scissors')}
                         style={styles.moveBtn}
                         title="Makas"
@@ -82,7 +82,7 @@ const GameMessage = ({ gameId, state, currentUser, onMove }) => {
             )}
 
             {!isFinished && isPlayer && myMove && (
-                <div style={styles.status}>Hamleni Yaptın, Rakibi Bekle...</div>
+                <div style={styles.status}>{t('gameMsg.waitingOpponent', 'You made your move, waiting for opponent...')}</div>
             )}
         </div>
     );

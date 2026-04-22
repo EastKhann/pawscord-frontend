@@ -329,7 +329,7 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    aria-label="Save welcome message settings"
+                    aria-label={t('serverSettings.saveWelcome', 'Save welcome message settings')}
                     style={saveBtnStyle}
                 >
                     {saving ? '⏳ Saving...' : t('ui.hos_geldin_mesajini_save')}

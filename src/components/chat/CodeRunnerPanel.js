@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect, useCallback, memo } from 'react';
 import { getToken } from '../../utils/tokenStorage';
 
@@ -310,7 +310,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                 },
 
                 body: JSON.stringify({
-                    content: `\`\`\`${language}\n${code}\n\`\`\`\n**Exittı:**\n\`\`\`\n${output}\n\`\`\``,
+                    content: `\`\`\`${language}\n${code}\n\`\`\`\n**Output:**\n\`\`\`\n${output}\n\`\`\``,
                 }),
             });
 
@@ -354,19 +354,19 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
             <div className="code-runner-panel">
                 <div className="panel-header">
                     <h2>
-                        <FaCode /> Kod Çalıştırıcı
+                        <FaCode /> {t('codeRunner.title', 'Code Runner')}
                     </h2>
 
                     <div className="header-actions">
                         <button
-                            aria-label="handle Toggle Fullscreen"
+                            aria-label={t('codeRunner.toggleFullscreen', 'Toggle fullscreen')}
                             className="fullscreen-btn"
                             onClick={handleToggleFullscreen}
                         >
                             {isFullscreen ? <FaCompress /> : <FaExpand />}
                         </button>
 
-                        <button aria-label="Close" className="close-btn" onClick={onClose}>
+                        <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                             <FaTimes />
                         </button>
                     </div>
@@ -376,9 +376,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                     <div className="language-selector">
                         {languages.map((lang) => (
                             <button
-                                aria-label="Action button"
-                                key={lang.id}
-                                className={`lang-btn ${language === lang.id ? 'active' : ''}`}
+                                aria-label={t('codeRunner.selectLang', 'Select {{lang}}', { lang: lang.name })}
                                 onClick={() => setLanguage(lang.id)}
                                 title={lang.name}
                             >
@@ -391,15 +389,15 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
 
                     <div className="toolbar-actions">
                         <button
-                            aria-label="handle Toggle History"
+                            aria-label={t('codeRunner.historyTitle', 'View history')}
                             className="action-btn"
                             onClick={handleToggleHistory}
                         >
-                            <FaHistory /> Geçmiş
+                            <FaHistory /> {t('codeRunner.history', 'History')}
                         </button>
 
                         <button
-                            aria-label="handle Show Save Modal"
+                            aria-label={t('common.save', 'Save')}
                             className="action-btn"
                             onClick={handleShowSaveModal}
                         >
@@ -407,7 +405,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                         </button>
 
                         <button
-                            aria-label="handle Clear All"
+                            aria-label={t('common.clear', 'Clear')}
                             className="action-btn clear"
                             onClick={handleClearAll}
                         >
@@ -439,7 +437,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                     <div className="output-section">
                         <div className="section-header">
                             <span>
-                                <FaTerminal /> Exittı
+                                <FaTerminal /> {t('codeRunner.output', 'Output')}
                             </span>
 
                             <div className="output-actions">
@@ -450,9 +448,9 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                                 )}
 
                                 <button
-                                    aria-label="Çıktıyı kopyala"
+                                    aria-label={t('common.copyOutput', 'Copy output')}
                                     onClick={handleCopyOutput}
-                                    title="Kopyala"
+                                    title={t('common.copy', 'Copy')}
                                 >
                                     <FaCopy />
                                 </button>
@@ -470,15 +468,15 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                 <div className="run-bar">
                     {!isRunning ? (
                         <button
-                            aria-label="handle Run Code"
+                            aria-label={t('codeRunner.run', 'Run')}
                             className="run-btn"
                             onClick={handleRunCode}
                         >
-                            <FaPlay /> Çalıştır
+                            <FaPlay /> {t('codeRunner.run', 'Run')}
                         </button>
                     ) : (
                         <button
-                            aria-label="handle Stop Execution"
+                            aria-label={t('codeRunner.stop', 'Stop execution')}
                             className="stop-btn"
                             onClick={handleStopExecution}
                         >
@@ -488,7 +486,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
 
                     {channelId && (
                         <button
-                            aria-label="handle Share To Channel"
+                            aria-label={t('codeRunner.shareToChannel', 'Share to channel')}
                             className="share-btn"
                             onClick={handleShareToChannel}
                         >
@@ -501,10 +499,10 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                     <div className="history-sidebar">
                         <div className="sidebar-header">
                             <h3>
-                                <FaHistory /> Geçmiş & Snippets
+                                <FaHistory /> {t('codeRunner.historySnippets', 'History & Snippets')}
                             </h3>
 
-                            <button aria-label="Close" onClick={handleHideHistory}>
+                            <button aria-label={t('common.close', 'Close')} onClick={handleHideHistory}>
                                 <FaTimes />
                             </button>
                         </div>
@@ -515,7 +513,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                             </h4>
 
                             {savedSnippets.length === 0 ? (
-                                <p className="empty-msg">Henüz kod parçacığı yok</p>
+                                <p className="empty-msg">{t('codeRunner.noSnippets', 'No code snippets yet')}</p>
                             ) : (
                                 <div className="snippets-list">
                                     {savedSnippets.map((snippet) => (
@@ -538,7 +536,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                                             </div>
 
                                             <button
-                                                aria-label="Delete"
+                                                aria-label={t('common.delete')}
                                                 className="delete-snippet"
                                                 onClick={() => handleDeleteSnippet(snippet.id)}
                                             >
@@ -552,11 +550,11 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
 
                         <div className="sidebar-section">
                             <h4>
-                                <FaClock /> Son Çalıştırmalar
+                                <FaClock /> {t('codeRunner.recentRuns', 'Recent Runs')}
                             </h4>
 
                             {history.length === 0 ? (
-                                <p className="empty-msg">Geçmiş yok</p>
+                                <p className="empty-msg">{t('codeRunner.noHistory', 'No history')}</p>
                             ) : (
                                 <div className="history-list">
                                     {history.slice(0, 10).map((item, index) => (
@@ -639,37 +637,37 @@ const SaveSnippetModal = ({ onClose, onSave, language }) => {
                 className="save-modal"
                 role="dialog"
                 aria-modal="true"
-                aria-label="Kod Snippet'i Kaydet"
+                aria-label={t('codeRunner.saveSnippet', 'Save code snippet')}
             >
                 <h3>
                     <FaSave /> Snippet Kaydet
                 </h3>
 
                 <div className="form-group">
-                    <label>Snippet Adı</label>
+                    <label>{t('codeRunner.snippetName', 'Snippet Name')}</label>
 
                     <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder={t('ui.orn_fibonacci_hesaplama')}
-                        aria-label="Name"
+                        aria-label={t('codeRunner.snippetName', 'Snippet Name')}
                     />
                 </div>
 
                 <div className="form-group">
                     <label>Dil</label>
 
-                    <input type="text" value={language} disabled aria-label="text" />
+                    <input type="text" value={language} disabled aria-label={t('codeRunner.language', 'Programming language')} />
                 </div>
 
                 <div className="modal-actions">
-                    <button aria-label="on Close" className="cancel-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="cancel-btn" onClick={onClose}>
                         {t('common.cancel')}
                     </button>
 
                     <button
-                        aria-label="handle Submit"
+                        aria-label={t('common.save', 'Save')}
                         className="save-submit-btn"
                         onClick={handleSubmit}
                     >

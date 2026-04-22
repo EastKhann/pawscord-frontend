@@ -50,7 +50,7 @@ const TwoFactorSetup = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
             }
         } catch (err) {
             logger.error('QR Code generation error:', err);
-            setError('Bağlantı hatası');
+            setError(t('twoFactor.connectionError', 'Connection error'));
         } finally {
             setLoading(false);
         }
@@ -86,7 +86,7 @@ const TwoFactorSetup = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
             }
         } catch (err) {
             logger.error('Verification error:', err);
-            setError('Doğrulama hatası');
+            setError(t('twoFactor.verifyError', 'Verification error'));
         } finally {
             setLoading(false);
         }
@@ -113,7 +113,7 @@ const TwoFactorSetup = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     return (
         <div className="twofa-modal-overlay" {...overlayProps}>
             <div className="twofa-modal-content" {...dialogProps}>
-                <button aria-label="Close" className="twofa-close-btn" onClick={onClose}>
+                <button aria-label={t('common.close', 'Close')} className="twofa-close-btn" onClick={onClose}>
                     ×
                 </button>
 
@@ -122,21 +122,21 @@ const TwoFactorSetup = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 {/* Step 1: QR Code */}
                 {step === 1 && (
                     <div className="twofa-step">
-                        <h3>Adım 1: QR Kodu Tara</h3>
+                        <h3>{t('twoFactor.step1Title', 'Step 1: Scan QR Code')}</h3>
                         <p>Google Authenticator veya Authy ile bu QR kodu tara:</p>
 
                         {loading ? (
-                            <div className="twofa-loading">QR kodu oluşturuluyor...</div>
+                            <div className="twofa-loading">{t('twoFactor.qrLoading', 'Generating QR code...')}</div>
                         ) : qrCode ? (
                             <>
-                                <img src={qrCode} alt="QR Code" className="twofa-qr-code" />
+                                <img src={qrCode} alt={t('alt.qrCode', 'QR Code')} className="twofa-qr-code" />
                                 <div className="twofa-secret">
                                     <p>
                                         <strong>Manuel Kod:</strong>
                                     </p>
                                     <code>{secret}</code>
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('twoFactor.copySecret', 'Copy secret key')}
                                         onClick={() => {
                                             navigator.clipboard.writeText(secret);
                                             toast.success(t('security.codeCopied'));
@@ -147,11 +147,11 @@ const TwoFactorSetup = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                                     </button>
                                 </div>
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('twoFactor.next', 'Next')}
                                     onClick={() => setStep(2)}
                                     className="twofa-next-btn"
                                 >
-                                    İleri →
+                                    {t('twoFactor.next', 'Next →')}
                                 </button>
                             </>
                         ) : (
@@ -163,31 +163,31 @@ const TwoFactorSetup = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 {/* Step 2: Verify Code */}
                 {step === 2 && (
                     <div className="twofa-step">
-                        <h3>Adım 2: Doğrulama Kodu</h3>
-                        <p>Doğrulayıcı uygulamanızdan 6 haneli kodu girin:</p>
+                        <h3>{t('twoFactor.step2Title', 'Step 2: Verification Code')}</h3>
+                        <p>{t('twoFactor.enterCode', 'Enter the 6-digit code from your authenticator app:')}</p>
                         <input
                             type="text"
                             maxLength="6"
                             value={verifyCode}
                             onChange={(e) => setVerifyCode(e.target.value.replace(/\D/g, ''))}
-                            placeholder="000000"
+                            placeholder={t('twoFactor.code', '000000')}
                             className="twofa-code-input"
                             autoFocus
-                            aria-label="Verify Code"
+                            aria-label={t('twoFactor.verifyCode', 'Verification code')}
                         />
 
                         {error && <div className="twofa-error">{error}</div>}
 
                         <div className="twofa-buttons">
                             <button
-                                aria-label="Action button"
+                                aria-label={t('common.back', 'Go back')}
                                 onClick={() => setStep(1)}
                                 className="twofa-back-btn"
                             >
                                 Geri
                             </button>
                             <button
-                                aria-label="handle Verify"
+                                aria-label={t('auth.verify', 'Verify')}
                                 onClick={handleVerify}
                                 disabled={loading || verifyCode.length !== 6}
                                 className="twofa-verify-btn"
@@ -201,10 +201,9 @@ const TwoFactorSetup = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 {/* Step 3: Backup Codes */}
                 {step === 3 && (
                     <div className="twofa-step">
-                        <h3>Adım 3: Yedek Kodlar</h3>
+                        <h3>{t('twoFactor.step3Title', 'Step 3: Backup Codes')}</h3>
                         <p className="twofa-warning">
-                            ⚠️ Bu kodları güvenli bir yerde saklayın! Telefonunuza erişiminizi
-                            kaybederseniz kullanın.
+                            {t('twoFactor.backupWarning', '⚠️ Store these codes in a safe place! Use them if you lose access to your phone.')}
                         </p>
 
                         <div className="twofa-backup-codes">
@@ -217,14 +216,14 @@ const TwoFactorSetup = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
 
                         <div className="twofa-buttons">
                             <button
-                                aria-label="download Backup Codes"
+                                aria-label={t('twoFactor.download', 'Download backup codes')}
                                 onClick={downloadBackupCodes}
                                 className="twofa-download-btn"
                             >
-                                💾 İndir
+                                {t('twoFactor.download', '💾 Download')}
                             </button>
                             <button
-                                aria-label="handle Complete"
+                                aria-label={t('twoFactor.complete', 'Complete setup')}
                                 onClick={handleComplete}
                                 className="twofa-complete-btn"
                             >

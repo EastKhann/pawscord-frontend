@@ -35,7 +35,7 @@ const VoiceWaitingRoom = ({ channelName, maxUsers, currentUsers, position, onLea
             <div style={styles.modal}>
                 <div style={styles.header}>
                     <FaUsers style={styles.headerIcon} />
-                    <h3 style={styles.title}>Bekleme Ranksı</h3>
+                    <h3 style={styles.title}>{t('waitingRoom.title','Waiting Queue')}</h3>
                 </div>
 
                 <div style={styles.content}>
@@ -70,12 +70,12 @@ const VoiceWaitingRoom = ({ channelName, maxUsers, currentUsers, position, onLea
                             <p style={styles.waitingText}>
                                 {position === 1
                                     ? t('ui.bir_kisi_cikinca_katilabilirsin')
-                                    : `${position} kişi önünde var`}
+                                    : `${position} ${t('waitingRoom.peopleAhead','people ahead of you')}`}
                             </p>
                         </div>
                     )}
 
-                    <button aria-label="on Leave" onClick={onLeave} style={styles.leaveButton}>
+                    <button aria-label={t('voice.leave', 'Leave')} onClick={onLeave} style={styles.leaveButton}>
                         <FaPhoneSlash /> Pendingn Exit
                     </button>
                 </div>

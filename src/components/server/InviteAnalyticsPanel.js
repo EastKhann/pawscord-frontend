@@ -47,9 +47,9 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaChartLine className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Davet Analitiği</h2>
+                        <h2 style={styles.title}>{t('inviteAnalytics.title', 'Invite Analytics')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -58,7 +58,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                     <div style={styles.timeRangeButtons}>
                         {timeRanges.map((range) => (
                             <button
-                                aria-label="Action button"
+                                aria-label={range.label}
                                 key={range.value}
                                 onClick={() => setTimeRange(range.value)}
                                 style={getTimeRangeButtonStyle(range.value)}
@@ -71,7 +71,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Analitik yükleniyor...</div>
+                        <div style={styles.loading}>{t('inviteAnalytics.loading', 'Loading analytics...')}</div>
                     ) : !analytics ? (
                         <div style={styles.empty}>Analitik verisi yok</div>
                     ) : (
@@ -97,7 +97,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                                         <div style={styles.statValue}>
                                             {analytics.total_joins || 0}
                                         </div>
-                                        <div style={styles.statLabel}>Toplam Katılımlar</div>
+                                        <div style={styles.statLabel}>{t('inviteAnalytics.totalJoins', 'Total Joins')}</div>
                                     </div>
                                 </div>
 
@@ -109,20 +109,20 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                                         <div style={styles.statValue}>
                                             {analytics.total_invites > 0
                                                 ? (
-                                                      (analytics.total_joins /
-                                                          analytics.total_invites) *
-                                                      100
-                                                  ).toFixed(1)
+                                                    (analytics.total_joins /
+                                                        analytics.total_invites) *
+                                                    100
+                                                ).toFixed(1)
                                                 : 0}
                                             %
                                         </div>
-                                        <div style={styles.statLabel}>Dönüşüm Oranı</div>
+                                        <div style={styles.statLabel}>{t('inviteAnalytics.conversionRate', 'Conversion Rate')}</div>
                                     </div>
                                 </div>
                             </div>
 
                             <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>En İyi Davetler</h3>
+                                <h3 style={styles.sectionTitle}>{t('inviteAnalytics.topInvites', 'Top Invites')}</h3>
                                 <div style={styles.invitesList}>
                                     {(analytics.top_invites || []).map((invite, idx) => (
                                         <div key={`item-${idx}`} style={styles.inviteCard}>
@@ -147,7 +147,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                             </div>
 
                             <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>Günlük Katılımlar</h3>
+                                <h3 style={styles.sectionTitle}>{t('inviteAnalytics.dailyJoins', 'Daily Joins')}</h3>
                                 <div style={styles.chartContainer}>
                                     {(analytics.daily_joins || []).map((day, idx) => {
                                         const maxJoins = Math.max(

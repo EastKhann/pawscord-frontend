@@ -88,7 +88,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                         <FaLink className="icon-primary-mr10" />
                         <h2 style={styles.title}>Vanity URL</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -115,7 +115,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                                     setVanityUrl(val);
                                     checkAvailability(val);
                                 }}
-                                placeholder="my-server"
+                                placeholder={t('vanityUrl.slug', 'my-server')}
                                 style={styles.input}
                                 maxLength={32}
                             />
@@ -131,7 +131,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                             3-32 characters, letters, numbers, and hyphens only
                         </div>
                         <button
-                            aria-label="set Vanity"
+                            aria-label={t('vanityURL.setVanity', 'Set vanity URL')}
                             onClick={setVanity}
                             disabled={!available}
                             style={setButtonStyle}

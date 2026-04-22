@@ -2,7 +2,7 @@
 // 🎬 DASH Player - Lazy loaded (saves 988KB on initial load)
 
 import { useEffect, useRef, memo, useCallback } from 'react';
-
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
 
@@ -17,6 +17,7 @@ const bgStyle = (style) => ({
 const DashPlayer = memo(
     ({ src, controls = true, style = {}, onLoaded, onPause, onEnded, onError }) => {
         const videoRef = useRef(null);
+        const { t } = useTranslation();
         const playerRef = useRef(null);
 
         useEffect(() => {
@@ -90,7 +91,7 @@ const DashPlayer = memo(
 
         return (
             <video
-                aria-label="dash video player"
+                aria-label={t('videoStreaming.dashPlayer', 'Video player')}
                 ref={videoRef}
                 controls={controls}
                 onPause={handlePause}

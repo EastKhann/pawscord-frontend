@@ -191,7 +191,7 @@ const ScheduledMessagesPanel = ({ apiBaseUrl, roomSlug, onClose }) => {
                                 ? `✕ ${t('common.cancel')}`
                                 : `+ ${t('scheduled.newMessage')}`}
                         </button>
-                        <button aria-label="Close" className="close-btn" onClick={onClose}>
+                        <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                             ✕
                         </button>
                     </div>
@@ -247,7 +247,7 @@ const ScheduledMessagesPanel = ({ apiBaseUrl, roomSlug, onClose }) => {
 
                         <div className="form-actions">
                             <button
-                                aria-label="Action button"
+                                aria-label={t('common.cancel', 'Cancel')}
                                 className="cancel-form-btn"
                                 onClick={() => {
                                     setShowCreateForm(false);
@@ -305,7 +305,7 @@ const ScheduledMessagesPanel = ({ apiBaseUrl, roomSlug, onClose }) => {
                                             </span>
                                         </div>
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('scheduledMessages.cancel', 'Cancel scheduled message')}
                                             className="cancel-btn"
                                             onClick={() => cancelScheduledMessage(msg.id)}
                                             title={t('common.cancel')}

@@ -23,10 +23,10 @@ const WatchTogether = ({ roomId, onClose }) => {
         return (
             <div className="watch-together-container">
                 <div className="watch-together-empty">
-                    <h2>📺 Birlikte İzle</h2>
-                    <p>Arkadaşlarla birlikte video izle!</p>
+                    <h2>{t('watchTogether.title', '📺 Watch Together')}</h2>
+                    <p>{t('watchTogether.subtitle', 'Watch videos together with friends!')}</p>
                     <button className="create-party-btn" onClick={() => w.setShowCreateModal(true)}>
-                        <FaPlus /> Yeni İzleme Partisi
+                        <FaPlus /> {t('watchTogether.newParty', 'New Watch Party')}
                     </button>
                     <div className="supported-platforms">
                         <span>Desteklenen platformlar:</span>
@@ -57,11 +57,11 @@ const WatchTogether = ({ roomId, onClose }) => {
                                 (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
                             }
                         >
-                            <h3>🎬 İzleme Partisi Oluştur</h3>
+                            <h3>{t('watchTogether.createParty', '🎬 Create Watch Party')}</h3>
                             {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                             <input
                                 type="url"
-                                placeholder="Video URL'sini yapıştırın..."
+                                placeholder={t('media.pasteVideoUrl', 'Paste video URL...')}
                                 value={w.videoUrl}
                                 onChange={(e) => w.setVideoUrl(e.target.value)}
                                 autoFocus
@@ -78,7 +78,7 @@ const WatchTogether = ({ roomId, onClose }) => {
                                     onClick={w.createWatchParty}
                                     disabled={w.isLoading}
                                 >
-                                    {w.isLoading ? 'Oluşturuluyor...' : 'Oluştur'}
+                                    {w.isLoading ? t('common.creating', 'Creating...') : t('common.create', 'Create')}
                                 </button>
                             </div>
                         </div>
@@ -100,7 +100,7 @@ const WatchTogether = ({ roomId, onClose }) => {
                     <FaUsers />
                     <span>{w.viewers.length} izleyici</span>
                 </div>
-                <button aria-label="Close" className="close-btn" onClick={onClose}>
+                <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                     <FaTimes />
                 </button>
             </div>
@@ -111,7 +111,7 @@ const WatchTogether = ({ roomId, onClose }) => {
                     <iframe
                         ref={w.playerRef}
                         src={`https://www.youtube.com/embed/${extractYouTubeId(w.party.video_url)}?autoplay=${w.isPlaying ? 1 : 0}&start=${Math.floor(w.currentTime)}&enablejsapi=1`}
-                        title="İzleme Partisi"
+                        title={t('media.watchParty', 'Watch Party')}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -198,12 +198,12 @@ const WatchTogether = ({ roomId, onClose }) => {
                     <div className="chat-input">
                         <input
                             type="text"
-                            placeholder="Mesaj yazın..."
+                            placeholder={t('common.typeMessage', 'Type a message...')}
                             value={w.newMessage}
                             onChange={(e) => w.setNewMessage(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && w.sendMessage()}
                         />
-                        <button onClick={w.sendMessage}>Gönder</button>
+                        <button onClick={w.sendMessage}>{t('common.send', 'Send')}</button>
                     </div>
                 </div>
             )}

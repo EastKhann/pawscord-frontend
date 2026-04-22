@@ -70,8 +70,8 @@ export default function GrowthDashboard() {
             const avgActive =
                 metrics.length > 0
                     ? (
-                          metrics.reduce((sum, m) => sum + m.active_users, 0) / metrics.length
-                      ).toFixed(0)
+                        metrics.reduce((sum, m) => sum + m.active_users, 0) / metrics.length
+                    ).toFixed(0)
                     : 0;
 
             const lastWeek = metrics.slice(-7).reduce((sum, m) => sum + m.new_users, 0);
@@ -94,7 +94,7 @@ export default function GrowthDashboard() {
     const goalWaitlistFillStyle = { width: `${Math.min((totals.waitlist / 200) * 100, 100)}%` };
 
     return (
-        <div aria-label="growth dashboard" className="growth-dashboard">
+        <div aria-label={t('analytics.growthDashboard', 'Growth dashboard')} className="growth-dashboard">
             <div className="dashboard-header">
                 <h1>📈 {t('growth.title', 'Growth Dashboard')}</h1>
                 <button onClick={loadDashboard} className="refresh-btn">

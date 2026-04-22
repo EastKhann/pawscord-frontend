@@ -231,11 +231,11 @@ export default function VisitorLogsTab() {
                     onChange={(e) => setLocalPath(e.target.value)}
                     onKeyDown={handleKeyDown}
                 />
-                <button aria-label="Apply filters" style={s.btn} onClick={applyFilters}>
-                    <FaSearch size={11} /> Filtrele
+                <button aria-label={t('common.search', 'Apply filters')} style={s.btn} onClick={applyFilters}>
+                    <FaSearch size={11} /> {t('common.search', 'Filter')}
                 </button>
                 <button
-                    aria-label="Reset filters"
+                    aria-label={t('admin.clearDateFilter', 'Reset filters')}
                     className={css.btnDarkGray}
                     onClick={() => {
                         setLocalIp('');
@@ -251,7 +251,7 @@ export default function VisitorLogsTab() {
                     Clear
                 </button>
                 <button
-                    aria-label="Refresh visitor logs"
+                    aria-label={t('admin.refreshLogs', 'Refresh visitor logs')}
                     className={css.btnDarkGrayMl}
                     onClick={() =>
                         fetchVisitorLogs({
@@ -353,7 +353,7 @@ export default function VisitorLogsTab() {
                 </div>
                 {visitorLoading ? (
                     <div className="pad-20-gray6b">
-                        <FaSync className="spin" size={18} /> Yükleniyor...
+                        <FaSync className="spin" size={18} /> {t('common.loading', 'Loading...')}
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
@@ -444,7 +444,7 @@ export default function VisitorLogsTab() {
                 {total_pages > 1 && (
                     <div style={s.paginationRow}>
                         <button
-                            aria-label="First page"
+                            aria-label={t('common.firstPage', 'First page')}
                             style={s.pageBtn(false)}
                             onClick={() => goPage(1)}
                             disabled={visitorPage <= 1}
@@ -452,7 +452,7 @@ export default function VisitorLogsTab() {
                             «
                         </button>
                         <button
-                            aria-label="Previous page"
+                            aria-label={t('common.prevPage', 'Previous page')}
                             style={s.pageBtn(false)}
                             onClick={() => goPage(Math.max(visitorPage - 1, 1))}
                             disabled={visitorPage <= 1}
@@ -475,7 +475,7 @@ export default function VisitorLogsTab() {
                             );
                         })}
                         <button
-                            aria-label="Next page"
+                            aria-label={t('common.nextPage', 'Next page')}
                             style={s.pageBtn(false)}
                             onClick={() => goPage(Math.min(visitorPage + 1, total_pages))}
                             disabled={visitorPage >= total_pages}
@@ -483,7 +483,7 @@ export default function VisitorLogsTab() {
                             ›
                         </button>
                         <button
-                            aria-label="Last page"
+                            aria-label={t('common.lastPage', 'Last page')}
                             style={s.pageBtn(false)}
                             onClick={() => goPage(total_pages)}
                             disabled={visitorPage >= total_pages}

@@ -29,12 +29,12 @@ const ScanResultCard = ({ result, onReview }) => {
             result.confidence_score > 80
                 ? '#f23f42'
                 : result.confidence_score > 50
-                  ? '#f0b232'
-                  : '#23a559',
+                    ? '#f0b232'
+                    : '#23a559',
     };
 
     return (
-        <div aria-label="scan result card" style={styles.resultCard}>
+        <div aria-label={t('contentScanner.resultCard', 'Scan result card')} style={styles.resultCard}>
             <div style={styles.resultHeader}>
                 <div style={styles.resultStatus}>
                     <StatusIcon style={iconStyle} />

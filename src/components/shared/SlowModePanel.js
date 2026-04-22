@@ -96,7 +96,7 @@ const SlowModePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) => {
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaClock className="icon-warning" />
-                        <h2 className="m-0">Yavaş Mod</h2>
+                        <h2 className="m-0">{t('slowMode.title', 'Slow Mode')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
@@ -104,94 +104,93 @@ const SlowModePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) => {
                 <div style={styles.content}>
                     <div style={styles.toggle}>
                         <div style={styles.toggleInfo}>
-                            <strong>Yavaş Modu Etkinleştir</strong>
+                            <strong>{t('slowMode.enable', 'Enable Slow Mode')}</strong>
                             <p style={styles.desc}>
-                                Kullanıcılar mesaj gönderdikten sonra belirli bir süre beklemek
-                                zorunda kalır
+                                {t('slowMode.desc1', 'Users must wait a certain time after sending a message')}
+                                {t('slowMode.desc2', 'before they can send another')}
                             </p>
                         </div>
                         <button
-                            aria-label="Action button"
-                            onClick={() => setSlowMode({ ...slowMode, enabled: !slowMode.enabled })}
-                            style={styles.toggleBtn}
+                            aria-label={slowMode.enabled ? t('slowMode.disable', 'Disable slow mode') : t('slowMode.enable', 'Enable slow mode')}
+                        style={styles.toggleBtn}
                         >
-                            {slowMode.enabled ? (
-                                <FaToggleOn className="icon-success-32" />
-                            ) : (
-                                <FaToggleOff className="icon-gray-32" />
-                            )}
-                        </button>
-                    </div>
-
-                    {slowMode.enabled && (
-                        <>
-                            <div style={styles.field}>
-                                <label style={styles.label}>Mesajlar Arası Bekleme Süresi</label>
-                                <div style={styles.presetGrid}>
-                                    {presetIntervals.map((preset) => (
-                                        <button
-                                            aria-label="Action button"
-                                            key={preset.value}
-                                            onClick={() =>
-                                                setSlowMode({
-                                                    ...slowMode,
-                                                    interval_seconds: preset.value,
-                                                })
-                                            }
-                                            style={{
-                                                ...styles.presetBtn,
-                                                backgroundColor:
-                                                    slowMode.interval_seconds === preset.value
-                                                        ? '#5865f2'
-                                                        : '#111214',
-                                            }}
-                                        >
-                                            {preset.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div style={styles.field}>
-                                <label style={styles.label}>Özel Duration (saniye)</label>
-                                <input
-                                    type="number"
-                                    value={slowMode.interval_seconds}
-                                    onChange={(e) =>
-                                        setSlowMode({
-                                            ...slowMode,
-                                            interval_seconds: parseInt(e.target.value) || 0,
-                                        })
-                                    }
-                                    min="1"
-                                    max="21600"
-                                    style={styles.input}
-                                />
-                            </div>
-
-                            <div style={styles.info}>
-                                ⏱️ Kullanıcılar her{' '}
-                                <strong>{slowMode.interval_seconds} saniye</strong>'de bir mesaj
-                                gönderebilecek
-                            </div>
-                        </>
-                    )}
-                </div>
-
-                <div style={styles.footer}>
-                    <button aria-label="on Close" onClick={onClose} style={styles.cancelBtn}>
-                        Cancel
-                    </button>
-                    <button
-                        aria-label="save Slow Mode"
-                        onClick={saveSlowMode}
-                        style={styles.saveBtn}
-                    >
-                        Save
+                        {slowMode.enabled ? (
+                            <FaToggleOn className="icon-success-32" />
+                        ) : (
+                            <FaToggleOff className="icon-gray-32" />
+                        )}
                     </button>
                 </div>
+
+                {slowMode.enabled && (
+                    <>
+                        <div style={styles.field}>
+                            <label style={styles.label}>{t('slowMode.cooldown', 'Cooldown Between Messages')}</label>
+                            <div style={styles.presetGrid}>
+                                {presetIntervals.map((preset) => (
+                                    <button
+                                        aria-label={preset.label}
+                                        key={preset.value}
+                                        onClick={() =>
+                                            setSlowMode({
+                                                ...slowMode,
+                                                interval_seconds: preset.value,
+                                            })
+                                        }
+                                        style={{
+                                            ...styles.presetBtn,
+                                            backgroundColor:
+                                                slowMode.interval_seconds === preset.value
+                                                    ? '#5865f2'
+                                                    : '#111214',
+                                        }}
+                                    >
+                                        {preset.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={styles.field}>
+                            <label style={styles.label}>{t('slowMode.customDuration', 'Custom Duration (seconds)')}</label>
+                            <input
+                                type="number"
+                                value={slowMode.interval_seconds}
+                                onChange={(e) =>
+                                    setSlowMode({
+                                        ...slowMode,
+                                        interval_seconds: parseInt(e.target.value) || 0,
+                                    })
+                                }
+                                min="1"
+                                max="21600"
+                                style={styles.input}
+                            />
+                        </div>
+
+                        <div style={styles.info}>
+                            {t('slowMode.usersCan', '⏱️ Users can send every')}{' '}
+                            <strong>{slowMode.interval_seconds} saniye</strong>'de bir mesaj
+                            {t('slowMode.seconds', 'seconds')}
+                        </div>
+                    </>
+                )}
+            </div>
+
+            <div style={styles.footer}>
+                <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.cancelBtn}>
+                    Cancel
+                </button>
+                <button
+                    aria-label={t('slowMode.save', 'Save slow mode settings')}
+                    onClick={saveSlowMode}
+                    style={styles.saveBtn}
+                >
+                    Save
+                </button>
             </div>
         </div>
+        </div >
     );
 };
 

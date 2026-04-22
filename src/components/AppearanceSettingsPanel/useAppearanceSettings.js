@@ -130,7 +130,7 @@ const useAppearanceSettings = () => {
     const resetToDefaults = async () => {
         if (
             !(await confirmDialog(
-                'Tüm görünüm ayarlarını varsayılana sıfırlamak istediğinizden emin misiniz?'
+                t('appearance.resetConfirm','Are you sure you want to reset all appearance settings to defaults?')
             ))
         ) {
             return;

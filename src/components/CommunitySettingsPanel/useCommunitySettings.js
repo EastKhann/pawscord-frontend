@@ -17,17 +17,17 @@ const DEFAULT_SETTINGS = {
 };
 
 export const VERIFICATION_LEVELS = [
-    { value: 'none', label: 'Yok', description: 'Herkes mesaj gönderebilir' },
-    { value: 'low', label: 'Düşük', description: 'E-posta doğrulaması gerekli' },
-    { value: 'medium', label: 'Orta', description: '5 dakikadır kayıtlı olmalı' },
-    { value: 'high', label: 'Yüksek', description: '10 dakikadır sunucuda olmalı' },
-    { value: 'highest', label: 'En Yüksek', description: 'Telefon doğrulaması gerekli' },
+    { value: 'none', label: t('verif.none','None'), description: t('verif.noneDesc','Anyone can send messages') },
+    { value: 'low', label: t('verif.low','Low'), description: t('verif.lowDesc','Email verification required') },
+    { value: 'medium', label: t('verif.medium','Medium'), description: t('verif.mediumDesc','Must be registered for 5 minutes') },
+    { value: 'high', label: t('verif.high','High'), description: t('verif.highDesc','Must be on server for 10 minutes') },
+    { value: 'highest', label: t('verif.highest','Highest'), description: t('verif.highestDesc','Phone verification required') },
 ];
 
 export const CONTENT_FILTERS = [
-    { value: 'disabled', label: 'Kapalı', description: 'İçerik filtresi yok' },
-    { value: 'medium', label: 'Orta', description: 'Rolü olmayan üyeleri filtrele' },
-    { value: 'high', label: 'Yüksek', description: 'Tüm mesajları filtrele' },
+    { value: 'disabled', label: t('contentFilter.disabled','Off'), description: t('contentFilter.disabledDesc','No content filter') },
+    { value: 'medium', label: t('contentFilter.medium','Medium'), description: t('contentFilter.mediumDesc','Filter members without roles') },
+    { value: 'high', label: t('contentFilter.high','High'), description: t('contentFilter.highDesc','Filter all messages') },
 ];
 
 const useCommunitySettings = (apiBaseUrl, serverId) => {

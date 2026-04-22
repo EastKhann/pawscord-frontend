@@ -1,5 +1,6 @@
 ﻿import { memo } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { FaCog, FaDownload } from 'react-icons/fa';
 import { styles } from '../../styles/SidebarStyles';
 import { PRODUCTION_URL } from '../../utils/constants';
@@ -107,6 +108,7 @@ const UserFooter = ({
         avatarUrl = getDeterministicAvatar(currentUsername);
     }
 
+    const { t } = useTranslation();
     // 🔥 DÜZELTME 2: Friend Code
     const friendCode = currentUserProfile?.friend_code || '0000';
 
@@ -122,7 +124,7 @@ const UserFooter = ({
                     style={S.flex}
                 >
                     <FaDownload />
-                    <span>Güncelleme Mevcut!</span>
+                    <span>{t('ui.updateAvailable')}</span>
                 </div>
             )}
 
@@ -134,7 +136,7 @@ const UserFooter = ({
                 onClick={onProfileClick}
                 role="button"
                 tabIndex={0}
-                aria-label="Open profile panel"
+                aria-label={t('profile.openPanel', 'Open profile panel')}
                 data-testid="profile-panel-trigger"
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onProfileClick()}
             >
@@ -155,7 +157,7 @@ const UserFooter = ({
 
                 <div style={styles.userInfo}>
                     <div style={S.flex2}>
-                        <span style={S.flex3}>{currentUsername || 'Loading...'}</span>
+                        <span style={S.flex3}>{currentUsername || t('common.loading')}</span>
                         {activityMeta && (
                             <span
                                 style={{
@@ -196,7 +198,7 @@ const UserFooter = ({
                 </div>
 
                 <button
-                    aria-label="Settings"
+                    aria-label={t('nav.settings', 'Settings')}
                     style={styles.settingsButton}
                     onClick={(e) => {
                         e.stopPropagation();

@@ -102,7 +102,7 @@ const GDPRExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         <FaFileArchive className="icon-primary-mr10" />
                         <h2 style={styles.title}>{t('gdpr.title')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -110,7 +110,7 @@ const GDPRExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                 <div style={styles.info}>
                     <p style={styles.infoText}>{t('gdpr.infoText')}</p>
                     <button
-                        aria-label="request Export"
+                        aria-label={t('gdpr.requestExport', 'Request data export')}
                         onClick={requestExport}
                         disabled={requesting}
                         style={styles.requestButton}
@@ -162,22 +162,21 @@ const GDPRExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                     </div>
                                     {exp.status === 'completed' && (
                                         <button
-                                            aria-label="Action button"
-                                            onClick={() => downloadExport(exp.id)}
-                                            style={styles.downloadButton}
-                                            title="İndir"
+                                            aria-label={t('gdpr.downloadExport', 'Download export')}
+                                    style={styles.downloadButton}
+                                    title={t('common.download', 'Download')}
                                         >
-                                            <FaDownload className="mr-6" />
-                                            {t('gdpr.download')}
-                                        </button>
-                                    )}
-                                </div>
-                            ))}
+                                    <FaDownload className="mr-6" />
+                                    {t('gdpr.download')}
+                                </button>
+                            )}
                         </div>
-                    )}
+                    ))}
                 </div>
+                    )}
             </div>
         </div>
+        </div >
     );
 };
 const styles = {

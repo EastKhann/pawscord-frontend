@@ -47,7 +47,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                 setBookmarks(data.bookmarks || []);
             }
         } catch (err) {
-            setError('Yer imleri yüklenemedi: ' + err.message);
+            setError(t('readLater.loadError', 'Could not load bookmarks: ') + err.message);
         } finally {
             setLoading(false);
         }
@@ -90,10 +90,10 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                 setError('');
             } else {
                 const data = await response.json();
-                setError(data.error || 'Etiket oluşturulamadı');
+                setError(data.error || t('readLater.tagCreateError', 'Could not create tag'));
             }
         } catch (err) {
-            setError('Ağ hatası: ' + err.message);
+            setError(t('readLater.networkError', 'Network error: ') + err.message);
         }
     };
 
@@ -110,7 +110,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                 setError('');
             }
         } catch (err) {
-            setError('Yer imi kaldırılamadı: ' + err.message);
+            setError(t('readLater.removeError', 'Could not remove bookmark: ') + err.message);
         }
     };
 
@@ -144,7 +144,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                 setError('');
             }
         } catch (err) {
-            setError('Etiket kaldırılamadı: ' + err.message);
+            setError(t('readLater.tagRemoveError', 'Could not remove tag: ') + err.message);
         }
     };
 
@@ -176,8 +176,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                     <FaBookmark /> {t('readLater.title')}
                 </h2>
                 <button
-                    aria-label="Toggle visibility"
-                    className="create-tag-btn"
+                    aria-label={t('readLater.showTagModal', 'Create new tag')}
                     onClick={() => setShowTagModal(true)}
                 >
                     <FaPlus /> {t('readLater.newTag')}
@@ -203,9 +202,8 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                     <div className="tag-filter-list">
                         {tags.map((tag) => (
                             <button
-                                aria-label="Action button"
-                                key={tag.id}
-                                className={`tag-filter ${selectedTags.includes(tag.id) ? 'active' : ''}`}
+                                aria-label={t('readLater.filterByTag', tag.name)}
+                                className={`tag-filter-button ${selectedTags.includes(tag.id) ? 'active' : ''}`}
                                 style={{ borderColor: tag.color }}
                                 onClick={() => toggleTagFilter(tag.id)}
                             >
@@ -228,7 +226,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                     </div>
                 ) : (
                     filteredBookmarks.map((bookmark, idx) => (
-                        <div key={`item-${idx}`} className="bookmark-item">
+                        <div key={`item - ${idx}`} className="bookmark-item">
                             <div className="bookmark-header">
                                 <div className="bookmark-author">
                                     <img
@@ -293,8 +291,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                                 </div>
 
                                 <button
-                                    aria-label="Action button"
-                                    className="remove-bookmark-btn"
+                                    aria-label={t('readLater.removeBookmark', 'Remove bookmark')}
                                     onClick={() => removeBookmark(bookmark.message_id)}
                                 >
                                     <FaTrash /> {t('common.remove')}
@@ -320,7 +317,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                         className="modal-content"
                         role="dialog"
                         aria-modal="true"
-                        aria-label="Create Tag"
+                        aria-label={t('readLater.createTagDialog', 'Create tag')}
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="modal-header">
@@ -328,8 +325,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                                 <FaTag /> {t('readLater.createTag')}
                             </h3>
                             <button
-                                aria-label="Toggle visibility"
-                                className="modal-close"
+                                aria-label={t('common.close', 'Close')}
                                 onClick={() => setShowTagModal(false)}
                             >
                                 <FaTimes />
@@ -354,9 +350,8 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                                 <div className="color-picker">
                                     {tagColors.map((color) => (
                                         <button
-                                            aria-label="Action button"
-                                            key={color}
-                                            className={`color-option ${newTagColor === color ? 'selected' : ''}`}
+                                            aria-label={t('readLater.selectColor', color)}
+                                            className={`color - option ${newTagColor === color ? 'selected' : ''}`}
                                             style={{ backgroundColor: color }}
                                             onClick={() => setNewTagColor(color)}
                                         />
@@ -365,7 +360,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                             </div>
 
                             <button
-                                aria-label="create Tag"
+                                aria-label={t('readLater.createTagBtn', 'Create tag')}
                                 className="create-tag-submit"
                                 onClick={createTag}
                             >
@@ -373,9 +368,10 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                             </button>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                </div >
+            )
+            }
+        </div >
     );
 }
 

@@ -3,8 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import logger from '../utils/logger';
+import { useTranslation } from 'react-i18next';
 // <<< D�ZELTME: absoluteHostUrl prop'u added >>>
 const GifPicker = ({ onSelect, onClose, localGifListUrl, absoluteHostUrl, fetchWithAuth }) => {
+    const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
     const [allGifs, setAllGifs] = useState([]);
     const [filteredGifs, setFilteredGifs] = useState([]);
@@ -50,7 +52,7 @@ const GifPicker = ({ onSelect, onClose, localGifListUrl, absoluteHostUrl, fetchW
             } catch (err) {
                 logger.error('Local GIF load error:', err);
                 setError(
-                    "GIF koleksiyonu yüklenemedi. Django sunucusunu ve 'gifs' klasörünü kontrol edin."
+                    t('gifPicker.loadError',"Failed to load GIF collection. Please check the server and 'gifs' folder.")
                 );
             } finally {
                 setIsLoading(false);
@@ -97,11 +99,11 @@ const GifPicker = ({ onSelect, onClose, localGifListUrl, absoluteHostUrl, fetchW
     };
 
     return (
-        <div aria-label="gif picker" style={styles.pickerOverlay}>
+        <div aria-label={t('aria.gifPicker', 'GIF Picker')} style={styles.pickerOverlay}>
             <div style={styles.pickerContainer} ref={pickerRef}>
                 <input
                     type="text"
-                    placeholder="Koleksiyonda ara (dosya adına göre)..."
+                    placeholder={t('gifPicker.searchCollection', 'Search collection...')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={styles.searchInput}
@@ -110,7 +112,7 @@ const GifPicker = ({ onSelect, onClose, localGifListUrl, absoluteHostUrl, fetchW
                 <div style={styles.gifGrid}>
                     {error && <p style={styles.errorText}>{error}</p>}
                     {isLoading ? (
-                        <p style={styles.loadingText}>Yerel koleksiyon yükleniyor...</p>
+                        <p style={styles.loadingText}>{t('gifPicker.loadingLocal','Loading local collection...')}</p>
                     ) : filteredGifs.length > 0 ? (
                         filteredGifs.map((url) => (
                             <div

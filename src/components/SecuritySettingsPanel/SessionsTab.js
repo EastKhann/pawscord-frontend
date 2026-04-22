@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 const SessionsTab = ({ sessions, revokeSession, revokeAllSessions }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="sessions tab" className="tab-content">
+        <div aria-label={t('security.sessionsTab', 'Sessions tab')} className="tab-content">
             <div className="sessions-header">
                 <h3>{t('active_oturumlar')}</h3>
                 <button className="revoke-all-btn" onClick={revokeAllSessions}>

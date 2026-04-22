@@ -59,7 +59,7 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
     const permanentlyDelete = async (roomSlug) => {
         if (
             !(await confirmDialog(
-                'Bu kanalı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!'
+                t('archivedRooms.deleteConfirm', 'Are you sure you want to permanently delete this channel? This action cannot be undone!')
             ))
         ) {
             return;
@@ -100,7 +100,7 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaArchive className="icon-gray" />
-                        <h2 className="m-0">Arşivlenmiş Kanallar</h2>
+                        <h2 className="m-0">{t('archivedRooms.title', 'Archived Channels')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
@@ -111,8 +111,8 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
                     ) : archivedRooms.length === 0 ? (
                         <div style={styles.empty}>
                             <FaArchive className="icon-lg-mb10" />
-                            <p>Arşivlenmiş kanal yok</p>
-                            <p className="text-gray-12">Arşivlenen kanallar burada görünür</p>
+                            <p>{t('archivedRooms.noChannels', 'No archived channels')}</p>
+                            <p className="text-gray-12">{t('archivedRooms.subtitle', 'Archived channels appear here')}</p>
                         </div>
                     ) : (
                         archivedRooms.map((room) => (
@@ -125,7 +125,7 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
                                     <div style={styles.roomMeta}>
                                         <FaClock className="fs-12" />
                                         <span>
-                                            Arşivlendi:{' '}
+                                            {t('archivedRooms.archivedAt', 'Archived:')}{' '}
                                             {new Date(room.archived_at).toLocaleDateString('tr-TR')}
                                         </span>
                                     </div>
@@ -137,15 +137,15 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
                                 </div>
                                 <div style={styles.roomActions}>
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('archivedRooms.unarchive', 'Restore archived channel')}
                                         onClick={() => unarchiveRoom(room.slug)}
                                         style={styles.unarchiveBtn}
-                                        title="Geri yükle"
+                                        title={t('common.restore', 'Restore')}
                                     >
                                         <FaUndo /> Geri Upload
                                     </button>
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('archivedRooms.delete', 'Permanently delete channel')}
                                         onClick={() => permanentlyDelete(room.slug)}
                                         style={styles.deleteBtn}
                                         title={t('ui.kalici_olarak_delete_2')}

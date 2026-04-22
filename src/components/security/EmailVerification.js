@@ -7,10 +7,11 @@ import logger from '../../utils/logger';
 import { API_BASE_URL } from '../../utils/apiEndpoints';
 
 const EmailVerification = () => {
+    const { t } = useTranslation();
     const { token } = useParams();
     const navigate = useNavigate();
     const [status, setStatus] = useState('verifying'); // verifying, success, error
-    const [message, setMessage] = useState('E-postanız doğrulanıyor...');
+    const [message, setMessage] = useState(t('emailVerif.verifying', 'Verifying your email...'));
 
     useEffect(() => {
         verifyEmail();
@@ -29,7 +30,7 @@ const EmailVerification = () => {
 
             if (data.success) {
                 setStatus('success');
-                setMessage('E-posta başarıyla doğrulandı! Yönlendiriliyor...');
+                setMessage(t('emailVerif.success', 'Email successfully verified! Redirecting...'));
 
                 // Redirect to login after 3 seconds
                 setTimeout(() => {
@@ -37,12 +38,12 @@ const EmailVerification = () => {
                 }, 3000);
             } else {
                 setStatus('error');
-                setMessage(data.error || 'Doğrulama başarısız');
+                setMessage(data.error || t('emailVerif.failed', 'Verification failed'));
             }
         } catch (error) {
             logger.error('Verification error:', error);
             setStatus('error');
-            setMessage('Doğrulama sırasında bir hata oluştu');
+            setMessage(t('emailVerif.error', 'An error occurred during verification'));
         }
     };
 
@@ -73,14 +74,14 @@ const EmailVerification = () => {
                     {status === 'success'
                         ? 'Email Verified!'
                         : status === 'error'
-                          ? 'Verification Failed'
-                          : 'Verifying Email'}
+                            ? 'Verification Failed'
+                            : 'Verifying Email'}
                 </h2>
                 <p>{message}</p>
 
                 {status === 'success' && (
                     <button
-                        aria-label="Action button"
+                        aria-label={t('emailVerify.goToLogin', 'Go to login')}
                         className="btn-primary"
                         onClick={() => navigate('/login')}
                     >
@@ -90,7 +91,7 @@ const EmailVerification = () => {
 
                 {status === 'error' && (
                     <button
-                        aria-label="Action button"
+                        aria-label={t('emailVerify.backToRegister', 'Back to registration')}
                         className="btn-secondary"
                         onClick={() => navigate('/register')}
                     >

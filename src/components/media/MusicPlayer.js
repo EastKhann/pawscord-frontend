@@ -242,7 +242,7 @@ const MusicPlayer = ({ channelId }) => {
                         </>
                     ) : (
                         <div className="no-track">
-                            <span>Şarkı seçilmedi</span>
+                            <span>{t('musicPlayer.noSong', 'No song selected')}</span>
                         </div>
                     )}
                 </div>
@@ -250,10 +250,7 @@ const MusicPlayer = ({ channelId }) => {
                 <div className="player-controls">
                     <div className="control-buttons">
                         <button
-                            aria-label="Action button"
-                            className={`control-btn ${shuffle ? 'active' : ''}`}
-                            onClick={() => setShuffle(!shuffle)}
-                            title={t('ui.karistir')}
+                            aria-label={t('music.shuffle', 'Shuffle')}
                         >
                             <FaRandom />
                         </button>
@@ -261,12 +258,12 @@ const MusicPlayer = ({ channelId }) => {
                             className="control-btn"
                             onClick={handlePrevious}
                             title={t('ui.onceki')}
-                            aria-label="Previous"
+                            aria-label={t('common.previous')}
                         >
                             <FaStepBackward />
                         </button>
                         <button
-                            aria-label="handle Play Pause"
+                            aria-label={isPlaying ? t('common.pause', 'Pause') : t('common.play', 'Play')}
                             className="control-btn play-btn"
                             onClick={handlePlayPause}
                         >
@@ -275,16 +272,16 @@ const MusicPlayer = ({ channelId }) => {
                         <button
                             className="control-btn"
                             onClick={handleNext}
-                            title="Sonraki"
-                            aria-label="Sonraki"
+                            title={t('common.next', 'Next')}
+                            aria-label={t('common.next', 'Next')}
                         >
                             <FaStepForward />
                         </button>
                         <button
-                            aria-label="Action button"
+                            aria-label={t('music.repeat', 'Repeat')}
                             className={`control-btn ${repeat ? 'active' : ''}`}
                             onClick={() => setRepeat(!repeat)}
-                            title="Tekrarla"
+                            title={t('music.repeat', 'Repeat')}
                         >
                             <FaRedo />
                         </button>
@@ -299,7 +296,7 @@ const MusicPlayer = ({ channelId }) => {
                             max="100"
                             value={(progress / duration) * 100 || 0}
                             onChange={handleSeek}
-                            aria-label="range"
+                            aria-label={t('music.progressBar', 'Progress')}
                         />
                         <span className="time-display">{formatTime(duration)}</span>
                     </div>
@@ -307,16 +304,13 @@ const MusicPlayer = ({ channelId }) => {
 
                 <div className="player-extras">
                     <button
-                        aria-label="Action button"
-                        className="extra-btn"
-                        onClick={() => setShowQueue(!showQueue)}
-                        title="Sıralama"
+                        aria-label={t('music.showQueue', 'Show queue')}
                     >
                         <FaListUl />
                         {queue.length > 0 && <span className="queue-count">{queue.length}</span>}
                     </button>
                     <button
-                        aria-label="Action button"
+                        aria-label={t('music.addTrack', 'Add track')}
                         className="extra-btn"
                         onClick={() => setShowAddTrack(!showAddTrack)}
                         title={t('ui.sarki_add')}
@@ -325,9 +319,7 @@ const MusicPlayer = ({ channelId }) => {
                     </button>
                     <div className="volume-control">
                         <button
-                            aria-label="Action button"
-                            className="extra-btn"
-                            onClick={() => setIsMuted(!isMuted)}
+                            aria-label={isMuted ? t('music.unmute', 'Unmute') : t('music.mute', 'Mute')}
                         >
                             {isMuted || volume === 0 ? <FaVolumeMute /> : <FaVolumeUp />}
                         </button>
@@ -349,16 +341,14 @@ const MusicPlayer = ({ channelId }) => {
                     <div className="queue-header">
                         <h3>Rank ({queue.length})</h3>
                         <button
-                            aria-label="Toggle visibility"
-                            className="close-btn"
-                            onClick={() => setShowQueue(false)}
+                            aria-label={t('common.close', 'Close')}
                         >
                             <FaTimes />
                         </button>
                     </div>
                     <div className="queue-list">
                         {queue.length === 0 ? (
-                            <div className="queue-empty">Rank boş</div>
+                            <div className="queue-empty">{t('musicPlayer.queueEmpty', 'Queue empty')}</div>
                         ) : (
                             queue.map((track, index) => (
                                 <div key={track.id} className="queue-item">
@@ -375,7 +365,7 @@ const MusicPlayer = ({ channelId }) => {
                                         </div>
                                     </div>
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('music.removeFromQueue', 'Remove from queue')}
                                         className="remove-btn"
                                         onClick={() => removeFromQueue(track.id)}
                                         title={t('music.removeFromQueue')}
@@ -392,29 +382,27 @@ const MusicPlayer = ({ channelId }) => {
             {showAddTrack && (
                 <div className="add-track-modal">
                     <div className="add-track-content">
-                        <h3>Şarkı Ekle</h3>
+                        <h3>{t('musicPlayer.addSong', 'Add Song')}</h3>
                         <input
                             type="text"
                             className="track-url-input"
-                            placeholder="YouTube or Spotify URL'si girin..."
+                            placeholder={t('music.urlPlaceholder', 'Enter YouTube or Spotify URL...')}
                             value={trackUrl}
                             onChange={(e) => setTrackUrl(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleAddTrack()}
                         />
                         <div className="modal-actions">
                             <button
-                                aria-label="Toggle visibility"
-                                className="btn-cancel"
-                                onClick={() => setShowAddTrack(false)}
+                                aria-label={t('common.cancel', 'Cancel')}
                             >
                                 {t('common.cancel')}
                             </button>
                             <button
-                                aria-label="handle Add Track"
+                                aria-label={t('music.addTrack', 'Add track')}
                                 className="btn-add"
                                 onClick={handleAddTrack}
                             >
-                                Ekle
+                                {t('common.add', 'Add')}
                             </button>
                         </div>
                     </div>

@@ -40,7 +40,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
 
     if (isLoading) {
         return (
-            <div aria-label="enhanced profile" className="enhanced-profile-modal">
+            <div aria-label={t('profile.enhancedProfile', 'Enhanced profile')} className="enhanced-profile-modal">
                 <div className="profile-loading">
                     <div className="loading-spinner" />
                     <span>{t('profil_yükleniyor')}</span>
@@ -293,7 +293,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                                     <h3>{t('this_user_hakkında_notum')}</h3>
                                     <p className="notes-info">
                                         {t(
-                                            'bu_not_sadece_sana_privatedir_other_kullanıcılar_göremez'
+                                            'note_private_only_visible_to_you'
                                         )}
                                     </p>
                                     <textarea

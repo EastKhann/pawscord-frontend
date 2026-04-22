@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 
 const ReactPlayer = lazy(() => import('react-player'));
 
@@ -92,7 +92,7 @@ const CinemaPlayer = () => {
                     </div>
                 )}
 
-                <Suspense fallback={<div>Oynatıcı yükleniyor...</div>}>
+                <Suspense fallback={<div>Oynatici y�kleniyor...</div>}>
                     <ReactPlayer
                         ref={playerRef}
                         url={url}
@@ -126,7 +126,7 @@ const CinemaPlayer = () => {
 
             <div style={styles.controls}>
                 <button
-                    aria-label="handle Play Pause"
+                    aria-label={t('cinema.playPause', 'Play/Pause')}
                     onClick={handlePlayPause}
                     style={{
                         ...styles.btn,
@@ -152,12 +152,12 @@ const CinemaPlayer = () => {
                         type="text"
                         value={inputUrl}
                         onChange={(e) => setInputUrl(e.target.value)}
-                        placeholder="YouTube Link..."
+                        placeholder={t('cinema.urlPlaceholder', 'YouTube Link...')}
                         style={styles.input}
-                        aria-label="Input Url"
+                        aria-label={t('cinema.urlInput', 'Video URL')}
                     />
 
-                    <button aria-label="Submit" type="submit">
+                    <button aria-label={t('common.submit')} type="submit">
                         {t('common.upload')}
                     </button>
                 </form>

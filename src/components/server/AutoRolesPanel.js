@@ -143,7 +143,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
     };
 
     const deleteAutoRole = async (autoRoleId) => {
-        if (!(await confirmDialog('Bu otomatik rolü silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('autoRoles.deleteConfirm', 'Are you sure you want to delete this auto role?')))) return;
 
         try {
             const response = await fetch(`${apiBaseUrl}/auto-roles/${autoRoleId}/delete/`, {
@@ -205,7 +205,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
             >
                 <div className="autoroles-header">
                     <h2>⚡ Auto Roles</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -227,7 +227,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
                                             })
                                         }
                                     >
-                                        <option value="">Rol Seçin</option>
+                                        <option value="">{t('common.selectRole', 'Select Role')}</option>
                                         {roles.map((role) => (
                                             <option key={role.id} value={role.id}>
                                                 {role.name}
@@ -330,7 +330,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
                                     <input
                                         type="number"
                                         min="0"
-                                        placeholder="0 = Neverbir zaman"
+                                        placeholder={t('autoRoles.delay', '0 = Never')}
                                         value={newAutoRole.remove_after}
                                         onChange={(e) =>
                                             setNewAutoRole({
@@ -343,7 +343,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
                             </div>
 
                             <button
-                                aria-label="create Auto Role"
+                                aria-label={t('autoRoles.createBtn', 'Create auto role')}
                                 className="create-btn"
                                 onClick={createAutoRole}
                             >
@@ -358,14 +358,14 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
                         {loading ? (
                             <div className="loading-state">
                                 <div className="spinner"></div>
-                                <p>Otomatik roller yükleniyor...</p>
+                                <p>{t('autoRoles.loading', 'Loading auto roles...')}</p>
                             </div>
                         ) : autoRoles.length === 0 ? (
                             <div className="empty-state">
                                 <span className="empty-icon">⚡</span>
-                                <p>Henüz otomatik rol yok</p>
+                                <p>{t('autoRoles.noRoles', 'No auto roles yet')}</p>
                                 <span className="empty-hint">
-                                    Kullanıcılar için otomatik rol atamaları yapabilirsiniz
+                                    {t('autoRoles.subtitle', 'You can set up automatic role assignments for users')}
                                 </span>
                             </div>
                         ) : (
@@ -389,8 +389,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
                                             </div>
                                             <div className="autorole-actions">
                                                 <button
-                                                    aria-label="Action button"
-                                                    className={`toggle-btn ${autoRole.enabled ? 'active' : ''}`}
+                                                    aria-label={autoRole.enabled ? t('autoRoles.disableRole', 'Disable role') : t('autoRoles.enableRole', 'Enable role')}
                                                     onClick={() =>
                                                         toggleAutoRole(
                                                             autoRole.id,
@@ -401,7 +400,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
                                                     {autoRole.enabled ? '✓' : '○'}
                                                 </button>
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('autoRoles.deleteRole', 'Delete auto role')}
                                                     className="delete-btn"
                                                     onClick={() => deleteAutoRole(autoRole.id)}
                                                 >

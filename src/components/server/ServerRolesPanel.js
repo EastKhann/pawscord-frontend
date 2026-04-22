@@ -164,100 +164,98 @@ const ServerRolesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
 
                 <div style={styles.toolbar}>
                     <button
-                        aria-label="Toggle visibility"
-                        onClick={() => setShowNewRole(!showNewRole)}
-                        style={styles.newRoleBtn}
+                        aria-label={showNewRole ? t('serverRoles.hideNewRole', 'Hide new role form') : t('serverRoles.createRole', 'Create new role')}
+                    style={styles.newRoleBtn}
                     >
-                        <FaPlus /> {t('roles.newRole')}
-                    </button>
-                    <p className="text-888-12">💡 {t('roles.dragTip')}</p>
-                </div>
-
-                {showNewRole && (
-                    <div style={styles.newRoleForm}>
-                        <input
-                            type="text"
-                            placeholder={t('ui.role_adi')}
-                            value={newRole.name}
-                            onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
-                            style={styles.input}
-                        />
-                        <div style={S.flex}>
-                            <FaPalette className="icon-gray" />
-                            <input
-                                type="color"
-                                value={newRole.color}
-                                onChange={(e) => setNewRole({ ...newRole, color: e.target.value })}
-                                style={styles.colorPicker}
-                            />
-                            <span className="text-dbd-14">{newRole.color}</span>
-                        </div>
-                        <div className="flex-gap-10">
-                            <button
-                                aria-label={t('roles.create')}
-                                onClick={createRole}
-                                style={styles.saveBtn}
-                            >
-                                {t('roles.create')}
-                            </button>
-                            <button
-                                aria-label="Toggle visibility"
-                                onClick={() => setShowNewRole(false)}
-                                style={styles.cancelBtn}
-                            >
-                                {t('common.cancel')}
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                <div style={styles.rolesList}>
-                    {loading ? (
-                        <div style={styles.loading}>{t('common.loading')}</div>
-                    ) : roles.length === 0 ? (
-                        <div style={styles.empty}>
-                            <FaUserShield className="icon-lg" />
-                            <p>{t('roles.empty')}</p>
-                        </div>
-                    ) : (
-                        roles.map((role, index) => (
-                            <div
-                                key={role.id}
-                                draggable
-                                onDragStart={() => handleDragStart(role)}
-                                onDragOver={(e) => handleDragOver(e, role)}
-                                onDragEnd={handleDragEnd}
-                                style={{
-                                    ...styles.roleItem,
-                                    opacity: draggedRole?.id === role.id ? 0.5 : 1,
-                                }}
-                            >
-                                <div style={styles.dragHandle}>
-                                    <FaGripVertical className="icon-gray" />
-                                </div>
-                                <div />
-                                <div style={styles.roleContent}>
-                                    <div style={styles.roleName}>{role.name}</div>
-                                    <div style={styles.roleMeta}>
-                                        Pozisyon: {index + 1} • {role.member_count || 0} member
-                                    </div>
-                                </div>
-                                {!role.is_default && (
-                                    <button
-                                        aria-label="Action button"
-                                        onClick={() => deleteRole(role.id)}
-                                        style={styles.deleteBtn}
-                                        title="Sil"
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                )}
-                            </div>
-                        ))
-                    )}
-                </div>
+                    <FaPlus /> {t('roles.newRole')}
+                </button>
+                <p className="text-888-12">💡 {t('roles.dragTip')}</p>
             </div>
+
+            {showNewRole && (
+                <div style={styles.newRoleForm}>
+                    <input
+                        type="text"
+                        placeholder={t('ui.role_adi')}
+                        value={newRole.name}
+                        onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
+                        style={styles.input}
+                    />
+                    <div style={S.flex}>
+                        <FaPalette className="icon-gray" />
+                        <input
+                            type="color"
+                            value={newRole.color}
+                            onChange={(e) => setNewRole({ ...newRole, color: e.target.value })}
+                            style={styles.colorPicker}
+                        />
+                        <span className="text-dbd-14">{newRole.color}</span>
+                    </div>
+                    <div className="flex-gap-10">
+                        <button
+                            aria-label={t('roles.create')}
+                            onClick={createRole}
+                            style={styles.saveBtn}
+                        >
+                            {t('roles.create')}
+                        </button>
+                        <button
+                            aria-label={t('common.cancel', 'Cancel')}
+                        style={styles.cancelBtn}
+                            >
+                        {t('common.cancel')}
+                    </button>
+                </div>
+                    </div>
+    )
+}
+
+<div style={styles.rolesList}>
+    {loading ? (
+        <div style={styles.loading}>{t('common.loading')}</div>
+    ) : roles.length === 0 ? (
+        <div style={styles.empty}>
+            <FaUserShield className="icon-lg" />
+            <p>{t('roles.empty')}</p>
         </div>
+    ) : (
+        roles.map((role, index) => (
+            <div
+                key={role.id}
+                draggable
+                onDragStart={() => handleDragStart(role)}
+                onDragOver={(e) => handleDragOver(e, role)}
+                onDragEnd={handleDragEnd}
+                style={{
+                    ...styles.roleItem,
+                    opacity: draggedRole?.id === role.id ? 0.5 : 1,
+                }}
+            >
+                <div style={styles.dragHandle}>
+                    <FaGripVertical className="icon-gray" />
+                </div>
+                <div />
+                <div style={styles.roleContent}>
+                    <div style={styles.roleName}>{role.name}</div>
+                    <div style={styles.roleMeta}>
+                        Pozisyon: {index + 1} • {role.member_count || 0} member
+                    </div>
+                </div>
+                {!role.is_default && (
+                    <button
+                        aria-label={t('serverRoles.deleteRole', 'Delete role')}
+                        style={styles.deleteBtn}
+                        title="Sil"
+                    >
+                        <FaTrash />
+                    </button>
+                )}
+            </div>
+        ))
+    )}
+</div>
+            </div> 
+        </div >
     );
 };
 

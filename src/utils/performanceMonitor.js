@@ -33,7 +33,7 @@ class PerformanceMonitor {
 
         // Yavaş render uyarısı (16ms = 60fps threshold)
         if (duration > 16) {
-            logger.warn(`⚠️ [Thuf] ${componentName} yavaş render: ${duration.toFixed(2)}ms`);
+            logger.warn(`⚠️ [Thuf] ${componentName} slow render: ${duration.toFixed(2)}ms`);
         }
 
         return result;

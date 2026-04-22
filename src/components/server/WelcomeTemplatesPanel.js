@@ -121,7 +121,7 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaEnvelope className="icon-success" />
-                        <h2 className="m-0">Hoş Geldin Mesajları</h2>
+                        <h2 className="m-0">{t('welcome.title', 'Welcome Messages')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
@@ -136,14 +136,14 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
                                     setTemplate({ ...template, enabled: e.target.checked })
                                 }
                             />
-                            <span>Karşılama mesajlarını etkinleştir</span>
+                            <span>{t('welcome.enable', 'Enable welcome messages')}</span>
                         </label>
                     </div>
 
                     {template.enabled && (
                         <>
                             <div style={styles.field}>
-                                <label style={styles.label}>Karşılama Kanalı</label>
+                                <label style={styles.label}>{t('welcome.channel', 'Welcome Channel')}</label>
                                 <select
                                     value={template.channel_id}
                                     onChange={(e) =>
@@ -151,7 +151,7 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
                                     }
                                     style={styles.select}
                                 >
-                                    <option value="">Kanal Seçin</option>
+                                    <option value="">{t('giveaway.selectChannel', 'Select Channel')}</option>
                                     {channels.map((ch) => (
                                         <option key={ch.id} value={ch.id}>
                                             {ch.name}
@@ -161,11 +161,11 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
                             </div>
 
                             <div style={styles.field}>
-                                <label style={styles.label}>Mesaj Şablonu</label>
+                                <label style={styles.label}>{t('welcome.template', 'Message Template')}</label>
                                 <div style={styles.placeholders}>
                                     {placeholders.map((ph) => (
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={ph.desc || ph.key}
                                             key={ph.key}
                                             onClick={() => insertPlaceholder(ph.key)}
                                             style={styles.placeholderBtn}
@@ -180,16 +180,16 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
                                     onChange={(e) =>
                                         setTemplate({ ...template, message: e.target.value })
                                     }
-                                    placeholder="Merhaba {user}! {server} sunucusuna hoş geldin. Toplam {membercount} üyeyiz! 🎉"
+                                    placeholder={t('server.welcomeTemplateLong', 'Hello {user}! Welcome to {server}. We have {membercount} members! 🎉')}
                                     style={styles.textarea}
                                     rows={5}
                                 />
                                 <button
-                                    aria-label="Önizle"
+                                    aria-label={t('common.preview', 'Preview')}
                                     onClick={previewMessage}
                                     style={styles.previewBtn}
                                 >
-                                    <FaEye /> Önizle
+                                    <FaEye /> {t('common.preview', 'Preview')}
                                 </button>
                             </div>
 
@@ -205,19 +205,19 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
                                             })
                                         }
                                     />
-                                    <span>Hoş geldin DM mesajı gönder</span>
+                                    <span>{t('welcome.sendDm', 'Send welcome DM message')}</span>
                                 </label>
                             </div>
 
                             {template.dm_enabled && (
                                 <div style={styles.field}>
-                                    <label style={styles.label}>DM Mesajı</label>
+                                    <label style={styles.label}>{t('welcome.dmMessage', 'DM Message')}</label>
                                     <textarea
                                         value={template.dm_message}
                                         onChange={(e) =>
                                             setTemplate({ ...template, dm_message: e.target.value })
                                         }
-                                        placeholder="Merhaba {user}! {server} sunucusuna hoş geldin!"
+                                        placeholder={t('server.welcomeTemplateShort', 'Hello {user}! Welcome to {server}!')}
                                         style={styles.textarea}
                                         rows={3}
                                     />
@@ -228,7 +228,7 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
                 </div>
 
                 <div style={styles.footer}>
-                    <button aria-label="Kaydet" onClick={saveTemplate} style={styles.saveBtn}>
+                    <button aria-label={t('welcome.save', 'Save template')} onClick={saveTemplate} style={styles.saveBtn}>
                         <FaSave /> Kaydet
                     </button>
                 </div>

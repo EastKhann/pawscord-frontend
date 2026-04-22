@@ -27,10 +27,10 @@ const AvatarPreview = ({ avatar, parts, mini = false }) => {
             avatar.face_shape === 'round'
                 ? '50%'
                 : avatar.face_shape === 'oval'
-                  ? '50% 50% 45% 45%'
-                  : avatar.face_shape === 'square'
-                    ? '10%'
-                    : '50%',
+                    ? '50% 50% 45% 45%'
+                    : avatar.face_shape === 'square'
+                        ? '10%'
+                        : '50%',
         background: skinColor,
         position: 'relative',
     };
@@ -94,8 +94,9 @@ const AvatarPreview = ({ avatar, parts, mini = false }) => {
         fontSize: size * 0.15,
     };
 
+    const { t } = useTranslation();
     return (
-        <div aria-label="avatar preview" style={containerStyle}>
+        <div aria-label={t('avatarStudio.preview', 'Avatar preview')} style={containerStyle}>
             <div style={faceStyle}>
                 {/* Hair */}
                 <div style={hairStyle} />

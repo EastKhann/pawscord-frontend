@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import './TicketSystemPanel.css';
 import useTicketSystem from '../TicketSystemPanel/useTicketSystem';
@@ -6,6 +7,7 @@ import TicketConfig from '../TicketSystemPanel/TicketConfig';
 import TicketDetail from '../TicketSystemPanel/TicketDetail';
 
 const TicketSystemPanel = ({ serverId, onClose }) => {
+    const { t: tl } = useTranslation();
     const [error, setError] = useState(null);
     const t = useTicketSystem(serverId);
 
@@ -26,7 +28,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
             >
                 <div className="ticket-header">
                     <h2>🎫 Destek Sistemi</h2>
-                    <button aria-label="on Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={tl('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -47,14 +49,14 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
                         {t.loading ? (
                             <div className="loading-state">
                                 <div className="spinner"></div>
-                                <p>Biletler yükleniyor...</p>
+                                <p>{tl('tickets.loading', 'Loading tickets...')}</p>
                             </div>
                         ) : t.tickets.length === 0 ? (
                             <div className="empty-state">
                                 <span className="empty-icon">🎫</span>
-                                <p>Henüz bilet yok</p>
+                                <p>{tl('tickets.noTickets', 'No tickets yet')}</p>
                                 <span className="empty-hint">
-                                    Kullanıcılar bilet oluşturduğunda burada görünecek
+                                    {tl('tickets.noTicketsHint', 'They will appear here when users create tickets')}
                                 </span>
                             </div>
                         ) : (
@@ -101,7 +103,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
 
                                         <div className="ticket-meta">
                                             <div className="meta-item">
-                                                <span className="meta-label">Oluşturan:</span>
+                                                <span className="meta-label">{tl('tickets.createdBy', 'Created by:')}</span>
                                                 <span className="meta-value">
                                                     {ticket.creator_username}
                                                 </span>
@@ -124,7 +126,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
 
                                         <div className="ticket-actions-quick">
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('tickets.changePriority', 'Change priority')}
                                                 className="priority-btn"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -140,7 +142,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
                                                     t.setPriority(
                                                         ticket.id,
                                                         priorities[
-                                                            (currentIndex + 1) % priorities.length
+                                                        (currentIndex + 1) % priorities.length
                                                         ]
                                                     );
                                                 }}
@@ -148,7 +150,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
                                                 🏷️ Priority
                                             </button>
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('tickets.closeTicket', 'Close ticket')}
                                                 className="close-ticket-btn"
                                                 onClick={(e) => {
                                                     e.stopPropagation();

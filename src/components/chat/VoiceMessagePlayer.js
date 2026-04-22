@@ -33,7 +33,7 @@ const VoiceMessagePlayer = ({
     const animationRef = useRef(null);
 
     // 🔥 DEBUG: İlk render'da ve URL değişimlerinde log
-    useEffect(() => {}, [audioUrl, currentAudioUrl, triedProxy, apiBaseUrl]);
+    useEffect(() => { }, [audioUrl, currentAudioUrl, triedProxy, apiBaseUrl]);
 
     // 🔥 audioUrl değiştiğinde state'i sıfırla
     useEffect(() => {
@@ -128,7 +128,7 @@ const VoiceMessagePlayer = ({
             setHasError(true);
         };
 
-        const handleCanPlay = () => {};
+        const handleCanPlay = () => { };
 
         audio.addEventListener('loadedmetadata', handleLoadedMetadata);
         audio.addEventListener('error', handleError);
@@ -235,7 +235,7 @@ const VoiceMessagePlayer = ({
                 /* 📛 Error State */
                 <div style={styles.errorContainer}>
                     <div style={styles.errorIcon}>🔇</div>
-                    <div style={styles.errorText}>Ses dosyası bulunamadı (eski mesaj)</div>
+                    <div style={styles.errorText}>{t('voiceMsgPlayer.fileNotFound', 'Audio file not found (old message)')}</div>
                     {/* 🔥 Debug: URL'yi göster */}
                     <div style={S.txt}>{audioUrl?.substring(0, 80)}...</div>
                 </div>
@@ -251,7 +251,7 @@ const VoiceMessagePlayer = ({
 
                     {/* Play/Pause Button */}
                     <button
-                        aria-label="toggle Play Pause"
+                        aria-label={isPlaying ? t('voicePlayer.pause', 'Pause') : t('voicePlayer.play', 'Play')}
                         onClick={togglePlayPause}
                         style={styles.playButton}
                     >
@@ -298,10 +298,10 @@ const VoiceMessagePlayer = ({
                     {/* Download Button */}
                     {onDownload && (
                         <button
-                            aria-label="İndir"
+                            aria-label={t('common.download', 'Download')}
                             onClick={onDownload}
                             style={styles.downloadButton}
-                            title="İndir"
+                            title={t('common.download', 'Download')}
                         >
                             <FaDownload />
                         </button>
@@ -310,7 +310,7 @@ const VoiceMessagePlayer = ({
                     {/* Transcription Button */}
                     {messageId && fetchWithAuth && (
                         <button
-                            aria-label="handle Transcribe"
+                            aria-label={t('voicePlayer.transcribe', 'Transcribe voice message')}
                             onClick={handleTranscribe}
                             disabled={isTranscribing || !!transcription}
                             style={{
@@ -321,8 +321,8 @@ const VoiceMessagePlayer = ({
                                 color: isTranscribing
                                     ? '#f0b232'
                                     : transcription
-                                      ? '#23a559'
-                                      : '#b5bac1',
+                                        ? '#23a559'
+                                        : '#b5bac1',
                                 cursor: isTranscribing || transcription ? 'default' : 'pointer',
                             }}
                             title={transcription ? t('ui.cevrildi') : 'Metne Dönüştür'}

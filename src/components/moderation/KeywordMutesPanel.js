@@ -150,12 +150,12 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         value={newKeyword}
                         onChange={(e) => setNewKeyword(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && addKeyword()}
-                        placeholder="Filternecek kelime/ifade girin..."
+                        placeholder={t('keywordMutes.keyword', 'Enter word/phrase to filter...')}
                         style={styles.input}
-                        aria-label="New Keyword"
+                        aria-label={t('keywordMutes.newKeyword', 'New keyword')}
                     />
 
-                    <button aria-label="add Keyword" onClick={addKeyword} style={styles.addBtn}>
+                    <button aria-label={t('keywordMutes.addKeyword', 'Add keyword')} onClick={addKeyword} style={styles.addBtn}>
                         <FaPlus /> Add
                     </button>
                 </div>
@@ -167,10 +167,10 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         <div style={styles.empty}>
                             <FaFilter className="icon-lg-mb10" />
 
-                            <p>Henüz filtrelenmiş kelime yok</p>
+                            <p>{t('keywordMutes.noKeywords', 'No filtered keywords yet')}</p>
 
                             <p className="text-gray-12">
-                                Bu kelimeler içeren messagelar sizden gizlenecek
+                                {t('keywordMutes.hint', 'Messages containing these words will be hidden from you')}
                             </p>
                         </div>
                     ) : (
@@ -184,7 +184,7 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                     </div>
 
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('keywordMutes.removeKeyword', 'Remove keyword')}
                                         onClick={() => removeKeyword(kw.id)}
                                         style={styles.removeBtn}
                                     >
@@ -198,7 +198,7 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
                 <div style={styles.footer}>
                     <div style={styles.hint}>
-                        💡 Tip: Bu kelimeleri içeren messagelar size gösterilmeyecek
+                        {t('keywordMutes.tip', '💡 Tip: Messages containing these words will not be shown to you')}
                     </div>
                 </div>
             </div>

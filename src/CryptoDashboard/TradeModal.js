@@ -88,7 +88,7 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                 </div>
                 <div>
                     <button
-                        aria-label="AL (Buy)"
+                        aria-label={t('crypto.buy', 'Buy')}
                         onClick={() => {
                             setMode('BUY');
                             setAmount('');
@@ -103,7 +103,7 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                         AL (Buy)
                     </button>
                     <button
-                        aria-label="SAT (Sell)"
+                        aria-label={t('crypto.sell', 'Sell')}
                         onClick={() => {
                             setMode('SELL');
                             setAmount('');
@@ -137,10 +137,10 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                             value={amount}
                             onChange={(e) => handleAmountChange(e.target.value)}
                             style={styles.input}
-                            placeholder="0"
+                            placeholder={t('crypto.amountPlaceholder', '0')}
                         />
                         {mode === 'SELL' && (
-                            <button aria-label="Maksimum" onClick={handleMax} style={styles.maxBtn}>
+                            <button aria-label={t('crypto.maximum', 'Maximum')} onClick={handleMax} style={styles.maxBtn}>
                                 MAX
                             </button>
                         )}
@@ -154,17 +154,17 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                             value={usdtTotal}
                             onChange={(e) => handleUsdtChange(e.target.value)}
                             style={styles.input}
-                            placeholder="0"
+                            placeholder={t('crypto.amountPlaceholder', '0')}
                         />
                         {mode === 'BUY' && (
-                            <button aria-label="Maksimum" onClick={handleMax} style={styles.maxBtn}>
+                            <button aria-label={t('crypto.maximum', 'Maximum')} onClick={handleMax} style={styles.maxBtn}>
                                 MAX
                             </button>
                         )}
                     </div>
                 </div>
                 <button
-                    aria-label="İşlem yap"
+                    aria-label={t('crypto.executeTrade', 'Execute trade')}
                     onClick={() => onTrade(mode, coin, amount, numericPrice)}
                     style={{
                         ...styles.confirmBtn,

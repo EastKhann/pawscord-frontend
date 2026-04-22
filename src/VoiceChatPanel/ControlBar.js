@@ -1,4 +1,3 @@
-﻿import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import VoiceControlBtn from './VoiceControlBtn';
@@ -25,8 +24,6 @@ const ControlBar = ({
     onSettings,
 }) => {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const formatDuration = (sec) => {
         const m = Math.floor(sec / 60)
             .toString()
@@ -39,7 +36,7 @@ const ControlBar = ({
 
     return (
         <div
-            aria-label="control bar"
+            aria-label={t('aria.controlBar', 'Voice Controls')}
             style={{
                 background:
                     'linear-gradient(180deg, rgba(30, 31, 34, 0.95) 0%, rgba(17, 18, 20, 1) 100%)',
@@ -61,14 +58,14 @@ const ControlBar = ({
             {/* Sol Grup: Ses Kontrolleri */}
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <VoiceControlBtn
-                    icon={isMuted ? '🔇' : '🎤'}
+                    icon={isMuted ? '??' : '??'}
                     active={!isMuted}
                     danger={isMuted}
                     onClick={onToggleMute}
                     title={isMuted ? t('voice.unmute') : t('voice.mute')}
                 />
                 <VoiceControlBtn
-                    icon={isDeafened ? '🔈' : '🎧'}
+                    icon={isDeafened ? '??' : '??'}
                     active={!isDeafened}
                     danger={isDeafened}
                     onClick={onToggleDeafened}
@@ -89,13 +86,13 @@ const ControlBar = ({
             {/* Orta Grup: Video/Ekran Kontrolleri */}
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <VoiceControlBtn
-                    icon={isCameraOn ? '📹' : '📷'}
+                    icon={isCameraOn ? '??' : '??'}
                     active={isCameraOn}
                     onClick={onToggleCamera}
                     title={isCameraOn ? t('voice.stopCamera') : t('voice.camera')}
                 />
                 <VoiceControlBtn
-                    icon="🖥️"
+                    icon="???"
                     active={isScreenSharing}
                     special={isScreenSharing}
                     onClick={onToggleScreenShare}
@@ -103,7 +100,7 @@ const ControlBar = ({
                 />
                 {onToggleSpatialAudio && (
                     <VoiceControlBtn
-                        icon="🔊"
+                        icon="??"
                         active={isSpatialAudio}
                         onClick={onToggleSpatialAudio}
                         title={
@@ -130,7 +127,7 @@ const ControlBar = ({
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 {onStartRecording && onStopRecording && (
                     <VoiceControlBtn
-                        icon={isRecording ? '⏹️' : '⏺️'}
+                        icon={isRecording ? '??' : '??'}
                         active={isRecording}
                         danger={isRecording}
                         onClick={isRecording ? onStopRecording : onStartRecording}
@@ -144,7 +141,7 @@ const ControlBar = ({
                 )}
                 {onSettings && (
                     <VoiceControlBtn
-                        icon="⚙️"
+                        icon="??"
                         onClick={onSettings}
                         title={t('voice.openSettings')}
                         subtle
@@ -163,7 +160,7 @@ const ControlBar = ({
             />
 
             {/* Leave Butonu */}
-            <VoiceControlBtn icon="📞" danger onClick={onLeave} title={t('voice.leave')} isLeave />
+            <VoiceControlBtn icon="??" danger onClick={onLeave} title={t('voice.leave')} isLeave />
         </div>
     );
 };

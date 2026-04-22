@@ -4,15 +4,25 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useTheme } from '../../hooks/useTheme';
 
+// Override global vi.fn() localStorage mock with a real functional store
+const _store: Record<string, string> = {};
+const realLocalStorageMock = {
+    getItem: (key: string) => _store[key] ?? null,
+    setItem: (key: string, value: string) => { _store[key] = value; },
+    removeItem: (key: string) => { delete _store[key]; },
+    clear: () => { Object.keys(_store).forEach((k) => delete _store[k]); },
+};
+Object.defineProperty(window, 'localStorage', { value: realLocalStorageMock, writable: true, configurable: true });
+
 describe('useTheme', () => {
     beforeEach(() => {
-        localStorage.clear();
+        realLocalStorageMock.clear();
         // Reset document attribute
         document.documentElement.removeAttribute('data-theme');
     });
 
     afterEach(() => {
-        localStorage.clear();
+        realLocalStorageMock.clear();
         document.documentElement.removeAttribute('data-theme');
     });
 

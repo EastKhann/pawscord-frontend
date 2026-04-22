@@ -120,7 +120,7 @@ function SlashCommandsPanel({ apiBaseUrl, fetchWithAuth }) {
                     />
                     {selectedCommand && (
                         <button
-                            aria-label="Action button"
+                            aria-label={t('slashCommands.execute', 'Execute command')}
                             className="execute-btn"
                             onClick={() => executeCommand(selectedCommand)}
                             disabled={loading}

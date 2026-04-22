@@ -134,7 +134,7 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
                 next.delete(friendUsername);
                 return next;
             });
-            toast.error('Davet gönderilemedi: ' + e.message);
+            toast.error('Failed to send invite: ' + e.message);
         }
     };
 

@@ -64,7 +64,7 @@ const BookmarksPanel = ({ apiBaseUrl, fetchWithAuth, username }) => {
             <div style={styles.categories}>
                 {categories.map((cat) => (
                     <button
-                        aria-label="Action button"
+                        aria-label={cat}
                         key={cat}
                         onClick={() => setActiveCategory(cat)}
                         style={{
@@ -83,7 +83,7 @@ const BookmarksPanel = ({ apiBaseUrl, fetchWithAuth, username }) => {
                 {filteredBookmarks.length === 0 ? (
                     <div style={styles.empty}>
                         <FaBookmark style={styles.emptyIcon} />
-                        <p>Henüz kaydedilen mesaj yok</p>
+                        <p>{t('bookmarksPanel.empty', 'No saved messages yet')}</p>
                     </div>
                 ) : (
                     filteredBookmarks.map((bookmark) => (
@@ -105,7 +105,7 @@ const BookmarkCard = ({ bookmark, onRemove }) => {
             <div style={styles.bookmarkHeader}>
                 <span style={styles.bookmarkCategory}>{bookmark.category}</span>
                 <button
-                    aria-label="Action button"
+                    aria-label={t('bookmarks.removeBookmark', 'Remove bookmark')}
                     onClick={() => onRemove(bookmark.id)}
                     style={styles.removeButton}
                 >

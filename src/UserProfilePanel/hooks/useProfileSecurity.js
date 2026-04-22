@@ -70,7 +70,7 @@ const useProfileSecurity = () => {
     };
 
     const disable2FA = async () => {
-        if (!(await confirmDialog("2FA'yı devre dışı bırakmak istediğinize emin misiniz?"))) return;
+        if (!(await confirmDialog(t('security.disable2FAConfirm','Are you sure you want to disable 2FA?')))) return;
         try {
             setLoading((l) => ({ ...l, disable2fa: true }));
             await authPost('/api/security/2fa/disable/');

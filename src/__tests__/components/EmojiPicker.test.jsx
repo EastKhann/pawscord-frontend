@@ -46,7 +46,7 @@ const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
     }, []);
 
     return (
-        <div data-testid="emoji-picker" role="dialog" aria-label="Emoji seçici">
+        <div data-testid="emoji-picker" role="dialog" aria-label="Emoji picker">
             {/* Search */}
             <div data-testid="search-bar">
                 <input
@@ -92,7 +92,7 @@ const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
                 ))}
                 {filteredEmojis.length === 0 && (
                     <div data-testid="empty-state">
-                        {searchTerm ? '🔍 No results found' : '⏱️ Not yet emoji kullanılmadı'}
+                        {searchTerm ? '🔍 No results found' : '⏱️ No emoji used yet'}
                     </div>
                 )}
             </div>
@@ -105,7 +105,7 @@ const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
                         onClick={() => handleToggleFav(contextMenu.emoji)}
                     >
                         {favorites.includes(contextMenu.emoji)
-                            ? '💔 Favorilerden Çıkar'
+                            ? '💔 Remove from Favorites'
                             : '⭐ Favorilere Ekle'}
                     </button>
                 </div>

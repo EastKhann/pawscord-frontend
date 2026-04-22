@@ -1,8 +1,9 @@
-/* eslint-disable no-useless-escape */
+﻿/* eslint-disable no-useless-escape */
 // frontend/src/LinkPreview.js (DISCORD-STYLE ÖNİZLEME - V2.0)
 
 import { memo } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 // -- dynamic style helpers (pass 2) --
 
@@ -74,8 +75,9 @@ const LinkPreview = ({ data }) => {
 
     // 1. YOUTUBE GÖSTERİMİ - Discord tarzı
     if (youtubeEmbedUrl) {
+    const { t } = useTranslation();
         return (
-            <div aria-label="get you tube video id" style={styles.embedContainer}>
+            <div aria-label={t('aria.youtubeEmbed', 'YouTube Video')} style={styles.embedContainer}>
                 <div style={_st1030} />
                 <div style={styles.embedBody}>
                     <div style={styles.providerRow}>
@@ -100,7 +102,7 @@ const LinkPreview = ({ data }) => {
                         <iframe
                             src={youtubeEmbedUrl}
                             style={styles.videoIframe}
-                            title="YouTube video oynatıcı"
+                            title={t('media.youtubePlayer', 'YouTube video player')}
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
@@ -124,7 +126,7 @@ const LinkPreview = ({ data }) => {
                         <iframe
                             src={spotifyEmbedUrl}
                             style={_st1}
-                            title="Spotify Oynatıcı"
+                            title={t('media.spotifyPlayer', 'Spotify Player')}
                             allow="encrypted-media"
                         />
                     </div>

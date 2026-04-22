@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback } from 'react';
+﻿import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import profileStyles from './styles';
@@ -33,8 +33,6 @@ const ProfileSidebar = ({
 }) => {
     const styles = profileStyles;
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const handleNav = useCallback(
         (tab, cat) => {
             setActiveTab(tab);

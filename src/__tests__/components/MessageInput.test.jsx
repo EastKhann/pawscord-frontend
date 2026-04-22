@@ -41,7 +41,7 @@ const MockMessageInput = ({
     };
 
     return (
-        <div data-testid="message-input-container" role="form" aria-label="Mesaj gönderme alanı">
+        <div data-testid="message-input-container" role="form" aria-label="Message input area">
             {replyingTo && (
                 <div data-testid="reply-preview" role="status" aria-label="Replynan message">
                     <strong>@{replyingTo.author}</strong>
@@ -65,7 +65,7 @@ const MockMessageInput = ({
                 <button
                     data-testid="emoji-button"
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                    aria-label="Emoji seç"
+                    aria-label="Select emoji"
                 >
                     😀
                 </button>
@@ -85,9 +85,9 @@ const MockMessageInput = ({
                     data-testid="send-button"
                     onClick={handleSubmit}
                     disabled={disabled || !message.trim()}
-                    aria-label="Gönder"
+                    aria-label="Send"
                 >
-                    Gönder
+                    Send
                 </button>
                 <label data-testid="file-upload-label">
                     <input

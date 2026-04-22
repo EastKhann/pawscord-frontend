@@ -103,7 +103,7 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaThumbtack className="icon-warning" />
-                        <h2 className="m-0">Sabitlenmiş Mesajlar</h2>
+                        <h2 className="m-0">{t('stickyMsgs.title', 'Pinned Messages')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
@@ -117,7 +117,7 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
                         rows={3}
                     />
                     <button
-                        aria-label="create Sticky"
+                        aria-label={t('stickyMsgs.createSticky', 'Create sticky message')}
                         onClick={createSticky}
                         style={styles.createBtn}
                     >
@@ -131,9 +131,9 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
                     ) : stickies.length === 0 ? (
                         <div style={styles.empty}>
                             <FaThumbtack className="icon-lg-mb10" />
-                            <p>Henüz sabitlenmiş mesaj yok</p>
+                            <p>{t('stickyMsgs.none', 'No pinned messages yet')}</p>
                             <p className="text-gray-12">
-                                Sticky mesajlar kanalın en üstüne sabitlenir
+                                {t('stickyMsgs.hint', 'Sticky messages are pinned to the top of the channel')}
                             </p>
                         </div>
                     ) : (
@@ -150,7 +150,7 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
                                     </div>
                                 </div>
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('stickyMsgs.deleteSticky', 'Delete sticky message')}
                                     onClick={() => deleteSticky(sticky.id)}
                                     style={styles.deleteBtn}
                                 >

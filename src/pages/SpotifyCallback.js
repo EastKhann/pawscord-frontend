@@ -59,7 +59,7 @@ const SpotifyCallback = ({ apiBaseUrl }) => {
     }, [location, apiBaseUrl, navigate]);
 
     return (
-        <div aria-label="spotify callback" style={styles.container}>
+        <div aria-label={t('aria.spotifyCallback', 'Spotify Connection')} style={styles.container}>
             <div style={styles.card}>
                 {status === 'loading' && (
                     <>

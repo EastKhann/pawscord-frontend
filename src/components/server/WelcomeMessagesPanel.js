@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import useWelcomeMessages from '../WelcomeMessagesPanel/useWelcomeMessages';
@@ -7,7 +7,7 @@ import './WelcomeMessagesPanel.css';
 import { useTranslation } from 'react-i18next';
 
 const STAT_ITEMS = [
-    { icon: '👋', key: 'total_welcomes', label: 'Toplam Karşılama' },
+    { icon: '👋', key: 'total_welcomes', label: t('welcomeMessages.totalWelcomes', 'Total Welcomes') },
     { icon: '😢', key: 'total_goodbyes', label: 'Toplam Veda' },
     { icon: '📅', key: 'welcomes_today', label: 'Today Joinan' },
 ];
@@ -33,7 +33,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                 <div className="welcome-messages-panel">
                     <div className="loading-state">
                         <div className="spinner" />
-                        <p>Kar{''}lama mesajları yükleniyor...</p>
+                        <p>{t('welcomeMessages.loading', 'Loading welcome messages...')}</p>
                     </div>
                 </div>
             </div>
@@ -56,8 +56,8 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="welcome-header">
-                    <h2>👋 Kar{''}lama & Veda Mesajları</h2>
-                    <button aria-label="on Close" className="close-btn" onClick={onClose}>
+                    <h2>{t('welcomeMessages.title', '👋 Welcome & Farewell Messages')}</h2>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -137,8 +137,8 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                                                 const newRoles = e.target.checked
                                                     ? [...welcomeConfig.auto_role_ids, role.id]
                                                     : welcomeConfig.auto_role_ids.filter(
-                                                          (id) => id !== role.id
-                                                      );
+                                                        (id) => id !== role.id
+                                                    );
                                                 updateConfig('auto_role_ids', newRoles);
                                             }}
                                             disabled={!welcomeConfig.auto_role_enabled}
@@ -150,8 +150,8 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                         </div>
                     </div>
 
-                    <button aria-label="save Config" className="save-btn" onClick={saveConfig}>
-                        💾 Ayarları Kaydet
+                    <button aria-label={t('welcomeMessages.saveConfig', 'Save configuration')} className="save-btn" onClick={saveConfig}>
+                        {t('common.saveSettings', '💾 Save Settings')}
                     </button>
                 </div>
             </div>

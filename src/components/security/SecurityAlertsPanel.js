@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/SecurityAlertsPanel.js - Security Alerts Dashboard
 import { useState, useEffect, useCallback, useMemo, memo } from 'react';
@@ -177,17 +177,17 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
             >
                 <div className="panel-header">
                     <h2>
-                        <FaExclamationTriangle /> Security Uyarıları
+                        <FaExclamationTriangle /> {t('secAlerts.title', 'Security Alerts')}
                     </h2>
                     <div className="header-actions">
                         <button
-                            aria-label="fetch Alerts"
+                            aria-label={t('common.refresh', 'Refresh')}
                             className="refresh-btn"
                             onClick={fetchAlerts}
                         >
                             <FaSync />
                         </button>
-                        <button aria-label="Close" className="close-btn" onClick={onClose}>
+                        <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                             <FaTimes />
                         </button>
                     </div>
@@ -208,7 +208,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
                     </div>
                     <div className="stat-item success">
                         <span className="stat-value">{stats.resolved_today}</span>
-                        <span className="stat-label">Today zülen</span>
+                        <span className="stat-label">{t('secAlerts.todayResolved', 'Resolved Today')}</span>
                     </div>
                 </div>
 
@@ -225,10 +225,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
                     <div className="filter-buttons">
                         {['all', 'unresolved', 'resolved', 'critical'].map((f) => (
                             <button
-                                aria-label="Action button"
-                                key={f}
-                                className={`filter-btn ${filter === f ? 'active' : ''}`}
-                                onClick={() => setFilter(f)}
+                                aria-label={t('secAlerts.filterBtn', 'Filter: {{f}}', { f })}
                             >
                                 {f === 'all' && 'All'}
                                 {f === 'unresolved' && 'Bekleyen'}
@@ -245,8 +242,8 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
                     ) : filteredAlerts.length === 0 ? (
                         <div className="empty-state">
                             <FaShieldAlt />
-                            <p>Security uyarısı findunmuyor</p>
-                            <span>Sisteminiz güvende görünüyor</span>
+                            <p>{t('secAlerts.noAlerts', 'No security alerts found')}</p>
+                            <span>{t('secAlerts.systemSafe', 'Your system appears secure')}</span>
                         </div>
                     ) : (
                         <div className="alerts-list">
@@ -313,26 +310,24 @@ const AlertCard = ({ alert, severityLevels, alertTypes, onView, onDismiss, onRes
                     )}
                     {alert.resolved && (
                         <span className="resolved-badge">
-                            <FaCheckCircle /> zümlendi
+                            <FaCheckCircle /> {t('secAlerts.resolved', 'Resolved')}
                         </span>
                     )}
                 </div>
             </div>
 
             <div className="alert-actions">
-                <button aria-label="on View" className="view-btn" onClick={onView}>
+                <button aria-label={t('common.view', 'View')} className="view-btn" onClick={onView}>
                     <FaEye />
                 </button>
                 {!alert.resolved && (
                     <>
                         <button
-                            aria-label="Action button"
-                            className="resolve-btn"
-                            onClick={() => onResolve(t('ui.hizli_cozum'))}
+                            aria-label={t('secAlerts.quickResolve', 'Quick resolve')}
                         >
                             <FaCheckCircle />
                         </button>
-                        <button aria-label="Close" className="dismiss-btn" onClick={onDismiss}>
+                        <button aria-label={t('common.dismiss', 'Dismiss')} className="dismiss-btn" onClick={onDismiss}>
                             <FaTimes />
                         </button>
                     </>
@@ -368,7 +363,7 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
                     <div className="severity-badge" style={{ background: severity.color }}>
                         {severity.icon} {severity.label}
                     </div>
-                    <button aria-label="Close" className="close-modal" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-modal" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -403,7 +398,7 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
                                         <span>{alert.user_info.username}</span>
                                     </div>
                                     <div className="detail-item">
-                                        <label>Kullanıcı ID</label>
+                                        <label>{t('secAlerts.userId', 'User ID')}</label>
                                         <span className="mono">{alert.user_info.id}</span>
                                     </div>
                                 </>
@@ -428,13 +423,11 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
 
                     {!alert.resolved && (
                         <div className="resolution-section">
-                            <h4>züm</h4>
+                            <h4>{t('secAlerts.resolution', 'Resolution')}</h4>
                             <div className="quick-resolutions">
                                 {quickResolutions.map((res, idx) => (
                                     <button
-                                        aria-label="Action button"
-                                        key={`item-${idx}`}
-                                        className={`quick-res-btn ${resolution === res ? 'active' : ''}`}
+                                        aria-label={t('secAlerts.quickResolution', '{{res}}', { res })}
                                         onClick={() => setResolution(res)}
                                     >
                                         {res}
@@ -452,17 +445,15 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
                 </div>
 
                 <div className="modal-actions">
-                    <button aria-label="on Close" className="cancel-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="cancel-btn" onClick={onClose}>
                         {t('common.close')}
                     </button>
                     {!alert.resolved && (
                         <button
-                            aria-label="Action button"
-                            className="resolve-btn"
-                            onClick={() => onResolve(resolution || t('ui.cozumlendi'))}
+                            aria-label={t('secAlerts.resolve', 'Resolve')}
                             disabled={!resolution}
                         >
-                            <FaCheckCircle /> zümle
+                            <FaCheckCircle /> {t('secAlerts.resolve', 'Resolve')}
                         </button>
                     )}
                 </div>

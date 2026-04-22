@@ -1,6 +1,6 @@
 {
     "name": "pawscord",
-    "version": "1.1.234",
+    "version": "1.1.237",
     "description": "Pawscord Sohbet Uygulamasi",
     "author": "Eastkhan",
     "private": true,
@@ -73,6 +73,7 @@
         "@types/react": "^19.0.0",
         "@types/react-dom": "^19.0.0",
         "@vitejs/plugin-react": "^5.1.2",
+        "@vitest/coverage-v8": "^4.0.18",
         "axe-core": "^4.11.1",
         "concurrently": "^8.2.2",
         "cross-env": "^7.0.3",

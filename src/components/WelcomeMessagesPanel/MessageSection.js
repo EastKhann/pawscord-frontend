@@ -129,14 +129,14 @@ const MessageSection = ({
 
                         {embedTitleKey && (
                             <div className="form-group full-width">
-                                <label>Gömme Başlığı</label>
+                                <label>{t('welcomeMsg.embedTitle', 'Embed Title')}</label>
 
                                 <input
                                     type="text"
                                     value={config[embedTitleKey]}
                                     onChange={(e) => updateConfig(embedTitleKey, e.target.value)}
                                     disabled={!config[enabledKey]}
-                                    aria-label="Config"
+                                    aria-label={t('messageSection.embedTitle', 'Embed title')}
                                 />
                             </div>
                         )}

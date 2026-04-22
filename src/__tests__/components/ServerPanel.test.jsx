@@ -141,14 +141,14 @@ describe('ServerPanel Component', () => {
             },
             {
                 id: 102,
-                name: 'Ses Kanalları',
+                name: 'Voice Channels',
                 rooms: [
                     { id: 203, name: 'General Ses', slug: 'genel-audio', room_type: 'voice' },
                 ],
             },
             {
                 id: 103,
-                name: 'Boş Category',
+                name: 'Empty Category',
                 rooms: [],
             },
         ],
@@ -257,7 +257,7 @@ describe('ServerPanel Component', () => {
                 <MockServerPanel
                     servers={[mockServer]}
                     selectedServerId={1}
-                    collapsedCategories={{ 101: true }}>
+                    collapsedCategories={{ 101: true }}
                     {...handlers}
                 />
             );
@@ -292,7 +292,7 @@ describe('ServerPanel Component', () => {
                 <MockServerPanel
                     servers={[mockServer]}
                     selectedServerId={1}
-                    safeUnreadCounts={{ 'room-sohbet': 5 }}>
+                    safeUnreadCounts={{ 'room-sohbet': 5 }}
                     {...handlers}
                 />
             );

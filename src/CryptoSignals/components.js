@@ -2,6 +2,7 @@
 // CryptoSignals/components.js
 // Sub-components extracted from CryptoSignals.js
 import PropTypes from 'prop-types';
+import i18n from '../i18n';
 const _s = (o) => o;
 
 // -- extracted inline style constants --
@@ -13,7 +14,7 @@ export const SignalBadge = ({ value }) => {
     const isLong = String(value).toUpperCase() === 'LONG';
     return (
         <span
-            aria-label="signal badge"
+            aria-label={i18n.t('aria.signalBadge', { defaultValue: 'Signal Badge' })}
             style={_s({
                 display: 'inline-flex',
                 alignItems: 'center',

@@ -1,9 +1,6 @@
-﻿import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const ActionButton = ({ icon, onClick, title, bgColor = 'rgba(0, 0, 0, 0.7)' }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     return (
         <button
             onClick={onClick}

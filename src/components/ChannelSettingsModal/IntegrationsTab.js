@@ -47,7 +47,7 @@ const IntegrationsTab = ({
                     </div>
                 </div>
                 <button
-                    aria-label="Create webhook"
+                    aria-label={t('channelSettings.createWebhook', 'Create webhook')}
                     style={styles.integrationBtn}
                     onClick={async () => {
                         try {

@@ -135,7 +135,7 @@ const FriendsTab = ({
                         <p style={{ color: '#b5bac1', fontSize: '0.9em', marginBottom: '16px' }}>
                             {t(
                                 'friends.addFriendDesc',
-                                'Arkadaşlık isteği göndermek için bir kullanıcı adı girin.'
+                                t('friendsTab.enterUsername','Enter a username to send a friend request.')
                             )}
                         </p>
                         <form onSubmit={api.handleSendRequest} style={styles.addForm}>
@@ -146,11 +146,11 @@ const FriendsTab = ({
                                 onChange={(e) => api.setAddUsername(e.target.value)}
                                 placeholder={t(
                                     'friends.searchPlaceholder',
-                                    'Kullanıcı adı veya Arkadaş Kodu (örn: 8392014)'
+                                    t('friendsTab.placeholder','Username or Friend Code (e.g.: 8392014)')
                                 )}
                                 aria-label={t(
                                     'friends.usernameLabel',
-                                    'Kullanıcı adı veya arkadaş kodu'
+                                    t('friendsTab.placeholder2','Username or friend code')
                                 )}
                                 style={styles.input}
                                 autoFocus

@@ -125,7 +125,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
     };
 
     const deleteReminder = async (id) => {
-        if (!(await confirmDialog('Bu hatırlatıcıyı silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('reminder.deleteConfirm', 'Are you sure you want to delete this reminder?')))) return;
         try {
             const response = await fetch(`${apiBaseUrl}/reminders/${id}/delete/`, {
                 method: 'DELETE',
@@ -185,14 +185,14 @@ const ReminderPanel = ({ serverId, onClose }) => {
             >
                 <div className="reminder-header">
                     <h2>⏰ Reminderlar</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
 
                 <div className="reminder-content">
                     <button
-                        aria-label="handle Show Create"
+                        aria-label={t('reminder.showCreate', 'Create new reminder')}
                         className="create-reminder-btn"
                         onClick={handleShowCreate}
                     >
@@ -207,7 +207,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
                     ) : reminders.length === 0 ? (
                         <div className="empty-state">
                             <span className="empty-icon">⏰</span>
-                            <p>Henüz hatırlatıcı yok</p>
+                            <p>{t('reminder.noReminders', 'No reminders yet')}</p>
                         </div>
                     ) : (
                         <div className="reminders-list">
@@ -239,14 +239,14 @@ const ReminderPanel = ({ serverId, onClose }) => {
                                     </div>
                                     <div className="reminder-actions">
                                         <button
-                                            aria-label="▶️ Tetikle"
+                                            aria-label={t('reminder.triggerNow', 'Trigger reminder now')}
                                             className="trigger-btn"
                                             onClick={() => triggerNow(reminder.id)}
                                         >
                                             ▶️ Tetikle
                                         </button>
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('reminder.deleteReminder', 'Delete reminder')}
                                             className="delete-btn"
                                             onClick={() => deleteReminder(reminder.id)}
                                         >
@@ -274,13 +274,13 @@ const ReminderPanel = ({ serverId, onClose }) => {
                             className="create-modal"
                             role="dialog"
                             aria-modal="true"
-                            aria-label="Create Reminder"
+                            aria-label={t('reminder.createModal', 'Create reminder')}
                             onClick={handleStopPropagation}
                         >
                             <div className="modal-header">
-                                <h3>Yeni Hatırlatıcı</h3>
+                                <h3>{t('reminder.newReminder', 'New Reminder')}</h3>
                                 <button
-                                    aria-label="Close"
+                                    aria-label={t('common.close', 'Close')}
                                     className="close-btn"
                                     onClick={handleHideCreate}
                                 >
@@ -293,7 +293,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
                                     <input
                                         value={newReminder.title}
                                         onChange={handleTitleChange}
-                                        aria-label="input"
+                                        aria-label={t('reminder.titleInput', 'Reminder title')}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -302,7 +302,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
                                         value={newReminder.description}
                                         onChange={handleDescChange}
                                         rows="3"
-                                        aria-label="textarea"
+                                        aria-label={t('reminder.descriptionInput', 'Reminder description')}
                                     />
                                 </div>
                                 <div className="form-row">
@@ -312,7 +312,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
                                             type="datetime-local"
                                             value={newReminder.remind_at}
                                             onChange={handleRemindAtChange}
-                                            aria-label="datetime-local"
+                                            aria-label={t('reminder.dateTimeInput', 'Reminder date and time')}
                                         />
                                     </div>
                                     <div className="form-group">
@@ -320,11 +320,9 @@ const ReminderPanel = ({ serverId, onClose }) => {
                                         <select
                                             value={newReminder.repeat}
                                             onChange={handleRepeatChange}
-                                            aria-label="select"
-                                        >
-                                            <option value="once">Bir kez</option>
-                                            <option value="daily">Günlük</option>
-                                            <option value="weekly">Haftalık</option>
+                                            aria-label={t('reminder.repeatSelect', 'Repeat frequency')}>
+                                            <option value="daily">{t('common.daily', 'Daily')}</option>
+                                            <option value="weekly">{t('common.weekly', 'Weekly')}</option>
                                             <option value="monthly">Monthly</option>
                                         </select>
                                     </div>
@@ -334,9 +332,8 @@ const ReminderPanel = ({ serverId, onClose }) => {
                                     <select
                                         value={newReminder.channel_id}
                                         onChange={handleChannelChange}
-                                        aria-label="select"
+                                        aria-label={t('reminder.channelSelect', 'Select channel')}
                                     >
-                                        <option value="">Selectin</option>
                                         {channels.map((ch) => (
                                             <option key={ch.id} value={ch.id}>
                                                 {ch.name}
@@ -347,14 +344,14 @@ const ReminderPanel = ({ serverId, onClose }) => {
                             </div>
                             <div className="modal-footer">
                                 <button
-                                    aria-label="handle Hide Create"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-btn"
                                     onClick={handleHideCreate}
                                 >
                                     {t('common.cancel')}
                                 </button>
                                 <button
-                                    aria-label="create Reminder"
+                                    aria-label={t('reminder.createBtn', 'Create reminder')}
                                     className="submit-btn"
                                     onClick={createReminder}
                                 >
@@ -363,9 +360,10 @@ const ReminderPanel = ({ serverId, onClose }) => {
                             </div>
                         </div>
                     </div>
-                )}
+                )
+                }
             </div>
-        </div>
+        </div >
     );
 };
 

@@ -20,7 +20,7 @@ const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = fal
             <div style={styles.container}>
                 <div style={styles.loading}>
                     <FaRobot className="pulse" size={32} color="#5865f2" />
-                    <span>Spam koruma sistemi yükleniyor...</span>
+                    <span>{t('spamDetect.loading', 'Loading spam protection system...')}</span>
                 </div>
             </div>
         );
@@ -33,7 +33,7 @@ const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = fal
                     <FaShieldAlt size={24} color="#23a559" />
                     <div>
                         <h2 style={styles.title}>Spam Koruma Sistemi</h2>
-                        <p style={styles.subtitle}>ML tabanlı akıllı spam algılama</p>
+                        <p style={styles.subtitle}>{t('spamDetect.subtitle', 'ML-based intelligent spam detection')}</p>
                     </div>
                 </div>
                 <div style={styles.headerRight}>
@@ -54,7 +54,7 @@ const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = fal
             <div style={styles.tabs}>
                 {['overview', 'settings', 'logs'].map((tab) => (
                     <button
-                        aria-label="Action button"
+                        aria-label={t('spamDetection.viewDetails', 'View details')}
                         key={tab}
                         style={{
                             ...styles.tab,
@@ -69,8 +69,8 @@ const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = fal
                         {tab === 'overview'
                             ? t('ui.general_bakis')
                             : tab === 'settings'
-                              ? 'Ayarlar'
-                              : 'Records'}
+                                ? 'Ayarlar'
+                                : 'Records'}
                     </button>
                 ))}
             </div>

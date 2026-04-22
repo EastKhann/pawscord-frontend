@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+﻿/* eslint-disable no-undef */
 // frontend/src/components/LanguageSelector.js
 // 🌐 LANGUAGE SELECTOR COMPONENT
 
@@ -31,9 +31,7 @@ export const LanguageSelector = ({ compact = false }) => {
     return (
         <div className={`language-selector ${compact ? 'compact' : ''}`}>
             <button
-                aria-label="Action button"
-                className="language-toggle"
-                onClick={() => setIsOpen(!isOpen)}
+                aria-label={t('language.toggleSelector', 'Select language')}
             >
                 <span className="lang-flag">{currentLang.flag}</span>
                 {!compact && (
@@ -50,10 +48,7 @@ export const LanguageSelector = ({ compact = false }) => {
                 <div className="language-dropdown">
                     {languages.map((lang) => (
                         <button
-                            aria-label="Action button"
-                            key={lang.code}
-                            className={`language-option ${lang.code === currentLanguage ? 'active' : ''}`}
-                            onClick={() => handleSelect(lang.code)}
+                            aria-label={t('language.selectLang', 'Select {{lang}}', { lang: lang.native_name })}
                         >
                             <span className="lang-flag">{lang.flag}</span>
                             <span className="lang-name">{lang.native_name}</span>
@@ -83,7 +78,7 @@ export const LanguageSettings = ({ onClose }) => {
         <div className="language-settings-panel">
             <div className="panel-header">
                 <h2>🌐 {t('language.title')}</h2>
-                <button aria-label="Close" className="close-btn" onClick={onClose}>
+                <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                     ✕
                 </button>
             </div>
@@ -94,7 +89,7 @@ export const LanguageSettings = ({ onClose }) => {
                 <div className="languages-grid">
                     {languages.map((lang) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={t('language.selectLang', 'Select {{lang}}', { lang: lang.native_name })}
                             key={lang.code}
                             className={`language-card ${lang.code === selectedLang ? 'selected' : ''}`}
                             onClick={() => setSelectedLang(lang.code)}
@@ -127,10 +122,10 @@ export const LanguageSettings = ({ onClose }) => {
             </div>
 
             <div className="panel-footer">
-                <button aria-label="on Close" className="btn-cancel" onClick={onClose}>
+                <button aria-label={t('common.close', 'Close')} className="btn-cancel" onClick={onClose}>
                     {t('common.cancel')}
                 </button>
-                <button aria-label="handle Save" className="btn-save" onClick={handleSave}>
+                <button aria-label={t('common.save', 'Save')} className="btn-save" onClick={handleSave}>
                     {t('common.save')}
                 </button>
             </div>
@@ -149,11 +144,7 @@ export const InlineLanguageSwitcher = () => {
         <div className="inline-language-switcher">
             {languages.slice(0, 4).map((lang) => (
                 <button
-                    aria-label="Action button"
-                    key={lang.code}
-                    className={`inline-lang-btn ${lang.code === currentLanguage ? 'active' : ''}`}
-                    onClick={() => changeLanguage(lang.code)}
-                    title={lang.native_name}
+                    aria-label={t('language.selectLang', 'Select {{lang}}', { lang: lang.native_name })}
                 >
                     {lang.flag}
                 </button>

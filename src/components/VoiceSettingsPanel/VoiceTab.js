@@ -178,7 +178,7 @@ const VoiceTab = ({ settings, updateSetting, updateSettings, micLevel, voice }) 
                                 placeholder={t('bir_tuşa_basın')}
                                 className="key-input"
                                 readOnly
-                                aria-label="Push To Talk Key"
+                                aria-label={t('voiceSettings.pushToTalkKey', 'Push-to-talk key')}
                             />
                         </div>
 

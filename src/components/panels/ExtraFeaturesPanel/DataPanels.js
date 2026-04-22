@@ -46,8 +46,8 @@ export const ScheduledMessagesPanel = memo(({ onClose }) => {
                     {scheduled.length === 0 && <p className="empty">{t('planlanm_message_yok')}</p>}
                 </div>
                 <div className="add-scheduled">
-                    <input value={newMessage.content} onChange={handleContentChange} placeholder={t('mesaj_ierii')} aria-label="mesaj ierii" />
-                    <input type="datetime-local" value={newMessage.scheduled_time} onChange={handleTimeChange} aria-label="datetime-local" />
+                    <input value={newMessage.content} onChange={handleContentChange} placeholder={t('mesaj_ierii')} aria-label={t('dataPanels.messageContent', 'Message content')} />
+                    <input type="datetime-local" value={newMessage.scheduled_time} onChange={handleTimeChange} aria-label={t('dataPanels.scheduledTime', 'Scheduled time')} />
                     <button onClick={addScheduled}>{t('planla')}</button>
                 </div>
             </div>
@@ -171,7 +171,7 @@ export const CustomCommandsPanel = memo(({ serverId, onClose }) => {
 
     return (
         <div className="feature-panel custom-commands">
-            <div className="panel-header"><h3>⚡ Özel Komutlar</h3><button onClick={onClose} className="close-btn">✕</button></div>
+            <div className="panel-header"><h3>⚡ {t('dataPanels.customCommands', 'Custom Commands')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
             <div className="panel-content">
                 <div className="commands-list">
                     {Object.entries(commands).map(([name, data]) => (
@@ -180,8 +180,8 @@ export const CustomCommandsPanel = memo(({ serverId, onClose }) => {
                     {Object.keys(commands).length === 0 && <p className="empty">{t('zel_komut_yok')}</p>}
                 </div>
                 <div className="add-command">
-                    <input value={newCmd.name} onChange={handleCmdNameChange} placeholder={t('komut')} aria-label="komut" />
-                    <input value={newCmd.response} onChange={handleCmdResponseChange} placeholder={t('yant')} aria-label="yant" />
+                    <input value={newCmd.name} onChange={handleCmdNameChange} placeholder={t('komut')} aria-label={t('dataPanels.commandName', 'Command name')} />
+                    <input value={newCmd.response} onChange={handleCmdResponseChange} placeholder={t('yant')} aria-label={t('dataPanels.commandResponse', 'Command response')} />
                     <button onClick={addCommand}>{t('add')}</button>
                 </div>
             </div>
@@ -207,7 +207,7 @@ export const ServerAnalyticsPanel = memo(({ serverId, onClose }) => {
 
     return (
         <div className="feature-panel server-analytics">
-            <div className="panel-header"><h3>{'📈'} Server Analitiği</h3><button onClick={onClose} className="close-btn">✕</button></div>
+            <div className="panel-header"><h3>{'📈'} {t('dataPanels.serverAnalytics', 'Server Analytics')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
             <div className="panel-content">
                 {loading ? <div className="loading">{t("common.loading")}</div>{t('analytics')}<>
                     <div className="analytics-grid">

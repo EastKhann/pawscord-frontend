@@ -6,10 +6,12 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaUserPlus, FaUserMinus, FaClock } from 'react-icons/fa';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 // -- extracted inline style constants --
 
 const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
+    const { t } = useTranslation();
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all'); // all, joins, leaves
@@ -28,8 +30,8 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                     filter === 'all'
                         ? data
                         : filter === 'joins'
-                          ? data.filter((l) => l.action === 'join')
-                          : data.filter((l) => l.action === 'leave');
+                            ? data.filter((l) => l.action === 'join')
+                            : data.filter((l) => l.action === 'leave');
                 setLogs(filtered);
             }
         } catch (e) {
@@ -49,16 +51,16 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
         });
     };
 
-    if (loading) return <div className="pad-20-b5">Loglar yükleniyor...</div>;
+    if (loading) return <div className="pad-20-b5">{t('joinLogs.loading', 'Loading logs...')}</div>;
 
     return (
         <div>
             <div className="flex-between-center">
-                <h4 className="text-dbd-m0">Üye Aktivitesi</h4>
+                <h4 className="text-dbd-m0">{t('joinLogs.title', 'Member Activity')}</h4>
                 <div className="flex-gap-8">
                     {['all', 'joins', 'leaves'].map((f) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={t('joinLeaveLogs.filter', 'Filter logs')}
                             key={f}
                             onClick={() => setFilter(f)}
                             style={{
@@ -79,7 +81,7 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
             </div>
 
             {logs.length === 0 ? (
-                <div className={css.emptyStatePad40}>Aktivite kaydı yok</div>
+                <div className={css.emptyStatePad40}>{t('joinLogs.noActivity', 'No activity records')}</div>
             ) : (
                 <div>
                     {logs.map((log, idx) => (
@@ -115,8 +117,8 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                                 <div>{log.username}</div>
                                 <div className="text-b5-13">
                                     {log.action === 'join'
-                                        ? 'Sunucuya katıldı'
-                                        : 'Sunucudan ayrıldı'}
+                                        ? t('joinLogs.joined', 'Joined the server')
+                                        : t('joinLogs.left', 'Left the server')}
                                 </div>
                             </div>
                             <div>

@@ -210,17 +210,14 @@ const AnalyticsDashboard = ({ onClose, apiBaseUrl, fetchWithAuth }) => {
 
     return (
         <div
-            aria-label="analytics dashboard"
+            aria-label={t('aria.analyticsDashboard', 'Analytics Dashboard')}
             style={styles.overlay}
             role="button"
             tabIndex={0}
             onClick={onClose}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
         >
-            {/* DİNAMİK STİL:
-                Mobilde: Ekranı tam kapla, kenarları düz yap.
-                PC'de: Ortala, kenarları yuvarlat, geniş olsun.
-            */}
+            {/* Dynamic panel style: mobile = full screen; desktop = centered wide */}
             <div
                 style={{
                     ...styles.panel,

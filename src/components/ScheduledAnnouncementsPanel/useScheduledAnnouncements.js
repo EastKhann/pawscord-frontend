@@ -82,7 +82,7 @@ const useScheduledAnnouncements = (fetchWithAuth, apiBaseUrl) => {
     };
 
     const deleteAnnouncement = async (announcementId) => {
-        if (!(await confirmDialog('Bu zamanlanmış duyuruyu silmek istediğinizden emin misiniz?')))
+        if (!(await confirmDialog(t('scheduledAnn.deleteConfirm','Are you sure you want to delete this scheduled announcement?'))))
             return;
         try {
             await fetchWithAuth(`${apiBaseUrl}/announcements/${announcementId}/delete/`, {

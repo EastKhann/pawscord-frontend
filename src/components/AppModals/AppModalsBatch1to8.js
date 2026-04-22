@@ -139,7 +139,7 @@ const AppModalsBatch1to8 = ({
             {modals.reactionAnalytics && activeChat?.type === 'room' && (
                 <Suspense
                     fallback={
-                        <div role="region" aria-label="App Modals Batch1to8">
+                        <div role="region" aria-label={t('appModals.batch1to8', 'App modals')}>
                             {t('common.loading')}
                         </div>
                     }

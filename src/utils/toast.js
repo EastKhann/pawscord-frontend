@@ -1,5 +1,6 @@
 // frontend/src/utils/toast.js
 // Modern Toast Notification System - alert() yerine kullan
+import i18n from '../i18n';
 
 let toastContainer = null;
 
@@ -108,23 +109,9 @@ export function showToast(message, type = 'info', duration = 3000, priority = 'n
     `;
 
     toast.innerHTML = `
-        <span style="font-size: 20px;">${icon}</span>
+        <span style="font-size: 20px;" role="img" aria-hidden="true">${icon}</span>
         <span style="flex: 1;">${escapeHTML(message)}</span>
-        <button onclick="this.parentElement.remove()" aria-label="Dismiss notification" style=">
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        " onmouseover="this.style.background='rgba(255,255,255,0.3)'" 
-           onmouseout="this.style.background='rgba(255,255,255,0.2)'">×</button>
+        <button onclick="this.parentElement.remove()" aria-label="${i18n.t('toast.dismiss', { defaultValue: 'Dismiss notification' })}" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; flex-shrink: 0;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">×</button>
     `;
 
     container.appendChild(toast);

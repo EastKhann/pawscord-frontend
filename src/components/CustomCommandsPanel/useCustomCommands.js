@@ -111,7 +111,7 @@ export default function useCustomCommands(serverId) {
     };
 
     const deleteCommand = async (commandId) => {
-        if (!(await confirmDialog('Bu komutu silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('customCmds.deleteConfirm','Are you sure you want to delete this command?')))) return;
         try {
             const r = await fetch(`${apiBaseUrl}/commands/${commandId}/delete/`, {
                 method: 'DELETE',

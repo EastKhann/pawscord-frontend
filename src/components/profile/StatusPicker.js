@@ -29,10 +29,10 @@ const STATUSES = [
 
     {
         key: 'dnd',
-        label: 'Rahatsız Etme',
+        label: t('status.dnd', 'Do Not Disturb'),
         icon: FaMinusCircle,
         color: '#f23f42',
-        desc: 'Bildirim almayacaksın',
+        desc: t('status.dndDesc', 'You will not receive notifications'),
     },
 
     {
@@ -40,7 +40,7 @@ const STATUSES = [
         label: 'Invisible',
         icon: FaEyeSlash,
         color: '#80848e',
-        desc: 'Offline görüneceksin',
+        desc: t('status.invisibleDesc', 'You will appear offline'),
     },
 ];
 
@@ -141,7 +141,7 @@ const StatusPicker = ({
             {/* Custom Status Section */}
 
             <button
-                aria-label="handle Toggle Custom"
+                aria-label={t('status.toggleCustom', 'Set custom status')}
                 type="button"
                 style={S.customBtn}
                 onClick={handleToggleCustom}
@@ -172,23 +172,23 @@ const StatusPicker = ({
                             type="text"
                             value={customText}
                             onChange={handleCustomTextChange}
-                            placeholder="Statusunu ayarla..."
+                            placeholder={t('status.customPlaceholder', 'Set your status...')}
                             style={S.input}
                             maxLength={128}
-                            aria-label="Custom Text"
+                            aria-label={t('status.customText', 'Custom status text')}
                         />
                     </div>
 
                     <div style={S.expireRow}>
                         <FaClock className="text-4e-12" />
 
-                        <span style={S.expireLabel}>Sonra temizle:</span>
+                        <span style={S.expireLabel}>{t('status.clearAfter', 'Clear after:')}</span>
 
                         <select
                             style={S.select}
                             value={expireAfter || ''}
                             onChange={handleExpireChange}
-                            aria-label="select"
+                            aria-label={t('status.expireSelect', 'Clear after duration')}
                         >
                             {EXPIRE_OPTIONS.map((opt) => (
                                 <option key={opt.label} value={opt.value || ''}>
@@ -199,12 +199,12 @@ const StatusPicker = ({
                     </div>
 
                     <button
-                        aria-label="handle Custom Save"
+                        aria-label={t('common.save', 'Save')}
                         type="button"
                         style={S.saveBtn}
                         onClick={handleCustomSave}
                     >
-                        Kaydet
+                        {t('common.save', 'Save')}
                     </button>
                 </div>
             )}
@@ -220,7 +220,7 @@ const StatusPicker = ({
 
                 return (
                     <button
-                        aria-label="Action button"
+                        aria-label={t('status.setStatus', 'Set status')}
                         key={s.key}
                         type="button"
                         style={{

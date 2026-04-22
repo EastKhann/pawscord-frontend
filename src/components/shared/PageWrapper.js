@@ -1,15 +1,17 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types'; // frontend/src/components/PageWrapper.js
 import { Capacitor } from '@capacitor/core';
 
 const PageWrapper = ({ children }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const isNative = Capacitor.isNativePlatform();
 
     return (
         <div
-            aria-label="page wrapper"
+            aria-label={t('common.pageWrapper', 'Page content')}
             style={{
                 width: '100%',
                 height: '100dvh',

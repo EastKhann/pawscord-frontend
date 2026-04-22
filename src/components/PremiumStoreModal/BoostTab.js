@@ -53,14 +53,14 @@ const BoostTab = ({ styles, loading, setLoading, token, API_BASE_URL }) => {
     };
 
     return (
-        <div aria-label="boost tab" style={styles.boostTab}>
+        <div aria-label={t('premiumStore.boostTab', 'Server boost tab')} style={styles.boostTab}>
             <div style={styles.boostHeader}>
                 <h3 style={styles.boostTitle}>
                     <span style={styles.boostIcon}>🚀</span>
-                    Sunucu Güçlendirme
+                    {t('boost.serverBoost')}
                 </h3>
                 <p style={styles.boostSubtitle}>
-                    Sevdiğin sunucuları güçlendir ve özel özellikler kazan!
+                    {t('boost.boostSubtitle')}
                 </p>
             </div>
 
@@ -70,20 +70,20 @@ const BoostTab = ({ styles, loading, setLoading, token, API_BASE_URL }) => {
                     <div style={tierStyles.level1Badge}>
                         <span style={styles.tierNumber}>1</span>
                     </div>
-                    <h4 style={styles.tierTitle}>Seviye 1</h4>
-                    <p style={styles.tierRequirement}>2 boost gerekli</p>
+                    <h4 style={styles.tierTitle}>{t('boost.level1')}</h4>
+                    <p style={styles.tierRequirement}>{t('boost.boostsRequired', { count: 2 })}</p>
                     <ul style={styles.tierFeatureList}>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>🎨</span>100 Emoji Slot
+                            <span style={styles.featureIcon}>🎨</span>{t('boost.emojiSlots', { count: 100 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>🎵</span>256 Kbps Ses Kalitesi
+                            <span style={styles.featureIcon}>🎵</span>{t('boost.voiceQuality', { kbps: 256 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>📁</span>50 MB Dosya Yükleme
+                            <span style={styles.featureIcon}>📁</span>{t('boost.fileUpload', { size: 50 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>✨</span>Animasyonlu sunucu ikonu
+                            <span style={styles.featureIcon}>✨</span>{t('boost.animatedIcon')}
                         </li>
                     </ul>
                 </div>
@@ -93,24 +93,24 @@ const BoostTab = ({ styles, loading, setLoading, token, API_BASE_URL }) => {
                     <div style={tierStyles.level2Badge}>
                         <span style={styles.tierNumber}>2</span>
                     </div>
-                    <div style={styles.popularBadge}>⭐ Popüler</div>
-                    <h4 style={styles.tierTitle}>Seviye 2</h4>
-                    <p style={styles.tierRequirement}>7 boost gerekli</p>
+                    <div style={styles.popularBadge}>{t('boost.popular')}</div>
+                    <h4 style={styles.tierTitle}>{t('boost.level2')}</h4>
+                    <p style={styles.tierRequirement}>{t('boost.boostsRequired', { count: 7 })}</p>
                     <ul style={styles.tierFeatureList}>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>🎨</span>150 Emoji Slot
+                            <span style={styles.featureIcon}>🎨</span>{t('boost.emojiSlots', { count: 150 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>🎵</span>384 Kbps Ses Kalitesi
+                            <span style={styles.featureIcon}>🎵</span>{t('boost.voiceQuality', { kbps: 384 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>📁</span>100 MB Dosya Yükleme
+                            <span style={styles.featureIcon}>📁</span>{t('boost.fileUpload', { size: 100 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>📺</span>1080p Go Live
+                            <span style={styles.featureIcon}>📺</span>{t('boost.goLive', { res: '1080p' })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>🔗</span>Özel davet linki
+                            <span style={styles.featureIcon}>🔗</span>{t('boost.customInvite')}
                         </li>
                     </ul>
                 </div>
@@ -121,23 +121,23 @@ const BoostTab = ({ styles, loading, setLoading, token, API_BASE_URL }) => {
                         <span style={styles.tierNumber}>3</span>
                     </div>
                     <div style={styles.premiumBadge}>👑 Premium</div>
-                    <h4 style={styles.tierTitle}>Seviye 3</h4>
-                    <p style={styles.tierRequirement}>14 boost gerekli</p>
+                    <h4 style={styles.tierTitle}>{t('boost.level3')}</h4>
+                    <p style={styles.tierRequirement}>{t('boost.boostsRequired', { count: 14 })}</p>
                     <ul style={styles.tierFeatureList}>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>🎨</span>250 Emoji Slot
+                            <span style={styles.featureIcon}>🎨</span>{t('boost.emojiSlots', { count: 250 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>🎵</span>384 Kbps Ses Kalitesi
+                            <span style={styles.featureIcon}>🎵</span>{t('boost.voiceQuality', { kbps: 384 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>📁</span>500 MB Dosya Yükleme
+                            <span style={styles.featureIcon}>📁</span>{t('boost.fileUpload', { size: 500 })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>📺</span>4K Go Live 60FPS
+                            <span style={styles.featureIcon}>📺</span>{t('boost.goLive', { res: '4K 60FPS' })}
                         </li>
                         <li style={styles.tierFeature}>
-                            <span style={styles.featureIcon}>🔊</span>Özel ses efektleri
+                            <span style={styles.featureIcon}>🔊</span>{t('boost.soundEffects')}
                         </li>
                     </ul>
                 </div>
@@ -156,7 +156,7 @@ const BoostTab = ({ styles, loading, setLoading, token, API_BASE_URL }) => {
                 disabled={loading || !STORE_PURCHASES_ENABLED}
             >
                 <span style={styles.boostButtonIcon}>🚀</span>
-                {STORE_PURCHASES_ENABLED ? 'Güçlendirme Satın Al (19.99 TL/ay)' : '🔒 Çok Yakında'}
+                {STORE_PURCHASES_ENABLED ? t('boost.purchaseBoost') : t('boost.comingSoon')}
             </button>
         </div>
     );

@@ -94,12 +94,12 @@ const VideoPlaceholder = memo(({ onClick, thumbnail, duration }) => {
         <div
             role="button"
             tabIndex={0}
-            aria-label="Play video"
+            aria-label={t('videoStreaming.play', 'Play video')}
             onClick={onClick}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick?.(e)}
             style={S.flex}
         >
-            {thumbnail && <img src={thumbnail} alt="Video thumbnail" style={S.abs} />}
+            {thumbnail && <img src={thumbnail} alt={t('alt.videoThumbnail', 'Video Thumbnail')} style={S.abs} />}
             <div style={S.flex2}>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
                     <path d="M8 5v14l11-7z" />

@@ -11,7 +11,7 @@ const EffectsTab = ({
 }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="effects tab" className="tab-content">
+        <div aria-label={t('voiceSettings.effectsTab', 'Effects tab')} className="tab-content">
             <div className="settings-card">
                 <div className="card-header">
                     <FaMusic className="card-icon" />

@@ -120,7 +120,7 @@ const ConfirmModal = ({
                     {/* Danger Details */}
                     {dangerDetails && dangerDetails.length > 0 && (
                         <div style={styles.dangerBox}>
-                            <div style={styles.dangerHeader}>⚠️ Bu işlem:</div>
+                            <div style={styles.dangerHeader}>{t('confirmModal.dangerHeader', '⚠️ This action:')}</div>
                             <ul style={styles.dangerList}>
                                 {dangerDetails.map((detail, idx) => (
                                     <li key={`item-${idx}`} style={styles.dangerItem}>
@@ -128,7 +128,7 @@ const ConfirmModal = ({
                                     </li>
                                 ))}
                             </ul>
-                            <div style={styles.dangerFooter}>GERİ ALINAMAZ!</div>
+                            <div style={styles.dangerFooter}>{t('confirmModal.irreversible', 'CANNOT BE UNDONE!')}</div>
                         </div>
                     )}
 
@@ -136,7 +136,7 @@ const ConfirmModal = ({
                     {requireTextConfirmation && (
                         <div style={styles.inputContainer}>
                             <label style={styles.inputLabel}>
-                                Devam etmek için <strong>"{confirmationText}"</strong> yazın:
+                                {t('confirmModal.typeToConfirm', 'Type')} <strong>"{confirmationText}"</strong> {t('confirmModal.toContinue', 'to continue:')}
                             </label>
                             {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                             <input
@@ -155,7 +155,7 @@ const ConfirmModal = ({
                                 autoFocus
                             />
                             {inputValue && inputValue !== confirmationText && (
-                                <div style={styles.inputError}>Metin eşleşmiyor</div>
+                                <div style={styles.inputError}>{t('confirmModal.textMismatch', 'Text does not match')}</div>
                             )}
                         </div>
                     )}
@@ -164,7 +164,7 @@ const ConfirmModal = ({
                 {/* Footer */}
                 <div style={styles.footer}>
                     <button
-                        aria-label="on Close"
+                        aria-label={t('common.close', 'Close')}
                         onClick={onClose}
                         disabled={isProcessing}
                         style={styles.cancelButton}
@@ -172,7 +172,7 @@ const ConfirmModal = ({
                         {resolvedCancelText}
                     </button>
                     <button
-                        aria-label="handle Confirm"
+                        aria-label={t('confirmModal.confirm', 'Confirm action')}
                         onClick={handleConfirm}
                         disabled={!canConfirm || isProcessing}
                         style={{

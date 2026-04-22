@@ -65,18 +65,18 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                         <FaUsers className="icon-primary-mr10" />
                         <h2 style={styles.title}>Sunucu Bekleme Listesi</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 {referralCode && (
                     <div style={styles.referralSection}>
-                        <div style={styles.referralLabel}>Yönlendirme Kodunuz</div>
+                        <div style={styles.referralLabel}>{t('waitlist.referralCode', 'Your Referral Code')}</div>
                         <div style={styles.referralCode}>
                             <code>{referralCode}</code>
                             <button
-                                aria-label="copy Referral Code"
+                                aria-label={t('waitlist.copyCode', 'Copy referral code')}
                                 onClick={copyReferralCode}
                                 style={styles.copyButton}
                             >
@@ -91,9 +91,9 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Bekleme listesi yükleniyor...</div>
+                        <div style={styles.loading}>{t('waitlist.loading', 'Loading waitlist...')}</div>
                     ) : waitlist.length === 0 ? (
-                        <div style={styles.empty}>Bekleme listesi boş</div>
+                        <div style={styles.empty}>{t('waitlist.empty', 'Waitlist is empty')}</div>
                     ) : (
                         <div style={styles.entriesList}>
                             {waitlist.map((entry, idx) => (
@@ -132,14 +132,14 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                                     {entry.status === 'pending' && (
                                         <div style={styles.entryActions}>
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('waitlist.approveEntry', 'Approve')}
                                                 onClick={() => approveEntry(entry.id)}
                                                 style={styles.approveButton}
                                             >
                                                 Approve
                                             </button>
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('waitlist.rejectEntry', 'Reject')}
                                                 onClick={() => rejectEntry(entry.id)}
                                                 style={styles.rejectButton}
                                             >

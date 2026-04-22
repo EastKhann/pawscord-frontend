@@ -280,7 +280,7 @@ describe('useFileUpload', () => {
                 await result.current.startVoiceRecording();
             });
 
-            expect(toast.warning).toHaveBeenCalledWith('Mikrofon erişimi rejected!');
+            expect(toast.warning).toHaveBeenCalledWith('chat.micDenied');
         });
 
         it('should show warning toast when mic not found', async () => {
@@ -292,7 +292,7 @@ describe('useFileUpload', () => {
                 await result.current.startVoiceRecording();
             });
 
-            expect(toast.warning).toHaveBeenCalledWith('Mikrofon not found!');
+            expect(toast.warning).toHaveBeenCalledWith('chat.micNotFound');
         });
     });
 

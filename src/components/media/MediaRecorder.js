@@ -151,23 +151,23 @@ const MediaRecorder = ({
                 /* Start Recording */
                 <div className="recorder-start">
                     <button
-                        aria-label="start Recording"
+                        aria-label={t('mediaRec.startRecording', 'Start recording')}
                         className="record-btn"
                         onClick={startRecording}
                     >
                         {type === 'audio' && (
                             <>
-                                <FaMicrophone /> Ses Kaydı
+                                <FaMicrophone /> {t('mediaRec.audio', 'Audio Recording')}
                             </>
                         )}
                         {type === 'video' && (
                             <>
-                                <FaVideo /> Video Kaydı
+                                <FaVideo /> {t('mediaRec.video', 'Video Recording')}
                             </>
                         )}
                         {type === 'screen' && (
                             <>
-                                <FaDesktop /> Ekran Kaydı
+                                <FaDesktop /> {t('mediaRec.screen', 'Screen Recording')}
                             </>
                         )}
                     </button>
@@ -189,60 +189,52 @@ const MediaRecorder = ({
 
                         <div className="control-buttons">
                             <button
-                                aria-label="pause Recording"
+                                aria-label={isPaused ? t('mediaRec.resumeRecording', 'Resume recording') : t('mediaRec.pauseRecording', 'Pause recording')}
                                 onClick={pauseRecording}
                                 className="btn-secondary"
                             >
                                 {isPaused ? '▶️ Devam' : '⏸️ Duraklat'}
                             </button>
                             <button
-                                aria-label="stop Recording"
+                                aria-label={t('mediaRec.stopRecording', 'Stop recording')}
                                 onClick={stopRecording}
                                 className="btn-stop"
                             >
                                 <FaStop /> Stop
                             </button>
                             <button
-                                aria-label="handle Cancel"
-                                onClick={handleCancel}
-                                className="btn-cancel"
-                            >
-                                <FaTrash /> Cancel
+                                aria-label={t('mediaRec.cancelRecording', 'Cancel recording')}>
                             </button>
-                        </div>
                     </div>
                 </div>
+                </div>
+    ) : (
+        /* Preview & Send */
+        <div className="recorder-preview">
+            {type === 'audio' ? (
+                <audio src={previewUrl} controls className="preview-audio" />
             ) : (
-                /* Preview & Send */
-                <div className="recorder-preview">
-                    {type === 'audio' ? (
-                        <audio src={previewUrl} controls className="preview-audio" />
-                    ) : (
-                        <video src={previewUrl} controls className="preview-video">
-                            <track kind="captions" />
-                        </video>
-                    )}
-
-                    <div className="preview-info">
-                        <span>Duration: {formatDuration(duration)}</span>
-                        <span>Size: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB</span>
-                    </div>
-
-                    <div className="preview-actions">
-                        <button
-                            aria-label="handle Cancel"
-                            onClick={handleCancel}
-                            className="btn-cancel"
-                        >
-                            <FaTrash /> Delete
-                        </button>
-                        <button aria-label="handle Send" onClick={handleSend} className="btn-send">
-                            <FaPaperPlane /> Send
-                        </button>
-                    </div>
-                </div>
+                <video src={previewUrl} controls className="preview-video">
+                    <track kind="captions" />
+                </video>
             )}
+
+            <div className="preview-info">
+                <span>Duration: {formatDuration(duration)}</span>
+                <span>Size: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB</span>
+            </div>
+
+            <div className="preview-actions">
+                <button
+                    aria-label={t('mediaRec.deleteRecording', 'Delete recording')}>
+                        </button>
+            <button aria-label={t('mediaRec.sendRecording', 'Send recording')} onClick={handleSend} className="btn-send">
+                <FaPaperPlane /> Send
+            </button>
         </div>
+                </div >
+            )}
+        </div >
     );
 };
 
@@ -267,7 +259,7 @@ export const VoiceMessageButton = ({ onRecord }) => {
 
     return (
         <button
-            aria-label="Action button"
+            aria-label={t('mediaRec.voiceMessageBtn', 'Hold to record voice message')}
             className={`voice-message-btn ${isHolding ? 'recording' : ''}`}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}

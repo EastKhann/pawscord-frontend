@@ -168,7 +168,7 @@ const useSecurityAPI = () => {
     };
 
     const revokeAllSessions = async () => {
-        if (!(await confirmDialog('Tüm oturumları sonlandırmak istediğinizden emin misiniz?')))
+        if (!(await confirmDialog(t('security.revokeAllConfirm','Are you sure you want to terminate all sessions?'))))
             return;
         try {
             const res = await fetch(`${apiBaseUrl}/security/sessions/revoke-all/`, {

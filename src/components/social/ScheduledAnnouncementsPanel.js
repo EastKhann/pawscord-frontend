@@ -38,19 +38,19 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaBullhorn className="icon-primary-24" />
-                        <h2 className="m0-fs20">Zamanlanmış Duyurular</h2>
+                        <h2 className="m0-fs20">{t('scheduledAnnouncements.title', 'Scheduled Announcements')}</h2>
                     </div>
                     <div style={styles.headerRight}>
                         {!a.showCreateForm && (
                             <button
-                                aria-label="Create"
+                                aria-label={t('common.create')}
                                 onClick={() => a.setShowCreateForm(true)}
                                 style={styles.addBtn}
                             >
                                 <FaPlus /> Yeni Zamanla
                             </button>
                         )}
-                        <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                             <FaTimes />
                         </button>
                     </div>
@@ -64,8 +64,8 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
                     ) : a.announcements.length === 0 ? (
                         <div style={styles.empty}>
                             <FaBullhorn className="icon-48-949-mb16" />
-                            <p>Zamanlanmış duyuru yok</p>
-                            <p className="text-949-14">Başlatmak için ilk duyurunuzu zamanlayın</p>
+                            <p>{t('scheduledAnnouncements.none', 'No scheduled announcements')}</p>
+                            <p className="text-949-14">{t('scheduledAnnouncements.hint', 'Schedule your first announcement to get started')}</p>
                         </div>
                     ) : (
                         <div style={styles.announcementsList}>
@@ -96,7 +96,7 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
                                     </div>
                                     <div style={styles.announcementActions}>
                                         <button
-                                            aria-label="Delete"
+                                            aria-label={t('common.delete')}
                                             onClick={() => a.deleteAnnouncement(ann.id)}
                                             style={styles.deleteIconBtn}
                                             title={t('common.delete')}

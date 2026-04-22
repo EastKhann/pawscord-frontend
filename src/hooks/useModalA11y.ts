@@ -48,29 +48,16 @@ export default function useModalA11y({
 
         previousFocusRef.current = document.activeElement as HTMLElement | null;
 
-        const el = modalRef.current;
-        if (!el) return;
-
-        const FOCUSABLE =
-            'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-        const timer = setTimeout(() => {
-            const focusable = el.querySelectorAll<HTMLElement>(FOCUSABLE);
-            if (focusable.length > 0) {
-                focusable[0].focus();
-            } else {
-                el.setAttribute('tabindex', '-1');
-                el.focus();
-            }
-        }, 50);
-
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
                 e.stopPropagation();
                 onClose?.();
                 return;
             }
-            if (e.key === 'Tab') {
+            const el = modalRef.current;
+            if (e.key === 'Tab' && el) {
+                const FOCUSABLE =
+                    'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
                 const focusable = el.querySelectorAll<HTMLElement>(FOCUSABLE);
                 if (focusable.length === 0) return;
                 const first = focusable[0];
@@ -90,6 +77,22 @@ export default function useModalA11y({
         };
 
         document.addEventListener('keydown', handleKeyDown, true);
+
+        // Focus management (only if ref is attached)
+        const el = modalRef.current;
+        const FOCUSABLE =
+            'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+        const timer = setTimeout(() => {
+            if (el) {
+                const focusable = el.querySelectorAll<HTMLElement>(FOCUSABLE);
+                if (focusable.length > 0) {
+                    focusable[0].focus();
+                } else {
+                    el.setAttribute('tabindex', '-1');
+                    el.focus();
+                }
+            }
+        }, 50);
 
         return () => {
             clearTimeout(timer);

@@ -160,8 +160,7 @@ const VoiceMessage = ({ onSend, onCancel }) => {
         <div className="voice-message-container">
             {!isRecording && !audioBlob && (
                 <button
-                    aria-label="Action button"
-                    ref={recordButtonRef}
+                    aria-label={t('voice.startRecording', 'Hold to record')}
                     className="btn-start-recording"
                     onMouseDown={handleRecordStart}
                     onMouseMove={handleRecordMove}
@@ -217,7 +216,7 @@ const VoiceMessage = ({ onSend, onCancel }) => {
 
                     <div className="recording-controls">
                         <button
-                            aria-label="cancel Recording"
+                            aria-label={t('voiceMsg.cancelRecording', 'Cancel recording')}
                             className="btn-cancel"
                             onClick={cancelRecording}
                         >
@@ -225,7 +224,7 @@ const VoiceMessage = ({ onSend, onCancel }) => {
                         </button>
                         {isLocked && (
                             <button
-                                aria-label="stop Recording"
+                                aria-label={t('voiceMsg.stopRecording', 'Stop recording')}
                                 className="btn-stop"
                                 onClick={stopRecording}
                             >
@@ -246,14 +245,14 @@ const VoiceMessage = ({ onSend, onCancel }) => {
                     </div>
                     <div className="preview-controls">
                         <button
-                            aria-label="cancel Recording"
+                            aria-label={t('voiceMsg.cancelRecording', 'Cancel recording')}
                             className="btn-cancel"
                             onClick={cancelRecording}
                         >
                             {t('common.delete')}
                         </button>
                         <button
-                            aria-label="send Voice Message"
+                            aria-label={t('voiceMsg.sendVoiceMsg', 'Send voice message')}
                             className="btn-send"
                             onClick={sendVoiceMessage}
                         >

@@ -9,6 +9,19 @@ vi.mock('../../utils/avatarUtils', () => ({
     getAvatarUrl: vi.fn((avatar, username) => avatar || `/avatars/${username}.png`),
     getDeterministicAvatar: vi.fn((username) => `/default/${username}.svg`),
 }));
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key, fallback) => {
+            const TR = { 'ui.updateAvailable': 'Update Available!' };
+            return TR[key] || (typeof fallback === 'string' ? fallback : key);
+        },
+        i18n: { language: 'en', changeLanguage: vi.fn() },
+    }),
+    Trans: ({ children }) => children,
+    I18nextProvider: ({ children }) => children,
+    withTranslation: () => (Component) => Component,
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
+}));
 
 import UserFooter from '../../components/profile/UserFooter';
 
@@ -35,8 +48,7 @@ describe('UserFooter', () => {
 
     it('calls onProfileClick when user panel is clicked', () => {
         render(<UserFooter {...defaultProps} />);
-        const panel =
-            screen.getByRole('button', { name: /TestUser/i }) || screen.getAllByRole('button')[0];
+        const panel = screen.getByTestId('profile-panel-trigger');
         fireEvent.click(panel);
         expect(defaultProps.onProfileClick).toHaveBeenCalledTimes(1);
     });

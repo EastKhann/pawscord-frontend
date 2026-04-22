@@ -1,4 +1,4 @@
-﻿// frontend/src/components/AIChatbotPanel.js
+// frontend/src/components/AIChatbotPanel.js
 
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 
@@ -189,7 +189,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                 {
                     role: 'assistant',
 
-                    content: `📝 **Summary:**\n\n${data.summary}`,
+                    content: `?? **Summary:**\n\n${data.summary}`,
 
                     timestamp: new Date(),
 
@@ -228,7 +228,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                 {
                     role: 'assistant',
 
-                    content: `🎓 **Description:**\n\n${data.explanation}`,
+                    content: `?? **Description:**\n\n${data.explanation}`,
 
                     timestamp: new Date(),
 
@@ -300,7 +300,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
             const data = await response.json();
 
             toast.info(
-                `${data.is_safe ? t('ui.guvenli') : '⚠️ Inappropriate'}\n${data.reason || ''}`
+                `${data.is_safe ? t('ui.guvenli') : '?? Inappropriate'}\n${data.reason || ''}`
             );
         } catch (err) {
             logger.error('Moderation error:', err);
@@ -389,7 +389,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
 
             <div className="ai-tabs">
                 <button
-                    aria-label="handle Set Tab Chat"
+                    aria-label={t('ai.tabChat', 'AI Chat')}
                     className={activeTab === 'chat' ? 'active' : ''}
                     onClick={handleSetTabChat}
                 >
@@ -397,7 +397,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                 </button>
 
                 <button
-                    aria-label="handle Set Tab Smart Reply"
+                    aria-label={t('ai.tabSmartReply', 'Smart Reply')}
                     className={activeTab === 'smart-reply' ? 'active' : ''}
                     onClick={handleSetTabSmartReply}
                 >
@@ -405,7 +405,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                 </button>
 
                 <button
-                    aria-label="handle Set Tab Summarize"
+                    aria-label={t('ai.tabSummarize', 'Summarize')}
                     className={activeTab === 'summarize' ? 'active' : ''}
                     onClick={handleSetTabSummarize}
                 >
@@ -413,7 +413,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                 </button>
 
                 <button
-                    aria-label="handle Set Tab Code"
+                    aria-label={t('ai.tabCode', 'Code generation')}
                     className={activeTab === 'code' ? 'active' : ''}
                     onClick={handleSetTabCode}
                 >
@@ -436,24 +436,24 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
 
                                 <div className="ai-suggestions">
                                     <button
-                                        aria-label="handle Suggestion Code"
+                                        aria-label={t('ai.suggestionCode', 'Get a code example')}
                                         onClick={handleSuggestionCode}
                                     >
-                                        💻 {t('ai.getCodeExample')}
+                                        ?? {t('ai.getCodeExample')}
                                     </button>
 
                                     <button
-                                        aria-label="handle Suggestion Explain"
+                                        aria-label={t('ai.suggestionExplain', 'Explain a concept')}
                                         onClick={handleSuggestionExplain}
                                     >
-                                        🎓 {t('ai.explainConcept')}
+                                        ?? {t('ai.explainConcept')}
                                     </button>
 
                                     <button
-                                        aria-label="handle Suggestion Chat"
+                                        aria-label={t('ai.suggestionChat', 'Start chatting')}
                                         onClick={handleSuggestionChat}
                                     >
-                                        💬 Chat
+                                        ?? Chat
                                     </button>
                                 </div>
                             </div>
@@ -464,7 +464,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                                     className={`ai-message ${msg.role} ${msg.error ? 'error' : ''}`}
                                 >
                                     <div className="ai-message-avatar">
-                                        {msg.role === 'user' ? '👤' : '🤖'}
+                                        {msg.role === 'user' ? '??' : '??'}
                                     </div>
 
                                     <div className="ai-message-content">
@@ -512,16 +512,16 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                             placeholder={t('ai.askPlaceholder')}
                             disabled={loading}
                             className="ai-input"
-                            aria-label="AI message input"
+                            aria-label={t('ai.messageInput', 'AI message input')}
                         />
 
                         <button
-                            aria-label="Submit"
+                            aria-label={t('common.submit')}
                             type="submit"
                             disabled={loading || !input.trim()}
                             className="ai-send-btn"
                         >
-                            {loading ? '⏳' : <FaPaperPlane />}
+                            {loading ? '?' : <FaPaperPlane />}
                         </button>
                     </form>
                 </div>
@@ -540,12 +540,12 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                     </div>
 
                     <button
-                        aria-label="handle Last Smart Reply"
+                        aria-label={t('ai.getSmartReply', 'Get smart reply suggestions')}
                         onClick={handleLastSmartReply}
                         disabled={loading}
                         className="ai-action-btn"
                     >
-                        💡 {t('ai.smartReplyLast')}
+                        ?? {t('ai.smartReplyLast')}
                     </button>
 
                     {smartReplies.length > 0 && (
@@ -556,7 +556,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                                 <div key={`item-${index}`} className="ai-smart-reply-item">
                                     <span>{reply}</span>
 
-                                    <button aria-label="Use" onClick={() => setInput(reply)}>
+                                    <button aria-label={t('common.use', 'Use')} onClick={() => setInput(reply)}>
                                         {t('common.use')}
                                     </button>
                                 </div>
@@ -579,12 +579,12 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                     </div>
 
                     <button
-                        aria-label="handle Summarize Last"
+                        aria-label={t('ai.summarizeMessages', 'Summarize last messages')}
                         onClick={handleSummarizeLast}
                         disabled={loading}
                         className="ai-action-btn"
                     >
-                        📝 {t('ai.summarizeLast50')}
+                        ?? {t('ai.summarizeLast50')}
                     </button>
                 </div>
             )}
@@ -608,16 +608,16 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                             placeholder={t('ai.codeGenPlaceholder')}
                             rows={4}
                             className="ai-code-textarea"
-                            aria-label="What do you want to do? E.g.: 'Build a counter component in React'"
+                            aria-label={t('ai.codeGenPlaceholder', 'What do you want to do?')}
                         />
 
                         <button
-                            aria-label="Submit"
+                            aria-label={t('common.submit')}
                             type="submit"
                             disabled={loading || !input.trim()}
                             className="ai-action-btn"
                         >
-                            💻 {t('ai.generateCode')}
+                            ?? {t('ai.generateCode')}
                         </button>
                     </form>
                 </div>

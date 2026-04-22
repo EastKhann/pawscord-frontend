@@ -11,7 +11,7 @@ const Spoiler = ({ children }) => {
 
     return (
         <span
-            aria-label="spoiler"
+            aria-label={t('chat.spoiler', 'Spoiler content')}
             role="button"
             tabIndex={0}
             onClick={(e) => {

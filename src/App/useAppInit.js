@@ -133,7 +133,7 @@ export default function useAppInit({
                 });
             } catch (e) {
                 logger.error('Init Data Error', e);
-                setAuthError('Veriler yüklenemedi.');
+                setAuthError(t('errors.data_load_failed'));
                 fetchingInitRef.current = false;
             }
         };
@@ -194,8 +194,8 @@ export default function useAppInit({
                     const members = Array.isArray(raw)
                         ? raw
                         : Array.isArray(raw?.results)
-                          ? raw.results
-                          : [];
+                            ? raw.results
+                            : [];
                     serverMembersCacheRef.current[serverId] = { members, timestamp: Date.now() };
                     setServerMembers(members);
                 } else setServerMembers([]);

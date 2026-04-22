@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FaClock, FaUsers, FaExternalLinkAlt } from 'react-icons/fa';
 
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const LABELS = {
     playing: 'Playing',
@@ -12,6 +13,7 @@ const LABELS = {
 };
 
 export const RichPresenceCard = ({ activity, expanded = false }) => {
+    const { t } = useTranslation();
     const [elapsedTime, setElapsedTime] = useState('');
 
     useEffect(() => {
@@ -36,7 +38,7 @@ export const RichPresenceCard = ({ activity, expanded = false }) => {
 
     return (
         <div
-            aria-label="rich presence card"
+            aria-label={t('gamePresence.richPresenceCard', 'Rich presence card')}
             className={`rich-presence-card rich-presence-${activity.type} ${expanded ? 'expanded' : ''}`}
         >
             <div className="rp-header">

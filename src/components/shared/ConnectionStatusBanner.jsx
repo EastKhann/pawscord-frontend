@@ -78,7 +78,7 @@ export function ConnectionStatusBanner() {
                 {isFailed
                     ? t(
                           'connection.lostRetrying',
-                          'Bağlantı kesildi. Yeniden bağlanmaya çalışılıyor...'
+                          t('connBanner.disconnected','Disconnected. Attempting to reconnect...')
                       )
                     : t('connection.reconnecting', 'Yeniden bağlanıyor...')}
             </span>

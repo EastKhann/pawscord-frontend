@@ -113,19 +113,19 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaClock className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Veri Saklama Politikaları</h2>
+                        <h2 style={styles.title}>{t('dataRetention.title', 'Data Retention Policies')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.content}>
                     <div style={styles.section}>
-                        <h3 style={styles.sectionTitle}>Yeni Politika Oluştur</h3>
+                        <h3 style={styles.sectionTitle}>{t('dataRetention.createPolicy', 'Create New Policy')}</h3>
                         <div style={styles.form}>
                             <div style={styles.formRow}>
-                                <label style={styles.label}>İçerik Türü</label>
+                                <label style={styles.label}>{t('dataRetention.contentType', 'Content Type')}</label>
                                 <select
                                     value={newPolicy.content_type}
                                     onChange={(e) =>
@@ -142,12 +142,11 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                             </div>
 
                             <div style={styles.formRow}>
-                                <label style={styles.label}>Saklama Süresi</label>
+                                <label style={styles.label}>{t('dataRetention.retentionPeriod', 'Retention Period')}</label>
                                 <div style={styles.presetButtons}>
                                     {retentionPresets.map((preset) => (
                                         <button
-                                            aria-label="Action button"
-                                            key={preset.days}
+                                            aria-label={preset.label}
                                             onClick={() =>
                                                 setNewPolicy({
                                                     ...newPolicy,
@@ -163,7 +162,7 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                             </div>
 
                             <button
-                                aria-label="save Policy"
+                                aria-label={t('dataRetention.savePolicy', 'Save policy')}
                                 onClick={savePolicy}
                                 style={styles.saveButton}
                             >
@@ -179,7 +178,7 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                             <div style={styles.loading}>{t('common.loading')}</div>
                         ) : policies.length === 0 ? (
                             <div style={styles.empty}>
-                                Hiçbir saklama politikası yapılandırılmamış
+                                {t('dataRetention.noPolicies', 'No retention policies configured')}
                             </div>
                         ) : (
                             <div style={styles.policiesList}>
@@ -194,17 +193,17 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                             <div style={styles.policyRetention}>
                                                 {policy.retention_days === -1
                                                     ? 'Sonsuza kadar'
-                                                    : `${policy.retention_days} gün`}
+                                                    : `${policy.retention_days} ${t('common.days', 'days')}`}
                                             </div>
                                             <div style={styles.policyMeta}>
-                                                Son çalışma:{' '}
+                                                {t('dataRetention.lastRun', 'Last run:')}{' '}
                                                 {policy.last_run
                                                     ? new Date(policy.last_run).toLocaleString()
-                                                    : 'Hiçbir zaman'}
+                                                    : t('dataRetention.never', 'Never')}
                                             </div>
                                             {policy.items_deleted > 0 && (
                                                 <div style={styles.policyMeta}>
-                                                    Silinen öğe:{' '}
+                                                    {t('dataRetention.deletedItems', 'Deleted items:')}{' '}
                                                     {policy.items_deleted.toLocaleString()}
                                                 </div>
                                             )}
@@ -221,10 +220,10 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                                 <span style={styles.toggleSlider}></span>
                                             </label>
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('dataRetention.deletePolicy', 'Delete policy')}
                                                 onClick={() => deletePolicy(policy.id)}
                                                 style={styles.deleteButton}
-                                                title="Politikayı sil"
+                                                title={t('common.deletePolicy', 'Delete policy')}
                                             >
                                                 <FaTrash />
                                             </button>

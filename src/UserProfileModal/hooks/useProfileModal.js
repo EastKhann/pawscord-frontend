@@ -83,7 +83,7 @@ export const useProfileModal = ({ user, fetchWithAuth, apiBaseUrl, currentUser, 
                 setRequestStatus('idle');
             }
         } catch (error) {
-            logger.error('Friend addme hatası:', error);
+            logger.error('Friend add error:', error);
             setRequestStatus('idle');
         }
     };

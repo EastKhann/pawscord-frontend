@@ -35,10 +35,10 @@ const ChannelAboutPanel = ({
 
     const createdAt = channel.created_at
         ? new Date(channel.created_at).toLocaleDateString('tr-TR', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-          })
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        })
         : null;
 
     const channelIcon = channel.is_voice ? (
@@ -57,7 +57,7 @@ const ChannelAboutPanel = ({
                     {channelIcon}
                     <span style={S.channelName}>{channel.name}</span>
                 </div>
-                <button aria-label="Close" style={S.closeBtn} onClick={onClose}>
+                <button aria-label={t('common.close', 'Close')} style={S.closeBtn} onClick={onClose}>
                     <FaTimes />
                 </button>
             </div>
@@ -65,102 +65,98 @@ const ChannelAboutPanel = ({
             {/* Tabs */}
             <div style={S.tabs}>
                 <button
-                    aria-label="Action button"
-                    style={{ ...S.tab, ...(tab === 'about' ? S.tabActive : {}) }}
-                    onClick={() => setTab('about')}
+                    aria-label={t('chanAbout.aboutTab', 'About')}
                 >
-                    About
-                </button>
-                <button
-                    aria-label="Action button"
-                    style={{ ...S.tab, ...(tab === 'members' ? S.tabActive : {}) }}
-                    onClick={() => setTab('members')}
+                About
+            </button>
+            <button
+                aria-label={t('chanAbout.membersTab', 'Members')}
                 >
-                    Üyeler
-                </button>
-            </div>
+            {t('chanAbout.members', 'Members')}
+        </button>
+            </div >
 
-            {/* Content */}
-            <div style={S.content}>
-                {tab === 'about' && (
-                    <>
-                        {/* Topic */}
-                        {channel.topic && (
-                            <div style={S.section}>
-                                <span style={S.sectionLabel}>KONU</span>
-                                <p style={S.topicText}>{channel.topic}</p>
+    {/* Content */ }
+    < div style = { S.content } >
+        { tab === 'about' && (
+            <>
+                {/* Topic */}
+                {channel.topic && (
+                    <div style={S.section}>
+                        <span style={S.sectionLabel}>KONU</span>
+                        <p style={S.topicText}>{channel.topic}</p>
+                    </div>
+                )}
+
+                {/* Stats */}
+                <div style={S.section}>
+                    <span style={S.sectionLabel}>INFO</span>
+                    <div style={S.infoGrid}>
+                        {memberCount != null && (
+                            <div style={S.infoItem}>
+                                <FaUsers style={S.infoIcon} />
+                                <span style={S.infoText}>{memberCount} member</span>
                             </div>
                         )}
-
-                        {/* Stats */}
-                        <div style={S.section}>
-                            <span style={S.sectionLabel}>INFO</span>
-                            <div style={S.infoGrid}>
-                                {memberCount != null && (
-                                    <div style={S.infoItem}>
-                                        <FaUsers style={S.infoIcon} />
-                                        <span style={S.infoText}>{memberCount} member</span>
-                                    </div>
-                                )}
-                                {pinnedCount != null && (
-                                    <div style={S.infoItem}>
-                                        <FaThumbtack style={S.infoIcon} />
-                                        <span style={S.infoText}>
-                                            {pinnedCount} pinned messages
-                                        </span>
-                                    </div>
-                                )}
-                                {createdAt && (
-                                    <div style={S.infoItem}>
-                                        <FaCalendar style={S.infoIcon} />
-                                        <span style={S.infoText}>{createdAt}</span>
-                                    </div>
-                                )}
-                                {channel.slow_mode_interval > 0 && (
-                                    <div style={S.infoItem}>
-                                        <FaClock style={S.infoIcon} />
-                                        <span style={S.infoText}>
-                                            Slow mode: {channel.slow_mode_interval}s
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Channel type */}
-                        <div style={S.section}>
-                            <span style={S.sectionLabel}>KANAL TÜRÜ</span>
-                            <div style={S.typeBadge}>
-                                {channelIcon}
-                                <span style={S.typeText}>
-                                    {channel.is_voice
-                                        ? 'Sesli Channel'
-                                        : channel.is_private
-                                          ? t('ui.ozel_channel')
-                                          : channel.is_forum
-                                            ? 'Forum Channel'
-                                            : t('ui.metin_channeli')}
+                        {pinnedCount != null && (
+                            <div style={S.infoItem}>
+                                <FaThumbtack style={S.infoIcon} />
+                                <span style={S.infoText}>
+                                    {pinnedCount} pinned messages
                                 </span>
                             </div>
-                        </div>
-
-                        {/* Notifications */}
-                        <div style={S.section}>
-                            <button
-                                aria-label="on Toggle Mute"
-                                style={S.muteBtn}
-                                onClick={onToggleMute}
-                            >
-                                {isMuted ? <FaBellSlash /> : <FaBell />}
-                                <span>
-                                    {isMuted ? 'Notificationsi Open' : 'Notificationsi Close'}
+                        )}
+                        {createdAt && (
+                            <div style={S.infoItem}>
+                                <FaCalendar style={S.infoIcon} />
+                                <span style={S.infoText}>{createdAt}</span>
+                            </div>
+                        )}
+                        {channel.slow_mode_interval > 0 && (
+                            <div style={S.infoItem}>
+                                <FaClock style={S.infoIcon} />
+                                <span style={S.infoText}>
+                                    Slow mode: {channel.slow_mode_interval}s
                                 </span>
-                            </button>
-                        </div>
-                    </>
-                )}
-            </div>
-        </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Channel type */}
+                <div style={S.section}>
+                    <span style={S.sectionLabel}>{t('chanAbout.channelType', 'CHANNEL TYPE')}</span>
+                    <div style={S.typeBadge}>
+                        {channelIcon}
+                        <span style={S.typeText}>
+                            {channel.is_voice
+                                ? 'Sesli Channel'
+                                : channel.is_private
+                                    ? t('ui.ozel_channel')
+                                    : channel.is_forum
+                                        ? 'Forum Channel'
+                                        : t('ui.metin_channeli')}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Notifications */}
+                <div style={S.section}>
+                    <button
+                        aria-label={t('common.mute', 'Mute')}
+                        style={S.muteBtn}
+                        onClick={onToggleMute}
+                    >
+                        {isMuted ? <FaBellSlash /> : <FaBell />}
+                        <span>
+                            {isMuted ? 'Notificationsi Open' : 'Notificationsi Close'}
+                        </span>
+                    </button>
+                </div>
+            </>
+        )}
+            </div> 
+        </div >
     );
 };
 

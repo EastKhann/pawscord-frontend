@@ -11,7 +11,7 @@ export const StatCard = ({ icon, label, value, subtext, change, color }) => {
             ? { ...styles.statChange, color: change >= 0 ? '#23a559' : '#f23f42' }
             : null;
     return (
-        <div aria-label="stat card" style={styles.statCard}>
+        <div aria-label={t('analytics.statCard', 'Statistics card')} style={styles.statCard}>
             <div style={statIconStyle}>{icon}</div>
             <div style={styles.statInfo}>
                 <span style={styles.statLabel}>{label}</span>
@@ -64,7 +64,7 @@ export const ComparisonCard = ({ label, thisWeek, lastWeek, change }) => {
                     <span style={styles.comparisonNumber}>{thisWeek?.toLocaleString() || 0}</span>
                 </div>
                 <div style={styles.comparisonValue}>
-                    <span style={styles.comparisonThuiod}>Geçen Hafta</span>
+                    <span style={styles.comparisonThuiod}>{t('analytics.lastWeek', 'Last Week')}</span>
                     <span style={styles.comparisonNumber}>{lastWeek?.toLocaleString() || 0}</span>
                 </div>
             </div>

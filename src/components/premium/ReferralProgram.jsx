@@ -72,7 +72,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
         } catch (error) {
             toast.error(
                 error.response?.data?.error ||
-                    t('referral.claimFailed', { defaultValue: 'Failed to claim reward' })
+                t('referral.claimFailed', { defaultValue: 'Failed to claim reward' })
             );
         }
     }, [t]);
@@ -107,7 +107,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                         value={`${PRODUCTION_URL}/join/${referralCode}`}
                         readOnly
                         className="referral-input"
-                        aria-label="Referral link"
+                        aria-label={t('referral.referralLink', 'Referral link')}
                     />
                     <button
                         onClick={copyReferralLink}
@@ -145,10 +145,10 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                         {tier === 'lifetime'
                             ? '∞'
                             : tier === '6months'
-                              ? '6mo'
-                              : tier === '1month'
-                                ? '1mo'
-                                : '0'}
+                                ? '6mo'
+                                : tier === '1month'
+                                    ? '1mo'
+                                    : '0'}
                     </div>
                     <div className="stat-label">
                         {t('referral.premiumEarned', 'Premium Earned')}
@@ -169,7 +169,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                         </div>
                         {referralCount >= 1 && referralCount < 5 && (
                             <button
-                                aria-label="claim Reward"
+                                aria-label={t('referral.claimReward', 'Claim reward')}
                                 onClick={claimReward}
                                 className="claim-btn"
                             >
@@ -187,7 +187,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                         </div>
                         {referralCount >= 5 && referralCount < 10 && (
                             <button
-                                aria-label="claim Reward"
+                                aria-label={t('referral.claimReward', 'Claim reward')}
                                 onClick={claimReward}
                                 className="claim-btn"
                             >
@@ -205,7 +205,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                         </div>
                         {referralCount >= 10 && (
                             <button
-                                aria-label="claim Reward"
+                                aria-label={t('referral.claimReward', 'Claim reward')}
                                 onClick={claimReward}
                                 className="claim-btn"
                             >
@@ -231,10 +231,10 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                     {referralCount >= 10
                         ? t('referral.unlockedLifetime')
                         : referralCount >= 5
-                          ? t('referral.moreForLifetime', { count: 10 - referralCount })
-                          : referralCount >= 1
-                            ? t('referral.moreForSixMonths', { count: 5 - referralCount })
-                            : t('referral.shareToStart')}
+                            ? t('referral.moreForLifetime', { count: 10 - referralCount })
+                            : referralCount >= 1
+                                ? t('referral.moreForSixMonths', { count: 5 - referralCount })
+                                : t('referral.shareToStart')}
                 </p>
             </div>
 
@@ -254,7 +254,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                 <h3>{t('referral.shareOn')}</h3>
                 <div className="share-buttons">
                     <button
-                        aria-label="button"
+                        aria-label={t('referral.shareFacebook', 'Share on Facebook')}
                         onClick={() =>
                             window.open(
                                 `https://www.facebook.com/sharer/sharer.php?u=${PRODUCTION_URL}/join/${referralCode}`,
@@ -266,7 +266,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                         📘 Facebook
                     </button>
                     <button
-                        aria-label="button"
+                        aria-label={t('referral.shareReddit', 'Share on Reddit')}
                         onClick={() =>
                             window.open(
                                 `https://www.reddit.com/submit?url=${PRODUCTION_URL}/join/${referralCode}&title=Check out Pawscord!`,
@@ -278,7 +278,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                         🤖 Reddit
                     </button>
                     <button
-                        aria-label="button"
+                        aria-label={t('referral.shareWhatsApp', 'Share on WhatsApp')}
                         onClick={() =>
                             window.open(
                                 `https://wa.me/?text=Join me on Pawscord! ${PRODUCTION_URL}/join/${referralCode}`,
@@ -290,7 +290,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                         💬 WhatsApp
                     </button>
                     <button
-                        aria-label="button"
+                        aria-label={t('referral.shareTelegram', 'Share on Telegram')}
                         onClick={() =>
                             window.open(
                                 `https://t.me/share/url?url=${PRODUCTION_URL}/join/${referralCode}&text=Check out Pawscord!`,

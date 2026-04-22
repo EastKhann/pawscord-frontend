@@ -39,7 +39,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
                         </p>
                     </div>
                     <button
-                        aria-label="on Close"
+                        aria-label={t('common.close', 'Close')}
                         onClick={onClose}
                         style={styles.closeBtn}
                         onMouseEnter={(e) => {

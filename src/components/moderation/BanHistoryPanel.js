@@ -176,7 +176,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
         if (appeal === 'approved' || status === 'appealed') {
             return (
                 <span className="status-badge appealed">
-                    <FaUserCheck /> İtiraz Onaylandı
+                    <FaUserCheck /> {t('ban.appealApproved', 'Appeal Approved')}
                 </span>
             );
         }
@@ -190,7 +190,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
             case 'expired':
                 return (
                     <span className="status-badge expired">
-                        <FaClock /> Süresi Dolmuş
+                        <FaClock /> {t('ban.expired', 'Expired')}
                     </span>
                 );
             default:
@@ -201,9 +201,9 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
     const getAppealBadge = (status) => {
         if (!status) return null;
         const badges = {
-            pending: <span className="appeal-badge pending">İtiraz Bekliyor</span>,
-            approved: <span className="appeal-badge approved">İtiraz Onaylandı</span>,
-            denied: <span className="appeal-badge denied">İtiraz Reddedildi</span>,
+            pending: <span className="appeal-badge pending">{t('ban.appealPending', 'Appeal Pending')}</span>,
+            approved: <span className="appeal-badge approved">{t('ban.appealApproved', 'Appeal Approved')}</span>,
+            denied: <span className="appeal-badge denied">{t('ban.appealDenied', 'Appeal Denied')}</span>,
         };
         return badges[status];
     };
@@ -223,7 +223,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
             className="banhistory-overlay"
             role="button"
             tabIndex={-1}
-            aria-label="Close"
+            aria-label={t('common.close', 'Close')}
             onClick={(e) => e.target.className === 'banhistory-overlay' && onClose()}
             onKeyDown={handleKeyDown}
         >
@@ -235,10 +235,10 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
             >
                 <div className="panel-header">
                     <h2>
-                        <FaBan /> Ban Geçmişi
+                        <FaBan /> {t('ban.history', 'Ban History')}
                     </h2>
                     <span className="server-name">{serverName}</span>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -276,7 +276,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                         onKeyDown={(e) => handleStatKey(e, 'expired')}
                     >
                         <span className="stat-value">{stats.expired}</span>
-                        <span className="stat-label">Süresi Dolmuş</span>
+                        <span className="stat-label">{t('admin.expired', 'Expired')}</span>
                     </div>
                     <div
                         className="stat-item appealed"
@@ -287,7 +287,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                         onKeyDown={(e) => handleStatKey(e, 'appealed')}
                     >
                         <span className="stat-value">{stats.appealed}</span>
-                        <span className="stat-label">İtiraz Onaylandı</span>
+                        <span className="stat-label">{t('ban.appealApproved', 'Appeal Approved')}</span>
                     </div>
                 </div>
 
@@ -303,21 +303,21 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                         />
                     </div>
                     <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-                        <option value="all">Tüm Yasaklar</option>
+                        <option value="all">{t('ban.allBans', 'All Bans')}</option>
                         <option value="active">Aktif</option>
-                        <option value="expired">Süresi Dolmuş</option>
-                        <option value="appealed">İtiraz Onaylandı</option>
+                        <option value="expired">{t('admin.expired', 'Expired')}</option>
+                        <option value="appealed">{t('ban.appealApproved', 'Appeal Approved')}</option>
                     </select>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                         <option value="newest">En Yeni</option>
                         <option value="oldest">En Eski</option>
                     </select>
                     <button
-                        aria-label="handle Export"
+                        aria-label={t('common.export', 'Export')}
                         className="export-btn"
                         onClick={handleExport}
                     >
-                        <FaDownload /> Dışa Aktar
+                        <FaDownload /> {t('common.export', 'Export')}
                     </button>
                 </div>
 
@@ -328,7 +328,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                     ) : filteredBans.length === 0 ? (
                         <div className="empty-state">
                             <FaUserSlash />
-                            <p>Ban kaydı bulunamadı</p>
+                            <p>{t('ban.noRecords', 'No ban records found')}</p>
                         </div>
                     ) : (
                         filteredBans.map((ban) => (
@@ -375,7 +375,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                                         <FaCalendar />
                                         <span>{formatDate(ban.banned_at)}</span>
                                     </div>
-                                    <button aria-label="Action button" className="expand-btn">
+                                    <button aria-label={expandedBan === ban.id ? t('common.collapse', 'Collapse') : t('common.expand', 'Expand')} className="expand-btn">
                                         {expandedBan === ban.id ? (
                                             <FaChevronUp />
                                         ) : (
@@ -392,7 +392,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                                         </div>
                                         {ban.expires_at && (
                                             <div className="detail-row">
-                                                <span className="label">Bitiş Tarihi:</span>
+                                                <span className="label">{t('ban.endDate', 'End Date:')}</span>
                                                 <span className="value">
                                                     {formatDate(ban.expires_at)}
                                                 </span>
@@ -400,7 +400,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                                         )}
                                         {ban.unbanned_at && (
                                             <div className="detail-row">
-                                                <span className="label">Yasak Kaldırıldı:</span>
+                                                <span className="label">{t('ban.removedDate', 'Ban Removed:')}</span>
                                                 <span className="value">
                                                     {formatDate(ban.unbanned_at)}
                                                 </span>
@@ -415,11 +415,11 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                                         {ban.status === 'active' && (
                                             <div className="detail-actions">
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('ban.removeBan', 'Remove ban')}
                                                     className="unban-btn"
                                                     onClick={() => handleUnban(ban)}
                                                 >
-                                                    <FaUndo /> Yasağı Kaldır
+                                                    <FaUndo /> {t('ban.removeBan', 'Remove Ban')}
                                                 </button>
                                             </div>
                                         )}

@@ -45,7 +45,7 @@ class RateLimiter {
     checkLimit(action, userId = 'default') {
         const limit = this.limits[action];
         if (!limit) {
-            logger.warn(`⚠️ [RateLimiter] Limit tanımlı değil: ${action}`);
+            logger.warn(`⚠️ [RateLimiter] Limit not defined: ${action}`);
             return { allowed: true, remaining: Infinity, resetIn: 0 };
         }
 
@@ -149,7 +149,7 @@ export const withRateLimit = (action, callback, userId) => {
     }
 
     if (remaining <= 2) {
-        logger.warn(`⚠️ [RateLimiter] ${action} limit yaklaşıyor (kalan: ${remaining})`);
+        logger.warn(`⚠️ [RateLimiter] ${action} limit approaching (remaining: ${remaining})`);
     }
 
     callback();

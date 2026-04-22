@@ -1,6 +1,7 @@
 ﻿import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import styles from './styles';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 // -- dynamic style helpers (pass 2) --
 const _st1124 = styles.pieColor;
@@ -13,11 +14,12 @@ export const formatNumber = (num) => {
     if (num === undefined || num === null) return '0';
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
     if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    const { t } = useTranslation();
     return num.toLocaleString();
 };
 
 export const StatCard = ({ icon, label, value, color, subtitle }) => (
-    <div aria-label="helpers" style={{ ...styles.statCard, borderTop: `3px solid ${color}` }}>
+    <div aria-label={t('admin.statsCard', 'Statistics card')} style={{ ...styles.statCard, borderTop: `3px solid ${color}` }}>
         <div style={getStatIconStyle(color)}>{icon}</div>
         <div style={styles.statContent}>
             <div style={styles.statLabel}>{label}</div>

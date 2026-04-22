@@ -123,32 +123,32 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
             >
                 <div className="portal-header">
                     <h2>
-                        <FaRobot /> Bot Geliştirici Portalı
+                        <FaRobot /> {t('bot.developerPortal', 'Bot Developer Portal')}
                     </h2>
                     <div className="header-actions">
                         <button
-                            aria-label="handle View List"
+                            aria-label={t('bot.myBots', 'My bots')}
                             className={`nav-btn ${view === 'list' ? 'active' : ''}`}
                             onClick={handleViewList}
                         >
-                            <FaRobot /> My Bots
+                            <FaRobot /> {t('bot.myBots', 'My Bots')}
                         </button>
                         <button
-                            aria-label="handle View Create"
+                            aria-label={t('bot.createNew', 'Create new bot')}
                             className={`nav-btn ${view === 'create' ? 'active' : ''}`}
                             onClick={handleViewCreate}
                         >
-                            <FaPlus /> Yeni Bot
+                            <FaPlus /> {t('bot.createNew', 'New Bot')}
                         </button>
                         <button
-                            aria-label="handle View Docs"
+                            aria-label={t('bot.documentation', 'Documentation')}
                             className={`nav-btn ${view === 'docs' ? 'active' : ''}`}
                             onClick={handleViewDocs}
                         >
-                            <FaBook /> Documentation
+                            <FaBook /> {t('bot.documentation', 'Documentation')}
                         </button>
                     </div>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -175,16 +175,16 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                         className={`bot-status ${bot.status || 'offline'}`}
                                                     >
                                                         {bot.status === 'online'
-                                                            ? '🟢 Çevrimiçi'
-                                                            : '🔴 Çevrimdışı'}
+                                                            ? t('bot.online', '🟢 Online')
+                                                            : t('bot.offline', '🔴 Offline')}
                                                     </span>
                                                 </div>
                                                 <div className="bot-actions">
                                                     <button
                                                         aria-label={
                                                             bot.status === 'online'
-                                                                ? 'Botu durdur'
-                                                                : 'Botu başlat'
+                                                                ? t('bot.stopBot', 'Stop Bot')
+                                                                : t('bot.startBot', 'Start Bot')
                                                         }
                                                         className="action-btn"
                                                         onClick={() =>
@@ -195,8 +195,8 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                         }
                                                         title={
                                                             bot.status === 'online'
-                                                                ? 'Durdur'
-                                                                : 'Başlat'
+                                                                ? t('bot.stop', 'Stop')
+                                                                : t('bot.start', 'Start')
                                                         }
                                                     >
                                                         {bot.status === 'online' ? (
@@ -206,7 +206,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                         )}
                                                     </button>
                                                     <button
-                                                        aria-label="Botu düzenle"
+                                                        aria-label={t('bot.editBot', 'Edit Bot')}
                                                         className="action-btn"
                                                         onClick={() => editBot(bot)}
                                                         title={t('common.edit')}
@@ -214,7 +214,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                         <FaEdit />
                                                     </button>
                                                     <button
-                                                        aria-label="Botu sil"
+                                                        aria-label={t('common.delete', 'Delete')}
                                                         className="action-btn delete"
                                                         onClick={() => handleDeleteBot(bot.id)}
                                                         title={t('common.delete')}
@@ -243,14 +243,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                 <div className="token-header">
                                                     <FaKey /> Token
                                                     <button
-                                                        aria-label="Action button"
-                                                        className="toggle-token"
-                                                        onClick={() =>
-                                                            setShowToken({
-                                                                ...showToken,
-                                                                [bot.id]: !showToken[bot.id],
-                                                            })
-                                                        }
+                                                        aria-label={showToken[bot.id] ? t('bot.hideToken', 'Hide token') : t('bot.showToken', 'Show token')}
                                                     >
                                                         {showToken[bot.id] ? (
                                                             <FaEyeSlash />
@@ -264,35 +257,33 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                         {showToken[bot.id] ? bot.token : ''}
                                                     </code>
                                                     <button
-                                                        aria-label="Action button"
-                                                        className="copy-btn"
-                                                        onClick={() => copyToClipboard(bot.token)}
+                                                        aria-label={t('common.copy', 'Copy')}
                                                     >
                                                         <FaCopy />
                                                     </button>
                                                 </div>
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('bot.regenerateToken', 'Regenerate token')}
                                                     className="regenerate-btn"
                                                     onClick={() => handleRegenerateToken(bot.id)}
                                                 >
-                                                    <FaSync /> Token Refresh
+                                                    <FaSync /> {t('bot.tokenRefresh', 'Token Refresh')}
                                                 </button>
                                             </div>
 
                                             <div className="bot-footer">
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('bot.addWebhook', 'Add webhook')}
                                                     className="webhook-btn"
                                                     onClick={() => {
                                                         setSelectedBot(bot);
                                                         setShowWebhookForm(true);
                                                     }}
                                                 >
-                                                    <FaLink /> Webhook Add
+                                                    <FaLink /> {t('bot.webhookAdd', 'Add Webhook')}
                                                 </button>
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('bot.viewAnalytics', 'View analytics')}
                                                     className="analytics-btn"
                                                     onClick={() => {
                                                         setSelectedBot(bot);
@@ -308,12 +299,12 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                             ) : (
                                 <div className="no-bots">
                                     <FaRobot className="empty-icon" />
-                                    <p>Henüz bot oluştturmadınız</p>
+                                    <p>{t('bot.noBotsYet', 'You have not created any bots yet')}</p>
                                     <button
-                                        aria-label="handle View Create No Reset"
+                                        aria-label={t('bot.noBotsBack', 'View bot list')}
                                         onClick={handleViewCreateNoReset}
                                     >
-                                        <FaPlus /> İlk botunuzu oluşturun
+                                        <FaPlus /> {t('bot.createFirstBot', 'Create your first bot')}
                                     </button>
                                 </div>
                             )}
@@ -323,28 +314,28 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                     {/* Create/Edit Bot View */}
                     {(view === 'create' || view === 'edit') && (
                         <div className="bot-form-view">
-                            <h3>{view === 'create' ? '🤖 Yeni Bot Create' : '✏️ Bot Edit'}</h3>
+                            <h3>{view === 'create' ? '🤖 ' + t('bot.createNew', 'New Bot') : '✏️ ' + t('bot.editBot', 'Edit Bot')}</h3>
 
                             <div className="form-group">
                                 <label>Bot Name *</label>
                                 <input
                                     type="text"
-                                    placeholder="Harika Bot"
+                                    placeholder={t('bot.namePlaceholder', 'My Awesome Bot')}
                                     value={botForm.name}
                                     onChange={handleFormName}
                                     maxLength={32}
-                                    aria-label="Harika Bot"
+                                    aria-label={t('bot.botName', 'Bot Name')}
                                 />
                             </div>
 
                             <div className="form-group">
                                 <label>Description</label>
                                 <textarea
-                                    placeholder="Bu bot ne yapar?"
+                                    placeholder={t('bot.descriptionPlaceholder', 'What does this bot do?')}
                                     value={botForm.description}
                                     onChange={handleFormDescription}
                                     rows={3}
-                                    aria-label="Bu bot ne yapar?"
+                                    aria-label={t('bot.description', 'Description')}
                                 />
                             </div>
 
@@ -352,27 +343,27 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                 <label>Avatar URL</label>
                                 <input
                                     type="text"
-                                    placeholder="https://..."
+                                    placeholder={t('botDeveloper.callbackUrl', 'https://...')}
                                     value={botForm.avatar_url}
                                     onChange={handleFormAvatar}
-                                    aria-label="https://..."
+                                    aria-label={t('bot.avatarUrl', 'Avatar URL')}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label>Komut Öneki</label>
+                                <label>{t('bot.commandPrefix', 'Command Prefix')}</label>
                                 <input
                                     type="text"
-                                    placeholder="!"
+                                    placeholder={t('bot.prefixPlaceholder', '!')}
                                     value={botForm.prefix}
                                     onChange={handleFormPrefix}
                                     maxLength={5}
-                                    aria-label="!"
+                                    aria-label={t('bot.commandPrefix', 'Command Prefix')}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label>Bot İzinleri (Niyet)</label>
+                                <label>{t('bot.permissions', 'Bot Permissions (Intent)')}</label>
                                 <div className="intents-grid">
                                     {Object.entries(botForm.intents).map(([intent, enabled]) => (
                                         <label key={intent} className="intent-checkbox">
@@ -403,27 +394,27 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                         type="checkbox"
                                         checked={botForm.is_public}
                                         onChange={handleFormPublic}
-                                        aria-label="checkbox"
+                                        aria-label={t('bot.makePublic', 'Make bot public')}
                                     />
-                                    <span>Botu herkese açık yap (keşfedilebilir)</span>
+                                    <span>{t('bot.makePublic', 'Make bot public (discoverable)')}</span>
                                 </label>
                             </div>
 
                             <div className="form-actions">
                                 <button
-                                    aria-label="view create handle Create Bot handle Update Bot"
+                                    aria-label={view === 'create' ? t('bot.createBot', 'Create Bot') : t('common.save')}
                                     className="submit-btn"
                                     onClick={view === 'create' ? handleCreateBot : handleUpdateBot}
                                 >
                                     <FaRocket />{' '}
-                                    {view === 'create' ? 'Bot Create' : t('common.save')}
+                                    {view === 'create' ? t('bot.createBot', 'Create Bot') : t('common.save')}
                                 </button>
                                 <button
-                                    aria-label="handle View List"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-btn"
                                     onClick={handleViewList}
                                 >
-                                    Cancel
+                                    {t('common.cancel', 'Cancel')}
                                 </button>
                             </div>
                         </div>
@@ -433,11 +424,11 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                     {view === 'analytics' && selectedBot && (
                         <div className="analytics-view">
                             <button
-                                aria-label="handle View List"
+                                aria-label={t('common.back', 'Back')}
                                 className="back-btn"
                                 onClick={handleViewList}
                             >
-                                ← Geri
+                                ← {t('common.back', 'Back')}
                             </button>
                             <h3>📊 {selectedBot.name} - Analytics</h3>
 
@@ -452,26 +443,26 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                     <div className="analytics-value">
                                         {selectedBot.users_count || 0}
                                     </div>
-                                    <div className="analytics-label">Toplam Kullanıcı</div>
+                                    <div className="analytics-label">{t('bot.totalUsers', 'Total Users')}</div>
                                 </div>
                                 <div className="analytics-card">
                                     <div className="analytics-value">
                                         {selectedBot.commands_used || 0}
                                     </div>
-                                    <div className="analytics-label">Komut Kullanımı</div>
+                                    <div className="analytics-label">{t('bot.commandUsage', 'Command Usage')}</div>
                                 </div>
                                 <div className="analytics-card">
                                     <div className="analytics-value">
                                         {selectedBot.messages_sent || 0}
                                     </div>
-                                    <div className="analytics-label">Gönderilen Mesaj</div>
+                                    <div className="analytics-label">{t('bot.messagesSent', 'Messages Sent')}</div>
                                 </div>
                             </div>
 
                             <div className="analytics-chart-placeholder analytics-chart-placeholder pad-20">
-                                <h4 style={S.txt}>📈 Haftalık Kullanım</h4>
+                                <h4 style={S.txt}>{t('bot.weeklyUsage', '📈 Weekly Usage')}</h4>
                                 <div style={S.flex}>
-                                    {['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'].map(
+                                    {t('bot.daysShort', { returnObjects: true, defaultValue: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] }).map(
                                         (day, i) => {
                                             const val = Math.max(
                                                 10,
@@ -480,7 +471,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                         (0.3 +
                                                             Math.sin(i * 1.2) * 0.5 +
                                                             Math.random() * 0.2)) /
-                                                        7
+                                                    7
                                                 )
                                             );
                                             const maxVal = (selectedBot.commands_used || 50) / 4;
@@ -521,17 +512,17 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                     <div className="webhook-modal-overlay">
                         <div className="webhook-modal">
                             <h3>
-                                <FaLink /> Webhook Oluştur
+                                <FaLink /> {t('bot.createWebhook', 'Create Webhook')}
                             </h3>
 
                             <div className="form-group">
                                 <label>Webhook URL *</label>
                                 <input
                                     type="text"
-                                    placeholder="https://your-server.com/webhook"
+                                    placeholder={t('bot.webhookUrlPlaceholder', 'https://your-server.com/webhook')}
                                     value={webhookUrl}
                                     onChange={handleWebhookUrlChange}
-                                    aria-label="https://your-server.com/webhook"
+                                    aria-label={t('bot.webhookUrl', 'Webhook URL')}
                                 />
                             </div>
 
@@ -564,18 +555,18 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
 
                             <div className="modal-actions">
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('bot.createWebhook', 'Create Webhook')}
                                     className="submit-btn"
                                     onClick={() => handleCreateWebhook(selectedBot.id)}
                                 >
-                                    Webhook Create
+                                    {t('bot.createWebhook', 'Create Webhook')}
                                 </button>
                                 <button
-                                    aria-label="handle Close Webhook Form"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-btn"
                                     onClick={handleCloseWebhookForm}
                                 >
-                                    Cancel
+                                    {t('common.cancel', 'Cancel')}
                                 </button>
                             </div>
                         </div>

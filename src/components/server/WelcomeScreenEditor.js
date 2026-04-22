@@ -10,10 +10,12 @@ import { useState, memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { FaEdit, FaPlus, FaTrash, FaHashtag, FaGripVertical, FaSave, FaEye } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const EMOJI_PRESETS = ['👋', '📢', '📖', '🎮', '💬', '🎵', '🎨', '📌', '🔧', '', '🚀', ''];
 
 const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave }) => {
+    const { t } = useTranslation();
     const [description, setDescription] = useState(
         initialConfig?.description || `${serverName} Welcome!`
     );
@@ -88,12 +90,10 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
                 </div>
 
                 <button
-                    aria-label="Action button"
-                    type="button"
-                    style={S.backBtn}
+                    aria-label={t('welcomeEditor.backToEdit', 'Back to edit')}
                     onClick={() => setPreview(false)}
                 >
-                    <FaEdit /> Düzenlemeye Dön
+                    <FaEdit /> {t('welcomeEditor.backToEdit', 'Back to Edit')}
                 </button>
             </div>
         );
@@ -102,27 +102,25 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
     return (
         <div style={S.container}>
             <div style={S.headerRow}>
-                <h3 style={S.title}>Hoş Geldin Ekranı</h3>
+                <h3 style={S.title}>{t('welcomeEditor.title', 'Welcome Screen')}</h3>
 
                 <button
-                    aria-label="Action button"
-                    type="button"
-                    style={S.previewBtn}
+                    aria-label={t('welcomeEditor.preview', 'Preview welcome screen')}
                     onClick={() => setPreview(true)}
                 >
-                    <FaEye /> Önizleme
+                    <FaEye /> {t('common.preview', 'Preview')}
                 </button>
             </div>
 
             {/* Description */}
 
             <div style={S.field}>
-                <label style={S.label}>Açıklama</label>
+                <label style={S.label}>{t('common.description', 'Description')}</label>
 
                 <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Sunucu açıklaması..."
+                    placeholder={t('server.descriptionPlaceholder', 'Server description...')}
                     style={S.textarea}
                     maxLength={300}
                     rows={2}
@@ -134,7 +132,7 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
             {/* Welcome Channels */}
 
             <div style={S.field}>
-                <label style={S.label}>Önerilen Kanallar ({welcomeChannels.length}/5)</label>
+                <label style={S.label}>{t('welcomeEditor.suggestedChannels', 'Suggested Channels ({count}/5)', { count: welcomeChannels.length })}</label>
 
                 {welcomeChannels.map((wc, i) => (
                     <div key={`item-${i}`} style={S.channelRow}>
@@ -157,7 +155,7 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
                             value={wc.channelId || ''}
                             onChange={(e) => updateChannel(i, 'channelId', e.target.value || null)}
                         >
-                            <option value="">Kanal seç...</option>
+                            <option value="">{t('giveaway.selectChannel', 'Select Channel')}</option>
 
                             {channels.map((c) => (
                                 <option key={c.id} value={c.id}>
@@ -170,16 +168,14 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
                             type="text"
                             value={wc.description}
                             onChange={(e) => updateChannel(i, 'description', e.target.value)}
-                            placeholder="Kanal açıklaması"
+                            placeholder={t('channel.descriptionPlaceholder', 'Channel description')}
                             style={S.descInput}
                             maxLength={50}
-                            aria-label="Description"
+                            aria-label={t('welcomeEditor.channelDescription', 'Channel description')}
                         />
 
                         <button
-                            aria-label="Action button"
-                            type="button"
-                            style={S.removeBtn}
+                            aria-label={t('welcomeEditor.removeChannel', 'Remove channel')}
                             onClick={() => removeChannel(i)}
                         >
                             <FaTrash className="fs-12" />
@@ -189,7 +185,7 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
 
                 {welcomeChannels.length < 5 && (
                     <button
-                        aria-label="add Channel"
+                        aria-label={t('welcomeEditor.addChannel', 'Add channel')}
                         type="button"
                         style={S.addBtn}
                         onClick={addChannel}
@@ -199,7 +195,7 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
                 )}
             </div>
 
-            <button aria-label="handle Save" type="button" style={S.saveBtn} onClick={handleSave}>
+            <button aria-label={t('welcomeEditor.save', 'Save welcome screen')} type="button" style={S.saveBtn} onClick={handleSave}>
                 <FaSave /> Save
             </button>
         </div>

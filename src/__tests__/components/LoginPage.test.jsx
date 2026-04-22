@@ -63,7 +63,7 @@ const MockLoginPage = ({
                         <input
                             data-testid="username-input"
                             type="text"
-                            placeholder="User Adı"
+                            placeholder="Username"
                             value={formData.username}
                             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                             required
@@ -89,7 +89,7 @@ const MockLoginPage = ({
                         <input
                             data-testid="password-input"
                             type="password"
-                            placeholder="Şifre"
+                            placeholder="Password"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             required
@@ -102,7 +102,7 @@ const MockLoginPage = ({
                         className="submit-btn"
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Loading...' : isLoginMode ? 'Log In' : 'Kayıt Ol'}
+                        {isLoading ? 'Loading...' : isLoginMode ? 'Log In' : 'Sign Up'}
                     </button>
                 </form>
 
@@ -110,7 +110,7 @@ const MockLoginPage = ({
                 {isLoginMode && (
                     <div data-testid="forgot-password-container">
                         <a data-testid="forgot-password-link" href="#/forgot-password">
-                            Şifremi Unuttum?
+                            Forgot Password?
                         </a>
                     </div>
                 )}
@@ -132,7 +132,7 @@ const MockLoginPage = ({
 
                 {/* Toggle Mode */}
                 <div data-testid="toggle-mode" className="toggle-mode">
-                    {isLoginMode ? 'Hesabın yok mu? ' : 'Zaten üye misin? '}
+                    {isLoginMode ? 'No account? ' : 'Already a member? '}
                     <span
                         data-testid="toggle-button"
                         role="button"
@@ -142,7 +142,7 @@ const MockLoginPage = ({
                             setAuthError('');
                         }}
                     >
-                        {isLoginMode ? 'Kayıt Ol' : 'Log In'}
+                        {isLoginMode ? 'Sign Up' : 'Log In'}
                     </span>
                 </div>
             </div>
@@ -255,7 +255,7 @@ describe('LoginPage Component', () => {
 
             expect(screen.getByTestId('subtitle')).toHaveTextContent('Join us!');
             expect(screen.getByTestId('email-input')).toBeInTheDocument();
-            expect(screen.getByTestId('submit-button')).toHaveTextContent('Kayıt Ol');
+            expect(screen.getByTestId('submit-button')).toHaveTextContent('Sign Up');
         });
 
         it('should switch back to login mode', () => {
@@ -383,10 +383,10 @@ describe('LoginPage Component', () => {
                     onLogin={mockOnLogin}
                     onRegister={mockOnRegister}
                     setAuthError={mockSetAuthError}
-                    error="Hatalı şifre!"
+                    error="Incorrect password!"
                 />
             );
-            expect(screen.getByTestId('error-message')).toHaveTextContent('Hatalı şifre!');
+            expect(screen.getByTestId('error-message')).toHaveTextContent('Incorrect password!');
         });
 
         it('should NOT display error when none exists', () => {

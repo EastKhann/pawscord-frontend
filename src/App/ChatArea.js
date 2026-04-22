@@ -1,10 +1,10 @@
-﻿/**
- * 💬 ChatArea — Main chat rendering section
+/**
+ * ?? ChatArea � Main chat rendering section
  * Extracted from App.js: header, message list, drag overlay, input container
  */
 import React, { Suspense, memo, useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FaBell, FaUsers, FaSearch } from 'react-icons/fa';
+import { FaBell, FaUsers, FaSearch, FaEllipsisV } from 'react-icons/fa';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import ScrollToBottomButton from '../components/chat/ScrollToBottomButton';
 import MessageDateDivider from '../components/chat/MessageDateDivider';
@@ -132,7 +132,7 @@ const ChatArea = memo(function ChatArea({
     // Stable callback references
     const handleDragOver = useCallback((e) => e.preventDefault(), []);
 
-    // ── Faz 2.4: New-message unread counter (shown on scroll-to-bottom FAB) ──
+    // -- Faz 2.4: New-message unread counter (shown on scroll-to-bottom FAB) --
     const [newMsgCount, setNewMsgCount] = useState(0);
     const prevMsgCountRef = useRef(optimizedMessages.length);
     useEffect(() => {
@@ -147,7 +147,7 @@ const ChatArea = memo(function ChatArea({
         if (!showScrollToBottom) setNewMsgCount(0);
     }, [showScrollToBottom]);
 
-    // ── Faz 4.1: Pull-to-refresh (mobile) ──
+    // -- Faz 4.1: Pull-to-refresh (mobile) --
     const [pullDistance, setPullDistance] = useState(0);
     const [isPullRefreshing, setIsPullRefreshing] = useState(false);
     const pullStartYRef = useRef(-1);
@@ -184,14 +184,14 @@ const ChatArea = memo(function ChatArea({
         pullStartYRef.current = -1;
     }, [pullDistance, hasMoreMessages, messageHistoryLoading, messageHandlers]);
 
-    // ── Faz 4.1: Keyboard-aware scroll (mobile virtual keyboard opens) ──
+    // -- Faz 4.1: Keyboard-aware scroll (mobile virtual keyboard opens) --
     useEffect(() => {
         if (!isMobile || typeof window === 'undefined' || !window.visualViewport) return;
         let prevH = window.visualViewport.height;
         const handleViewportResize = () => {
             const newH = window.visualViewport.height;
             if (newH < prevH - 80) {
-                // Keyboard appeared — scroll message list to bottom
+                // Keyboard appeared � scroll message list to bottom
                 setTimeout(() => scrollToBottom('smooth'), 120);
             }
             prevH = newH;
@@ -501,12 +501,12 @@ const ChatArea = memo(function ChatArea({
                 <div>
                     {isMobile && !isLeftSidebarVisible && (
                         <button onClick={handleOpenLeftSidebar} style={_st1056}>
-                            ☰
+                            ?
                         </button>
                     )}
                     {isMobile && (activeChat.type === 'dm' || activeChat.type === 'room') && (
                         <button onClick={handleBackToWelcome} style={_st1057}>
-                            ←
+                            ?
                         </button>
                     )}
                     <h2
@@ -616,7 +616,7 @@ const ChatArea = memo(function ChatArea({
                             aria-label={t('chat.moreOptions')}
                             aria-expanded={!!modals.toolbarMenu}
                         >
-                            ⋮
+                            <FaEllipsisV />
                         </button>
                         {modals.toolbarMenu && (
                             <ToolbarMenu
@@ -643,7 +643,7 @@ const ChatArea = memo(function ChatArea({
                         <button
                             onClick={handleOpenRightSidebar}
                             style={_st1056}
-                            aria-label="Üyeler panelini aç"
+                            aria-label={t('nav.openMembersPanel', 'Open members panel')}
                         >
                             <FaUsers />
                         </button>
@@ -661,7 +661,7 @@ const ChatArea = memo(function ChatArea({
                 role="log"
                 aria-live="polite"
                 aria-relevant="additions"
-                aria-label="Mesaj listesi"
+                aria-label={t('nav.messageList', 'Message list')}
                 onTouchStart={handleMsgBoxTouchStart}
                 onTouchMove={handleMsgBoxTouchMove}
                 onTouchEnd={handleMsgBoxTouchEnd}
@@ -686,13 +686,23 @@ const ChatArea = memo(function ChatArea({
                     {messageHistoryLoading && optimizedMessages.length === 0 ? (
                         <MessageSkeleton count={6} />
                     ) : optimizedMessages.length === 0 && !messageHistoryLoading ? (
-                        /* Empty state */
+                        /* Empty state — context-aware for DM vs channel */
                         <div className="chat-empty-state">
                             <div className="chat-empty-icon-ring">
-                                <span>🐾</span>
+                                <span role="img" aria-label={activeChat.type === 'dm' ? 'direct message' : 'paw'}>
+                                    {activeChat.type === 'dm' ? '💬' : '🐾'}
+                                </span>
                             </div>
-                            <div className="chat-empty-title">{t('chat.welcomeTitle')}</div>
-                            <div className="chat-empty-subtitle">{t('chat.welcomeSubtitle')}</div>
+                            <div className="chat-empty-title">
+                                {activeChat.type === 'dm'
+                                    ? t('chat.dmWelcomeTitle', 'Start a conversation')
+                                    : t('chat.welcomeTitle')}
+                            </div>
+                            <div className="chat-empty-subtitle">
+                                {activeChat.type === 'dm'
+                                    ? t('chat.dmWelcomeSubtitle', 'Say hello to {{name}}! 👋', { name: chatTitle })
+                                    : t('chat.welcomeSubtitle')}
+                            </div>
                         </div>
                     ) : optimizedMessages.length > 50 ? (
                         <VirtualMessageList
@@ -724,7 +734,7 @@ const ChatArea = memo(function ChatArea({
             {/* DRAG OVERLAY */}
             {fileUpload.isDragging && (
                 <div className="chat-drop-overlay">
-                    <div className="chat-drop-icon">📁</div>
+                    <div className="chat-drop-icon" role="img" aria-hidden="true">📁</div>
                     <div className="chat-drop-title">{t('chat.dropFilesHere')}</div>
                     <div className="chat-drop-sub">{t('chat.dropFilesDesc')}</div>
                 </div>

@@ -91,9 +91,9 @@ const ModeratorTools = ({ onClose, fetchWithAuth, apiBaseUrl, roomSlug, serverId
             >
                 <div style={styles.header}>
                     <h2 style={styles.title}>
-                        <FaUserShield /> Moderator Searchçları
+                        <FaUserShield /> {t('moderation.moderatorTools', 'Moderator Tools')}
                     </h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -105,13 +105,13 @@ const ModeratorTools = ({ onClose, fetchWithAuth, apiBaseUrl, roomSlug, serverId
                         </h3>
                         <input
                             type="text"
-                            placeholder="Kullanıcı Adı"
+                            placeholder={t('common.username', 'Username')}
                             value={selectedUser}
                             onChange={(e) => setSelectedUser(e.target.value)}
                             style={styles.input}
                         />
                         <textarea
-                            placeholder="Banma sebebi"
+                            placeholder={t('moderation.banReason', 'Ban reason')}
                             value={banReason}
                             onChange={(e) => setBanReason(e.target.value)}
                             style={textAreaStyle}
@@ -122,13 +122,13 @@ const ModeratorTools = ({ onClose, fetchWithAuth, apiBaseUrl, roomSlug, serverId
                             style={styles.select}
                         >
                             <option value="1h">1 Saat</option>
-                            <option value="1d">1 Gün</option>
-                            <option value="7d">7 Gün</option>
-                            <option value="30d">30 Gün</option>
-                            <option value="permanent">Kalıcı</option>
+                            <option value="1d">{t('moderation.days1', '1 Day')}</option>
+                            <option value="7d">{t('moderation.days7', '7 Days')}</option>
+                            <option value="30d">{t('moderation.days30', '30 Days')}</option>
+                            <option value="permanent">{t('moderation.permanent', 'Permanent')}</option>
                         </select>
                         <button
-                            aria-label="handle Ban User"
+                            aria-label={t('modTools.banUser', 'Ban user')}
                             onClick={handleBanUser}
                             disabled={loading}
                             style={styles.banButton}
@@ -138,22 +138,22 @@ const ModeratorTools = ({ onClose, fetchWithAuth, apiBaseUrl, roomSlug, serverId
                     </div>
 
                     <div style={styles.section}>
-                        <h3 style={styles.sectionTitle}>📝 Modüratör Notu Ekle</h3>
+                        <h3 style={styles.sectionTitle}>{t('moderation.addNote', '📝 Add Moderator Note')}</h3>
                         <input
                             type="text"
-                            placeholder="Kullanıcı Adı"
+                            placeholder={t('common.username', 'Username')}
                             value={selectedUser}
                             onChange={(e) => setSelectedUser(e.target.value)}
                             style={styles.input}
                         />
                         <textarea
-                            placeholder="Modüratör notu"
+                            placeholder={t('moderation.moderatorNote', 'Moderator note')}
                             value={moderatorNote}
                             onChange={(e) => setModeratorNote(e.target.value)}
                             style={textAreaStyle}
                         />
                         <button
-                            aria-label="handle Add Note"
+                            aria-label={t('modTools.addNote', 'Add note')}
                             onClick={handleAddNote}
                             disabled={loading}
                             style={styles.noteButton}

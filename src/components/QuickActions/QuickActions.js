@@ -126,7 +126,7 @@ const QuickActions = ({
             icon: '👤',
             label: t('quickActions.memberList'),
             category: 'server',
-            keywords: ['members', 'üyeler', 'users'],
+            keywords: ['members', 'users'],
         },
         {
             id: 'server-roles',

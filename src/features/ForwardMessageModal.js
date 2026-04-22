@@ -1,4 +1,4 @@
-// C:\USERS\EASTKHAN\SOFTWARE\JAVASCRIPT\PAWSCORD_CHAT\FRONTEND\SRC\FORWARDMESSAGEMODAL.JS
+﻿// C:\USERS\EASTKHAN\SOFTWARE\JAVASCRIPT\PAWSCORD_CHAT\FRONTEND\SRC\FORWARDMESSAGEMODAL.JS
 //           --- YENİ DOSYA ---
 
 import React, { useState, useMemo } from 'react';
@@ -72,7 +72,7 @@ const ForwardMessageModal = ({
         }
     };
 
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Forward Message' });
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('message.forward', 'Forward Message') });
 
     return (
         <div style={styles.overlay} {...overlayProps}>
@@ -82,21 +82,21 @@ const ForwardMessageModal = ({
                 </button>
                 {message.id === 'bulk' ? (
                     <>
-                        <h4 style={styles.title}>{message.count} Mesaj İletiliyor</h4>
+                        <h4 style={styles.title}>{t('forward.countMessages','{{count}} Forwarding Messages',{count:message.count})}</h4>
                         <p style={styles.previewText}>
-                            Seçilen {message.count} medya dosyası iletilecek.
+                            {t('forward.mediaFiles','{{count}} selected media file(s) will be forwarded.',{count:message.count})}
                         </p>
                     </>
                 ) : (
                     <>
-                        <h4 style={styles.title}>Mesajı İlet:</h4>
+                        <h4 style={styles.title}>{t('forward.forwardMsg','Forward Message:')}</h4>
                         <p style={styles.previewText}>
-                            İletiliyor:{' '}
+                            {t('forward.forwarding','Forwarding:')}{' '}
                             {message.content || (message.image_url ? '[Resim]' : '[Dosya]')}
                         </p>
                     </>
                 )}
-                <h2 style={styles.header}>Mesajı İlet</h2>
+                <h2 style={styles.header}>{t('forward.title','Forward Message')}</h2>
 
                 <div style={styles.preview}>
                     <strong>Dosya:</strong> {filePreview}
@@ -104,8 +104,8 @@ const ForwardMessageModal = ({
 
                 <input
                     type="text"
-                    placeholder="Sohbet ara (#kanal veya @kullanıcı)..."
-                    aria-label="Sohbet Ara"
+                    placeholder={t('message.searchConversation', 'Search conversations...')}
+                    aria-label={t('common.search')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={styles.searchInput}
@@ -131,19 +131,19 @@ const ForwardMessageModal = ({
                                 }
                             >
                                 {target.type === 'dm' && target.avatar && (
-                                    <img src={target.avatar} style={styles.avatar} alt="avatar" />
+                                    <img src={target.avatar} style={styles.avatar} alt={t('alt.userAvatar', 'User Avatar')} />
                                 )}
                                 {target.name}
                             </div>
                         ))
                     ) : (
-                        <p style={styles.noResults}>Sonuç bulunamadı.</p>
+                        <p style={styles.noResults}>{t('common.noResults','No results found.')}</p>
                     )}
                 </div>
 
                 <textarea
-                    placeholder="İsteğe bağlı not ekle..."
-                    aria-label="İletme notu"
+                    placeholder={t('message.forwardNote', 'Add optional note...')}
+                    aria-label={t('message.forwardNote', 'Forward note')}
                     value={forwardContent}
                     onChange={(e) => setForwardContent(e.target.value)}
                     style={styles.textArea}
@@ -155,7 +155,7 @@ const ForwardMessageModal = ({
                     style={styles.sendButton}
                 >
                     {isLoading
-                        ? 'Gönderiliyor...'
+                        ? t('common.sending','Sending...')
                         : `Aktar -> ${selectedTarget ? selectedTarget.name : '...'}`}
                 </button>
             </div>

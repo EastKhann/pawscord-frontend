@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { getToken } from '../utils/tokenStorage';
 import confirmDialog from '../utils/confirmDialog';
@@ -5,6 +6,7 @@ import logger from '../utils/logger';
 import { API_BASE_URL } from '../utils/apiEndpoints';
 
 const useAdvancedModeration = (serverId) => {
+    const { t } = useTranslation();
     const [selectedUser, setSelectedUser] = useState(null);
     const [timeoutDuration, setTimeoutDuration] = useState(60);
     const [timeoutReason, setTimeoutReason] = useState('');
@@ -112,7 +114,7 @@ const useAdvancedModeration = (serverId) => {
             });
             if (res.ok) {
                 showToast(
-                    `${selectedUser.username} kullanıcısına ${timeoutDuration} dakika zaman aşımı uygulandı`,
+                    t('advMod.timeoutApplied', { user: selectedUser.username, duration: timeoutDuration }),
                     'success'
                 );
                 setSelectedUser(null);
@@ -146,7 +148,7 @@ const useAdvancedModeration = (serverId) => {
             if (res.ok) {
                 const data = await res.json();
                 showToast(
-                    `Toplu eylem tamamlandı: ${data.affected_count} kullanıcı etkilendi`,
+                    t('advMod.massActionComplete', { count: data.affected_count }),
                     'success'
                 );
                 setMassActionType('');
@@ -173,7 +175,7 @@ const useAdvancedModeration = (serverId) => {
             if (res.ok) {
                 setRaidProtection(!raidProtection);
                 showToast(
-                    `Baskın koruması ${!raidProtection ? 'etkinleştirildi' : 'devre dışı bırakıldı'}`,
+                    t(!raidProtection ? 'advMod.raidEnabled' : 'advMod.raidDisabled'),
                     'success'
                 );
             } else throw new Error('Failed to toggle raid protection');

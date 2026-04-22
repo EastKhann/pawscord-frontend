@@ -121,7 +121,7 @@ describe('useVoiceStore — Advanced', () => {
             useVoiceStore.getState().setSpeaking('user-2', true);
             useVoiceStore.getState().setSpeaking('user-3', true);
             const speaking = useVoiceStore.getState().speakingUsers;
-            expect(speaking.size).toBe(3);
+            expect(speaking.length).toBe(3);
         });
 
         it('should not duplicate user in speaking set', () => {

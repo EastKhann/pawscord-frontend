@@ -4,50 +4,56 @@ import { useTranslation } from 'react-i18next';
 import { STORE_PURCHASES_ENABLED } from '../../constants/featureFlags';
 
 // Premium Plans data
-const premiumPlans = {
-    basic: {
-        tier: 'basic',
-        name: 'Pawscord Nitro Basic',
-        price: 29.99,
-        priceYearly: 299.99,
-        color: '#5865f2',
-        features: [
-            { text: '100 Sunucu', included: true },
-            { text: 'Sınırsız Arkadaş', included: true },
-            { text: '50 MB Dosya Yükleme', included: true },
-            { text: '1080p Video Kalitesi', included: true },
-            { text: '50 Özel Emoji', included: true },
-            { text: 'Hareketli Avatar', included: true },
-            { text: 'HD Ekran Paylaşımı', included: true },
-            { text: 'Özel Rozet', included: true },
-            { text: 'Sunucu Güçlendirme', included: false },
-            { text: '4K Video', included: false },
-        ],
-    },
-    premium: {
-        tier: 'premium',
-        name: 'Pawscord Nitro Premium',
-        price: 49.99,
-        priceYearly: 499.99,
-        color: '#f0b232',
-        popular: true,
-        features: [
-            { text: 'Sınırsız Sunucu', included: true },
-            { text: 'Sınırsız Arkadaş', included: true },
-            { text: '500 MB Dosya Yükleme', included: true },
-            { text: '4K Video Kalitesi', included: true },
-            { text: '200 Özel Emoji', included: true },
-            { text: 'Hareketli Avatar + Başlık', included: true },
-            { text: '4K Ekran Paylaşımı 60FPS', included: true },
-            { text: '2x Sunucu Güçlendirme Dahil', included: true },
-            { text: 'AI Asistan', included: true },
-            { text: 'Özel Profil Temaları', included: true },
-        ],
-    },
+const PLAN_PRICES = {
+    basic: { monthly: 29.99, yearly: 299.99, color: '#5865f2' },
+    premium: { monthly: 49.99, yearly: 499.99, color: '#f0b232' },
 };
 
 const PremiumTab = ({ styles, handlePurchase }) => {
     const { t } = useTranslation();
+
+    // Plans defined inside component so feature text uses t()
+    const premiumPlans = {
+        basic: {
+            tier: 'basic',
+            name: 'Pawscord Nitro Basic',
+            price: PLAN_PRICES.basic.monthly,
+            priceYearly: PLAN_PRICES.basic.yearly,
+            color: PLAN_PRICES.basic.color,
+            features: [
+                { text: t('premium.servers100'), included: true },
+                { text: t('premium.unlimitedFriends'), included: true },
+                { text: t('premium.fileUpload50'), included: true },
+                { text: t('premium.video1080p'), included: true },
+                { text: t('premium.emoji50'), included: true },
+                { text: t('premium.animatedAvatar'), included: true },
+                { text: t('premium.hdScreenShare'), included: true },
+                { text: t('ui.ozel_rozet'), included: true },
+                { text: t('premium.serverBoostFeature'), included: false },
+                { text: t('premium.video4kFeature'), included: false },
+            ],
+        },
+        premium: {
+            tier: 'premium',
+            name: 'Pawscord Nitro Premium',
+            price: PLAN_PRICES.premium.monthly,
+            priceYearly: PLAN_PRICES.premium.yearly,
+            color: PLAN_PRICES.premium.color,
+            popular: true,
+            features: [
+                { text: t('premium.unlimitedServers'), included: true },
+                { text: t('premium.unlimitedFriends'), included: true },
+                { text: t('premium.fileUpload500'), included: true },
+                { text: t('premium.video4kQuality'), included: true },
+                { text: t('premium.emoji200'), included: true },
+                { text: t('premium.animatedAvatarTitle'), included: true },
+                { text: t('premium.screen4k60fps'), included: true },
+                { text: t('premium.serverBoost2x'), included: true },
+                { text: t('premium.aiAssistant'), included: true },
+                { text: t('premium.customProfileThemes'), included: true },
+            ],
+        },
+    };
     const basicHeaderStyle = { ...styles.planHeader, borderColor: premiumPlans.basic.color };
     const basicBtnStyle = { ...styles.purchaseButton, backgroundColor: premiumPlans.basic.color };
     const premiumHeaderStyle = { ...styles.planHeader, borderColor: premiumPlans.premium.color };
@@ -59,7 +65,7 @@ const PremiumTab = ({ styles, handlePurchase }) => {
     const mutedFeatureStyle = { ...styles.feature, opacity: 0.5 };
 
     return (
-        <div aria-label="premium tab" style={styles.premiumTab}>
+        <div aria-label={t('premiumStore.premiumTab', 'Premium tab')} style={styles.premiumTab}>
             <h3 style={styles.sectionTitle}>{t('premium_membership_plans')}</h3>
             <div style={styles.plansGrid}>
                 {/* Free Plan */}
@@ -72,15 +78,15 @@ const PremiumTab = ({ styles, handlePurchase }) => {
                         </div>
                     </div>
                     <div style={styles.featuresList}>
-                        <div style={styles.feature}>✅ 50 Sunucu</div>
-                        <div style={styles.feature}>✅ 100 Arkadaş</div>
-                        <div style={styles.feature}>✅ 8 MB Dosya Yükleme</div>
-                        <div style={styles.feature}>✅ 720p Video Kalitesi</div>
-                        <div style={mutedFeatureStyle}>❌ Özel Emoji</div>
-                        <div style={mutedFeatureStyle}>❌ Animasyonlu Avatar</div>
+                        <div style={styles.feature}>✅ {t('premium.servers50Free')}</div>
+                        <div style={styles.feature}>✅ {t('premium.friends100Free')}</div>
+                        <div style={styles.feature}>✅ {t('premium.fileUpload8')}</div>
+                        <div style={styles.feature}>✅ {t('premium.video720p')}</div>
+                        <div style={mutedFeatureStyle}>❌ {t('premium.customEmoji')}</div>
+                        <div style={mutedFeatureStyle}>❌ {t('premium.animatedAvatar')}</div>
                     </div>
                     <button style={styles.currentPlanButton} disabled>
-                        {t('mevcut_plan', 'Mevcut Plan')}
+                        {t('premium.currentPlan')}
                     </button>
                 </div>
 
@@ -111,7 +117,7 @@ const PremiumTab = ({ styles, handlePurchase }) => {
                         style={basicBtnStyle}
                         disabled={!STORE_PURCHASES_ENABLED}
                     >
-                        {STORE_PURCHASES_ENABLED ? 'Satın Al (Aylık)' : '🔒 Çok Yakında'}
+                        {STORE_PURCHASES_ENABLED ? `${t('premium.purchase')} (${t('premium.monthly')})` : t('boost.comingSoon')}
                     </button>
                     <button
                         onClick={() => handlePurchase(premiumPlans.basic, true)}
@@ -125,15 +131,15 @@ const PremiumTab = ({ styles, handlePurchase }) => {
                         disabled={!STORE_PURCHASES_ENABLED}
                     >
                         {STORE_PURCHASES_ENABLED
-                            ? `Yıllık Satın Al (%16 indirim) - ${premiumPlans.basic.priceYearly} TL`
-                            : '🔒 Çok Yakında'}
+                            ? `${t('premium.purchase')} (${t('premium.save17')}) - ${premiumPlans.basic.priceYearly} TL`
+                            : t('boost.comingSoon')}
                     </button>
                 </div>
 
                 {/* Premium Plan */}
                 <div style={popularPlanStyle}>
                     <div style={styles.popularBadge}>
-                        <FaStar /> EN POPÜLER
+                        <FaStar /> {t('premium.mostPopular')}
                     </div>
                     <div style={premiumHeaderStyle}>
                         <h4 style={styles.planName}>{premiumPlans.premium.name}</h4>
@@ -160,7 +166,7 @@ const PremiumTab = ({ styles, handlePurchase }) => {
                         style={premiumBtnStyle}
                         disabled={!STORE_PURCHASES_ENABLED}
                     >
-                        {STORE_PURCHASES_ENABLED ? 'Satın Al (Aylık)' : '🔒 Çok Yakında'}
+                        {STORE_PURCHASES_ENABLED ? `${t('premium.purchase')} (${t('premium.monthly')})` : t('boost.comingSoon')}
                     </button>
                     <button
                         onClick={() => handlePurchase(premiumPlans.premium, true)}
@@ -174,8 +180,8 @@ const PremiumTab = ({ styles, handlePurchase }) => {
                         disabled={!STORE_PURCHASES_ENABLED}
                     >
                         {STORE_PURCHASES_ENABLED
-                            ? `Yıllık Satın Al (%16 indirim) - ${premiumPlans.premium.priceYearly} TL`
-                            : '🔒 Çok Yakında'}
+                            ? `${t('premium.purchase')} (${t('premium.save17')}) - ${premiumPlans.premium.priceYearly} TL`
+                            : t('boost.comingSoon')}
                     </button>
                 </div>
             </div>

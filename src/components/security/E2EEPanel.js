@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import './E2EEPanel.css';
 import { FaLock, FaKey, FaShieldAlt, FaSync, FaCheckCircle } from 'react-icons/fa';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
+    const { t } = useTranslation();
     const [keysUploaded, setKeysUploaded] = useState(false);
     const [recipientUsername, setRecipientUsername] = useState('');
     const [encryptedMessage, setEncryptedMessage] = useState('');
@@ -223,18 +225,17 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                     <div className="setup-icon">
                         <FaKey />
                     </div>
-                    <h3>Kurulum Gerekli</h3>
+                    <h3>{t('e2ee.setupRequired', 'Setup Required')}</h3>
                     <p>
-                        E2EE mesajlaşmayı kullanmaya başlamak için şifreleme anahtarlarınızı
-                        oluşturun ve yükleyin
+                        {t('e2ee.generateKeysDesc', 'Generate and upload your encryption keys to start using E2EE messaging')}
                     </p>
                     <button
-                        aria-label="generate And Upload Keys"
+                        aria-label={t('e2ee.generateKeys', 'Generate and upload encryption keys')}
                         className="setup-btn"
                         onClick={generateAndUploadKeys}
                         disabled={loading}
                     >
-                        <FaKey /> {loading ? 'Üretiliyor...' : 'Şifreleme Anahtarları Oluştur'}
+                        <FaKey /> {loading ? t('e2ee.generating', 'Generating...') : t('e2ee.createKeys', 'Create Encryption Keys')}
                     </button>
                 </div>
             ) : (
@@ -242,29 +243,29 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                     <div className="status-card">
                         <FaCheckCircle className="status-icon success" />
                         <div className="status-text">
-                            <strong>Şifreleme Aktif</strong>
-                            <span>Mesajlarınız uçtan uça şifrelenmiştir</span>
+                            <strong>{t('e2ee.encryptionActive', 'Encryption Active')}</strong>
+                            <span>{t('e2ee.messagesEncrypted', 'Your messages are end-to-end encrypted')}</span>
                         </div>
                         <button
-                            aria-label="rotate Keys"
+                            aria-label={t('e2ee.rotateKeys', 'Rotate encryption keys')}
                             className="rotate-btn"
                             onClick={rotateKeys}
                             disabled={loading}
                         >
-                            <FaSync /> Anahtarları Döndür
+                            <FaSync /> {t('e2ee.rotateKeys', 'Rotate Keys')}
                         </button>
                     </div>
 
                     <div className="e2ee-section">
                         <h3>
-                            <FaLock /> Şifreli Mesaj Gönder
+                            <FaLock /> {t('e2ee.sendEncryptedMessage', 'Send Encrypted Message')}
                         </h3>
                         <div className="send-form">
                             <div className="form-group">
-                                <label>Alıcı Kullanıcı Adı</label>
+                                <label>{t('e2ee.recipientUsername', 'Recipient Username')}</label>
                                 <input
                                     type="text"
-                                    placeholder="kullanıcı adı"
+                                    placeholder={t('common.username', 'Username')}
                                     value={recipientUsername}
                                     onChange={(e) => setRecipientUsername(e.target.value)}
                                     className="form-input"
@@ -273,7 +274,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                             <div className="form-group">
                                 <label>Message</label>
                                 <textarea
-                                    placeholder="Şifreli mesajınız..."
+                                    placeholder={t('security.encryptedMessagePlaceholder', 'Your encrypted message...')}
                                     value={encryptedMessage}
                                     onChange={(e) => setEncryptedMessage(e.target.value)}
                                     className="form-textarea"
@@ -281,12 +282,12 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                                 />
                             </div>
                             <button
-                                aria-label="send Encrypted Message"
+                                aria-label={t('e2ee.sendEncryptedBtn', 'Send encrypted message')}
                                 className="send-btn"
                                 onClick={sendEncryptedMessage}
                                 disabled={loading}
                             >
-                                <FaLock /> Şifreli Gönder
+                                <FaLock /> {t('e2ee.sendEncrypted', 'Send Encrypted')}
                             </button>
                         </div>
                     </div>
@@ -297,7 +298,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                         </h3>
                         <div className="safety-form">
                             <button
-                                aria-label="get Safety Number"
+                                aria-label={t('e2ee.getSafetyNumber', 'Get safety number')}
                                 className="verify-btn"
                                 onClick={getSafetyNumber}
                             >
@@ -311,8 +312,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                                         verify identity
                                     </p>
                                     <button
-                                        aria-label="Action button"
-                                        className="confirm-btn"
+                                        aria-label={t('e2ee.confirmVerification', 'Confirm verification')}
                                         onClick={() => verifySafetyNumber(safetyNumber)}
                                     >
                                         Confirm Verification
@@ -325,7 +325,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                     <div className="e2ee-section">
                         <h3>📨 Encrypted Messages</h3>
                         <button
-                            aria-label="fetch Encrypted Messages"
+                            aria-label={t('e2ee.fetchMessages', 'Load encrypted messages')}
                             className="fetch-btn"
                             onClick={fetchEncryptedMessages}
                         >
@@ -351,16 +351,15 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                     </div>
 
                     <div className="info-box">
-                        <h4>🔒 Uçtan Uca Şifrelem (E2EE) Nasıl Çalışır?</h4>
+                        <h4>{t('e2ee.howItWorks', '🔒 How E2EE Works')}</h4>
                         <ul>
-                            <li>Mesajlar gönderilmeden önce cihazınızda şifrelenir</li>
-                            <li>Yalnızca siz ve alıcı mesajları çözebilir</li>
-                            <li>Sunucu mesaj içeriklerini okuyamaz</li>
+                            <li>{t('e2ee.bullet1', 'Messages are encrypted on your device before sending')}</li>
+                            <li>{t('e2ee.bullet2', 'Only you and the recipient can decrypt messages')}</li>
+                            <li>{t('e2ee.bullet3', 'The server cannot read message contents')}</li>
                             <li>
-                                Güvenlik numaraları, ortadaki adam saldırılarını önlemek için
-                                kimliği doğrular
+                                {t('e2ee.safetyNumbers', 'Safety numbers verify identity to prevent man-in-the-middle attacks')}
                             </li>
-                            <li>Anahtarlar, ileri gizlilik için periyodik olarak değiştirilir</li>
+                            <li>{t('e2ee.periodicRotation', 'Keys are periodically rotated for forward secrecy')}</li>
                         </ul>
                     </div>
                 </>

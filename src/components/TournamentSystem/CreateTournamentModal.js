@@ -29,7 +29,7 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
     return (
         <div style={styles.modalOverlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
-                <h3 style={styles.modalTitle}>Yeni Turnuva Oluştur</h3>
+                <h3 style={styles.modalTitle}>{t('tournament.createNew','Create New Tournament')}</h3>
                 <form onSubmit={handleSubmit} style={styles.form}>
                     <input
                         type="text"
@@ -54,10 +54,10 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                         }
                         style={styles.input}
                     >
-                        <option value={4}>4 Kişi</option>
-                        <option value={8}>8 Kişi</option>
-                        <option value={16}>16 Kişi</option>
-                        <option value={32}>32 Kişi</option>
+                        <option value={4}>{t('tournament.nPeople','{{n}} People',{n:4})}</option>
+                        <option value={8}>{t('tournament.nPeople','{{n}} People',{n:8})}</option>
+                        <option value={16}>{t('tournament.nPeople','{{n}} People',{n:16})}</option>
+                        <option value={32}>{t('tournament.nPeople','{{n}} People',{n:32})}</option>
                     </select>
                     <input
                         type="datetime-local"
@@ -83,9 +83,7 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                         <button type="button" onClick={onClose} style={styles.cancelButton}>
                             Cancel
                         </button>
-                        <button type="submit" style={styles.submitButton}>
-                            Oluştur
-                        </button>
+                        <button type="submit" style={styles.submitButton}>{t('common.create','Create')}</button>
                     </div>
                 </form>
             </div>

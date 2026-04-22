@@ -5,6 +5,7 @@ import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { handleChunkErrorInBoundary, isChunkLoadError } from '../../utils/lazyWithRetry';
 import logger from '../../utils/logger';
+import i18n from '../../i18n';
 
 const getSectionErrorMessage = (error) => {
     const rawMessage = error?.message || error?.toString() || 'Unknown error';
@@ -87,12 +88,12 @@ class SectionErrorBoundary extends React.Component {
             return (
                 <div style={S.flex}>
                     <div style={S.mar}>⚠️</div>
-                    <p style={S.mar2}>{(this.props.section || 'Bu bölüm') + ' yüklenemedi.'}</p>
+                    <p style={S.mar2}>{(this.props.section || 'This section') + ' could not be loaded.'}</p>
                     {!isChunkLoadError(this.state.error) && this.state.error && (
                         <p style={S.err}>{getSectionErrorMessage(this.state.error)}</p>
                     )}
                     <button
-                        aria-label="Action button"
+                        aria-label={i18n.t('errors.tryAgain', { defaultValue: 'Try again' })}
                         onClick={() => {
                             if (isChunkLoadError(this.state.error)) {
                                 window.location.reload();
@@ -102,7 +103,7 @@ class SectionErrorBoundary extends React.Component {
                         }}
                         style={S.bg}
                     >
-                        {isChunkLoadError(this.state.error) ? 'Sayfayı Yenile' : 'Tekrar Dene'}
+                        {isChunkLoadError(this.state.error) ? 'Reload Page' : 'Try Again'}
                     </button>
                 </div>
             );

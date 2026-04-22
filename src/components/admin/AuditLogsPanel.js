@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getToken } from '../../utils/tokenStorage';
@@ -196,7 +196,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
             >
                 <div className="audit-header">
                     <h2>📋 Audit Logs</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -204,52 +204,52 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
                 <div className="filters-section">
                     <div className="filter-grid">
                         <div className="filter-group">
-                            <label>Eylem Türü</label>
+                            <label>{t('admin.actionType', 'Action Type')}</label>
                             <select
                                 value={filters.action_type}
                                 onChange={(e) =>
                                     setFilters({ ...filters, action_type: e.target.value })
                                 }
                             >
-                                <option value="">Tümü</option>
-                                <optgroup label="Mesajlar">
-                                    <option value="message_delete">Mesaj Silme</option>
-                                    <option value="message_edit">Mesaj Düzenle</option>
-                                    <option value="pin_add">Pin Ekleme</option>
-                                    <option value="pin_remove">Pin Kaldırma</option>
+                                <option value="">{t('common.all', 'All')}</option>
+                                <optgroup label={t('common.messages', 'Messages')}>
+                                    <option value="message_delete">{t('admin.messageDelete', 'Message Delete')}</option>
+                                    <option value="message_edit">{t('admin.messageEdit', 'Message Edit')}</option>
+                                    <option value="pin_add">{t('admin.pinAdd', 'Add Pin')}</option>
+                                    <option value="pin_remove">{t('admin.pinRemove', 'Remove Pin')}</option>
                                 </optgroup>
-                                <optgroup label="Üyeler">
-                                    <option value="member_join">Üye Katıldı</option>
-                                    <option value="member_leave">Üye Ayrıldı</option>
-                                    <option value="member_kick">Üye Kovuldu</option>
-                                    <option value="member_ban">Üye Yasaklandı</option>
-                                    <option value="member_unban">Yasak Kaldırıldı</option>
+                                <optgroup label={t('common.members', 'Members')}>
+                                    <option value="member_join">{t('admin.memberJoin', 'Member Joined')}</option>
+                                    <option value="member_leave">{t('admin.memberLeave', 'Member Left')}</option>
+                                    <option value="member_kick">{t('admin.memberKick', 'Member Kicked')}</option>
+                                    <option value="member_ban">{t('admin.memberBan', 'Member Banned')}</option>
+                                    <option value="member_unban">{t('admin.memberUnban', 'Ban Removed')}</option>
                                 </optgroup>
-                                <optgroup label="Roller">
-                                    <option value="role_create">Rol Oluşturma</option>
-                                    <option value="role_delete">Rol Silme</option>
-                                    <option value="role_update">Rol Güncelleme</option>
-                                    <option value="role_assign">Rol Atama</option>
-                                    <option value="role_remove">Rol Kaldırma</option>
+                                <optgroup label={t('common.roles', 'Roles')}>
+                                    <option value="role_create">{t('admin.roleCreate', 'Role Created')}</option>
+                                    <option value="role_delete">{t('admin.roleDelete', 'Role Delete')}</option>
+                                    <option value="role_update">{t('admin.roleUpdate', 'Role Updated')}</option>
+                                    <option value="role_assign">{t('admin.roleAssign', 'Role Assign')}</option>
+                                    <option value="role_remove">{t('admin.roleRemove', 'Role Remove')}</option>
                                 </optgroup>
-                                <optgroup label="Kanallar">
-                                    <option value="channel_create">Kanal Oluşturma</option>
-                                    <option value="channel_delete">Kanal Silme</option>
-                                    <option value="channel_update">Kanal Güncelleme</option>
+                                <optgroup label={t('common.channels', 'Channels')}>
+                                    <option value="channel_create">{t('admin.channelCreate', 'Channel Created')}</option>
+                                    <option value="channel_delete">{t('admin.channelDelete', 'Channel Delete')}</option>
+                                    <option value="channel_update">{t('admin.channelUpdate', 'Channel Updated')}</option>
                                 </optgroup>
-                                <optgroup label="Diğer">
-                                    <option value="server_update">Sunucu Güncelleme</option>
-                                    <option value="invite_create">Davet Oluşturma</option>
-                                    <option value="webhook_create">Webhook Oluşturma</option>
-                                    <option value="webhook_delete">Webhook Silme</option>
-                                    <option value="emoji_create">Emoji Ekleme</option>
-                                    <option value="emoji_delete">Emoji Silme</option>
+                                <optgroup label={t('common.other', 'Other')}>
+                                    <option value="server_update">{t('admin.serverUpdate', 'Server Updated')}</option>
+                                    <option value="invite_create">{t('admin.inviteCreate', 'Invite Created')}</option>
+                                    <option value="webhook_create">{t('admin.webhookCreate', 'Webhook Created')}</option>
+                                    <option value="webhook_delete">{t('admin.webhookDelete', 'Webhook Delete')}</option>
+                                    <option value="emoji_create">{t('admin.emojiCreate', 'Add Emoji')}</option>
+                                    <option value="emoji_delete">{t('admin.emojiDelete', 'Remove Emoji')}</option>
                                 </optgroup>
                             </select>
                         </div>
 
                         <div className="filter-group">
-                            <label>Başlangıç Tarihi</label>
+                            {t('admin.startDate', 'Start Date')}
                             <input
                                 type="datetime-local"
                                 value={filters.start_date}
@@ -260,7 +260,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
                         </div>
 
                         <div className="filter-group">
-                            <label>Bitiş Tarihi</label>
+                            {t('admin.endDate', 'End Date')}
                             <input
                                 type="datetime-local"
                                 value={filters.end_date}
@@ -271,10 +271,10 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
                         </div>
 
                         <div className="filter-group">
-                            <label>Kullanıcı ID</label>
+                            {t('admin.userIdLabel', 'User ID')}
                             <input
                                 type="text"
-                                placeholder="Eylemi gerçekleştiren kullanıcı"
+                                placeholder={t('admin.actionUser', 'User performing action')}
                                 value={filters.user_id}
                                 onChange={(e) =>
                                     setFilters({ ...filters, user_id: e.target.value })
@@ -285,21 +285,21 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
 
                     <div className="filter-actions">
                         <button
-                            aria-label="apply Filters"
+                            aria-label={t('admin.applyFilters', 'Apply Filters')}
                             className="filter-btn apply-btn"
                             onClick={applyFilters}
                         >
-                            🔍 Filtrele
+                            {t('common.filter', '🔍 Filter')}
                         </button>
                         <button
-                            aria-label="clear Filters"
+                            aria-label={t('admin.clearFilters', 'Clear Filters')}
                             className="filter-btn clear-btn"
                             onClick={clearFilters}
                         >
                             🗑️ Clear
                         </button>
                         <button
-                            aria-label="export Logs"
+                            aria-label={t('admin.exportLogs', 'Export logs')}
                             className="filter-btn export-btn"
                             onClick={exportLogs}
                         >
@@ -312,13 +312,13 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
                     {loading && logs.length === 0 ? (
                         <div className="loading-state">
                             <div className="spinner"></div>
-                            <p>Loglar yükleniyor...</p>
+                            <p>{t('admin.logsLoading', 'Loading logs...')}</p>
                         </div>
                     ) : logs.length === 0 ? (
                         <div className="empty-state">
                             <span className="empty-icon">📋</span>
-                            <p>Henüz audit log yok</p>
-                            <span>Sunucu eylemleri burada görünecek</span>
+                            <p>{t('admin.noAuditLogs', 'No audit logs yet')}</p>
+                            <span>{t('admin.serverActionsHere', 'Server actions will appear here')}</span>
                         </div>
                     ) : (
                         <>
@@ -403,12 +403,12 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
 
                             {hasMore && (
                                 <button
-                                    aria-label="Daha fazla yükle"
+                                    aria-label={t('common.loadMore', 'Load more')}
                                     className="load-more-btn"
                                     onClick={() => setPage(page + 1)}
                                     disabled={loading}
                                 >
-                                    {loading ? '⏳ Yükleniyor...' : '📄 Daha Fazla Yükle'}
+                                    {loading ? t('common.loading', 'Loading...') : t('admin.loadMore', '📄 Load More')}
                                 </button>
                             )}
                         </>

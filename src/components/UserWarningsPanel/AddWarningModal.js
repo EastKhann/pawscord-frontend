@@ -29,14 +29,14 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
         <div style={styles.modalOverlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.modalHeader}>
-                    <h3 style={styles.modalTitle}>Uyarı Ekle</h3>
+                    <h3 style={styles.modalTitle}>{t('userWarnings.addWarning','Add Warning')}</h3>
                     <button onClick={onClose} style={styles.modalClose}>
                         <FaTimes />
                     </button>
                 </div>
                 <div style={styles.modalContent}>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Kullanıcı</label>
+                        <label style={styles.label}>{t('common.user','User')}</label>
                         <select
                             value={newWarning.user_id}
                             onChange={(e) =>
@@ -44,7 +44,7 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
                             }
                             style={styles.select}
                         >
-                            <option value="">Kullanıcı seç...</option>
+                            <option value="">{t('common.selectUser','Select user...')}</option>
                             {users.map((user) => (
                                 <option key={user.id} value={user.id}>
                                     {user.username}
@@ -59,7 +59,7 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
                             onChange={(e) =>
                                 setNewWarning({ ...newWarning, reason: e.target.value })
                             }
-                            placeholder="Bu uyarı neden veriliyor?"
+                            placeholder={t('moderation.warningReasonPlaceholder', 'Why is this warning being issued?')}
                             style={styles.textarea}
                             rows="3"
                         />
@@ -120,7 +120,7 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
                         {t('common.cancel')}
                     </button>
                     <button onClick={handleAdd} style={styles.submitBtn}>
-                        <FaPlus /> Uyardı Ekle
+                        <FaPlus /> {t('userWarnings.addWarning','Add Warning')}
                     </button>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 // frontend/src/components/ReportSystemPanel.js
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaFlag, FaCheck, FaTimes, FaEye, FaFilter, FaUser } from 'react-icons/fa';
 import { useReportSystem } from '../ReportSystemPanel/hooks/useReportSystem';
@@ -18,6 +19,7 @@ const S = {
 };
 
 const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => {
+    const { t } = useTranslation();
     const [error, setError] = useState(null);
     const {
         reports,
@@ -62,7 +64,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                         <FaFlag style={styles.headerIcon} />
                         <h2 style={styles.title}>Rapor Sistemi</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -76,7 +78,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                     <div style={styles.statCard}>
                         <FaCheck style={S.txt2} />
                         <div style={styles.statValue}>{stats.resolved}</div>
-                        <div style={styles.statLabel}>Çözüldü</div>
+                        <div style={styles.statLabel}>{t('admin.resolved', 'Resolved')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaTimes style={S.txt3} />
@@ -98,9 +100,9 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                             onChange={(e) => setFilter(e.target.value)}
                             style={styles.filterSelect}
                         >
-                            <option value="all">Tüm Raporlar</option>
+                            <option value="all">{t('admin.allReports', 'All Reports')}</option>
                             <option value="pending">Bekliyor</option>
-                            <option value="resolved">Çözüldü</option>
+                            <option value="resolved">{t('admin.resolved', 'Resolved')}</option>
                             <option value="dismissed">Reddedildi</option>
                         </select>
                         <select
@@ -108,9 +110,9 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                             onChange={(e) => setTypeFilter(e.target.value)}
                             style={styles.filterSelect}
                         >
-                            <option value="all">Tüm Türler</option>
+                            <option value="all">{t('common.allTypes','All Types')}</option>
                             <option value="message">Mesajlar</option>
-                            <option value="user">Kullanıcılar</option>
+                            <option value="user">{t('admin.users', 'Users')}</option>
                             <option value="server">Sunucu</option>
                         </select>
                     </div>
@@ -118,11 +120,11 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
 
                 <div style={styles.reportsList}>
                     {loading ? (
-                        <div style={styles.loading}>Raporlar yükleniyor...</div>
+                        <div style={styles.loading}>{t('admin.loadingReports', 'Loading reports...')}</div>
                     ) : reports.length === 0 ? (
                         <div style={styles.empty}>
                             <FaFlag style={styles.emptyIcon} />
-                            <p>Rapor bulunamadı</p>
+                            <p>{t('admin.noReports', 'No reports found')}</p>
                         </div>
                     ) : (
                         reports.map((report) => (
@@ -163,7 +165,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                     <p style={styles.reportText}>{report.description}</p>
                                     {report.message_content && (
                                         <div style={styles.reportedContent}>
-                                            <strong>Şikayet Edilen İçerik:</strong>
+                                            <strong>{t('admin.reportedContent', 'Reported Content:')}</strong>
                                             <p>{report.message_content}</p>
                                         </div>
                                     )}
@@ -171,7 +173,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                         <div style={styles.reportedUser}>
                                             <FaUser />
                                             <span>
-                                                Şikayet Edilen Kullanıcı: {report.reported_username}
+                                                {t('reportSystem.reportedUser','Reported User')}: {report.reported_username}
                                             </span>
                                         </div>
                                     )}

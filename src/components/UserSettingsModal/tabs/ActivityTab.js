@@ -27,7 +27,7 @@ const ActivityTab = () => {
     );
 
     return (
-        <div aria-label="activity tab">
+        <div aria-label={t('settings.activityTab', 'Activity tab')}>
             <SettingSection title={t('settings.tabs.activity.privacyTitle')}>
                 <p className={ut.mutedMb12}>{t('settings.tabs.activity.privacyDesc')}</p>
                 <ToggleSwitch

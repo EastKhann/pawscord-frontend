@@ -7,7 +7,7 @@ const RulesSettings = ({ rules, onAdd, onUpdate, onRemove }) => {
     return (
         <div className="settings-tab">
             <div className="tab-header">
-                <h4>Sunucu Kuralları</h4>
+                <h4>{t('rulesSettings.title','Server Rules')}</h4>
                 <button className="add-btn" onClick={onAdd}>
                     {t('kural_add')}
                 </button>
@@ -16,7 +16,7 @@ const RulesSettings = ({ rules, onAdd, onUpdate, onRemove }) => {
             {rules.length === 0 ? (
                 <div className="empty-rules">
                     <FaClipboardList />
-                    <p>Henüz kural addnmemiş</p>
+                    <p>{t('rulesSettings.noRules','No rules added yet')}</p>
                 </div>
             ) : (
                 <div className="rules-list">

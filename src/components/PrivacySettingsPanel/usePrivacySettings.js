@@ -111,7 +111,7 @@ export default function usePrivacySettings() {
     const requestDataExport = async () => {
         if (
             !(await confirmDialog(
-                'Verilerinizi dışa aktarmak istediğinizden emin misiniz? Bu biraz zaman alabilir.'
+                t('privacy.exportConfirm','Are you sure you want to export your data? This may take a while.')
             ))
         )
             return;

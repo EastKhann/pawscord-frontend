@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import './PageTransitionWrapper.css';
 
 import PropTypes from 'prop-types';
@@ -21,6 +22,7 @@ import PropTypes from 'prop-types';
  *   </HashRouter>
  */
 const PageTransitionWrapper = ({ children }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const location = useLocation();
@@ -39,7 +41,7 @@ const PageTransitionWrapper = ({ children }) => {
 
     return (
         <div
-            aria-label="page transition wrapper"
+            aria-label={t('common.pageTransition', 'Page content')}
             ref={ref}
             className="page-transition-wrapper page-transition-active"
         >

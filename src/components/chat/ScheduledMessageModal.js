@@ -72,7 +72,7 @@ const ScheduledMessageModal = ({ room, conversation, onClose, fetchWithAuth, api
                     <h3 style={styles.title}>
                         <FaClock /> {t('chat.scheduleMessage', 'Mesaj Zamanla')}
                     </h3>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -80,22 +80,19 @@ const ScheduledMessageModal = ({ room, conversation, onClose, fetchWithAuth, api
                 <div style={styles.content}>
                     <div style={styles.presets}>
                         <button
-                            aria-label="Action button"
-                            onClick={() => setScheduledTime(getPresetTime(5))}
+                            aria-label={t('scheduledMsg.in5min', 'Schedule in 5 minutes')}
                             style={styles.presetButton}
                         >
                             {t('chat.in5min', '5 dk sonra')}
                         </button>
                         <button
-                            aria-label="Action button"
-                            onClick={() => setScheduledTime(getPresetTime(30))}
+                            aria-label={t('scheduledMsg.in30min', 'Schedule in 30 minutes')}
                             style={styles.presetButton}
                         >
                             {t('chat.in30min', '30 dk sonra')}
                         </button>
                         <button
-                            aria-label="Action button"
-                            onClick={() => setScheduledTime(getPresetTime(60))}
+                            aria-label={t('scheduledMsg.in1hour', 'Schedule in 1 hour')}
                             style={styles.presetButton}
                         >
                             {t('chat.in1hour', '1 saat sonra')}
@@ -125,7 +122,7 @@ const ScheduledMessageModal = ({ room, conversation, onClose, fetchWithAuth, api
                     </div>
 
                     <button
-                        aria-label="handle Schedule"
+                        aria-label={t('scheduledMsg.scheduleBtn', 'Schedule message')}
                         onClick={handleSchedule}
                         disabled={loading || !message.trim() || !scheduledTime}
                         style={{
@@ -141,9 +138,9 @@ const ScheduledMessageModal = ({ room, conversation, onClose, fetchWithAuth, api
                             ? t('ui.planlaniyor')
                             : '⏰ ' + t('chat.scheduleMessage', 'Mesaj Zamanla')}
                     </button>
-                </div>
-            </div>
-        </div>
+                </div> 
+            </div> 
+        </div >
     );
 };
 

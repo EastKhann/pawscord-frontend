@@ -10,7 +10,7 @@ import styles from './styles';
 const renderQuickActions = () => {
     const { t } = useTranslation();
     return (
-        <div aria-label="render quick actions">
+        <div aria-label={t('admin.quickActions', 'Quick actions')}>
             <h2 className="white-18-mb16">{t('⚡_quick_actionsler')}</h2>
 
             <div className="grid-auto-250-12">

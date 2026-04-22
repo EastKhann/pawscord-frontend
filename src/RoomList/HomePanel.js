@@ -1,5 +1,5 @@
 ﻿// frontend/src/RoomList/HomePanel.js
-import React, { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaUserFriends, FaRobot, FaChartLine, FaCompass } from '../utils/iconOptimization';
@@ -230,13 +230,16 @@ const DMItem = ({
     const isOnline = onlineUsers.includes(otherUser.username);
     const statusColor = isOnline ? '#23a559' : '#80848e';
     const hoverTimerRef = useRef(null);
+    const [isHovered, setIsHovered] = useState(false);
 
     // ?? Hover prefetch: 200ms debounce
     const handlePointerEnter = useCallback(() => {
+        setIsHovered(true);
         if (!onPrefetchChat) return;
         hoverTimerRef.current = setTimeout(() => onPrefetchChat('dm', conv.id), 200);
     }, [onPrefetchChat, conv.id]);
     const handlePointerLeave = useCallback(() => {
+        setIsHovered(false);
         if (hoverTimerRef.current) {
             clearTimeout(hoverTimerRef.current);
             hoverTimerRef.current = null;
@@ -247,7 +250,11 @@ const DMItem = ({
         <div
             style={{
                 ...styles.dmItem,
-                backgroundColor: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
+                backgroundColor: isActive
+                    ? 'rgba(255,255,255,0.12)'
+                    : isHovered
+                        ? 'rgba(255,255,255,0.06)'
+                        : 'transparent',
                 position: 'relative',
             }}
             onClick={() => onDMSelect(conv.id, otherUser.username)}

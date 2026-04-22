@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BATCH11_MODALS } from './batch11Config';
 
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 /**
  * AppModalsBatch11 — Data-driven renderer for 51 modals
@@ -9,6 +10,7 @@ import PropTypes from 'prop-types';
  */
 const AppModalsBatch11 = (props) => {
     const { modals, closeModal } = props;
+    const { t } = useTranslation();
     return (
         <>
             {BATCH11_MODALS.map(({ key, C, fb, cond, props: getProps, noSuspense }) => {
@@ -22,7 +24,7 @@ const AppModalsBatch11 = (props) => {
                     <Suspense
                         key={key}
                         fallback={
-                            <div role="region" aria-label="App Modals Batch11">
+                            <div role="region" aria-label={t('appModals.batch11', 'App modals batch 11')}>
                                 {fb || 'Loading...'}
                             </div>
                         }

@@ -1,4 +1,4 @@
-﻿/* eslint-disable jsx-a11y/no-autofocus */
+/* eslint-disable jsx-a11y/no-autofocus */
 // frontend/src/components/MessageThreadsPanel.js
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -8,14 +8,14 @@ import toast from '../../utils/toast';
 import { useTranslation } from 'react-i18next';
 import logger from '../../utils/logger';
 /**
- * 💬 Message Threads Panel
+ * ?? Message Threads Panel
  * Discord-style thread sistemi
  *
  * Features:
- * - Thread oluşturma
+ * - Thread olusturma
  * - Thread'lere abone olma
  * - Thread pinleme
- * - Thread mesajları görüntüleme
+ * - Thread mesajlari g�r�nt�leme
  */
 
 const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) => {
@@ -42,7 +42,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
             }
         } catch (error) {
             logger.error(t('ui.thread_load_hatasi'), error);
-            toast.error(t('threads.couldNotLoad', 'Konular yüklenemedi'));
+            toast.error(t('threads.couldNotLoad', 'Konular y�klenemedi'));
         } finally {
             setLoading(false);
         }
@@ -65,7 +65,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
             });
 
             if (response.ok) {
-                toast.success(t('threads.created', 'Konu oluşturuldu'));
+                toast.success(t('threads.created', 'Konu olusturuldu'));
                 setNewThreadName('');
                 setShowCreateThread(false);
                 loadThreads();
@@ -74,7 +74,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
             }
         } catch (error) {
             logger.error(t('ui.thread_olusturma_hatasi'), error);
-            toast.error(t('common.error', 'Bir hata oluştu'));
+            toast.error(t('common.error', 'Bir hata olustu'));
         }
     };
 
@@ -92,7 +92,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
             }
         } catch (error) {
             logger.error(t('ui.abone_olma_hatasi'), error);
-            toast.error(t('common.error', 'Bir hata oluştu'));
+            toast.error(t('common.error', 'Bir hata olustu'));
         }
     };
 
@@ -108,7 +108,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
             }
         } catch (error) {
             logger.error('Pin error:', error);
-            toast.error(t('common.error', 'Bir hata oluştu'));
+            toast.error(t('common.error', 'Bir hata olustu'));
         }
     };
 
@@ -137,7 +137,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
 
                 <div style={styles.toolbar}>
                     <button
-                        aria-label="Create"
+                        aria-label={t('common.create')}
                         onClick={() => setShowCreateThread(!showCreateThread)}
                         style={styles.createBtn}
                     >
@@ -158,14 +158,14 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                         />
                         <div className="flex-gap-10">
                             <button
-                                aria-label="create Thread"
+                                aria-label={t('threads.createThread', 'Create thread')}
                                 onClick={createThread}
                                 style={styles.saveBtn}
                             >
-                                {t('common.create', 'Oluştur')}
+                                {t('common.create', 'Olustur')}
                             </button>
                             <button
-                                aria-label="Create"
+                                aria-label={t('common.create')}
                                 onClick={() => setShowCreateThread(false)}
                                 style={styles.cancelBtn}
                             >
@@ -181,7 +181,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                     ) : threads.length === 0 ? (
                         <div style={styles.empty}>
                             <FaComments className="icon-lg" />
-                            <p>Henüz konu yok</p>
+                            <p>Hen�z konu yok</p>
                         </div>
                     ) : (
                         threads.map((thread) => (
@@ -193,14 +193,14 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                                     <div style={styles.threadName}>{thread.name}</div>
                                     <div style={styles.threadMeta}>
                                         <span>{thread.message_count || 0} message</span>
-                                        <span>•</span>
+                                        <span>�</span>
                                         <span>{thread.subscriber_count || 0} abone</span>
                                     </div>
                                 </div>
                                 <div style={styles.threadActions}>
                                     {thread.is_pinned && <FaThumbtack className="icon-warning" />}
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={thread.is_subscribed ? t('threads.unsubscribe', 'Unsubscribe') : t('threads.subscribe', 'Subscribe')}
                                         onClick={() => subscribeToThread(thread.id)}
                                         style={styles.actionBtn}
                                         title={
@@ -213,7 +213,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                                     </button>
                                     {!thread.is_pinned && (
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('threads.pinThread', 'Pin thread')}
                                             onClick={() => pinThread(thread.id)}
                                             style={styles.actionBtn}
                                             title="Sabitle"

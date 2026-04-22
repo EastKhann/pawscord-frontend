@@ -95,13 +95,13 @@ export default function InviteServerModal({
     const { overlayProps, dialogProps } = useModalA11y({
         onClose: handleClose,
         isOpen: !!inviteToServerUser,
-        label: 'Invite to Server',
+        label: t('server.inviteToServer', 'Invite to Server'),
     });
     if (!inviteToServerUser) return null;
 
     return ReactDOM.createPortal(
         <div
-            aria-label="invite to server modal"
+            aria-label={t('aria.inviteServerModal', 'Invite to Server')}
             role="button"
             tabIndex={-1}
             style={_st1}

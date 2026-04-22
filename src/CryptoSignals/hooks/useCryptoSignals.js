@@ -49,7 +49,7 @@ const useCryptoSignals = () => {
                 }
             } catch (err) {
                 logger.error('Signal list fetch error:', err);
-                setError('Sinyal dosyaları yüklenemedi');
+                setError('Failed to load signal files');
                 setLoading(false);
             }
         })();
@@ -80,7 +80,7 @@ const useCryptoSignals = () => {
                 }, 50);
             } catch (err) {
                 logger.error('Signal fetch error:', err);
-                if (!data) setError('Sunucuya bağlanılamadı: ' + err.message);
+                if (!data) setError('Could not connect to server: ' + err.message);
             } finally {
                 setLoading(false);
             }

@@ -3,14 +3,12 @@
 // ⌨️ FEATURE 11: Enhanced Typing Indicator
 // Shows "X yazıyor..." with animated dots and multiple user support
 
-import { useState, memo, useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 const TypingIndicatorEnhanced = ({ typingUsers = [], currentUser }) => {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const filtered = useMemo(
         () => typingUsers.filter((u) => u !== currentUser),
         [typingUsers, currentUser]

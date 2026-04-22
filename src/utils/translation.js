@@ -124,7 +124,7 @@ export async function getSupportedLanguages(apiBaseUrl) {
             en: 'English',
             tr: 'Turkish',
             es: 'Español',
-            fr: 'Français',
+            fr: 'French',
             de: 'Deutsch',
             it: 'Italiano',
             pt: 'Português',

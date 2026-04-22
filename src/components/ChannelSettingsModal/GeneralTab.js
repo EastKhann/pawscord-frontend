@@ -60,9 +60,8 @@ const GeneralTab = ({
                         type="checkbox"
                         checked={isPrivate}
                         onChange={handlePrivateChange}
-                        aria-label="checkbox"
+                        aria-label={t('chanGeneral.privateToggle', 'Toggle private channel')}
                     />
-                    {isPrivate ? <FaLock color="#f23f42" /> : <FaGlobe color="#23a559" />}
                     <span>
                         {isPrivate ? t('ui.ozel_channel_izinli_roller') : '🌍 Public Channel'}
                     </span>
@@ -98,7 +97,7 @@ const GeneralTab = ({
                                 type="checkbox"
                                 checked={selectedRoles.includes(role.id)}
                                 readOnly
-                                aria-label="checkbox"
+                                aria-label={t('chanGeneral.roleAccess', 'Role has access')}
                             />
                         </div>
                     ))}
@@ -112,12 +111,12 @@ const GeneralTab = ({
                         type="checkbox"
                         checked={isNsfw}
                         onChange={handleNsfwChange}
-                        aria-label="checkbox"
+                        aria-label={t('chanGeneral.nsfwToggle', 'Toggle NSFW channel')}
                     />
                     <FaExclamationTriangle color="#f23f42" size={16} />
                     <span>{t('🔞_nsfw_18_content')}</span>
                 </label>
-                <p className={css.hintMuted}>Yetişkin içerik uyarısı gösterilir.</p>
+                <p className={css.hintMuted}>{t('chanGeneral.nsfwHint', 'Adult content warning will be shown.')}</p>
             </div>
 
             {/* 🔥 LOCKED CHANNEL */}
@@ -127,12 +126,12 @@ const GeneralTab = ({
                         type="checkbox"
                         checked={isLocked}
                         onChange={handleLockedChange}
-                        aria-label="checkbox"
+                        aria-label={t('chanGeneral.lockToggle', 'Toggle locked channel')}
                     />
                     <FaLock color="#f23f42" size={14} />
                     <span>{t('🔒_channel_kilitli')}</span>
                 </label>
-                <p className={css.hintMuted}>Kimse mesaj gönderemez (geçici kilitleme).</p>
+                <p className={css.hintMuted}>{t('chanGeneral.lockHint', 'No one can send messages (temporary lock).')}</p>
             </div>
 
             {/* 🔥 READ-ONLY CHANNEL */}
@@ -142,7 +141,7 @@ const GeneralTab = ({
                         type="checkbox"
                         checked={isReadOnly}
                         onChange={handleReadOnlyChange}
-                        aria-label="checkbox"
+                        aria-label={t('chanGeneral.readOnlyToggle', 'Toggle read-only channel')}
                     />
                     <FaBroadcastTower color="#f0b232" size={16} />
                     <span>{t('📢_duyuru_channelı_sadece_admin_yazar')}</span>
@@ -165,9 +164,9 @@ const GeneralTab = ({
                             onChange={handleUserLimitChange}
                             style={styles.input}
                             placeholder={t('0_sınırsız')}
-                            aria-label="0 = unlimited"
+                            aria-label={t('chanGeneral.userLimit', 'User limit (0 = unlimited)')}
                         />
-                        <p className={css.hintMuted}>Max kişi sayısı (0 = limitsiz)</p>
+                        <p className={css.hintMuted}>{t('chanGeneral.maxUsersHint', 'Max number of people (0 = unlimited)')}</p>
                     </div>
 
                     <div style={styles.section}>
@@ -193,12 +192,12 @@ const GeneralTab = ({
             )}
 
             <div style={styles.footer}>
-                <button aria-label="Delete channel" onClick={handleDelete} style={styles.deleteBtn}>
+                <button aria-label={t('chanGeneral.deleteChannel', 'Delete channel')} onClick={handleDelete} style={styles.deleteBtn}>
                     <FaTrash />
                     {t('delete_channel')}
                 </button>
                 <button
-                    aria-label="Save channel settings"
+                    aria-label={t('chanGeneral.saveSettings', 'Save channel settings')}
                     onClick={handleSave}
                     style={styles.saveBtn}
                 >

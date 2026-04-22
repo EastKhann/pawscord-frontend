@@ -59,7 +59,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
     const handleLockdown = useCallback(async () => {
         if (
             !(await confirmDialog(
-                'Sunucuyu kilitlemek istediğinizden emin misiniz? Yalnızca yöneticiler mesaj gönderebilir.'
+                t('modTab.lockConfirm', 'Are you sure you want to lock the server? Only administrators will be able to send messages.')
             ))
         )
             return;
@@ -76,7 +76,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
     }, [fetchWithAuth, apiBaseUrl, server]);
     const handleClearMessages = useCallback(() => toast.info(t('common.comingSoon')), []);
     const handleDisableJoin = useCallback(async () => {
-        if (!(await confirmDialog('Yeni üyelikleri duraklatmak istediğinizden emin misiniz?')))
+        if (!(await confirmDialog(t('modTab.pauseJoinsConfirm', 'Are you sure you want to pause new memberships?'))))
             return;
         try {
             await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
@@ -164,7 +164,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>{t('💬_toxic_algılama')}</span>
                     </div>
                     <button
-                        aria-label="Configure Auto Moderation"
+                        aria-label={t('modTab.configAutoMod', 'Configure auto moderation')}
                         style={styles.modCardBtn}
                         onClick={handleAutoModeration}
                     >
@@ -190,7 +190,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>{t('🛡️_anti-bot')}</span>
                     </div>
                     <button
-                        aria-label="Configure Raid Protection"
+                        aria-label={t('modTab.configRaid', 'Configure raid protection')}
                         className={css.modBtnDanger}
                         onClick={handleRaidProtection}
                     >
@@ -215,7 +215,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>{t('📝_uyarı_geçmişi')}</span>
                     </div>
                     <button
-                        aria-label="Manage Warnings"
+                        aria-label={t('modTab.manageWarnings', 'Manage warnings')}
                         className={css.modBtnWarning}
                         onClick={handleUserWarnings}
                     >
@@ -240,7 +240,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>{t('📊_i̇statistikler')}</span>
                     </div>
                     <button
-                        aria-label="View Reports"
+                        aria-label={t('modTab.viewReports', 'View reports')}
                         className={css.modBtnSuccess}
                         onClick={handleReportSystem}
                     >
@@ -265,7 +265,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>{t('📥_export')}</span>
                     </div>
                     <button
-                        aria-label="View Audit Logs"
+                        aria-label={t('modTab.viewAuditLogs', 'View audit logs')}
                         className={css.modBtnPrimary}
                         onClick={handleAuditLog}
                     >
@@ -290,7 +290,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>{t('⏰_duration_yönetimi')}</span>
                     </div>
                     <button
-                        aria-label="Configure Slow Mode"
+                        aria-label={t('modTab.configSlowMode', 'Configure slow mode')}
                         className={css.modBtnMuted}
                         onClick={handleSlowMode}
                     >
@@ -306,32 +306,32 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                 </h4>
                 <div style={styles.quickActionsGrid}>
                     <button
-                        aria-label="Lock server"
+                        aria-label={t('modTab.lockServer', 'Lock server')}
                         style={styles.quickActionBtn}
                         onClick={handleLockdown}
                     >
                         <FaLock /> Lock Server
                     </button>
                     <button
-                        aria-label="Clear all messages"
+                        aria-label={t('modTab.clearMessages', 'Clear all messages')}
                         style={styles.quickActionBtn}
                         onClick={handleClearMessages}
                     >
                         <FaTrash /> Clear All Messages
                     </button>
                     <button
-                        aria-label="Pause new memberships"
+                        aria-label={t('modTab.pauseJoins', 'Stop new memberships')}
                         style={styles.quickActionBtn}
                         onClick={handleDisableJoin}
                     >
-                        <FaUserSlash /> Yeni Üyelikleri Durdur
+                        <FaUserSlash /> {t('modTab.pauseJoins', 'Stop New Memberships')}
                     </button>
                     <button
-                        aria-label="Send announcement"
+                        aria-label={t('modTab.sendAnnouncement', 'Send announcement')}
                         style={styles.quickActionBtn}
                         onClick={handleAnnouncement}
                     >
-                        <FaBell /> Duyuru Gönder
+                        <FaBell /> {t('modTab.sendAnnouncement', 'Send Announcement')}
                     </button>
                 </div>
             </div>

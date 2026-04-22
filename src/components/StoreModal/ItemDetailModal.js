@@ -30,7 +30,7 @@ const ItemDetailModal = ({ item, balance, onClose, onPurchase }) => {
         label: 'Item Detail',
     });
     return (
-        <div aria-label="item detail modal" style={styles.detailOverlay} {...overlayProps}>
+        <div aria-label={t('store.itemDetail', 'Item detail')} style={styles.detailOverlay} {...overlayProps}>
             <div style={styles.detailModal} {...dialogProps}>
                 <button onClick={onClose} style={styles.detailClose}>
                     <FaTimes />
@@ -66,8 +66,8 @@ const ItemDetailModal = ({ item, balance, onClose, onPurchase }) => {
                     {!STORE_PURCHASES_ENABLED
                         ? t('store.comingSoon')
                         : balance < item.price
-                          ? t('store.insufficientCoins')
-                          : t('store.purchase')}
+                            ? t('store.insufficientCoins')
+                            : t('store.purchase')}
                 </button>
             </div>
         </div>

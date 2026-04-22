@@ -53,7 +53,7 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
 
     return (
         <div
-            aria-label="event card"
+            aria-label={t('serverEvents.eventCard', 'Event card')}
             className={`event-card ${isPast ? 'past' : ''} ${isOngoing ? 'ongoing' : ''}`}
         >
             {event.cover_image_url && (
@@ -103,7 +103,7 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
                     <div className="ec-attendees">
                         <FaUsers />
                         <span>
-                            {event.going_count} katılıyor
+                            {event.going_count} {t('event.going', 'going')}
                             {event.interested_count > 0 &&
                                 ` • ${event.interested_count} ilgwithniyor`}
                         </span>
@@ -115,13 +115,13 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
                                 className={`rsvp-btn ${event.user_status === 'interested' ? 'active' : ''}`}
                                 onClick={() => onRSVP?.(event.id, 'interested')}
                             >
-                                <FaStar /> {'İlgileniyor'}
+                                <FaStar /> {t('event.interested', 'Interested')}
                             </button>
                             <button
                                 className={`rsvp-btn primary ${event.user_status === 'going' ? 'active' : ''}`}
                                 onClick={() => onRSVP?.(event.id, 'going')}
                             >
-                                <FaCheck /> {'Katıl'}
+                                <FaCheck /> {t('common.join', 'Join')}
                             </button>
                         </div>
                     )}

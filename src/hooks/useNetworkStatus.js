@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react';
 import { Capacitor } from '@capacitor/core';
 
 /**
- * Returns { isOnline: boolean } — reacts to network changes on both web and native.
+ * Returns { isOnline: boolean, wasOffline: boolean } — reacts to network changes on both web and native.
+ * wasOffline is true if the connection dropped at least once since mount.
  */
 export function useNetworkStatus() {
     const [isOnline, setIsOnline] = useState(
         typeof navigator !== 'undefined' ? navigator.onLine : true
     );
+    const [wasOffline, setWasOffline] = useState(false);
 
     useEffect(() => {
         let removeListener = null;
@@ -22,6 +24,7 @@ export function useNetworkStatus() {
 
                 // Subscribe to changes
                 Network.addListener('networkStatusChange', ({ connected }) => {
+                    if (!connected) setWasOffline(true);
                     setIsOnline(connected);
                 }).then((handle) => {
                     removeListener = () => handle.remove();
@@ -30,7 +33,7 @@ export function useNetworkStatus() {
         } else {
             // Web: browser events
             const goOnline = () => setIsOnline(true);
-            const goOffline = () => setIsOnline(false);
+            const goOffline = () => { setWasOffline(true); setIsOnline(false); };
             window.addEventListener('online', goOnline);
             window.addEventListener('offline', goOffline);
             removeListener = () => {
@@ -44,5 +47,5 @@ export function useNetworkStatus() {
         };
     }, []);
 
-    return { isOnline };
+    return { isOnline, wasOffline };
 }

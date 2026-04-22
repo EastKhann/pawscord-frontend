@@ -145,7 +145,7 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
                     <div className="flex-align-10">
                         <FaFileAlt className="icon-primary" />
 
-                        <h2 className="m-0">Mesaj Şablonları</h2>
+                        <h2 className="m-0">{t('msgTemplatesPanel.title', 'Message Templates')}</h2>
                     </div>
 
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -158,7 +158,7 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
                         onChange={(e) => setNewTemplate({ ...newTemplate, name: e.target.value })}
                         placeholder={t('ui.sablon_adi_orn_toplanti_daveti')}
                         style={styles.input}
-                        aria-label="Name"
+                        aria-label={t('msgTemplates.nameInput', 'Template name')}
                     />
 
                     <textarea
@@ -172,11 +172,11 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
                     />
 
                     <button
-                        aria-label="create Template"
+                        aria-label={t('msgTemplates.createBtn', 'Create template')}
                         onClick={createTemplate}
                         style={styles.createBtn}
                     >
-                        <FaPlus /> Şablon Oluştur
+                        <FaPlus /> {t('msgTemplatesPanel.create', 'Create Template')}
                     </button>
                 </div>
 
@@ -187,7 +187,7 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
                         <div style={styles.empty}>
                             <FaFileAlt className="icon-lg-mb10" />
 
-                            <p>Henüz şablon yok</p>
+                            <p>{t('msgTemplatesPanel.noTemplates', 'No templates yet')}</p>
 
                             <p className="text-gray-12">
                                 Save frequently used messages as templates
@@ -216,8 +216,7 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
 
                                 <div style={styles.templateActions}>
                                     <button
-                                        aria-label="Action button"
-                                        onClick={() => useTemplate(template)}
+                                        aria-label={t('msgTemplates.useTemplate', 'Use template')}
                                         style={styles.useBtn}
                                         title={t('ui.sablonu_kullan')}
                                     >
@@ -225,8 +224,7 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
                                     </button>
 
                                     <button
-                                        aria-label="Action button"
-                                        onClick={() => deleteTemplate(template.id)}
+                                        aria-label={t('msgTemplates.deleteTemplate', 'Delete template')}
                                         style={styles.deleteBtn}
                                         title={t('ui.sablonu_delete')}
                                     >

@@ -94,27 +94,27 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                         <FaClock className="icon-primary-mr10" />
                         <h2 style={styles.title}>Otomatik Mesaj Silme</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Ayarlar yükleniyor...</div>
+                        <div style={styles.loading}>{t('ephemeral.loading', 'Loading settings...')}</div>
                     ) : (
                         <>
                             <div style={styles.toggleSection}>
                                 <div>
                                     <div style={styles.toggleLabel}>
-                                        Otomatik Silmeyi Etkinleştir
+                                        {t('ephemeral.enableAutoDelete', 'Enable Auto Delete')}
                                     </div>
                                     <div style={styles.toggleDescription}>
-                                        Mesajlar belirtilen süreden sonra otomatik olarak silinecek
+                                        {t('ephemeral.autoDeleteDesc', 'Messages will be automatically deleted after the specified time')}
                                     </div>
                                 </div>
                                 <button
-                                    aria-label="toggle Ephemeral"
+                                    aria-label={t('ephemeral.toggle', 'Toggle ephemeral messages')}
                                     onClick={toggleEphemeral}
                                     style={styles.toggleButton}
                                 >
@@ -128,11 +128,11 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
                             {settings?.enabled && (
                                 <div style={styles.ttlSection}>
-                                    <label style={styles.label}>Şu Süreden Sonra Sil</label>
+                                    <label style={styles.label}>{t('ephemeral.deleteAfter', 'Delete After')}</label>
                                     <div style={styles.optionsGrid}>
                                         {ttlOptions.map((option) => (
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={option.label}
                                                 key={option.value}
                                                 onClick={() => updateTTL(option.value)}
                                                 style={getOptionButtonStyle(option.value)}
@@ -143,7 +143,7 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                                     </div>
 
                                     <div style={styles.info}>
-                                        ⏱️ Mevcut ayar: Mesajlar şu süreden sonra silinir:
+                                        {t('ephemeral.currentSetting', '⏱️ Current setting: Messages are deleted after:')}
                                         <strong>
                                             {ttlOptions.find((o) => o.value === ttl)?.label ||
                                                 `${ttl} saniye`}
@@ -154,8 +154,8 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
                             {!settings?.enabled && (
                                 <div style={styles.disabledMessage}>
-                                    Geçici mesajlar şu anda devre dışı. Mesajların belirli bir
-                                    süreden sonra otomatik silinmesi için etkinleştirin.
+                                    {t('ephemeral.disabledDesc', 'Ephemeral messages are currently disabled. Enable to have messages')}
+                                    {t('ephemeral.disabledDesc2', 'automatically deleted after a certain time.')}
                                 </div>
                             )}
                         </>

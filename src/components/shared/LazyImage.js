@@ -2,6 +2,7 @@
 // 🚀 PERFORMANS: Progressive lazy loading + WebP + Blur placeholder (%60 daha hızlı görsel load)
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 const S = {
@@ -79,10 +80,11 @@ const LazyImage = ({
     quality = 85,
     style = {},
     className = '',
-    onLoad = () => {},
+    onLoad = () => { },
     showBlurPlaceholder = true,
     ...props
 }) => {
+    const { t } = useTranslation();
     const [shouldLoad, setShouldLoad] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
     const [currentSrc, setCurrentSrc] = useState(null);
@@ -145,7 +147,7 @@ const LazyImage = ({
 
     return (
         <div
-            aria-label="lazy image"
+            aria-label={t('common.lazyImage', 'Image')}
             ref={imgRef}
             style={{ ...S.rel, ...style }}
             className={className}

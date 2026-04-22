@@ -180,7 +180,7 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
                         style={S.toolBtn}
                         onClick={handleZoomOut}
                         title={t('ui.uzaklastir')}
-                        aria-label="Zoom Out (-)"
+                        aria-label={t('lightbox.zoomOut', 'Zoom out')}
                     >
                         <FaSearchMinus />
                     </button>
@@ -188,7 +188,7 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
                         style={S.toolBtn}
                         onClick={handleZoomIn}
                         title={t('ui.yakinlastir')}
-                        aria-label="Zoom In (+)"
+                        aria-label={t('lightbox.zoomIn', 'Zoom in')}
                     >
                         <FaSearchPlus />
                     </button>
@@ -196,7 +196,7 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
                         style={S.toolBtn}
                         onClick={handleRotate}
                         title={t('ui.dondur_r')}
-                        aria-label="Rotate (R)"
+                        aria-label={t('lightbox.rotate', 'Rotate image')}
                     >
                         <FaUndo />
                     </button>
@@ -204,7 +204,7 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
                         style={S.toolBtn}
                         onClick={handleReset}
                         title={t('ui.sifirla_0')}
-                        aria-label="Reset (0)"
+                        aria-label={t('lightbox.reset', 'Reset view')}
                     >
                         <FaExpand />
                     </button>
@@ -212,8 +212,8 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
                     <button
                         style={S.toolBtn}
                         onClick={handleDownload}
-                        title="İndir"
-                        aria-label="İndir"
+                        title={t('common.download', 'Download')}
+                        aria-label={t('common.download', 'Download')}
                     >
                         <FaDownload />
                     </button>
@@ -221,7 +221,7 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
                         style={S.el}
                         onClick={onClose}
                         title="Close (Esc)"
-                        aria-label="Close (Esc)"
+                        aria-label={t('common.close', 'Close')}
                     >
                         <FaTimes />
                     </button>
@@ -231,10 +231,10 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
             {/* Navigation arrows */}
             {hasMultiple && (
                 <>
-                    <button aria-label="go Prev" style={S.left2} onClick={goPrev}>
+                    <button aria-label={t('lightbox.prevImage', 'Previous image')} style={S.left2} onClick={goPrev}>
                         <FaChevronLeft />
                     </button>
-                    <button aria-label="go Next" style={S.right2} onClick={goNext}>
+                    <button aria-label={t('lightbox.nextImage', 'Next image')} style={S.right2} onClick={goNext}>
                         <FaChevronRight />
                     </button>
                 </>
@@ -245,7 +245,7 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
             <div style={S.imageContainer} onWheel={handleWheel} onMouseDown={handleMouseDown}>
                 <img
                     src={currentImage}
-                    alt="Preview"
+                    alt={t('alt.preview', 'Preview')}
                     draggable={false}
                     style={{
                         ...S.image,

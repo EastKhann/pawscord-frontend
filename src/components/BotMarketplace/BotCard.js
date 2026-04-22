@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const BotCard = ({ bot, onClick }) => {
+    const { t } = useTranslation();
     return (
         <div
-            aria-label="bot card"
+            aria-label={t('botMarketplace.card', 'Bot card')}
             className="bot-card"
             role="button"
             tabIndex={0}
@@ -18,7 +20,7 @@ const BotCard = ({ bot, onClick }) => {
             <div className="bot-info">
                 <h3 className="bot-name">
                     {bot.name}
-                    {bot.is_featured && <span className="featured-tag">⭐ Öne Çıkan</span>}
+                    {bot.is_featured && <span className="featured-tag">⭐ {t('botCard.featured', 'Featured')}</span>}
                 </h3>
                 <p className="bot-description">{bot.short_description}</p>
                 <div className="bot-meta">

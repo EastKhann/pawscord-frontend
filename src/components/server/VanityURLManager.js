@@ -123,7 +123,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
     };
 
     const handleDelete = async () => {
-        if (!(await confirmDialog("Bu vanity URL'yi silmek istediğinizden emin misiniz?"))) {
+        if (!(await confirmDialog(t('vanityUrl.deleteConfirm', 'Are you sure you want to delete this vanity URL?')))) {
             return;
         }
 
@@ -192,7 +192,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
 
                                 <div className="flex-gap-10">
                                     <button
-                                        aria-label="copy Url"
+                                        aria-label={t('vanityUrl.copyUrl', 'Copy URL')}
                                         onClick={copyUrl}
                                         style={styles.copyButton}
                                     >
@@ -200,7 +200,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
                                     </button>
 
                                     <button
-                                        aria-label="handle Delete"
+                                        aria-label={t('vanityUrl.delete', 'Delete vanity URL')}
                                         onClick={handleDelete}
                                         style={styles.deleteButton}
                                         disabled={loading}
@@ -223,22 +223,22 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
                                     e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
                                 )
                             }
-                            placeholder="myserver"
+                            placeholder={t('vanityUrlManager.slug', 'myserver')}
                             style={styles.input}
                             maxLength={32}
-                            aria-label="Vanity Path"
+                            aria-label={t('vanityUrl.pathInput', 'Vanity URL path')}
                         />
                     </div>
 
                     <div style={S.txt}>
                         • En az 3, en fazla 32 karakter
                         <br />
-                        • Sadece kk harf, rakam ve tire (-) kullanılabilir
-                        <br />• Sistem kelimeleri (api, admin, vb.) kullanılamaz
+                        {t('vanityUrl.rule1', '• Only lowercase letters, numbers and hyphens (-) can be used')}
+                        <br />{t('vanityUrl.rule2', '• System words (api, admin, etc.) cannot be used')}
                     </div>
 
                     <button
-                        aria-label="handle Create"
+                        aria-label={t('vanityUrl.create', 'Create vanity URL')}
                         onClick={handleCreate}
                         disabled={loading || !vanityPath.trim()}
                         style={styles.createButton}
@@ -246,8 +246,8 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
                         {loading
                             ? 'Processing...'
                             : existingVanity
-                              ? '🔗 Vanity URL Currentle'
-                              : '🔗 Vanity URL Create'}
+                                ? '🔗 Vanity URL Currentle'
+                                : '🔗 Vanity URL Create'}
                     </button>
                 </>
             )}
@@ -282,7 +282,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
                         <FaLink /> Vanity URL Create
                     </h3>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>

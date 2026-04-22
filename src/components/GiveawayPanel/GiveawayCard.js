@@ -1,11 +1,13 @@
 ﻿import { getStatusBadge, formatTimeRemaining } from './useGiveaways';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const GiveawayCard = ({ giveaway, onEnd, onReroll, onDelete }) => {
+    const { t } = useTranslation();
     const badge = getStatusBadge(giveaway.status);
 
     return (
-        <div aria-label="giveaway card" className="giveaway-card">
+        <div aria-label={t('giveaway.card', 'Giveaway card')} className="giveaway-card">
             <div className="giveaway-card-header">
                 <h3>{giveaway.title}</h3>
                 <span className="status-badge" style={{ background: badge.color }}>
@@ -25,16 +27,16 @@ const GiveawayCard = ({ giveaway, onEnd, onReroll, onDelete }) => {
 
                 <div className="giveaway-info">
                     <div className="info-item">
-                        <span className="info-label">Kazanan Sayısı:</span>
-                        <span className="info-value">{giveaway.winners_count} kişi</span>
+                        <span className="info-label">{t('giveaway.winnersLabel', 'Winners:')}</span>
+                        <span className="info-value">{giveaway.winners_count} {t('common.people', 'people')}</span>
                     </div>
                     <div className="info-item">
-                        <span className="info-label">Katılımcılar:</span>
-                        <span className="info-value">{giveaway.entries_count || 0} kişi</span>
+                        <span className="info-label">{t('giveaway.participants', 'Participants:')}</span>
+                        <span className="info-value">{giveaway.entries_count || 0} {t('common.people', 'people')}</span>
                     </div>
                     {giveaway.status === 'active' && (
                         <div className="info-item">
-                            <span className="info-label">Kalan Süre:</span>
+                            <span className="info-label">{t('giveaway.remainingTime', 'Time Remaining:')}</span>
                             <span className="info-value time-remaining">
                                 {formatTimeRemaining(giveaway.end_time)}
                             </span>
@@ -71,7 +73,7 @@ const GiveawayCard = ({ giveaway, onEnd, onReroll, onDelete }) => {
             <div className="giveaway-card-footer">
                 {giveaway.status === 'active' && (
                     <button className="end-btn" onClick={() => onEnd(giveaway.id)}>
-                        🏁 Sonlandır
+                        🏁 {t('giveaway.finish', 'Finish')}
                     </button>
                 )}
                 {giveaway.status === 'ended' && (

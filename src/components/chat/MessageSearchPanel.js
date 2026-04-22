@@ -129,7 +129,7 @@ const MessageSearchPanel = ({ serverId, channelId, onClose, onSelectMessage }) =
                 <div className="search-header">
                     <FaSearch className="header-icon" />
                     <h2>{t('search.messageSearch')}</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -148,7 +148,7 @@ const MessageSearchPanel = ({ serverId, channelId, onClose, onSelectMessage }) =
                     />
                     {query && (
                         <button
-                            aria-label="Close"
+                            aria-label={t('search.clearQuery', 'Clear search')}
                             className="clear-btn"
                             onClick={() => setQuery('')}
                         >
@@ -156,8 +156,7 @@ const MessageSearchPanel = ({ serverId, channelId, onClose, onSelectMessage }) =
                         </button>
                     )}
                     <button
-                        aria-label="Action button"
-                        className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
+                        aria-label={showFilters ? t('search.hideFilters', 'Hide filters') : t('search.showFilters', 'Show filters')}
                         onClick={() => setShowFilters(!showFilters)}
                         title={t('search.filter')}
                     >

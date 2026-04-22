@@ -12,7 +12,7 @@ const resetStore = () =>
         members: [],
         roles: [],
         serverSettings: {},
-        joinedServerIds: new Set(),
+        joinedServerIds: [],
     });
 
 describe('useServerStore — Extended', () => {

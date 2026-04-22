@@ -66,14 +66,14 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
                         <FaChartBar className="icon-primary-mr10" />
                         <h2 style={styles.title}>Activity - {username}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.tabs}>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('userActivity.activityTab', 'Activity Log')}
                         onClick={() => setActiveTab('activity')}
                         style={tabStyles.activity}
                     >
@@ -81,7 +81,7 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
                         Activity Log
                     </button>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('userActivity.presenceTab', 'Presence History')}
                         onClick={() => setActiveTab('presence')}
                         style={tabStyles.presence}
                     >
@@ -92,7 +92,7 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Aktivite yükleniyor...</div>
+                        <div style={styles.loading}>{t('userActivity.loading', 'Loading activity...')}</div>
                     ) : activeTab === 'activity' ? (
                         <div style={styles.activityList}>
                             {activityLog.length === 0 ? (
@@ -118,7 +118,7 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
                     ) : (
                         <div style={styles.presenceList}>
                             {presenceHistory.length === 0 ? (
-                                <div style={styles.empty}>Geçmiş oturum verisi yok</div>
+                                <div style={styles.empty}>{t('userActivity.noData', 'No past session data')}</div>
                             ) : (
                                 presenceHistory.map((presence, idx) => (
                                     <div key={`item-${idx}`} style={styles.presenceItem}>
@@ -129,10 +129,10 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
                                                     presence.status === 'online'
                                                         ? '#23a559'
                                                         : presence.status === 'idle'
-                                                          ? '#f0b232'
-                                                          : presence.status === 'dnd'
-                                                            ? '#f23f42'
-                                                            : '#949ba4',
+                                                            ? '#f0b232'
+                                                            : presence.status === 'dnd'
+                                                                ? '#f23f42'
+                                                                : '#949ba4',
                                             }}
                                         />
                                         <div style={styles.presenceInfo}>

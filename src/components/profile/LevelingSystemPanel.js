@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -56,7 +56,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
             >
                 <div className="leveling-header">
                     <h2>⭐ {t('leveling.title')}</h2>
-                    <button aria-label="on Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -163,7 +163,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
                                 </label>
                             </div>
                         </div>
-                        <button aria-label="save Config" className="save-btn" onClick={saveConfig}>
+                        <button aria-label={t('levelingSystem.saveConfig', 'Save configuration')} className="save-btn" onClick={saveConfig}>
                             💾 {t('leveling.saveSettings')}
                         </button>
                     </div>

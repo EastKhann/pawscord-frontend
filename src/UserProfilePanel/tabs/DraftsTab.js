@@ -74,7 +74,7 @@ const DraftsTab = ({ deleteDraft, drafts: rawDrafts }) => {
                             </div>
                             <button
                                 style={_st1110}
-                                aria-label="action-button"
+                                aria-label={t('aria.deleteDraft', 'Delete Draft')}
                                 onClick={() => deleteDraft(draft.key)}
                             >
                                 🗑️ {t('common.delete')}

@@ -1,5 +1,6 @@
-﻿// frontend/src/components/APIUsagePanel.js
+// frontend/src/components/APIUsagePanel.js
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
     FaTimes,
@@ -15,6 +16,7 @@ import useAPIUsage from '../APIUsagePanel/useAPIUsage';
 // -- dynamic style helpers (pass 2) --
 
 const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
+    const { t } = useTranslation();
     const [error, setError] = useState(null);
     const {
         safeStats,
@@ -46,7 +48,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaChartLine className="icon-primary-24" />
-                        <h2 className="m0-fs20">API Kullanım Analitiği</h2>
+                        <h2 className="m0-fs20">API Kullanim Analitigi</h2>
                     </div>
                     <div style={styles.headerRight}>
                         <select
@@ -55,10 +57,10 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             style={styles.timeRangeSelect}
                         >
                             <option value="24h">Son 24 Saat</option>
-                            <option value="7d">Son 7 Gün</option>
-                            <option value="30d">Son 30 Gün</option>
+                            <option value="7d">Son 7 G�n</option>
+                            <option value="30d">Son 30 G�n</option>
                         </select>
-                        <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                        <button aria-label={t('common.close')} onClick={onClose} style={styles.closeBtn}>
                             <FaTimes />
                         </button>
                     </div>
@@ -66,7 +68,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Analitik yükleniyor...</div>
+                        <div style={styles.loading}>Analitik y�kleniyor...</div>
                     ) : (
                         <>
                             <div style={styles.statsGrid}>
@@ -78,7 +80,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                         <div style={styles.statValue}>
                                             {(safeStats.requests_made || 0).toLocaleString()}
                                         </div>
-                                        <div style={styles.statLabel}>Toplam İstekler</div>
+                                        <div style={styles.statLabel}>Toplam Istekler</div>
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
@@ -91,7 +93,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                 ? `${safeStats.success_rate.toFixed(1)}%`
                                                 : '0%'}
                                         </div>
-                                        <div style={styles.statLabel}>Başarı Oranı</div>
+                                        <div style={styles.statLabel}>Basari Orani</div>
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
@@ -104,7 +106,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                 ? `${safeStats.avg_response_time}ms`
                                                 : '0ms'}
                                         </div>
-                                        <div style={styles.statLabel}>Ort. Yanıt Süresi</div>
+                                        <div style={styles.statLabel}>Ort. Yanit S�resi</div>
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
@@ -119,12 +121,12 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             </div>
 
                             <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>İstek Sınırı Durumu</h3>
+                                <h3 style={styles.sectionTitle}>Istek Siniri Durumu</h3>
                                 <div>
                                     <div style={styles.rateLimitInfo}>
                                         <div style={styles.rateLimitText}>
                                             {safeStats.requests_made || 0} /{' '}
-                                            {safeStats.rate_limit || 10000} istek kullanıldı
+                                            {safeStats.rate_limit || 10000} istek kullanildi
                                         </div>
                                         <div>{rateLimitStatus.text}</div>
                                     </div>
@@ -139,7 +141,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     </div>
                                     {safeStats.reset_at && (
                                         <div style={styles.rateLimitReset}>
-                                            Sıfırlanıyor:{' '}
+                                            Sifirlaniyor:{' '}
                                             {calculateTimeUntilReset(safeStats.reset_at)}
                                         </div>
                                     )}
@@ -147,10 +149,10 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             </div>
 
                             <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>En Çok Kullanılan Uç Noktalar</h3>
+                                <h3 style={styles.sectionTitle}>En �ok Kullanilan U� Noktalar</h3>
                                 <div style={styles.endpointsList}>
                                     {endpoints.length === 0 ? (
-                                        <div style={styles.empty}>Uç nokta verisi yok</div>
+                                        <div style={styles.empty}>U� nokta verisi yok</div>
                                     ) : (
                                         endpoints.slice(0, 10).map((endpoint, idx) => (
                                             <div
@@ -174,12 +176,12 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                     </div>
                                                     <div style={styles.endpointStats}>
                                                         <span>{endpoint.count} istek</span>
-                                                        <span className="divider-text">•</span>
+                                                        <span className="divider-text">�</span>
                                                         <span>{endpoint.avg_time}ms ort.</span>
                                                         {endpoint.error_rate > 0 && (
                                                             <>
                                                                 <span className="divider-text">
-                                                                    •
+                                                                    �
                                                                 </span>
                                                                 <span className="icon-danger">
                                                                     {endpoint.error_rate}% hata
@@ -247,9 +249,9 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                         >
                                                             {event.status}
                                                         </span>
-                                                        <span className="divider-text">•</span>
+                                                        <span className="divider-text">�</span>
                                                         <span>{event.response_time}ms</span>
-                                                        <span className="divider-text">•</span>
+                                                        <span className="divider-text">�</span>
                                                         <span>
                                                             {new Date(
                                                                 event.timestamp

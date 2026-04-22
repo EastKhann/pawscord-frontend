@@ -56,7 +56,7 @@ const SwipeActions = ({ children, leftActions = [], rightActions = [], onActionC
                 <div className="swipe-actions left">
                     {leftActions.map((action) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={action.label}
                             key={action.id}
                             className={`swipe-action ${action.color || 'primary'}`}
                             onClick={() => {
@@ -90,7 +90,7 @@ const SwipeActions = ({ children, leftActions = [], rightActions = [], onActionC
                 <div className="swipe-actions right">
                     {rightActions.map((action) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={action.label}
                             key={action.id}
                             className={`swipe-action ${action.color || 'primary'}`}
                             onClick={() => {

@@ -3,8 +3,10 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import './GiftPremiumPanel.css';
 import { FaGift, FaCrown, FaUser } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 function GiftPremiumPanel({ apiBaseUrl, fetchWithAuth }) {
+    const { t } = useTranslation();
     const [recipientUsername, setRecipientUsername] = useState('');
     const [duration, setDuration] = useState('1');
     const [message, setMessage] = useState('');
@@ -56,9 +58,9 @@ function GiftPremiumPanel({ apiBaseUrl, fetchWithAuth }) {
         <div className="gift-premium-panel">
             <div className="gift-header">
                 <h2>
-                    <FaGift /> Premium Hediyele
+                    <FaGift /> {t('premium.giftTitle', 'Gift Premium')}
                 </h2>
-                <p>Birisi için premium özelliklerini hediye et!</p>
+                <p>{t('premium.giftDesc', 'Gift premium features for someone!')}</p>
             </div>
 
             {message && <div className="gift-message-alert">{message}</div>}
@@ -66,13 +68,13 @@ function GiftPremiumPanel({ apiBaseUrl, fetchWithAuth }) {
             <div className="gift-form">
                 <div className="form-section">
                     <h3>
-                        <FaUser /> Alıcı
+                        <FaUser /> {t('premium.recipient', 'Recipient')}
                     </h3>
                     <div className="input-group">
-                        <label>Kullanıcı Adı</label>
+                        <label>{t('premium.username', 'Username')}</label>
                         <input
                             type="text"
-                            placeholder="Kullanıcı adı gir"
+                            placeholder={t('common.enterUsername', 'Enter username')}
                             value={recipientUsername}
                             onChange={(e) => setRecipientUsername(e.target.value)}
                             className="form-input"
@@ -82,7 +84,7 @@ function GiftPremiumPanel({ apiBaseUrl, fetchWithAuth }) {
 
                 <div className="form-section">
                     <h3>
-                        <FaCrown /> Süre
+                        <FaCrown /> {t('premium.duration', 'Duration')}
                     </h3>
                     <div className="plans-grid">
                         {plans.map((plan) => (
@@ -99,7 +101,7 @@ function GiftPremiumPanel({ apiBaseUrl, fetchWithAuth }) {
                                 {plan.discount > 0 && (
                                     <div className="discount-badge">{plan.discount}% OFF</div>
                                 )}
-                                <div className="plan-duration">{plan.months} Ay</div>
+                                <div className="plan-duration">{plan.months} {t('common.months', 'months')}</div>
                                 <div className="plan-price">${plan.price}</div>
                                 <div className="plan-per-month">
                                     ${(plan.price / plan.months).toFixed(2)}/mo
@@ -110,9 +112,9 @@ function GiftPremiumPanel({ apiBaseUrl, fetchWithAuth }) {
                 </div>
 
                 <div className="form-section">
-                    <h3>💌 Kişisel Mesaj (İsteğe Bağlı)</h3>
+                    <h3>{t('premium.personalMessage', '💌 Personal Message (Optional)')}</h3>
                     <textarea
-                        placeholder="Hediyenize kişisel bir mesaj ekleyin..."
+                        placeholder={t('premium.giftMessage', 'Add a personal message to your gift...')}
                         value={giftMessage}
                         onChange={(e) => setGiftMessage(e.target.value)}
                         className="message-textarea"
@@ -123,53 +125,53 @@ function GiftPremiumPanel({ apiBaseUrl, fetchWithAuth }) {
                 </div>
 
                 <button
-                    aria-label="gift Premium"
+                    aria-label={t('giftPremium.giftButton', 'Gift premium')}
                     className="gift-btn"
                     onClick={giftPremium}
                     disabled={loading}
                 >
-                    <FaGift /> {loading ? 'Gönderiliyor...' : 'Premium Hediyele'}
+                    <FaGift /> {loading ? t('premium.sending', 'Sending...') : t('premium.giftPremium', 'Gift Premium')}
                 </button>
             </div>
 
             <div className="premium-features">
-                <h3>✨ Dahil Premium Özellikler</h3>
+                <h3>{t('premium.includedFeatures', '✨ Included Premium Features')}</h3>
                 <div className="features-grid">
                     <div className="feature-item">
                         <div className="feature-icon">🎨</div>
-                        <div className="feature-text">Özel profil temaları</div>
+                        <div className="feature-text">{t('premium.customProfileThemes', 'Custom profile themes')}</div>
                     </div>
                     <div className="feature-item">
                         <div className="feature-icon">📁</div>
-                        <div className="feature-text">100MB dosya yüklemeleri</div>
+                        <div className="feature-text">{t('premium.upload100mb', '100MB file uploads')}</div>
                     </div>
                     <div className="feature-item">
                         <div className="feature-icon">😀</div>
-                        <div className="feature-text">Sınırsız özel emoji</div>
+                        <div className="feature-text">{t('premium.unlimitedEmoji', 'Unlimited custom emoji')}</div>
                     </div>
                     <div className="feature-item">
                         <div className="feature-icon">🎭</div>
-                        <div className="feature-text">Animasyonlu avatarlar</div>
+                        <div className="feature-text">{t('premium.animatedAvatars', 'Animated avatars')}</div>
                     </div>
                     <div className="feature-item">
                         <div className="feature-icon">⚡</div>
-                        <div className="feature-text">Öncelikli destek</div>
+                        <div className="feature-text">{t('premium.prioritySupport', 'Priority support')}</div>
                     </div>
                     <div className="feature-item">
                         <div className="feature-icon">🏷️</div>
-                        <div className="feature-text">Premium rozeti</div>
+                        <div className="feature-text">{t('premium.premiumBadge', 'Premium badge')}</div>
                     </div>
                 </div>
             </div>
 
             <div className="info-box">
-                <h4>ℹ️ Hedifyeleme Nasıl Çalışır</h4>
+                <h4>{t('premium.howItWorks', 'ℹ️ How Gifting Works')}</h4>
                 <ul>
-                    <li>Alıcı hediyeniz hakkında bildirim alacak</li>
-                    <li>Premium özellikler hemen etkinleşir</li>
-                    <li>Kişisel mesajınız bildirime eklenecek</li>
-                    <li>Hediye abonelikleri alıcı seçerse otomatik yenilenir</li>
-                    <li>Hediye geçmişinizi hesap ayarlarınızdan takip edebilirsiniz</li>
+                    <li>{t('premium.howBullet1', 'Recipient will receive a notification about your gift')}</li>
+                    <li>{t('premium.howBullet2', 'Premium features activate immediately')}</li>
+                    <li>{t('premium.howBullet3', 'Your personal message will be included in the notification')}</li>
+                    <li>{t('premium.howBullet4', 'Gift subscriptions auto-renew if the recipient chooses')}</li>
+                    <li>{t('premium.howBullet5', 'Track your gift history from account settings')}</li>
                 </ul>
             </div>
         </div>

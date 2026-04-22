@@ -67,14 +67,14 @@ const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                     <h2 style={styles.title}>
                         <FaHistory /> Audit Logs
                     </h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.filters}>
                     <button
-                        aria-label="Filter"
+                        aria-label={t('common.filter', 'Filter')}
                         onClick={() => setFilter('all')}
                         style={{
                             ...styles.filterButton,
@@ -84,7 +84,7 @@ const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                         All
                     </button>
                     <button
-                        aria-label="Filter"
+                        aria-label={t('common.filter', 'Filter')}
                         onClick={() => setFilter('moderation')}
                         style={{
                             ...styles.filterButton,
@@ -94,7 +94,7 @@ const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                         Moderasyon
                     </button>
                     <button
-                        aria-label="Filter"
+                        aria-label={t('common.filter', 'Filter')}
                         onClick={() => setFilter('server')}
                         style={{
                             ...styles.filterButton,
@@ -104,7 +104,7 @@ const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                         Server
                     </button>
                     <button
-                        aria-label="Filter"
+                        aria-label={t('common.filter', 'Filter')}
                         onClick={() => setFilter('user')}
                         style={{
                             ...styles.filterButton,
@@ -119,7 +119,7 @@ const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                     {loading ? (
                         <div style={styles.loading}>{t('common.loading')}</div>
                     ) : logs.length === 0 ? (
-                        <div style={styles.empty}>Kayıt bulunamadı</div>
+                        <div style={styles.empty}>Kayit bulunamadi</div>
                     ) : (
                         <div style={styles.logList}>
                             {logs.map((log, idx) => (

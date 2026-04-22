@@ -60,8 +60,8 @@ const MentionsInboxPanel = ({ isOpen, onClose, onNavigateToMessage, currentUsern
         const now = new Date();
         const diff = now - d;
         if (diff < 60000) return 'Just now';
-        if (diff < 3600000) return `${Math.floor(diff / 60000)} dk önce`;
-        if (diff < 86400000) return `${Math.floor(diff / 3600000)} sa önce`;
+        if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+        if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
         if (diff < 604800000) return `${Math.floor(diff / 86400000)} days ago`;
         return d.toLocaleDateString('tr-TR');
     };
@@ -95,7 +95,7 @@ const MentionsInboxPanel = ({ isOpen, onClose, onNavigateToMessage, currentUsern
                     </div>
                     <div style={styles.headerRight}>
                         <button
-                            aria-label="Yenile"
+                            aria-label={t('mentions.refresh', 'Refresh mentions')}
                             onClick={() => fetchMentions(1)}
                             style={styles.refreshBtn}
                             title="Yenile"
@@ -104,7 +104,7 @@ const MentionsInboxPanel = ({ isOpen, onClose, onNavigateToMessage, currentUsern
                                 style={loading ? { animation: 'spin 1s linear infinite' } : {}}
                             />
                         </button>
-                        <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                             <FaTimes />
                         </button>
                     </div>
@@ -122,7 +122,7 @@ const MentionsInboxPanel = ({ isOpen, onClose, onNavigateToMessage, currentUsern
                             <span className="fs-48">📭</span>
                             <p style={styles.emptyTitle}>Bahsedilme yok</p>
                             <p style={styles.emptySubtitle}>
-                                Birisi seni @{currentUsername} with etiketlediğinde burada görünür
+                                {t('mentions.emptyHint', 'It will appear here when someone tags you')}
                             </p>
                         </div>
                     ) : (
@@ -171,7 +171,7 @@ const MentionsInboxPanel = ({ isOpen, onClose, onNavigateToMessage, currentUsern
                             ))}
                             {hasNext && (
                                 <button
-                                    aria-label="handle Load More"
+                                    aria-label={t('mentions.loadMore', 'Load more mentions')}
                                     onClick={handleLoadMore}
                                     style={styles.loadMoreBtn}
                                     disabled={loading}

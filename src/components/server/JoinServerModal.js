@@ -145,7 +145,7 @@ const JoinServerModal = ({ isOpen, onClose }) => {
             } else {
                 const data = await res.json().catch(() => ({}));
 
-                toast.error(data.error || 'Sunucuya katılınamadı.');
+                toast.error(data.error || t('joinServer.error', 'Could not join the server.'));
             }
         } catch {
             toast.error(t('errors.connection_error'));
@@ -226,14 +226,12 @@ const JoinServerModal = ({ isOpen, onClose }) => {
                         <input
                             value={inviteCode}
                             onChange={(e) => setInviteCode(e.target.value)}
-                            placeholder="https://pawscord.com/invite/abc123"
+                            placeholder={t('joinServer.inviteUrl', 'https://pawscord.com/invite/abc123')}
                             style={input}
                         />
 
                         <button
-                            aria-label="Action button"
-                            type="submit"
-                            disabled={joiningId === 'invite' || !inviteCode.trim()}
+                            aria-label={t('joinServer.joinByCode', 'Join by invite code')}
                             style={{
                                 ...joinBtn,
 
@@ -257,7 +255,7 @@ const JoinServerModal = ({ isOpen, onClose }) => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={t('joinServer.searchPlaceholder', '🔍 Sunucu ara...')}
                     style={S.mar2}
-                    aria-label="Search Query"
+                    aria-label={t('joinServer.searchInput', 'Search servers')}
                 />
 
                 {/* Server listsi */}
@@ -323,8 +321,7 @@ const JoinServerModal = ({ isOpen, onClose }) => {
                                     </span>
                                 ) : (
                                     <button
-                                        aria-label="Action button"
-                                        onClick={() => handleJoinServer(srv.id)}
+                                        aria-label={t('joinServer.joinServer', 'Join server')}
                                         disabled={joiningId === srv.id}
                                         style={{
                                             ...joinBtn,

@@ -10,7 +10,7 @@ const ServerCard = ({ server, onJoin, featured }) => {
     const { t } = useTranslation();
     return (
         <div
-            aria-label="server card"
+            aria-label={t('serverDiscovery.serverCard', 'Server card')}
             style={featured ? styles.serverCardFeatured : styles.serverCard}
         >
             <div style={styles.serverIcon}>

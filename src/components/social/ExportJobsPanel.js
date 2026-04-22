@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes, FaDownload, FaFile, FaSpinner } from 'react-icons/fa';
 import useExportJobs, {
@@ -39,7 +39,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         <FaDownload className="icon-primary-24" />
                         <h2 style={h2Style}>{t('exportJobs.title')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -109,7 +109,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                                 </span>
                                                 {job.completed_at && (
                                                     <>
-                                                        <span className="m-0-8">•</span>
+                                                        <span className="m-0-8">�</span>
                                                         <span>
                                                             Completed:{' '}
                                                             {new Date(
@@ -142,16 +142,16 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                             <span>{job.status}</span>
                                             {job.status === 'completed' && (
                                                 <button
-                                                    aria-label="İndir"
+                                                    aria-label={t('exportJobs.download', 'Download export')}
                                                     onClick={() => e.downloadExport(job.id)}
                                                     style={styles.downloadBtn}
-                                                    title="İndir"
+                                                    title="Indir"
                                                 >
                                                     <FaDownload />
                                                 </button>
                                             )}
                                             <button
-                                                aria-label="Delete"
+                                                aria-label={t('common.delete')}
                                                 onClick={() => e.deleteJob(job.id)}
                                                 style={styles.deleteBtn}
                                                 title={t('common.delete')}
@@ -167,10 +167,10 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
                     <div style={styles.info}>
                         <p style={styles.infoText}>
-                            📦 Dışa aktarmalar arka planda işlenir ve birkaç dakika sürebilir
+                            ?? Disa aktarmalar arka planda islenir ve birka� dakika s�rebilir
                         </p>
                         <p style={styles.infoText}>
-                            💾 Completed exports are available for 7 days before auto-deletion
+                            ?? Completed exports are available for 7 days before auto-deletion
                         </p>
                     </div>
                 </div>

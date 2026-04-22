@@ -34,9 +34,9 @@ const TopicHistoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaHashtag className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Konu Geçmişi</h2>
+                        <h2 style={styles.title}>{t('topicHistory.title', 'Topic History')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -50,18 +50,18 @@ const TopicHistoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                     )}
 
                     {loading ? (
-                        <div style={styles.loading}>Geçmiş yükleniyor...</div>
+                        <div style={styles.loading}>{t('topicHistory.loading', 'Loading history...')}</div>
                     ) : history.length === 0 ? (
-                        <div style={styles.empty}>Konu geçmişi bulunamadı</div>
+                        <div style={styles.empty}>{t('topicHistory.empty', 'Topic history not found')}</div>
                     ) : (
                         <div style={styles.historyList}>
                             {history.map((entry, idx) => (
                                 <div key={`item-${idx}`} style={styles.historyItem}>
                                     <div style={styles.topicText}>{entry.topic}</div>
                                     <div style={styles.topicMeta}>
-                                        {entry.user?.username || 'Bilinmeyen'} tarafından{' '}
+                                        {entry.user?.username || t('common.unknown', 'Unknown')} {t('topicHistory.setBy', 'by')}{' '}
                                         {new Date(entry.set_at).toLocaleString('tr-TR')} tarihinde
-                                        ayarlandı
+                                        {t('topicHistory.set', 'set')}
                                     </div>
                                 </div>
                             ))}

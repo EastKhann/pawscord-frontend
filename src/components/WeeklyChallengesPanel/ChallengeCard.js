@@ -1,5 +1,6 @@
 ﻿// WeeklyChallengesPanel/ChallengeCard.js
 import { FaLock, FaCheck, FaStar } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
     getIcon,
@@ -10,6 +11,7 @@ import {
 } from './hooks/useChallenges';
 
 const ChallengeCard = ({ challenge, isDaily, styles }) => {
+    const { t } = useTranslation();
     const progress = (challenge.current / challenge.target) * 100;
     const isCompleted = challenge.status === 'completed';
     const isLocked = challenge.status === 'locked';
@@ -26,7 +28,7 @@ const ChallengeCard = ({ challenge, isDaily, styles }) => {
     };
 
     return (
-        <div aria-label="challenge card" style={cardStyle}>
+        <div aria-label={t('challenges.card', 'Challenge card')} style={cardStyle}>
             <div style={styles.challengeIcon}>
                 {isLocked ? (
                     <FaLock size={20} color="#949ba4" />

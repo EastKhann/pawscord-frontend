@@ -15,11 +15,11 @@ const PRESET_EMOJIS = [
 // Preset statuses
 const PRESET_STATUSES = [
     { emoji: '🎮', text: 'Oyun oynuyor' },
-    { emoji: '💻', text: 'Kod yazıyor' },
-    { emoji: '📚', text: 'Çalıyor' },
-    { emoji: '🎵', text: 'Müzik dinliyor' },
+    { emoji: '💻', text: t('customStatus.coding','Coding') },
+    { emoji: '📚', text: t('customStatus.studying','Studying') },
+    { emoji: '🎵', text: t('customStatus.listeningMusic','Listening to music') },
     { emoji: '💤', text: 'AFK' },
-    { emoji: '🚫', text: 'Rahatsız etmeyin' },
+    { emoji: '🚫', text: t('customStatus.doNotDisturb','Do not disturb') },
     { emoji: '☕', text: 'Mola veriyor' },
     { emoji: '🍕', text: 'Yemek yiyor' }
 ];

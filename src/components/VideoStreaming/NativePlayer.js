@@ -2,7 +2,7 @@
 // 🎥 Native HTML5 Video Player - Minimal overhead
 
 import { useRef, memo, useCallback, useEffect } from 'react';
-
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
 
@@ -17,6 +17,7 @@ const bgStyle = (style) => ({
 const NativePlayer = memo(
     ({ src, controls = true, style = {}, onLoaded, onPause, onEnded, onError }) => {
         const videoRef = useRef(null);
+        const { t } = useTranslation();
 
         useEffect(() => {
             if (videoRef.current) {
@@ -49,7 +50,7 @@ const NativePlayer = memo(
 
         return (
             <video
-                aria-label="native video player"
+                aria-label={t('videoStreaming.nativePlayer', 'Video player')}
                 ref={videoRef}
                 src={src}
                 controls={controls}
@@ -63,7 +64,7 @@ const NativePlayer = memo(
             >
                 <track kind="captions" />
                 <source src={src} />
-                Tarayıcınız video oynatmayı desteklemiyor.
+                Your browser does not support video playback.
             </video>
         );
     }

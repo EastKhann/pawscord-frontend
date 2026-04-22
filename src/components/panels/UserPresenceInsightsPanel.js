@@ -144,7 +144,7 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
     if (loading) {
         return (
             <div
-                aria-label="user presence insights panel"
+                aria-label={t('userPresence.panel', 'User presence insights panel')}
                 className="presence-insights-overlay"
                 role="button"
                 tabIndex={0}
@@ -428,10 +428,10 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                                     ))}
                                     {(!insights?.top_activities ||
                                         insights.top_activities.length === 0) && (
-                                        <div className="empty-state">
-                                            {t('no_activity_data_available')}
-                                        </div>
-                                    )}
+                                            <div className="empty-state">
+                                                {t('no_activity_data_available')}
+                                            </div>
+                                        )}
                                 </div>
                             </div>
                         </div>

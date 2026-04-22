@@ -19,7 +19,7 @@ const S = {
 const renderSystemHealth = () => {
     const { t } = useTranslation();
     return (
-        <div aria-label="render system health">
+        <div aria-label={t('admin.systemHealth', 'System health')}>
             <h2 className="white-18-mb16">{t('💚_sistem_sağlığı')}</h2>
 
             {/* Health Bars */}

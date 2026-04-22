@@ -206,7 +206,7 @@ class EnhancedErrorBoundary extends Component {
 
                         <h2 style={styles.title}>
                             {level === 'component'
-                                ? 'Bir hata oluştu'
+                                ? 'An error occurred'
                                 : t('ui.uzgunuz_bir_seyler_yanlis_gitti')}
                         </h2>
 
@@ -224,7 +224,7 @@ class EnhancedErrorBoundary extends Component {
                             <button
                                 onClick={this.handleReset}
                                 style={styles.primaryButton}
-                                aria-label="Try again"
+                                aria-label={t('errors.tryAgain', 'Try again')}
                             >
                                 <FaRedo size={14} />
                                 <span>{t('tekrar_dene')}</span>
@@ -234,7 +234,7 @@ class EnhancedErrorBoundary extends Component {
                                 <button
                                     onClick={() => (window.location.href = '/')}
                                     style={styles.secondaryButton}
-                                    aria-label="Ana pageya git"
+                                    aria-label={t('errors.returnHome', 'Return to home')}
                                 >
                                     <FaHome size={14} />
                                     <span>{t('ana_sayfa')}</span>

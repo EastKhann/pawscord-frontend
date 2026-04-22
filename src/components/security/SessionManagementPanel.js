@@ -97,7 +97,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         <FaLaptop className="icon-primary-mr10" />
                         <h2 style={styles.title}>Aktif Oturumlar</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -107,7 +107,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         {sessions.length} active {sessions.length === 1 ? 'session' : 'sessions'}
                     </div>
                     <button
-                        aria-label="revoke All Sessions"
+                        aria-label={t('sessions.revokeAll', 'Revoke all sessions')}
                         onClick={revokeAllSessions}
                         style={styles.revokeAllButton}
                     >
@@ -117,9 +117,9 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Oturumlar yükleniyor...</div>
+                        <div style={styles.loading}>{t('sessions.loading', 'Loading sessions...')}</div>
                     ) : sessions.length === 0 ? (
-                        <div style={styles.empty}>Aktif oturum bulunamadı</div>
+                        <div style={styles.empty}>{t('sessions.noActive', 'No active sessions found')}</div>
                     ) : (
                         <div style={styles.sessionsList}>
                             {sessions.map((session, idx) => (
@@ -155,21 +155,20 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                     </div>
                                     {!session.is_current && (
                                         <button
-                                            aria-label="Action button"
-                                            onClick={() => revokeSession(session.id)}
-                                            style={styles.revokeButton}
-                                            title="Oturumu Kapat"
+                                            aria-label={t('sessions.revokeSession', 'Revoke session')}
+                                    style={styles.revokeButton}
+                                    title="Oturumu Kapat"
                                         >
-                                            <FaTrash />
-                                        </button>
-                                    )}
-                                </div>
-                            ))}
+                                    <FaTrash />
+                                </button>
+                            )}
                         </div>
-                    )}
+                    ))}
                 </div>
+                    )}
             </div>
         </div>
+        </div >
     );
 };
 const styles = {

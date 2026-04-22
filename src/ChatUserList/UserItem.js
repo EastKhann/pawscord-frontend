@@ -196,7 +196,7 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
                                     <FaCrown size={11} color="#f0b232" title="Sunucu Sahibi" />
                                 )}
                                 {isModerator && !isOwner && (
-                                    <FaCrown size={11} color="#5865f2" title="Modatör" />
+                                    <FaCrown size={11} color="#5865f2" title={t('common.moderator', 'Moderator')} />
                                 )}
                             </div>
                             <div style={{ fontSize: '12px', color: '#b5bac1' }}>
@@ -312,7 +312,7 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
                         {user.display_name || user.username}
                     </span>
                     {isOwner && <FaCrown size={12} color="#f0b232" title="Sunucu Sahibi" />}
-                    {isModerator && <FaCrown size={12} color="#5865f2" title="Modatör" />}
+                    {isModerator && <FaCrown size={12} color="#5865f2" title={t('common.moderator', 'Moderator')} />}
                 </div>
                 {user.custom_status && (
                     <span style={styles.customStatus}>{user.custom_status}</span>

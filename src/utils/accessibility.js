@@ -342,7 +342,7 @@ export const createSkipLink = (targetId) => {
     const skipLink = document.createElement('a');
     skipLink.href = `${targetId}`;
     skipLink.className = 'skip-link';
-    skipLink.textContent = 'Ana içeriğe geç';
+    skipLink.textContent = 'Skip to main content';
 
     Object.assign(skipLink.style, {
         position: 'absolute',

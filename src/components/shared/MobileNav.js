@@ -62,7 +62,7 @@ const MobileNav = ({ activeTab = 'chats', onTabChange }) => {
     );
 
     return (
-        <nav className="mobile-nav" role="navigation" aria-label="Mobile navigation">
+        <nav className="mobile-nav" role="navigation" aria-label={t('nav.mobileNav', 'Mobile navigation')}>
             {tabs.map((tab) => (
                 <button
                     key={tab.id}

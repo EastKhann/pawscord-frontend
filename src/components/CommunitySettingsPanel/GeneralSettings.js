@@ -8,7 +8,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
     return (
         <div className="settings-tab">
             <div className="form-group">
-                <label>Server Açıklaması</label>
+                <label>{t('community.serverDescription', 'Server Description')}</label>
                 <textarea
                     value={settings.description}
                     onChange={(e) =>
@@ -24,7 +24,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
             <div className="form-row">
                 <div className="form-group">
                     <label>
-                        <FaGavel /> Kurallar Kanalı
+                        <FaGavel /> {t('community.rulesChannel', 'Rules Channel')}
                     </label>
                     <select
                         value={settings.rules_channel_id}
@@ -32,7 +32,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                             setSettings((prev) => ({ ...prev, rules_channel_id: e.target.value }))
                         }
                     >
-                        <option value="">Seç...</option>
+                        <option value="">{t('common.select', 'Select...')}</option>
                         {channels.map((ch) => (
                             <option key={ch.id} value={ch.id}>
                                 {ch.name}
@@ -42,7 +42,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                 </div>
                 <div className="form-group">
                     <label>
-                        <FaBullhorn /> Güncellemeler Kanalı
+                        <FaBullhorn /> {t('community.updatesChannel', 'Updates Channel')}
                     </label>
                     <select
                         value={settings.public_updates_channel_id}
@@ -53,7 +53,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                             }))
                         }
                     >
-                        <option value="">Seç...</option>
+                        <option value="">{t('common.select', 'Select...')}</option>
                         {channels.map((ch) => (
                             <option key={ch.id} value={ch.id}>
                                 {ch.name}
@@ -75,15 +75,15 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                             setSettings((prev) => ({ ...prev, preferred_locale: e.target.value }))
                         }
                     >
-                        <option value="tr">🇹🇷 Türkçe</option>
+                        <option value="tr">🇹🇷 {t('lang.tr', 'Turkish')}</option>
                         <option value="en">🇬🇧 English</option>
                         <option value="de">🇩🇪 Deutsch</option>
-                        <option value="fr">🇫🇷 Français</option>
+                        <option value="fr">{t('lang.fr', '🇫🇷 French')}</option>
                     </select>
                 </div>
                 <div className="form-group">
                     <label>
-                        <FaComments /> Varsayılan Bildirimler
+                        <FaComments /> {t('community.defaultNotifications', 'Default Notifications')}
                     </label>
                     <select
                         value={settings.default_notifications}
@@ -94,18 +94,18 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                             }))
                         }
                     >
-                        <option value="all">Tüm Mesajlar</option>
+                        <option value="all">{t('community.allMessages', 'All Messages')}</option>
                         <option value="mentions">{t('sadece_tagler')}</option>
                     </select>
                 </div>
             </div>
 
             <div className="feature-toggles">
-                <h4>Özellikler</h4>
+                <h4>{t('community.features', 'Features')}</h4>
                 {[
-                    { key: 'welcome_screen', label: 'Hoşgeldin Ekranı' },
-                    { key: 'member_screening', label: 'Üye Tarama' },
-                    { key: 'discovery', label: 'Sunucuları Keşfet' },
+                    { key: 'welcome_screen', label: t('community.welcomeScreen', 'Welcome Screen') },
+                    { key: 'member_screening', label: t('community.memberScreening', 'Member Screening') },
+                    { key: 'discovery', label: t('community.discoverServers', 'Discover Servers') },
                 ].map((f) => (
                     <label key={f.key} className="feature-item">
                         <span>{f.label}</span>

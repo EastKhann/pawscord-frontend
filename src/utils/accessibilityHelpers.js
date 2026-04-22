@@ -94,7 +94,7 @@ class AccessibilityManager {
         const skip = document.createElement('a');
         skip.href = '#main-content';
         skip.className = 'skip-link';
-        skip.textContent = 'İçeriğe Atla';
+        skip.textContent = 'Skip to Content';
         skip.style.cssText = `
       position: absolute;
       left: -10000px;

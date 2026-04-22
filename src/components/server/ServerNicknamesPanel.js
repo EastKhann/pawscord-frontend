@@ -90,10 +90,10 @@ const ServerNicknamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                     <div style={styles.headerLeft}>
                         <FaUser className="icon-primary-mr10" />
 
-                        <h2 style={styles.title}>Sunucu Gözkadları</h2>
+                        <h2 style={styles.title}>{t('serverNicks.title', 'Server Nicknames')}</h2>
                     </div>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -103,18 +103,18 @@ const ServerNicknamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Üye ara..."
+                        placeholder={t('common.searchMembers', 'Search members...')}
                         style={styles.searchInput}
-                        aria-label="Search Query"
+                        aria-label={t('serverNicknames.searchInput', 'Search members')}
                     />
                 </div>
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Gözkadlar yükleniyor...</div>
+                        <div style={styles.loading}>{t('serverNicks.loading', 'Loading nicknames...')}</div>
                     ) : filteredNicknames.length === 0 ? (
                         <div style={styles.empty}>
-                            {searchQuery ? 'Aramanızla eşleşen üye yok' : 'Üye bulunamadı'}
+                            {searchQuery ? t('serverNicks.noMatch', 'No members match your search') : t('serverNicks.notFound', 'No members found')}
                         </div>
                     ) : (
                         <div style={styles.nicknamesList}>
@@ -135,13 +135,12 @@ const ServerNicknamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
 
                                     <div style={styles.actions}>
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('serverNicknames.editNickname', 'Edit nickname')}
                                             onClick={() => {
                                                 const newNick = prompt(
                                                     'Enter new nickname:',
                                                     item.nickname || ''
                                                 );
-
                                                 if (newNick !== null && newNick.trim()) {
                                                     updateNickname(item.user_id, newNick.trim());
                                                 }
@@ -153,7 +152,7 @@ const ServerNicknamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
 
                                         {item.nickname && (
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('serverNicknames.clearNickname', 'Clear nickname')}
                                                 onClick={() => clearNickname(item.user_id)}
                                                 style={styles.clearButton}
                                             >
@@ -167,7 +166,7 @@ const ServerNicknamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

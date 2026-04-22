@@ -105,21 +105,21 @@ const ModeratorNotesPanel = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaStickyNote className="icon-warning" />
-                        <h2 className="m-0">Moderator Notesı - {username}</h2>
+                        <h2 className="m-0">{t('modNotes.title', 'Moderator Notes')} - {username}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
 
                 <div style={styles.addNote}>
                     <textarea
-                        placeholder="Yeni not ekle..."
+                        placeholder={t('modNotes.addPlaceholder', 'Add a new note...')}
                         value={newNote}
                         onChange={(e) => setNewNote(e.target.value)}
                         style={styles.textarea}
                         rows={3}
                     />
-                    <button aria-label="add Note" onClick={addNote} style={styles.addBtn}>
-                        <FaPlus /> Not Add
+                    <button aria-label={t('modNotes.addNote', 'Add note')} onClick={addNote} style={styles.addBtn}>
+                        <FaPlus /> {t('modNotes.addNote', 'Add Note')}
                     </button>
                 </div>
 
@@ -129,7 +129,7 @@ const ModeratorNotesPanel = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                     ) : notes.length === 0 ? (
                         <div style={styles.empty}>
                             <FaStickyNote className="icon-lg" />
-                            <p>Henüz not yok</p>
+                            <p>{t('modNotes.noNotes', 'No notes yet')}</p>
                         </div>
                     ) : (
                         notes.map((note) => (
@@ -144,10 +144,10 @@ const ModeratorNotesPanel = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                     <div style={styles.noteText}>{note.note}</div>
                                 </div>
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('common.delete', 'Delete')}
                                     onClick={() => deleteNote(note.id)}
                                     style={styles.deleteBtn}
-                                    title="Sil"
+                                    title={t('common.delete', 'Delete')}
                                 >
                                     <FaTrash />
                                 </button>

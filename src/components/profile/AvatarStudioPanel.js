@@ -26,21 +26,21 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         <FaCoins className="icon-warning" />
                         <span>{s.userCoins}</span>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.tabs}>
                     <button
-                        aria-label="Customize"
+                        aria-label={t('avatar.customize', 'Customize')}
                         onClick={() => s.setView('customize')}
                         style={s.view === 'customize' ? styles.activeTab : styles.tab}
                     >
                         <FaPalette /> {t('avatar.customize', 'Customize')}
                     </button>
                     <button
-                        aria-label="Presets"
+                        aria-label={t('avatar.presets', 'Presets')}
                         onClick={() => s.setView('presets')}
                         style={s.view === 'presets' ? styles.activeTab : styles.tab}
                     >
@@ -55,21 +55,21 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                 <AvatarPreview avatar={s.avatar} parts={s.parts} />
                                 <div style={styles.previewActions}>
                                     <button
-                                        aria-label="s randomize Avatar"
+                                        aria-label={t('avatar.randomize', 'Randomize avatar')}
                                         onClick={s.randomizeAvatar}
                                         style={styles.actionBtn}
                                     >
                                         <FaRandom /> {t('avatar.random', 'Random')}
                                     </button>
                                     <button
-                                        aria-label="s save Preset"
+                                        aria-label={t('avatar.savePreset', 'Save preset')}
                                         onClick={s.savePreset}
                                         style={styles.actionBtn}
                                     >
                                         <FaBookmark /> {t('avatar.savePreset', 'Save Preset')}
                                     </button>
                                     <button
-                                        aria-label="s save Avatar"
+                                        aria-label={t('avatar.saveAvatar', 'Save avatar')}
                                         onClick={s.saveAvatar}
                                         style={styles.saveBtn}
                                         disabled={s.loading}
@@ -84,7 +84,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                 <div style={styles.categoryTabs}>
                                     {CATEGORIES.map((cat) => (
                                         <button
-                                            aria-label="Switch tab"
+                                            aria-label={t('avatar.switchCategory', cat.name)}
                                             key={cat.id}
                                             onClick={() => s.setActiveCategory(cat.id)}
                                             style={
@@ -125,9 +125,9 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                                 }
                                             >
                                                 {item.color &&
-                                                !['gradient', 'galaxy', 'rainbow'].includes(
-                                                    item.color
-                                                ) ? (
+                                                    !['gradient', 'galaxy', 'rainbow'].includes(
+                                                        item.color
+                                                    ) ? (
                                                     <div />
                                                 ) : (
                                                     <span style={styles.itemPreview}>
@@ -142,7 +142,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                                 {!isOwned &&
                                                     (STORE_PURCHASES_ENABLED ? (
                                                         <button
-                                                            aria-label="Action button"
+                                                            aria-label={t('avatar.purchaseItem', 'Purchase item')}
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 s.purchaseItem(
@@ -176,7 +176,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                     <AvatarPreview avatar={preset.config} parts={s.parts} mini />
                                     <span style={styles.presetName}>{preset.name}</span>
                                     <button
-                                        aria-label="Y\u00fckle"
+                                        aria-label={t('avatar.loadPreset', 'Load preset')}
                                         onClick={() => s.loadPreset(preset)}
                                         style={styles.loadBtn}
                                     >
@@ -185,7 +185,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                 </div>
                             ))}
                             {s.presets.length === 0 && (
-                                <p style={styles.emptyText}>Henüz kaydedilmiş ön ayar yok</p>
+                                <p style={styles.emptyText}>{t('avatarStudio.noPresets', 'No saved presets yet')}</p>
                             )}
                         </div>
                     )}

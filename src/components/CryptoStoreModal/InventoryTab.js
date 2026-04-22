@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const InventoryTab = ({ inventory, loading, handleEquip }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="inventory tab" style={styles.grid}>
+        <div aria-label={t('cryptoStore.inventoryTab', 'Inventory')} style={styles.grid}>
             {inventory.map((entry) => (
                 <div
                     key={entry.id}

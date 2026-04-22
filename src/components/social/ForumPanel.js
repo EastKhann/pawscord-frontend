@@ -274,7 +274,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
             >
                 <div className="forum-header">
                     <h2>💬 Forum</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -282,13 +282,13 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                 {!selectedForum ? (
                     <div className="forum-list">
                         <div className="forum-list-header">
-                            <h3>Forum Channelları</h3>
+                            <h3>{t('forum.channels', 'Forum Channels')}</h3>
                             <button
-                                aria-label="handle Create Forum"
+                                aria-label={t('forum.createForum', 'Create new forum')}
                                 className="create-forum-btn"
                                 onClick={handleCreateForum}
                             >
-                                ➕ Yeni Forum
+                                ➕ {t('forum.newForum', 'New Forum')}
                             </button>
                         </div>
 
@@ -309,7 +309,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                         <div className="forum-icon">💬</div>
                                         <h4>{forum.name}</h4>
                                         <p className="forum-stats">
-                                            {forum.posts_count || 0} gönderi •{' '}
+                                            {forum.posts_count || 0} {t('forum.posts', 'posts')} •{' '}
                                             {forum.members_count || 0} member
                                         </p>
                                     </div>
@@ -317,12 +317,12 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                             </div>
                         ) : (
                             <div className="no-forums">
-                                <p>📋 Not yet forum kanalı yok</p>
+                                <p>{t('forum.noChannels', '📋 No forum channels yet')}</p>
                                 <button
-                                    aria-label="handle Create Forum"
+                                    aria-label={t('forum.createForum', 'Create forum')}
                                     onClick={handleCreateForum}
                                 >
-                                    İlk forumu oluştur
+                                    {t('forum.createFirst', 'Create the first forum')}
                                 </button>
                             </div>
                         )}
@@ -331,7 +331,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                     <div className="posts-view">
                         <div className="posts-header">
                             <button
-                                aria-label="handle Back To Forums"
+                                aria-label={t('forum.backToForums', 'Back to forums')}
                                 className="back-btn"
                                 onClick={handleBackToForums}
                             >
@@ -339,11 +339,11 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                             </button>
                             <h3>{selectedForum.name}</h3>
                             <button
-                                aria-label="handle Toggle Create Post"
+                                aria-label={t('forum.createPost', 'Create new post')}
                                 className="new-post-btn"
                                 onClick={handleToggleCreatePost}
                             >
-                                ➕ Yeni Sendi
+                                ➕ {t('forum.newPost', 'New Post')}
                             </button>
                         </div>
 
@@ -358,27 +358,27 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                     aria-label={t('ui.sendi_basligi_2')}
                                 />
                                 <textarea
-                                    placeholder="Content..."
+                                    placeholder={t('forum.contentPlaceholder', 'Post content...')}
                                     value={newPost.content}
                                     onChange={handleNewPostContentChange}
                                     rows={6}
-                                    aria-label="Content..."
+                                    aria-label={t('forum.contentPlaceholder', 'Post content...')}
                                 />
                                 <div className="form-actions">
                                     <button
-                                        aria-label="handle Create Post"
+                                        aria-label={t('forum.createPost', 'Create post')}
                                         className="submit-btn"
                                         onClick={handleCreatePost}
                                         disabled={creating}
                                     >
-                                        {creating ? '⏳ Sending...' : '📤 Send'}
+                                        {creating ? '⏳ ' + t('common.sending', 'Sending...') : '📤 ' + t('common.send', 'Send')}
                                     </button>
                                     <button
-                                        aria-label="handle Hide Create Post"
+                                        aria-label={t('common.cancel', 'Cancel')}
                                         className="cancel-btn"
                                         onClick={handleHideCreatePost}
                                     >
-                                        Cancel
+                                        {t('common.cancel', 'Cancel')}
                                     </button>
                                 </div>
                             </div>
@@ -399,7 +399,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                 >
                                     <div className="post-votes">
                                         <button
-                                            aria-label="Vote"
+                                            aria-label={t('forum.upvote', 'Upvote')}
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleVote(post.id, 'up');
@@ -409,7 +409,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                         </button>
                                         <span>{post.votes || 0}</span>
                                         <button
-                                            aria-label="Vote"
+                                            aria-label={t('forum.downvote', 'Downvote')}
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleVote(post.id, 'down');
@@ -429,7 +429,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                             {post.content?.substring(0, 150)}...
                                         </p>
                                         <div className="post-stats">
-                                            💬 {post.replies_count || 0} yanıt
+                                            {t('forum.replies', '💬 {{count}} replies', { count: post.replies_count || 0 })}
                                         </div>
                                     </div>
                                 </div>
@@ -437,7 +437,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
                             {posts.length === 0 && (
                                 <div className="no-posts">
-                                    <p>📭 Henüz gönderi yok</p>
+                                    <p>{t('forum.noPosts', '📭 No posts yet')}</p>
                                 </div>
                             )}
                         </div>
@@ -446,7 +446,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                     <div className="post-detail">
                         <div className="detail-header">
                             <button
-                                aria-label="handle Back To Posts"
+                                aria-label={t('forum.backToPosts', 'Back to posts')}
                                 className="back-btn"
                                 onClick={handleBackToPosts}
                             >
@@ -457,14 +457,14 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                         <div className="post-main">
                             <div className="post-votes-vertical">
                                 <button
-                                    aria-label="handle Upvote Selected"
+                                    aria-label={t('forum.upvote', 'Upvote')}
                                     onClick={handleUpvoteSelected}
                                 >
                                     👍
                                 </button>
                                 <span>{selectedPost.votes || 0}</span>
                                 <button
-                                    aria-label="handle Downvote Selected"
+                                    aria-label={t('forum.downvote', 'Downvote')}
                                     onClick={handleDownvoteSelected}
                                 >
                                     👎
@@ -495,19 +495,15 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                             {new Date(reply.created_at).toLocaleString('tr-TR')}
                                         </span>
                                         {reply.id === selectedPost.solution_id && (
-                                            <span className="solution-badge">✅ züm</span>
+                                            <span className="solution-badge">{t('forum.solution', '✅ Solution')}</span>
                                         )}
                                     </div>
                                     <div className="reply-content">{reply.content}</div>
                                     {!selectedPost.solution_id && (
                                         <button
-                                            aria-label="Action button"
-                                            className="mark-solution-btn"
-                                            onClick={() =>
-                                                handleMarkSolution(selectedPost.id, reply.id)
-                                            }
+                                            aria-label={t('forum.markSolution', 'Mark as solution')}
                                         >
-                                            ✅ züm olarak işaretle
+                                            {t('forum.markSolution', '✅ Mark as solution')}
                                         </button>
                                     )}
                                 </div>
@@ -522,11 +518,11 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                     aria-label={t('ui.write_your_reply_2')}
                                 />
                                 <button
-                                    aria-label="handle Reply Selected"
+                                    aria-label={t('forum.submitReply', 'Submit reply')}
                                     className="reply-submit-btn"
                                     onClick={handleReplySelected}
                                 >
-                                    📤 Reply
+                                    📤 {t('forum.reply', 'Reply')}
                                 </button>
                             </div>
                         </div>

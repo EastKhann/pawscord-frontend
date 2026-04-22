@@ -161,7 +161,7 @@ export function sanitizeURL(url) {
         const parsed = new URL(url);
 
         if (!validProtocols.includes(parsed.protocol)) {
-            logger.warn('🛡️ [XSS] İzinsiz protokol blocked:', parsed.protocol);
+            logger.warn('🛡️ [XSS] Unauthorized protocol blocked:', parsed.protocol);
             return null;
         }
 
@@ -173,7 +173,7 @@ export function sanitizeURL(url) {
 
         return url;
     } catch (error) {
-        logger.warn('🛡️ [XSS] Geçersiz URL:', url);
+        logger.warn('🛡️ [XSS] Invalid URL:', url);
         return null;
     }
 }
@@ -194,7 +194,7 @@ export function sanitizeJSON(jsonString) {
 
         return parsed;
     } catch (error) {
-        logger.warn('🛡️ [XSS] Geçersiz JSON:', error);
+        logger.warn('🛡️ [XSS] Invalid JSON:', error);
         return null;
     }
 }

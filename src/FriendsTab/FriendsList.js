@@ -177,16 +177,17 @@ const FriendsList = ({
     return (
         <div ref={listRef} onKeyDown={handleListKeyDown}>
             {/* Header with search + online count */}
-            <div>
-                <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', marginTop: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '6px 10px' }}>
                     <FaSearch size={11} color="#7a7d87" />
                     <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={t('common.search')}
+                        style={{ background: 'transparent', border: 'none', outline: 'none', color: '#dbdee1', fontSize: '13px', width: '100%' }}
                     />
                 </div>
-                <div>
+                <div style={{ fontSize: '12px', color: '#23a559', fontWeight: '600', whiteSpace: 'nowrap', background: 'rgba(35,165,89,0.1)', border: '1px solid rgba(35,165,89,0.25)', borderRadius: '6px', padding: '4px 8px' }}>
                     🟢 {onlineCount} / {friends.length}
                 </div>
             </div>
@@ -200,7 +201,12 @@ const FriendsList = ({
                 const activityMeta = getActivityMeta(friendActivity);
 
                 return (
-                    <div key={id} style={styles.listItem}>
+                    <div
+                        key={id}
+                        style={styles.listItem}
+                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                    >
                         <div
                             style={styles.userInfo}
                             role="button"
@@ -209,11 +215,11 @@ const FriendsList = ({
                             onKeyDown={(e) => e.key === 'Enter' && onStartDM(friendUsername)}
                             aria-label={`${t('friends.startDM')} ${friendUsername}`}
                         >
-                            <div>
+                            <div style={{ position: 'relative', flexShrink: 0 }}>
                                 <LazyImage
                                     src={displayAvatar || getDeterministicAvatar(friendUsername)}
                                     style={styles.avatar}
-                                    alt="avatar"
+                                    alt={friendUsername}
                                 />
                                 <span
                                     style={{
@@ -228,8 +234,8 @@ const FriendsList = ({
                                     }}
                                 />
                             </div>
-                            <div>
-                                <div>
+                            <div style={{ minWidth: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                     <div style={_st1063}>{friendUsername}</div>
                                     {activityMeta && (
                                         <span

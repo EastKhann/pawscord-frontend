@@ -73,7 +73,7 @@ export const registerServiceWorker = async () => {
  */
 const showUpdateNotification = () => {
     // Toast notification gösterme - sadece updateAvailable state kullan
-    logger.info('ℹ️ Yeni versiyon mevcut - UI güncelleme butonu aktif');
+    logger.info('ℹ️ New version available - UI update button active');
 };
 
 /**
@@ -148,7 +148,7 @@ export const setupNetworkMonitor = (onOnline, onOffline) => {
         if (onOffline) onOffline();
 
         // Banner göster
-        showNetworkBanner('🔴 Offline - Bağlantı koptu', 'error');
+        showNetworkBanner('🔴 Offline - Connection lost', 'error');
     };
 
     window.addEventListener('online', handleOnline);
@@ -257,7 +257,7 @@ export const getCacheStats = async () => {
  */
 export const requestNotificationPermission = async () => {
     if (!('Notification' in window)) {
-        logger.warn('Bu tarayıcı notificationleri desteklemiyor');
+        logger.warn('This browser does not support notifications');
         return false;
     }
 

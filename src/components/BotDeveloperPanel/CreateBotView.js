@@ -6,13 +6,13 @@ const CreateBotView = ({ newBot, setNewBot, handleCreateBot, onCancel }) => {
   const { t } = useTranslation();
   return (
     <div className="create-bot-form">
-      <h3>🤖 Yeni Bot Oluştur</h3>
+      <h3>{t('createBot.title','🤖 Create New Bot')}</h3>
 
       <div className="form-group">
-        <label>Bot Adı *</label>
+        <label>{t('createBot.botName','Bot Name *')}</label>
         <input
           type="text"
-          placeholder=ÖrnekBot"
+          placeholder={t('createBot.placeholder','ExampleBot')}"
         value={newBot.name}
         onChange={e => setNewBot({ ...newBot, name: e.target.value })}
         maxLength={32}
@@ -20,7 +20,7 @@ const CreateBotView = ({ newBot, setNewBot, handleCreateBot, onCancel }) => {
       </div>
 
       <div className="form-group">
-        <label>Açıklama</label>
+        <label>{t('common.description','Description')}</label>
         <textarea
           placeholder={t('botunuz_ne_yapar')}
           value={newBot.description}

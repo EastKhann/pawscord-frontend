@@ -108,7 +108,7 @@ const MockRoomList = ({
             <div data-testid="room-search">
                 <input
                     data-testid="room-search-input"
-                    placeholder="Ara or yeni sohbet başlat"
+                    placeholder="Search or start a new chat"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -123,7 +123,7 @@ const MockRoomList = ({
 
                     {/* DM Conversations */}
                     <div data-testid="dm-list" role="list" aria-label="Direkt Mesajlar">
-                        <h4 data-testid="dm-header">DİREKT MESAJLAR</h4>
+                        <h4 data-testid="dm-header">DIRECT MESSAGES</h4>
                         {filteredConversations.length === 0 && (
                             <div data-testid="no-conversations">Not yet message yok</div>
                         )}
@@ -229,7 +229,7 @@ describe('RoomList Component', () => {
         it('should render DM list', () => {
             render(<MockRoomList mode="home" conversations={mockConversations} {...handlers} />);
             expect(screen.getByTestId('dm-list')).toBeInTheDocument();
-            expect(screen.getByTestId('dm-header')).toHaveTextContent('DİREKT MESAJLAR');
+            expect(screen.getByTestId('dm-header')).toHaveTextContent('DIRECT MESSAGES');
         });
 
         it('should render all conversations', () => {
@@ -296,7 +296,7 @@ describe('RoomList Component', () => {
                 <MockRoomList
                     mode="server"
                     rooms={mockRooms}
-                    unreadCounts={{ 'room-random': 7 }}>
+                    unreadCounts={{ 'room-random': 7 }}
                     {...handlers}
                 />
             );
@@ -332,7 +332,7 @@ describe('RoomList Component', () => {
                 <MockRoomList
                     mode="home"
                     conversations={mockConversations}
-                    friendsList={[{ username: 'alice' }, { username: 'charlie' }]}>
+                    friendsList={[{ username: 'alice' }, { username: 'charlie' }]}
                     {...handlers}
                 />
             );

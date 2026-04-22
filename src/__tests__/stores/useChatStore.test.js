@@ -223,7 +223,8 @@ describe('useChatStore', () => {
         });
 
         it('should remove username when typing=false', () => {
-            useChatStore.setState({ typingUsers: ['alice', 'bob'] });
+            useChatStore.getState().setTypingUser('alice', true);
+            useChatStore.getState().setTypingUser('bob', true);
             useChatStore.getState().setTypingUser('alice', false);
             expect(useChatStore.getState().typingUsers).not.toContain('alice');
             expect(useChatStore.getState().typingUsers).toContain('bob');

@@ -134,7 +134,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                         (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
                     }
                 >
-                    <div className="loading">Mesaj özeti yükleniyor...</div>
+                    <div className="loading">{t('summary.loading', 'Loading message summary...')}</div>
                 </div>
             </div>
         );
@@ -159,11 +159,11 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                     <div className="header-info">
                         <h2>
                             <FaRobot />
-                            Yapay Zeka Mesaj Özeti
+                            {t('summary.title', 'AI Message Summary')}
                         </h2>
-                        <span className="subtitle">Kanal konuşmalarını yapay zeka ile özetle</span>
+                        <span className="subtitle">{t('summary.subtitle', 'Summarize channel conversations with AI')}</span>
                     </div>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -172,7 +172,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                     {/* Generator Panel */}
                     <div className="generator-section">
                         <h3>
-                            <FaCompressArrowsAlt /> Özet Oluştur
+                            <FaCompressArrowsAlt /> {t('summary.generate', 'Generate Summary')}
                         </h3>
                         <div className="generator-controls">
                             <div className="control-group">
@@ -192,7 +192,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                             </div>
                             <div className="control-group">
                                 <label>
-                                    <FaClock /> Zaman Aralığı
+                                    <FaClock /> {t('summary.timeRange', 'Time Range')}
                                 </label>
                                 <select
                                     value={timeRange}
@@ -201,13 +201,13 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                     <option value="1h">Son 1 Saat</option>
                                     <option value="6h">Son 6 Saat</option>
                                     <option value="24h">Son 24 Saat</option>
-                                    <option value="7d">Son 7 Gün</option>
-                                    <option value="30d">Son 30 Gün</option>
+                                    <option value="7d">{t('common.last7days', 'Last 7 Days')}</option>
+                                    <option value="30d">{t('common.last30days', 'Last 30 Days')}</option>
                                 </select>
                             </div>
                             <div className="control-group">
                                 <label>
-                                    <FaFileAlt /> Maks. Mesaj Sayısı
+                                    <FaFileAlt /> {t('summary.maxMessages', 'Max Messages')}
                                 </label>
                                 <select
                                     value={messageCount}
@@ -220,7 +220,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                 </select>
                             </div>
                             <button
-                                aria-label="generate Summary"
+                                aria-label={t('msgSummary.generateBtn', 'Generate summary')}
                                 className="generate-btn"
                                 onClick={generateSummary}
                                 disabled={generating}
@@ -228,12 +228,12 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                 {generating ? (
                                     <>
                                         <FaSpinner className="spinning" />
-                                        Oluşturuluyor...
+                                        {t('summary.generating', 'Generating...')}
                                     </>
                                 ) : (
                                     <>
                                         <FaRobot />
-                                        Özet Oluştur
+                                        {t('summary.generate', 'Generate Summary')}
                                     </>
                                 )}
                             </button>
@@ -246,11 +246,11 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                             <div className="summary-header">
                                 <h3>
                                     <FaFileAlt />
-                                    {currentSummary ? 'Oluşturulan Özet' : 'Son Özet'}
+                                    {currentSummary ? t('summary.currentSummary', 'Generated Summary') : t('summary.lastSummary', 'Last Summary')}
                                 </h3>
                                 <div className="summary-actions">
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('msgSummary.copySummary', 'Copy summary')}
                                         className="action-btn"
                                         onClick={() =>
                                             copyToClipboard(
@@ -261,7 +261,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                         <FaCopy /> Kopyala
                                     </button>
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('msgSummary.exportSummary', 'Export summary')}
                                         className="action-btn"
                                         onClick={() =>
                                             exportSummary(currentSummary || summaries[0])
@@ -319,7 +319,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                     {/* History Section */}
                     <div className="history-section">
                         <h3>
-                            <FaChartBar /> Özet Geçmişi
+                            <FaChartBar /> {t('summary.history', 'Summary History')}
                         </h3>
                         <div className="history-list">
                             {summaries.map((summary) => (

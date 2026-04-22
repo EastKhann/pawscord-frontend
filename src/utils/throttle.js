@@ -95,7 +95,7 @@ export const rateLimit = (func, maxCalls = 3, timeWindow = 1000) => {
             calls.push(now);
             func.apply(this, args);
         } else {
-            logger.warn(`Rate limit aşıldı: ${maxCalls} çağrı/${timeWindow}ms`);
+            logger.warn(`Rate limit exceeded: ${maxCalls} calls/${timeWindow}ms`);
         }
     };
 };

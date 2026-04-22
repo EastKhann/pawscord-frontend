@@ -85,25 +85,25 @@ const JoinLeaveLogsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaSignInAlt className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Katılma/Ayrılma Günlükleri</h2>
+                        <h2 style={styles.title}>{t('joinLeaveLogs.title', 'Join/Leave Logs')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.filters}>
-                    <button aria-label="Filter" onClick={() => setFilter('all')} style={_st1177}>
+                    <button aria-label={t('joinLeaveLogs.filterAll', 'All logs')} onClick={() => setFilter('all')} style={_st1177}>
                         All ({logs.length})
                     </button>
-                    <button aria-label="Filter" onClick={() => setFilter('joined')} style={_st1178}>
+                    <button aria-label={t('joinLeaveLogs.filterJoined', 'Joins only')} onClick={() => setFilter('joined')} style={_st1178}>
                         🟢 Joins ({logs.filter((l) => l.action === 'joined').length})
                     </button>
-                    <button aria-label="Filter" onClick={() => setFilter('left')} style={_st1179}>
+                    <button aria-label={t('joinLeaveLogs.filterLeft', 'Leaves only')} onClick={() => setFilter('left')} style={_st1179}>
                         🔴 Leaves ({logs.filter((l) => l.action === 'left').length})
                     </button>
                     <button
-                        aria-label="export Logs"
+                        aria-label={t('joinLeaveLogs.exportLogs', 'Export logs')}
                         onClick={exportLogs}
                         style={styles.exportButton}
                     >
@@ -114,9 +114,9 @@ const JoinLeaveLogsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Loglar yükleniyor...</div>
+                        <div style={styles.loading}>{t('joinLeaveLogs.loading', 'Loading logs...')}</div>
                     ) : filteredLogs.length === 0 ? (
-                        <div style={styles.empty}>Log bulunamadı</div>
+                        <div style={styles.empty}>{t('joinLeaveLogs.noLogs', 'No logs found')}</div>
                     ) : (
                         <div style={styles.logsList}>
                             {filteredLogs.map((log, idx) => (

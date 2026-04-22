@@ -13,7 +13,7 @@ const GrammarQuizPage = () => {
 
     if (quiz.isLoading)
         return (
-            <div role="region" aria-label="Grammar Quiz Page" style={styles.container}>
+            <div role="region" aria-label={t('aria.grammarQuizPage', 'Grammar Quiz')} style={styles.container}>
                 {t('common.loading')}
             </div>
         );

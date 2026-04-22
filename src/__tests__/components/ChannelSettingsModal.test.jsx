@@ -27,6 +27,32 @@ vi.mock('../../components/ChannelSettingsModal/styles', () => ({
 import GeneralTab from '../../components/ChannelSettingsModal/GeneralTab';
 import PermissionsTab from '../../components/ChannelSettingsModal/PermissionsTab';
 
+// Translation map for keys used in these components
+const TR = {
+    save: 'Kaydet',
+    delete_channel: 'Kanalı Sil',
+    'ui.ozel_channel_izinli_roller': 'Özel Kanal',
+    '🔒_channel_kilitli': 'Kanal Kilitli',
+    '📢_duyuru_channelı_sadece_admin_yazar': 'Announcement Channel',
+    remove: 'Kaldır',
+    'permTab.addPerm': 'İzin Ekle',
+    add_permission: 'İzin Ekle',
+    no_custom_permissions_defined_yet: 'Not yet özel izin tanımlanmamış',
+    you_can_define_custom_permissions_for_specific_roles_or_user: '',
+};
+
+// Mock react-i18next with a targeted translation map
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key, fallback) => TR[key] || (typeof fallback === 'string' ? fallback : key),
+        i18n: { language: 'tr', changeLanguage: vi.fn() },
+    }),
+    Trans: ({ children }) => children,
+    I18nextProvider: ({ children }) => children,
+    withTranslation: () => (Component) => Component,
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
+}));
+
 // ══════════════════════════════════════════════════════
 // GeneralTab
 // ══════════════════════════════════════════════════════

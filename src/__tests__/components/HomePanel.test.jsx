@@ -5,6 +5,30 @@ vi.mock('../../utils/logger', () => ({
     default: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 vi.mock('../../hooks/useMediaQuery', () => ({ default: () => false }));
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key, fallback) => {
+            const TR = {
+                'nav.home': 'Home',
+                'home.directMessages': 'DIRECT MESSAGES',
+                'server.joinServer': 'Join Server',
+                'home.addFriend': 'Add Friend',
+                'common.add': 'Add',
+                'home.noDMs': 'No direct messages yet.',
+                'home.noDMsHint': 'Click Add Friend to start!',
+                'home.pawpawChannel': 'PawPaw AI channel',
+                'home.signalBotChannel': 'Signal Bot channel',
+                'home.signalBot': 'Sinyal Bot',
+            };
+            return TR[key] || (typeof fallback === 'string' ? fallback : key);
+        },
+        i18n: { language: 'en', changeLanguage: vi.fn() },
+    }),
+    Trans: ({ children }) => children,
+    I18nextProvider: ({ children }) => children,
+    withTranslation: () => (Component) => Component,
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
+}));
 
 import HomePanel from '../../RoomList/HomePanel';
 

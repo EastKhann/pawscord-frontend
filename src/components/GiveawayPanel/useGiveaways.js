@@ -126,7 +126,7 @@ const useGiveaways = (serverId) => {
     };
 
     const endGiveaway = async (id) => {
-        if (!(await confirmDialog('Bu çekilişi sonlandırmak istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('giveaway.endConfirm','Are you sure you want to end this giveaway?')))) return;
         try {
             const r = await fetch(`${apiBaseUrl}/giveaways/${id}/end/`, {
                 method: 'POST',
@@ -161,7 +161,7 @@ const useGiveaways = (serverId) => {
     };
 
     const deleteGiveaway = async (id) => {
-        if (!(await confirmDialog('Bu çekilişi silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('giveaway.deleteConfirm','Are you sure you want to delete this giveaway?')))) return;
         try {
             const r = await fetch(`${apiBaseUrl}/giveaways/${id}/delete/`, {
                 method: 'DELETE',

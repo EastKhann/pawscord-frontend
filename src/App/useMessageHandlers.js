@@ -555,7 +555,7 @@ export default function useMessageHandlers({
             !(await confirmDialog(
                 t(
                     'chat.confirmClearChat',
-                    'Bu odadaki tüm mesajları silmek istediğinizden emin misiniz?'
+                    t('msgHandlers.deleteAllConfirm','Are you sure you want to delete all messages in this room?')
                 )
             ))
         )
@@ -598,7 +598,7 @@ export default function useMessageHandlers({
                 !(await confirmDialog(
                     t(
                         'chat.confirmAdminDelete',
-                        '⚠️ ADMIN: Bu sohbeti her iki taraf için de kalıcı olarak silmek istediğinizden emin misiniz?\n\nBu işlem GERİ ALINAMAZ!'
+                        t('msgHandlers.adminDeleteConfirmFull','⚠️ ADMIN: Are you sure you want to permanently delete this conversation for both parties?\n\nThis action CANNOT BE UNDONE!')
                     )
                 ))
             )

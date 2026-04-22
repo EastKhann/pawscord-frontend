@@ -59,10 +59,10 @@ const ScreenShareModal = ({
                 <div style={styles.header}>
                     <div style={styles.headerInfo}>
                         <FaDesktop style={styles.headerIcon} />
-                        <span style={styles.title}>Ekranımı Paylaş</span>
+                        <span style={styles.title}>{t('screenShare.title', 'Share My Screen')}</span>
                         {isSharing && (
                             <span style={styles.badge}>
-                                🔴 Shareılıyor ({participants.length} izleyici)
+                                {t('screenShare.sharing', '🔴 Sharing ({{count}} viewer(s))', { count: participants.length })}
                             </span>
                         )}
                     </div>
@@ -71,7 +71,7 @@ const ScreenShareModal = ({
                             onClick={toggleFullscreen}
                             style={styles.headerButton}
                             title="Tam ekran"
-                            aria-label="Tam ekran"
+                            aria-label={t('screenShare.fullscreen', 'Fullscreen')}
                         >
                             {isFullscreen ? <FaCompress /> : <FaExpand />}
                         </button>
@@ -95,7 +95,7 @@ const ScreenShareModal = ({
                     ) : (
                         <div style={styles.placeholder}>
                             <FaDesktop style={styles.placeholderIcon} />
-                            <p style={styles.placeholderText}>Ekran paylaşımı başlatılmadı</p>
+                            <p style={styles.placeholderText}>{t('screenShare.notStarted', 'Screen sharing not started')}</p>
                         </div>
                     )}
                 </div>
@@ -112,7 +112,7 @@ const ScreenShareModal = ({
                 <div style={styles.controls}>
                     {isSharing ? (
                         <button
-                            aria-label="on Stop Sharing"
+                            aria-label={t('common.stopSharing', 'Stop Sharing')}
                             onClick={onStopSharing}
                             style={styles.stopButton}
                         >
@@ -121,7 +121,7 @@ const ScreenShareModal = ({
                         </button>
                     ) : (
                         <div style={styles.info}>
-                            <p style={styles.infoText}>Ekran paylaşımı sona erdi</p>
+                            <p style={styles.infoText}>{t('screenShare.ended', 'Screen sharing ended')}</p>
                         </div>
                     )}
                 </div>
@@ -129,7 +129,7 @@ const ScreenShareModal = ({
                 {/* Participants */}
                 {participants.length > 0 && (
                     <div style={styles.participants}>
-                        <span style={styles.participantsTitle}>İzleyenler:</span>
+                        <span style={styles.participantsTitle}>{t('screenShare.viewers', 'Viewers:')}</span>
                         <div style={styles.participantList}>
                             {participants.map((p, i) => (
                                 <div key={`item-${i}`} style={styles.participant}>

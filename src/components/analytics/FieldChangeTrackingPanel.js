@@ -81,7 +81,7 @@ const FieldChangeTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, entityTy
                         onChange={(e) => setFilter(e.target.value)}
                         style={styles.filterSelect}
                     >
-                        <option value="all">Tüm Alanlar ({changes.length})</option>
+                        <option value="all">{t('fieldChange.allFields','All Fields ({count})',{count:changes.length})}</option>
                         {fieldNames.map((field) => (
                             <option key={field} value={field}>
                                 {field} ({changes.filter((c) => c.field_name === field).length})
@@ -109,7 +109,7 @@ const FieldChangeTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, entityTy
                                             <div style={styles.valueLabel}>{t('old')}</div>
                                             <div style={styles.value}>
                                                 {change.old_value || (
-                                                    <em className="icon-muted">boş</em>
+                                                    <em className="icon-muted">{t('fieldChange.empty','empty')}</em>
                                                 )}
                                             </div>
                                         </div>
@@ -118,13 +118,13 @@ const FieldChangeTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, entityTy
                                             <div style={styles.valueLabel}>{t('new')}</div>
                                             <div style={styles.value}>
                                                 {change.new_value || (
-                                                    <em className="icon-muted">boş</em>
+                                                    <em className="icon-muted">{t('fieldChange.empty','empty')}</em>
                                                 )}
                                             </div>
                                         </div>
                                     </div>
                                     <div style={styles.changeMeta}>
-                                        Değiştiren:{' '}
+                                        {t('fieldChange.changedBy','Changed by:')}{' '}
                                         <span style={styles.username}>
                                             {change.changed_by_username}
                                         </span>{' '}

@@ -343,10 +343,18 @@ export default function useChatConnection({
             }
         };
 
-        newWs.onerror = (error) => logger.error('[WebSocket] Connection error:', error);
+        newWs.onerror = () => {
+            // onerror fires before onclose — suppress; onclose will handle reconnect logic
+        };
         newWs.onclose = (event) => {
             setIsConnected(false);
             stopHeartbeat();
+            // Auth/permission failures — do not reconnect; not a transient error
+            const isAuthFailure = event.code === 4001 || event.code === 4003 || event.code === 4004 || event.code === 4403;
+            if (isAuthFailure) {
+                logger.warn(`[ChatWS] Auth/permission failure (${event.code}) — not reconnecting`);
+                return;
+            }
             // Reconnect unless intentionally closed (room switch / unmount)
             if (!intentionalChatClose.current && event.code !== 1000 && event.code !== 1001) {
                 if (chatReconnectAttempts.current >= MAX_CHAT_RECONNECT) {
@@ -643,7 +651,7 @@ export default function useChatConnection({
                             fetchWithAuth(ROOM_LIST_URL)
                                 .then((r) => r.json())
                                 .then((rooms) => setCategories(rooms))
-                                .catch(console.error);
+                                .catch((e) => logger.error('[StatusWS] Room list fetch failed:', e));
                         }
                     }
                 } catch (parseError) {

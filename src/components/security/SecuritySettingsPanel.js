@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import useSecurityAPI from '../SecuritySettingsPanel/useSecurityAPI';
@@ -31,7 +31,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
             >
                 <div className="security-header">
                     <h2>🔒 {t('security.title')}</h2>
-                    <button aria-label="on Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -70,7 +70,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
                         ['ip', `🌐 ${t('security.ipWhitelist')}`],
                     ].map(([key, label]) => (
                         <button
-                            aria-label="Switch tab"
+                            aria-label={label}
                             key={key}
                             className={`tab-btn ${api.activeTab === key ? 'active' : ''}`}
                             onClick={() => api.setActiveTab(key)}

@@ -36,10 +36,8 @@ const _st1086 = {};
 
 const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick, onDiscoverClick }) => {
     const { t } = useTranslation();
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Server Add' });
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: t('server.addServer', 'Add Server') });
     const [isCreatingServer, setIsCreatingServer] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [newServerName, setNewServerName] = useState('');
     const [isNewServerPublic, setIsNewServerPublic] = useState(false);
 
@@ -74,7 +72,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick, onDis
                         <h3 style={_st2}>{t('server.createServer', 'Create Server')}</h3>
                         <button
                             type="button"
-                            aria-label="Close"
+                            aria-label={t('common.close')}
                             style={{
                                 background: 'none',
                                 border: 'none',

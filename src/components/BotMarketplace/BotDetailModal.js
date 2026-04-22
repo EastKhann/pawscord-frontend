@@ -13,7 +13,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
     const { overlayProps, dialogProps } = useModalA11y({
         onClose,
         isOpen: !!bot,
-        label: 'Bot Detmonth',
+        label: t('bot.detail', 'Bot Details'),
     });
     const [activeTab, setActiveTab] = useState('overview');
     const [showServerSelect, setShowServerSelect] = useState(false);
@@ -74,7 +74,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
     if (!bot) return null;
 
     return (
-        <div aria-label="bot detail modal" className="bot-modal-overlay" {...overlayProps}>
+        <div aria-label={t('botMarketplace.detailModal', 'Bot detail')} className="bot-modal-overlay" {...overlayProps}>
             <div className="bot-modal" {...dialogProps}>
                 {/* Header */}
                 <div
@@ -115,7 +115,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                         className={activeTab === 'overview' ? 'active' : ''}
                         onClick={() => setActiveTab('overview')}
                     >
-                        General Bakış
+                        {t('botDetail.overview', 'Overview')}
                     </button>
                     <button
                         className={activeTab === 'commands' ? 'active' : ''}
@@ -176,7 +176,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            🔒 Gizlilik Politikası
+                                            {t('botDetail.privacyPolicy', '🔒 Privacy Policy')}
                                         </a>
                                     )}
                                 </div>
@@ -283,7 +283,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                             />
                                             <span>{server.name}</span>
                                             <span className="member-count">
-                                                {server.member_count} üye
+                                                {server.member_count} {t('botDetail.members', 'members')}
                                             </span>
                                         </div>
                                     ))
@@ -302,7 +302,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                     disabled={!selectedServer || installing}
                                     onClick={handleInstall}
                                 >
-                                    {installing ? 'Yükleniyor...' : 'Ekle'}
+                                    {installing ? t('common.installing', 'Installing...') : t('botDetail.add', 'Add')}
                                 </button>
                             </div>
                         </div>

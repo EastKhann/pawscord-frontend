@@ -31,7 +31,7 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                         <FaCoins color="#f0b232" size={24} />
                         <h2 style={S.txt}>{t('store.title', 'Pawscord Store')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -41,7 +41,7 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                         <span>{t('store.currentBalance', 'Mevcut Bakiye')}:</span>
                         <strong style={S.txt2}>{store.balance} Coin</strong>
                         <button
-                            aria-label="store handle Daily Claim"
+                            aria-label={t('cryptoStore.dailyClaim', 'Claim daily reward')}
                             onClick={store.handleDailyClaim}
                             style={styles.dailyBtn}
                             disabled={store.loading}

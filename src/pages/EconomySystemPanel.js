@@ -244,7 +244,7 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
   };
 
   return (
-    <div aria-label="economy system panel" className="economy-system-panel">
+    <div aria-label={t('aria.economyPanel', 'Economy Panel')} className="economy-system-panel">
       {/* Coin Animation Overlay */}
       {showAnimation && (
         <div className="coin-animation-overlay">
@@ -269,7 +269,7 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
           <i className="fas fa-coins"></i>
           {t('economy.title', 'Economy System')}
         </h2>
-        <button className="close-btn" onClick={onClose} aria-label="Close">
+        <button className="close-btn" onClick={onClose} aria-label={t('common.close')}>
           <i className="fas fa-times"></i>
         </button>
       </div>
@@ -319,7 +319,7 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
                 <input
                   type="number"
                   className="transfer-input amount-input"
-                  placeholder="0"
+                  placeholder={t('economy.amount', '0')}
                   value={transferAmount}
                   onChange={(e) => setTransferAmount(e.target.value)}
                   min="1"

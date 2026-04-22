@@ -85,10 +85,10 @@ const MockServerRail = ({
                                     height: isActive
                                         ? '40px'
                                         : hoveredServerId === server.id
-                                          ? '20px'
-                                          : unreadCount > 0
-                                            ? '8px'
-                                            : '0px',
+                                            ? '20px'
+                                            : unreadCount > 0
+                                                ? '8px'
+                                                : '0px',
                                     backgroundColor: '#fff',
                                 }}
                             />
@@ -202,7 +202,7 @@ describe('ServerRail Component', () => {
         it('should render the server rail navigation', () => {
             render(<MockServerRail servers={mockServers} {...handlers} />);
             expect(screen.getByTestId('server-rail')).toBeInTheDocument();
-            expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Sunucu listsi');
+            expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Server list');
         });
 
         it('should render home button', () => {

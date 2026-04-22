@@ -37,20 +37,20 @@ const SecurityTab = () => {
                         </div>
                     </div>
                     <button
-                        aria-label="Toggle maintenance mode"
+                        aria-label={t('common.maintenance', 'Toggle maintenance mode')}
                         onClick={toggleMaintenance}
                         style={styles.actionBtn(maintenanceMode ? '#23a559' : '#f0b132')}
                     >
                         {maintenanceMode ? <FaUnlock /> : <FaLock />}{' '}
-                        {maintenanceMode ? 'Close' : t('common.maintenance')}
+                        {maintenanceMode ? t('common.close', 'Close') : t('common.maintenance')}
                     </button>
                 </div>
             </div>
 
             <div className="grid-3col">
                 {[
-                    { label: 'Giriş Denemesi', value: '247', sub: 'Son 24 saat', color: '#5865f2' },
-                    { label: 'Başarısız Giriş', value: '12', sub: 'Son 24 saat', color: '#f0b132' },
+                    { label: t('adminSec.loginAttempts', 'Login Attempts'), value: '247', sub: t('adminSec.last24h', 'Last 24 hours'), color: '#5865f2' },
+                    { label: t('adminSec.failedLogins', 'Failed Logins'), value: '12', sub: t('adminSec.last24h', 'Last 24 hours'), color: '#f0b132' },
                     { label: 'Engellenen IP', value: '15', sub: 'Aktif', color: '#e74c3c' },
                 ].map((item, idx) => {
                     const itemColorStyle = {

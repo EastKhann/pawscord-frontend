@@ -7,8 +7,38 @@ vi.mock('../../utils/logger', () => ({
 vi.mock('../../utils/recaptcha', () => ({
     useRecaptcha: () => ({ getToken: vi.fn().mockResolvedValue('mock-token') }),
 }));
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key, fallback) => {
+            const TR = {
+                'login.username': 'Username',
+                'login.password': 'Password',
+                'login.emailAddress': 'Email',
+                'login.signUp': 'Sign Up',
+                'login.login': 'Login',
+                'login.showPassword': 'Show',
+                'login.hidePassword': 'Hide',
+                'login.forgotPassword': 'Forgot Password?',
+                'login.or': 'or',
+                'login.noAccount': "Don't have an account?",
+                'login.alreadyMember': 'Already a member?',
+                'login.loginWithGoogle': 'Sign in with Google',
+                'login.welcomeBack': 'Welcome back!',
+                'login.joinUs': 'Join us!',
+                'auth.signInWithGoogle': 'Sign in with Google',
+                'common.loading': 'Loading...',
+            };
+            return TR[key] || (typeof fallback === 'string' ? fallback : key);
+        },
+        i18n: { language: 'en', changeLanguage: vi.fn() },
+    }),
+    Trans: ({ children }) => children,
+    I18nextProvider: ({ children }) => children,
+    withTranslation: () => (Component) => Component,
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
+}));
 
-import LoginPage from '../../LoginPage';
+import LoginPage from '../../pages/LoginPage';
 
 describe('LoginPage integration', () => {
     const defaultProps = {

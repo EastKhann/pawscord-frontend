@@ -131,12 +131,12 @@ const CinemaModal = ({ onClose, ws }) => {
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Cinema & Music' });
 
     return (
-        <div aria-label="cinema modal" style={styles.overlay} {...overlayProps}>
+        <div aria-label={t('aria.cinemaModal', 'Cinema & Music')} style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3>🍿 Cinema & Music</h3>
 
-                    <button onClick={onClose} style={styles.closeBtn} aria-label="Close">
+                    <button onClick={onClose} style={styles.closeBtn} aria-label={t('common.close')}>
                         <FaTimes />
                     </button>
                 </div>
@@ -158,7 +158,7 @@ const CinemaModal = ({ onClose, ws }) => {
                         </div>
                     )}
 
-                    <Suspense fallback={<div>Oynatıcı yükleniyor...</div>}>
+                    <Suspense fallback={<div>{t('cinema.playerLoading','Loading player...')}</div>}>
                         <ReactPlayer
                             key={url}
                             ref={playerRef}
@@ -176,7 +176,7 @@ const CinemaModal = ({ onClose, ws }) => {
                             onError={(e) => {
                                 logger.error('Video Playback Error:', e);
 
-                                setError('Video oynatılamadı. Bağlantı geçersiz olabilir.');
+                                setError(t('cinema.videoError','Video could not be played. The link may be invalid.'));
 
                                 setIsReady(true);
                             }}
@@ -206,7 +206,7 @@ const CinemaModal = ({ onClose, ws }) => {
                             value={inputUrl}
                             onChange={(e) => setInputUrl(e.target.value)}
                             placeholder={t('cinema.paste_youtube_link')}
-                            aria-label="Video URL input"
+                            aria-label={t('media.videoUrl', 'Video URL')}
                             style={styles.input}
                         />
 

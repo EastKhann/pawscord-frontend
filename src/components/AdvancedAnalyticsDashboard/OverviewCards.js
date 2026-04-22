@@ -1,10 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { FaUsers, FaEye, FaComments, FaClock } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import { formatNumber, getGrowthIndicator } from './useAdvancedAnalytics';
 
 const CARDS = [
-    { key: 'total_members', icon: FaUsers, label: 'Toplam Üye', cls: 'members', growth: 'member' },
-    { key: 'active_members', icon: FaEye, label: 'Aktif Üye', cls: 'active' },
+    { key: 'total_members', icon: FaUsers, label: t('analytics.totalMembers', 'Total Members'), cls: 'members', growth: 'member' },
+    { key: 'active_members', icon: FaEye, label: t('analytics.activeMembers', 'Active Members'), cls: 'active' },
     {
         key: 'messages_count',
         icon: FaComments,
@@ -21,7 +22,7 @@ const OverviewCards = ({ overview }) => {
     const growths = { member: memberGrowth, message: messageGrowth };
 
     return (
-        <div aria-label="overview cards" className="overview-section">
+        <div aria-label={t('analytics.overviewCards', 'Overview cards')} className="overview-section">
             {CARDS.map((card) => {
                 const g = card.growth ? growths[card.growth] : null;
                 const growthStyle = g ? { color: g.color } : null;

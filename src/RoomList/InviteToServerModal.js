@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import useModalA11y from '../hooks/useModalA11y';
+import { useTranslation } from 'react-i18next';
 
 // -- extracted inline style constants --
 const _st1 = {
@@ -74,6 +75,7 @@ const _st15 = {
 const InviteToServerModal = ({ inviteToServerModal, servers, onSendInvite, onClose }) => {
     if (!inviteToServerModal || !inviteToServerModal.isOpen) return null;
 
+    const { t } = useTranslation();
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Invite to Server' });
 
     return createPortal(
@@ -127,7 +129,7 @@ const InviteToServerModal = ({ inviteToServerModal, servers, onSendInvite, onClo
 
                 {/* Footer */}
                 <div style={_st14}>
-                    <button aria-label="on Close" onClick={onClose} style={_st15}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={_st15}>
                         Cancel
                     </button>
                 </div>

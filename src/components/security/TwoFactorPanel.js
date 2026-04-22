@@ -163,7 +163,7 @@ const TwoFactorPanel = ({ onClose }) => {
                 <div className="two-factor-header">
                     <FaShieldAlt className="header-icon" />
                     <h2>{t('twoFactor.title')}</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -182,7 +182,7 @@ const TwoFactorPanel = ({ onClose }) => {
                                 </ul>
                             </div>
                             <button
-                                aria-label="start Setup"
+                                aria-label={t('twoFactor.startSetupBtn', 'Start 2FA setup')}
                                 className="primary-btn"
                                 onClick={startSetup}
                                 disabled={loading}
@@ -200,14 +200,14 @@ const TwoFactorPanel = ({ onClose }) => {
                                 </h3>
                                 <p>{t('twoFactor.scanQRDesc')}</p>
                                 <div className="qr-code-container">
-                                    <img src={qrCode} alt="2FA QR Code" />
+                                    <img src={qrCode} alt={t('alt.qrCode2fa', '2FA QR Code')} />
                                 </div>
                                 <div className="secret-code">
                                     <p>{t('twoFactor.orEnterManually')}</p>
                                     <div className="code-box">
                                         <code>{secret}</code>
                                         <button
-                                            aria-label="Copy"
+                                            aria-label={t('twoFactor.copySecret', 'Copy secret key')}
                                             onClick={() => copyToClipboard(secret)}
                                         >
                                             {copied ? <FaCheck /> : <FaCopy />}
@@ -224,7 +224,7 @@ const TwoFactorPanel = ({ onClose }) => {
                                 <input
                                     type="text"
                                     className="verify-input"
-                                    placeholder="000000"
+                                    placeholder={t('twoFactor.code', '000000')}
                                     maxLength="6"
                                     value={verifyCode}
                                     onChange={(e) =>
@@ -233,7 +233,7 @@ const TwoFactorPanel = ({ onClose }) => {
                                     onKeyDown={(e) => e.key === 'Enter' && verifySetup()}
                                 />
                                 <button
-                                    aria-label="verify Setup"
+                                    aria-label={t('twoFactor.verifySetupBtn', 'Verify and enable 2FA')}
                                     className="primary-btn"
                                     onClick={verifySetup}
                                     disabled={loading || verifyCode.length !== 6}
@@ -261,59 +261,56 @@ const TwoFactorPanel = ({ onClose }) => {
                             </div>
                             <div className="backup-actions">
                                 <button
-                                    aria-label="download Backup Codes"
+                                    aria-label={t('twoFactor.downloadBackupCodes', 'Download backup codes')}
                                     className="secondary-btn"
                                     onClick={downloadBackupCodes}
                                 >
                                     {t('twoFactor.download')}
                                 </button>
                                 <button
-                                    aria-label="Action button"
-                                    className="primary-btn"
-                                    onClick={() => {
-                                        setStep('complete');
-                                        setIsEnabled(true);
+                                    aria-label={t('twoFactor.saveAndContinueBtn', 'Save and continue')}
+                                    setIsEnabled(true);
                                     }}
                                 >
-                                    {t('twoFactor.saveAndContinue')}
-                                </button>
-                            </div>
+                                {t('twoFactor.saveAndContinue')}
+                            </button>
+                        </div>
                         </div>
                     )}
 
-                    {step === 'complete' && isEnabled && (
-                        <div className="step-complete">
-                            <div className="success-box">
-                                <FaCheck size={48} color="#23a559" />
-                                <h3>{t('twoFactor.active')}</h3>
-                                <p>{t('twoFactor.activeDesc')}</p>
-                            </div>
-                            <div className="info-list">
-                                <div className="info-item">
-                                    <strong>{t('twoFactor.authenticatorApps')}:</strong>
-                                    <span>
-                                        Google Authenticator, Authy, Microsoft Authenticator
-                                    </span>
-                                </div>
-                                <div className="info-item">
-                                    <strong>{t('twoFactor.backupCodesLabel')}:</strong>
-                                    <span>{t('twoFactor.keepBackupCodesSafe')}</span>
-                                </div>
-                            </div>
-                            <button
-                                aria-label="disable2 F A"
-                                className="danger-btn"
-                                onClick={disable2FA}
-                                disabled={loading}
-                            >
-                                <FaTrash />{' '}
-                                {loading ? t('ui.devre_disi_birakiliyor') : t('twoFactor.disable')}
-                            </button>
+                {step === 'complete' && isEnabled && (
+                    <div className="step-complete">
+                        <div className="success-box">
+                            <FaCheck size={48} color="#23a559" />
+                            <h3>{t('twoFactor.active')}</h3>
+                            <p>{t('twoFactor.activeDesc')}</p>
                         </div>
-                    )}
-                </div>
+                        <div className="info-list">
+                            <div className="info-item">
+                                <strong>{t('twoFactor.authenticatorApps')}:</strong>
+                                <span>
+                                    Google Authenticator, Authy, Microsoft Authenticator
+                                </span>
+                            </div>
+                            <div className="info-item">
+                                <strong>{t('twoFactor.backupCodesLabel')}:</strong>
+                                <span>{t('twoFactor.keepBackupCodesSafe')}</span>
+                            </div>
+                        </div>
+                        <button
+                            aria-label={t('twoFactor.disableBtn', 'Disable 2FA')}
+                            className="danger-btn"
+                            onClick={disable2FA}
+                            disabled={loading}
+                        >
+                            <FaTrash />{' '}
+                            {loading ? t('ui.devre_disi_birakiliyor') : t('twoFactor.disable')}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
+        </div >
     );
 };
 

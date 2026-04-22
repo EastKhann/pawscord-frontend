@@ -386,7 +386,7 @@ const AppModalsCore = ({
                 {modals.readLater && (
                     <Suspense
                         fallback={
-                            <div role="region" aria-label="App Modals Core">
+                            <div role="region" aria-label={t('appModals.core', 'App modals')}>
                                 {t('common.loading')}
                             </div>
                         }

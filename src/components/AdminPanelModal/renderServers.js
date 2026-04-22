@@ -11,7 +11,7 @@ import styles from './styles';
 const renderServers = () => {
     const { t } = useTranslation();
     return (
-        <div aria-label="render servers">
+        <div aria-label={t('admin.servers', 'Servers')}>
             <h2 className="white-18-mb16">{t('🏠_server_yönetimi')}</h2>
             <div className="grid-auto-280-14">
                 {servers.map((server) => (

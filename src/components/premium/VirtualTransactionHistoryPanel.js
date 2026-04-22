@@ -8,8 +8,10 @@ import {
 import { getApiBase } from '../../utils/apiEndpoints';
 import logger from '../../utils/logger';
 import './VirtualTransactionHistoryPanel.css';
+import { useTranslation } from 'react-i18next';
 
 const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBaseUrl }) => {
+    const { t } = useTranslation();
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
@@ -117,7 +119,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
         return (
             <div className="vth-overlay" role="button" tabIndex={0} onClick={onClose} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
                 <div className="vth-panel" role="button" tabIndex={0} onClick={e => e.stopPropagation()} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
-                    <div className="loading">İşlemler yükleniyor...</div>
+                    <div className="loading">{t('virtualTx.loading', 'Loading transactions...')}</div>
                 </div>
             </div>
         );
@@ -132,14 +134,14 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                             <FaWallet />
                             Transaction History
                         </h2>
-                        <span className="subtitle">Sanal para aktivite kaydı</span>
+                        <span className="subtitle">{t('virtualTx.subtitle', 'Virtual currency activity log')}</span>
                     </div>
                     <div className="header-actions">
                         <button
-                            aria-label="export Transactions" className="export-btn" onClick={exportTransactions}>
+                            aria-label={t('transactions.exportBtn', 'Export transactions')} className="export-btn" onClick={exportTransactions}>
                             <FaDownload /> Export
                         </button>
-                        <button aria-label="Close" className="close-btn" onClick={onClose}>
+                        <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                             <FaTimes />
                         </button>
                     </div>
@@ -161,7 +163,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                             <FaArrowDown />
                         </div>
                         <div className="balance-info">
-                            <span className="balance-label">Bu Ay Kazanılan</span>
+                            <span className="balance-label">{t('virtualTx.earnedThisMonth', 'Earned This Month')}</span>
                             <span className="balance-value positive">+{stats.this_month_earned.toLocaleString()}</span>
                         </div>
                     </div>
@@ -179,7 +181,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                             <FaHistory />
                         </div>
                         <div className="balance-info">
-                            <span className="balance-label">Toplam İşlemler</span>
+                            <span className="balance-label">{t('virtualTx.totalTransactions', 'Total Transactions')}</span>
                             <span className="balance-value">{stats.transactions_count}</span>
                         </div>
                     </div>
@@ -191,7 +193,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                         <FaSearch />
                         <input
                             type="text"
-                            placeholder="İşlem ara..."
+                            placeholder={t('common.searchTransactions', 'Search transactions...')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -201,7 +203,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                         <select
                             value={filterType}
                             onChange={(e) => setFilterType(e.target.value)}>
-                            <option value="all">Tüm Türler</option>
+                            <option value="all">{t('common.allTypes', 'All Types')}</option>
                             <option value="earn">Earned</option>
                             <option value="spend">Spent</option>
                             <option value="transfer">Transfers</option>
@@ -214,8 +216,8 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                             onChange={(e) => setDateRange(e.target.value)}>
                             <option value="week">Bu Hafta</option>
                             <option value="month">Bu Ay</option>
-                            <option value="year">Bu Yıl</option>
-                            <option value="all">Tüm Zaman</option>
+                            <option value="year">{t('common.thisYear', 'This Year')}</option>
+                            <option value="all">{t('admin.allTime', 'All Time')}</option>
                         </select>
                     </div>
                 </div>
@@ -247,7 +249,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                     ) : (
                         <div className="empty-state">
                             <FaHistory />
-                            <p>İşlem bulunamadı</p>
+                            <p>{t('virtualTx.notFound', 'No transactions found')}</p>
                         </div>
                     )}
 
@@ -255,8 +257,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                     {totalPages > 1 && (
                         <div className="pagination">
                             <button
-          aria-label="Action button"
-                                disabled={currentPage === 1}
+          aria-label={t('common.previousPage', 'Previous page')}
                                 onClick={() => setCurrentPage(p => p - 1)}
                                 Previous
                             </button>
@@ -264,8 +265,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                                 Page {currentPage} of {totalPages}
                             </span>
                             <button
-          aria-label="Action button"
-                                disabled={currentPage === totalPages}
+          aria-label={t('common.nextPage', 'Next page')}
                                 onClick={() => setCurrentPage(p => p + 1)}
                                 Next
                             </button>

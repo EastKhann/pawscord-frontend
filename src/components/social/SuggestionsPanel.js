@@ -114,8 +114,8 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                         status === 'approved'
                             ? 'suggestions.approved'
                             : status === 'rejected'
-                              ? 'suggestions.rejected'
-                              : 'suggestions.updated'
+                                ? 'suggestions.rejected'
+                                : 'suggestions.updated'
                     )
                 );
                 fetchSuggestions();
@@ -188,8 +188,8 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="suggestions-header">
-                    <h2>💡 Öneri Sistemi</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <h2>💡 {t('suggestions.title', 'Suggestion System')}</h2>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -210,19 +210,17 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                             type="checkbox"
                                             checked={config.enabled}
                                             onChange={handleEnabledChange}
-                                            aria-label="checkbox"
-                                        />
-                                        <span className="toggle-slider"></span>
+                                            aria-label={t('suggestions.enableToggle', 'Enable suggestions')}>
                                     </label>
                                 </div>
 
                                 <div className="config-grid">
                                     <div className="form-group">
-                                        <label>📢 Öneri Channelı</label>
+                                        <label>{t('suggestions.suggestionChannel', '📢 Suggestion Channel')}</label>
                                         <select
                                             value={config.channel_id}
                                             onChange={handleChannelIdChange}
-                                            aria-label="select"
+                                            aria-label={t('suggestions.channelSelect', 'Select suggestion channel')}
                                         >
                                             <option value="">Selectin</option>
                                             {channels.map((ch) => (
@@ -234,50 +232,24 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                     </div>
 
                                     <div className="form-group">
-                                        <label>📋 İnceleme Channelı</label>
-                                        <select
-                                            value={config.review_channel_id}
-                                            onChange={handleReviewChannelChange}
-                                            aria-label="select"
-                                        >
-                                            <option value="">Selectin</option>
-                                            {channels.map((ch) => (
-                                                <option key={ch.id} value={ch.id}>
-                                                    {ch.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label>👍 Beğeni Emojisi</label>
+                                        <label>{t('suggestions.likeEmoji', '👍 Like Emoji')}</label>
                                         <input
                                             type="text"
                                             value={config.upvote_emoji}
                                             onChange={handleUpvoteEmojiChange}
-                                            aria-label="text"
+                                            aria-label={t('suggestions.upvoteEmoji', 'Upvote emoji')}
                                         />
                                     </div>
 
                                     <div className="form-group">
-                                        <label>👎 Beğenmeme Emojisi</label>
-                                        <input
-                                            type="text"
-                                            value={config.downvote_emoji}
-                                            onChange={handleDownvoteEmojiChange}
-                                            aria-label="text"
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label>🎯 Auto Onmonth Eşiği</label>
+                                        <label>{t('suggestions.autoApproveThreshold', '🎯 Auto Approve Threshold')}</label>
                                         <input
                                             type="number"
                                             min="0"
                                             max="100"
                                             value={config.min_votes_to_approve}
                                             onChange={handleMinVotesChange}
-                                            aria-label="number"
+                                            aria-label={t('suggestions.minVotes', 'Minimum votes to approve')}
                                         />
                                     </div>
 
@@ -287,15 +259,13 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                                 type="checkbox"
                                                 checked={config.auto_approve}
                                                 onChange={handleAutoApproveChange}
-                                                aria-label="checkbox"
-                                            />
-                                            <span>Otomatik onayla</span>
+                                                aria-label={t('suggestions.autoApprove', 'Auto approve')}>
                                         </label>
                                     </div>
                                 </div>
 
                                 <button
-                                    aria-label="save Config"
+                                    aria-label={t('common.save', 'Save')}
                                     className="save-btn"
                                     onClick={saveConfig}
                                 >
@@ -306,14 +276,14 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                             <div className="suggestions-section">
                                 <div className="suggestions-filters">
                                     <button
-                                        aria-label="handle Filter All"
+                                        aria-label={t('suggestions.filterAll', 'Show all suggestions')}
                                         className={filter === 'all' ? 'active' : ''}
                                         onClick={handleFilterAll}
                                     >
                                         Hepsi ({suggestions.length})
                                     </button>
                                     <button
-                                        aria-label="handle Filter Pending"
+                                        aria-label={t('suggestions.filterPending', 'Show pending suggestions')}
                                         className={filter === 'pending' ? 'active' : ''}
                                         onClick={handleFilterPending}
                                     >
@@ -321,15 +291,15 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                         {suggestions.filter((s) => s.status === 'pending').length})
                                     </button>
                                     <button
-                                        aria-label="handle Filter Approved"
+                                        aria-label={t('suggestions.filterApproved', 'Show approved suggestions')}
                                         className={filter === 'approved' ? 'active' : ''}
                                         onClick={handleFilterApproved}
                                     >
-                                        Onaylandı (
+                                        {t('suggestions.approved', 'Approved (')}
                                         {suggestions.filter((s) => s.status === 'approved').length})
                                     </button>
                                     <button
-                                        aria-label="handle Filter Rejected"
+                                        aria-label={t('suggestions.filterRejected', 'Show rejected suggestions')}
                                         className={filter === 'rejected' ? 'active' : ''}
                                         onClick={handleFilterRejected}
                                     >
@@ -341,7 +311,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                 {filteredSuggestions.length === 0 ? (
                                     <div className="empty-state">
                                         <span className="empty-icon">💡</span>
-                                        <p>Öneri bulunamadı</p>
+                                        <p>{t('suggestions.notFound', 'No suggestions found')}</p>
                                     </div>
                                 ) : (
                                     <div className="suggestions-list">
@@ -390,7 +360,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                                     {suggestion.status === 'pending' && (
                                                         <div className="suggestion-actions">
                                                             <button
-                                                                aria-label="✅ Onayla"
+                                                                aria-label={t('suggestions.approve', 'Approve suggestion')}
                                                                 className="approve-btn"
                                                                 onClick={() =>
                                                                     updateStatus(
@@ -402,7 +372,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                                                 ✅ Onayla
                                                             </button>
                                                             <button
-                                                                aria-label="❌ Reddet"
+                                                                aria-label={t('suggestions.reject', 'Reject suggestion')}
                                                                 className="reject-btn"
                                                                 onClick={() =>
                                                                     updateStatus(
@@ -414,7 +384,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                                                 ❌ Reddet
                                                             </button>
                                                             <button
-                                                                aria-label="🎉 Uygulandı"
+                                                                aria-label={t('common.implemented', 'Implemented')}
                                                                 className="implement-btn"
                                                                 onClick={() =>
                                                                     updateStatus(
@@ -423,7 +393,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                                                     )
                                                                 }
                                                             >
-                                                                🎉 Uygulandı
+                                                                {t('suggestions.implemented', '🎉 Implemented')}
                                                             </button>
                                                         </div>
                                                     )}

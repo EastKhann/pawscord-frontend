@@ -73,7 +73,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
     const restoreBackup = async (backupId) => {
         if (
             !(await confirmDialog(
-                'Bu yedekten geri yüklemek istediğinizden emin misiniz? Bu işlem geri alınamaz!'
+                t('backup.restoreConfirm', 'Are you sure you want to restore from this backup? This action cannot be undone!')
             ))
         )
             return;
@@ -113,7 +113,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
     };
 
     const deleteBackup = async (backupId) => {
-        if (!(await confirmDialog('Bu yedeği silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('backup.deleteConfirm', 'Are you sure you want to delete this backup?')))) return;
         try {
             const response = await fetch(`${apiBaseUrl}/backups/${backupId}/delete/`, {
                 method: 'DELETE',
@@ -160,14 +160,14 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
             >
                 <div className="backup-header">
                     <h2>💾 Server Yedekleme</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
 
                 <div className="backup-content">
                     <div className="create-backup-section">
-                        <h3>Yeni Yedek Oluştur</h3>
+                        <h3>{t('backup.createNew', 'Create New Backup')}</h3>
                         <div className="backup-options">
                             <label className="option-label">
                                 <input
@@ -180,7 +180,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                                         })
                                     }
                                 />
-                                <span>📁 Kanalları dahil et</span>
+                                <span>{t('backup.includeChannels', '📁 Include channels')}</span>
                             </label>
                             <label className="option-label">
                                 <input
@@ -206,7 +206,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                                         })
                                     }
                                 />
-                                <span>💬 Mesajları dahil et (son 100)</span>
+                                <span>{t('backup.includeMessages', '💬 Include messages (last 100)')}</span>
                             </label>
                             <label className="option-label">
                                 <input
@@ -219,7 +219,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                                         })
                                     }
                                 />
-                                <span>⚙️ Ayarları dahil et</span>
+                                <span>{t('backup.includeSettings', '⚙️ Include settings')}</span>
                             </label>
                             <label className="option-label">
                                 <input
@@ -236,12 +236,12 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                             </label>
                         </div>
                         <button
-                            aria-label="create Backup"
+                            aria-label={t('serverBackup.createBtn', 'Create backup')}
                             className="create-backup-btn"
                             onClick={createBackup}
                             disabled={creating}
                         >
-                            {creating ? '⏳ Oluşturuluyor...' : '💾 Yedek Oluştur'}
+                            {creating ? t('backup.creating', '⏳ Creating...') : t('backup.create', '💾 Create Backup')}
                         </button>
                     </div>
 
@@ -253,7 +253,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                     ) : backups.length === 0 ? (
                         <div className="empty-state">
                             <span className="empty-icon">💾</span>
-                            <p>Henüz yedek yok</p>
+                            <p>{t('backup.noBackups', 'No backups yet')}</p>
                         </div>
                     ) : (
                         <div className="backups-list">
@@ -314,21 +314,21 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                                         {backup.status === 'completed' && (
                                             <div className="backup-actions">
                                                 <button
-                                                    aria-label="🔄 Geri Upload"
+                                                    aria-label={t('serverBackup.restore', 'Restore backup')}
                                                     className="restore-btn"
                                                     onClick={() => restoreBackup(backup.id)}
                                                 >
                                                     🔄 Geri Upload
                                                 </button>
                                                 <button
-                                                    aria-label="📥 Download"
+                                                    aria-label={t('serverBackup.download', 'Download backup')}
                                                     className="download-btn"
                                                     onClick={() => downloadBackup(backup.id)}
                                                 >
                                                     📥 Download
                                                 </button>
                                                 <button
-                                                    aria-label="🗑️ Delete"
+                                                    aria-label={t('serverBackup.delete', 'Delete backup')}
                                                     className="delete-btn"
                                                     onClick={() => deleteBackup(backup.id)}
                                                 >

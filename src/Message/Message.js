@@ -154,8 +154,8 @@ const Message = ({
             const chatId = msg.room
                 ? `room-${msg.room}`
                 : msg.conversation
-                  ? `dm-${msg.conversation}`
-                  : null;
+                    ? `dm-${msg.conversation}`
+                    : null;
             const secretKey = encryptionKeys[chatId];
             return secretKey
                 ? decryptMessage(msg.content, secretKey)
@@ -338,9 +338,9 @@ const Message = ({
                     >
                         {msg.timestamp
                             ? new Date(msg.timestamp).toLocaleTimeString([], {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                              })
+                                hour: '2-digit',
+                                minute: '2-digit',
+                            })
                             : ''}
                     </span>
                 ) : (
@@ -362,14 +362,14 @@ const Message = ({
                         tabIndex={0}
                         onClick={() => onScrollToMessage(msg.reply_to.id)}
                         onKeyDown={(e) => e.key === 'Enter' && onScrollToMessage(msg.reply_to.id)}
-                        aria-label="Go to replied message"
+                        aria-label={t('message.goToReply', 'Go to replied message')}
                     >
                         <div style={styles.replyLine} />
                         <span>@{msg.reply_to.username}</span>
                         <span>
                             {msg.reply_to.content
                                 ? msg.reply_to.content.substring(0, 50) + '...'
-                                : 'Bir file'}
+                                : t('message.fileAttachment', 'File attachment')}
                         </span>
                     </div>
                 )}
@@ -387,8 +387,8 @@ const Message = ({
                                     msg.username === '⚡ Signal Bot'
                                         ? '#5865f2'
                                         : isAdmin
-                                          ? '#f0b232'
-                                          : '#fff',
+                                            ? '#f0b232'
+                                            : '#fff',
                             }}
                             onKeyDown={(e) =>
                                 (e.key === 'Enter' || e.key === ' ') && onViewProfile(msg.username)
@@ -506,7 +506,7 @@ const Message = ({
                     displayContent && (
                         <div style={styles.messageContent}>
                             {isMessageEncrypted && (
-                                <span title="Şifreli">
+                                <span title={t('security.encrypted', 'Encrypted')}>
                                     <FaLock />
                                 </span>
                             )}
@@ -683,7 +683,7 @@ const Message = ({
                             </div>
                         )}
                         {isMyMessage && !msg.temp_id && (
-                            <span style={styles.readReceipt} title="İletildi">
+                            <span style={styles.readReceipt} title={t('message.delivered', 'Delivered')}>
                                 ✓
                             </span>
                         )}

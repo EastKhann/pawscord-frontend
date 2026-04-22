@@ -1,6 +1,7 @@
 // frontend/src/components/MessageSkeleton.js
 // Faz 2.4: Skeleton loading placeholders for chat messages
 import React, { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 const S = {
@@ -79,17 +80,20 @@ const SkeletonRow = memo(({ lineCount = 2, lineWidthIndex = 0 }) => (
  * MessageSkeleton — renders N skeleton message rows while messages are loading.
  * @param {number} count - Number of skeleton rows to render (default: 5)
  */
-const MessageSkeleton = ({ count = 5 }) => (
-    <div style={S.pad} aria-label="Loading messages..." aria-busy="true">
-        {Array.from({ length: count }, (_, i) => (
-            <SkeletonRow
-                key={`item-${Math.random()}`}
-                lineCount={i % 3 === 0 ? 3 : i % 3 === 1 ? 1 : 2}
-                lineWidthIndex={i * 2}
-            />
-        ))}
-    </div>
-);
+const MessageSkeleton = ({ count = 5 }) => {
+    const { t } = useTranslation();
+    return (
+        <div style={S.pad} role="status" aria-label={t('chat.loadingMessages', 'Loading messages...')} aria-busy="true">
+            {Array.from({ length: count }, (_, i) => (
+                <SkeletonRow
+                    key={`item-${Math.random()}`}
+                    lineCount={i % 3 === 0 ? 3 : i % 3 === 1 ? 1 : 2}
+                    lineWidthIndex={i * 2}
+                />
+            ))}
+        </div>
+    );
+};
 
 MessageSkeleton.propTypes = {
     count: PropTypes.number,

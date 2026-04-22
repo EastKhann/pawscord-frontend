@@ -1,4 +1,5 @@
-﻿import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 import { getToken } from '../../utils/tokenStorage';
 import PropTypes from 'prop-types';
 import './ServerBoost.css';
@@ -115,7 +116,7 @@ const ServerBoost = ({ serverId, onClose }) => {
     };
 
     const removeBoost = async (boostId) => {
-        if (!(await confirmDialog('Sunucudaki destek desteinizi kaldırmak istiyor musunuz?')))
+        if (!(await confirmDialog(t('serverBoost.removeConfirm', 'Do you want to remove your boost from this server?'))))
             return;
 
         try {
@@ -191,7 +192,7 @@ const ServerBoost = ({ serverId, onClose }) => {
         return (
             <div className="boost-overlay">
                 <div className="boost-modal">
-                    <div className="loading-spinner">Boost verileri yükleniyor...</div>
+                    <div className="loading-spinner">{t('serverBoost.loading', 'Loading boost data...')}</div>
                 </div>
             </div>
         );
@@ -218,7 +219,7 @@ const ServerBoost = ({ serverId, onClose }) => {
             >
                 <div className="boost-header">
                     <h2>🚀 Server Boost</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -266,7 +267,7 @@ const ServerBoost = ({ serverId, onClose }) => {
                     {/* Boost Button */}
                     <div className="boost-action">
                         <button
-                            aria-label="Toggle visibility"
+                            aria-label={t('serverBoost.openBoostModal', 'Boost this server')}
                             className="boost-server-btn"
                             onClick={() => setShowBoostModal(true)}
                         >
@@ -308,7 +309,7 @@ const ServerBoost = ({ serverId, onClose }) => {
                         <h3>📜 Boost History</h3>
                         {boostHistory.length === 0 ? (
                             <div className="empty-history">
-                                <p>Henüz bu sunucuyu destekleyen kimse yok</p>
+                                <p>{t('serverBoost.noBoosters', 'No one has boosted this server yet')}</p>
                                 <p className="empty-hint">Destekleyen ilk siz olun! 🚀</p>
                             </div>
                         ) : (
@@ -328,7 +329,7 @@ const ServerBoost = ({ serverId, onClose }) => {
                                         </div>
                                         {boost.is_current_user && (
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('serverBoost.removeBoost', 'Remove boost')}
                                                 className="remove-boost-btn"
                                                 onClick={() => removeBoost(boost.id)}
                                             >
@@ -381,14 +382,14 @@ const ServerBoost = ({ serverId, onClose }) => {
 
                             <div className="modal-actions">
                                 <button
-                                    aria-label="Toggle visibility"
+                                    aria-label={t('serverBoost.cancelBoost', 'Cancel boost')}
                                     className="cancel-btn"
                                     onClick={() => setShowBoostModal(false)}
                                 >
                                     Cancel
                                 </button>
                                 <button
-                                    aria-label="boost Server"
+                                    aria-label={t('serverBoost.confirmBoost', 'Confirm boost')}
                                     className="confirm-boost-btn"
                                     onClick={boostServer}
                                 >

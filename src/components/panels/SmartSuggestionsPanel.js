@@ -160,7 +160,7 @@ const SmartSuggestionsPanel = ({
     if (loading) {
         return (
             <div
-                aria-label="smart suggestions panel"
+                aria-label={t('smartSuggestions.panel', 'Smart suggestions panel')}
                 className="smart-suggestions-overlay"
                 role="button"
                 tabIndex={0}
@@ -352,8 +352,8 @@ const SmartSuggestionsPanel = ({
                                 ))}
                                 {(!suggestions?.trending_topics ||
                                     suggestions.trending_topics.length === 0) && (
-                                    <div className="empty-state">{t('no_trending_topics_yet')}</div>
-                                )}
+                                        <div className="empty-state">{t('no_trending_topics_yet')}</div>
+                                    )}
                             </div>
                         </div>
                     )}

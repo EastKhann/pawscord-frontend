@@ -29,8 +29,8 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>🔍 Sunucu Keşfi</h1>
-                <p style={styles.subtitle}>Beğenebileceğiniz toplulukları keşfedebilirsiniz</p>
+                <h1 style={styles.title}>{t('discovery.title', '🔍 Server Discovery')}</h1>
+                <p style={styles.subtitle}>{t('serverDiscovery.subtitle', 'Discover communities you might enjoy')}</p>
             </div>
 
             <div style={styles.searchContainer}>
@@ -38,10 +38,11 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
                     <FaSearch style={styles.searchIcon} />
                     <input
                         type="text"
-                        placeholder="Sunucu ara..."
+                        placeholder={t('serverDiscovery.searchPlaceholder', 'Search servers...')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={styles.searchInput}
+                        aria-label={t('common.search', 'Search')}
                     />
                 </div>
             </div>
@@ -49,7 +50,7 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
             <div style={styles.categories}>
                 {CATEGORIES.map((cat) => (
                     <button
-                        aria-label="Action button"
+                        aria-label={t('serverDiscovery.categoryBtn', 'Filter by {{cat}}', { cat: cat.name })}
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
                         style={
@@ -66,13 +67,13 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
 
             <div style={styles.section}>
                 <h2 style={styles.sectionTitle}>
-                    <FaStar className="icon-warning" /> Öne Çıkan Sunucular
+                    <FaStar className="icon-warning" /> {t('discovery.featured', 'Featured Servers')}
                 </h2>
                 <div style={styles.serverGrid}>
                     {loading ? (
                         <div style={styles.loading}>{t('common.loading')}</div>
                     ) : featuredServers.length === 0 ? (
-                        <div style={styles.empty}>Öne çıkan sunucu yok</div>
+                        <div style={styles.empty}>{t('discovery.noFeatured', 'No featured servers')}</div>
                     ) : (
                         featuredServers.map((server) => (
                             <ServerCard
@@ -88,7 +89,7 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
 
             <div style={styles.section}>
                 <h2 style={styles.sectionTitle}>
-                    <FaFire className="icon-danger" /> Popüler Sunucular
+                    <FaFire className="icon-danger" /> {t('discovery.popular', 'Popular Servers')}
                 </h2>
                 <div style={styles.serverGrid}>
                     {loading ? (
@@ -96,7 +97,7 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
                     ) : servers.length === 0 ? (
                         <div style={styles.empty}>
                             <FaSearch style={S.mar} />
-                            <p>Sunucu bulunamadı</p>
+                            <p>{t('discovery.noResults', 'No servers found')}</p>
                         </div>
                     ) : (
                         servers.map((server) => (

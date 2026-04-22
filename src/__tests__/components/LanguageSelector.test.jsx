@@ -5,7 +5,7 @@ import { describe, it, expect, vi } from 'vitest';
 describe('LanguageSelector Data Layer', () => {
     it('SUPPORTED_LANGUAGES should have all 13 languages', async () => {
         const { SUPPORTED_LANGUAGES } = await import('../../i18n/index.js');
-        expect(SUPPORTED_LANGUAGES).toHaveLength(13);
+        expect(SUPPORTED_LANGUAGES).toHaveLength(20);
         const codes = SUPPORTED_LANGUAGES.map((l) => l.code);
         expect(codes).toEqual(
             expect.arrayContaining([
@@ -22,6 +22,13 @@ describe('LanguageSelector Data Layer', () => {
                 'ko',
                 'zh',
                 'hi',
+                'pl',
+                'nl',
+                'sv',
+                'uk',
+                'vi',
+                'he',
+                'fa',
             ])
         );
     });

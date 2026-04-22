@@ -168,7 +168,7 @@ const EnhancedPollsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) =>
                         <h2 style={styles.title}>{t('polls.createPoll', 'Anket Oluştur')}</h2>
                     </div>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -184,7 +184,7 @@ const EnhancedPollsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) =>
                             placeholder={t('polls.whatsYourQuestion', "What's your question?")}
                             style={styles.input}
                             maxLength={200}
-                            aria-label="Question"
+                            aria-label={t('polls.questionInput', 'Poll question')}
                         />
                     </div>
 
@@ -193,7 +193,7 @@ const EnhancedPollsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) =>
                             <label style={styles.label}>{t('polls.options', 'Options')}</label>
 
                             <button
-                                aria-label="add Option"
+                                aria-label={t('polls.addOption', 'Add option')}
                                 onClick={addOption}
                                 style={styles.addButton}
                                 disabled={options.length >= 10}
@@ -214,100 +214,98 @@ const EnhancedPollsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) =>
                                         placeholder={`Option ${idx + 1}`}
                                         style={styles.optionInput}
                                         maxLength={100}
-                                        aria-label="Option"
+                                        aria-label={t('polls.optionInput', `Option ${idx + 1}`)}
                                     />
 
                                     {options.length > 2 && (
                                         <button
-                                            aria-label="Action button"
-                                            onClick={() => removeOption(idx)}
-                                            style={styles.removeButton}
-                                            title="Kaldır"
+                                            aria-label={t('polls.removeOption', 'Remove option')}
+                                    style={styles.removeButton}
+                                    title={t('common.remove', 'Remove')}
                                         >
-                                            <FaTrash />
-                                        </button>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div style={styles.section}>
-                        <label style={styles.label}>{t('polls.duration', 'Duration')}</label>
-
-                        <div style={styles.durationGrid}>
-                            {durationOptions.map((opt) => (
-                                <button
-                                    aria-label="Action button"
-                                    key={opt.value}
-                                    onClick={() => setDuration(opt.value)}
-                                    style={getDurationButtonStyle(opt.value)}
-                                >
-                                    {opt.label}
+                                    <FaTrash />
                                 </button>
-                            ))}
+                            )}
                         </div>
+                            ))}
                     </div>
+                </div>
 
-                    <div style={styles.section}>
-                        <label style={styles.label}>
-                            <FaCalendar className="mr-6" />
+                <div style={styles.section}>
+                    <label style={styles.label}>{t('polls.duration', 'Duration')}</label>
 
-                            {t('polls.scheduleOptional', 'Schedule (Optional)')}
-                        </label>
+                    <div style={styles.durationGrid}>
+                        {durationOptions.map((opt) => (
+                            <button
+                                aria-label={t('polls.selectDuration', opt.label)}
+                                onClick={() => setDuration(opt.value)}
+                                style={getDurationButtonStyle(opt.value)}
+                            >
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
 
+                <div style={styles.section}>
+                    <label style={styles.label}>
+                        <FaCalendar className="mr-6" />
+
+                        {t('polls.scheduleOptional', 'Schedule (Optional)')}
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        value={scheduledFor}
+                        onChange={(e) => setScheduledFor(e.target.value)}
+                        style={styles.input}
+                        min={new Date().toISOString().slice(0, 16)}
+                    />
+
+                    {scheduledFor && (
+                        <div style={styles.hint}>
+                            Poll will be posted on {new Date(scheduledFor).toLocaleString()}
+                        </div>
+                    )}
+                </div>
+
+                <div style={styles.checkboxes}>
+                    <label style={styles.checkbox}>
                         <input
-                            type="datetime-local"
-                            value={scheduledFor}
-                            onChange={(e) => setScheduledFor(e.target.value)}
-                            style={styles.input}
-                            min={new Date().toISOString().slice(0, 16)}
+                            type="checkbox"
+                            checked={allowMultiple}
+                            onChange={(e) => setAllowMultiple(e.target.checked)}
                         />
 
-                        {scheduledFor && (
-                            <div style={styles.hint}>
-                                Poll will be posted on {new Date(scheduledFor).toLocaleString()}
-                            </div>
-                        )}
-                    </div>
+                        <span style={styles.checkboxLabel}>
+                            {t('polls.allowMultiple', 'Çoklu seçime izin ver')}
+                        </span>
+                    </label>
+                    <label style={styles.checkbox}>
+                        <input
+                            type="checkbox"
+                            checked={anonymous}
+                            onChange={(e) => setAnonymous(e.target.checked)}
+                        />
 
-                    <div style={styles.checkboxes}>
-                        <label style={styles.checkbox}>
-                            <input
-                                type="checkbox"
-                                checked={allowMultiple}
-                                onChange={(e) => setAllowMultiple(e.target.checked)}
-                            />
-
-                            <span style={styles.checkboxLabel}>
-                                {t('polls.allowMultiple', 'Çoklu seçime izin ver')}
-                            </span>
-                        </label>
-                        <label style={styles.checkbox}>
-                            <input
-                                type="checkbox"
-                                checked={anonymous}
-                                onChange={(e) => setAnonymous(e.target.checked)}
-                            />
-
-                            <span style={styles.checkboxLabel}>
-                                {t('polls.anonymousVoting', 'Anonim oylama')}
-                            </span>
-                        </label>
-                    </div>
-
-                    <button
-                        aria-label="create Poll"
-                        onClick={createPoll}
-                        style={styles.createButton}
-                    >
-                        {scheduledFor
-                            ? t('polls.schedulePoll', 'Anketi Zamanla')
-                            : t('polls.createPoll', 'Anket Oluştur')}
-                    </button>
+                        <span style={styles.checkboxLabel}>
+                            {t('polls.anonymousVoting', 'Anonim oylama')}
+                        </span>
+                    </label>
                 </div>
+
+                <button
+                    aria-label={t('polls.createPollBtn', 'Create poll')}
+                    onClick={createPoll}
+                    style={styles.createButton}
+                >
+                    {scheduledFor
+                        ? t('polls.schedulePoll', 'Anketi Zamanla')
+                        : t('polls.createPoll', 'Anket Oluştur')}
+                </button>
             </div>
         </div>
+        </div >
     );
 };
 

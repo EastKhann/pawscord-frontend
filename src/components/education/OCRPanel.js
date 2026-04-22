@@ -3,8 +3,10 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import './OCRPanel.css';
 import { FaImage, FaCopy, FaUpload, FaLanguage, FaCheckCircle } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
+    const { t } = useTranslation();
     const [selectedFile, setSelectedFile] = useState(null);
     const [preview, setPreview] = useState(null);
     const [extractedText, setExtractedText] = useState('');
@@ -25,7 +27,7 @@ function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
 
     const extractText = async () => {
         if (!selectedFile) {
-            setError('Lütfen önce bir resim seçin');
+            setError(t('ocr.selectImageFirst', 'Please select an image first'));
             return;
         }
 
@@ -50,7 +52,7 @@ function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
                 setError(data.error || 'OCR failed');
             }
         } catch (err) {
-            setError('Ağ hatası: ' + err.message);
+            setError(t('ocr.networkError', 'Network error: ') + err.message);
         } finally {
             setLoading(false);
         }
@@ -79,14 +81,14 @@ function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
                         accept="image/*"
                         onChange={handleFileSelect}
                         className="display-none"
-                        aria-label="file"
+                        aria-label={t('ocr.fileInput', 'Upload file for OCR')}
                     />
                     {preview ? (
-                        <img src={preview} alt="Preview" className="image-preview" />
+                        <img src={preview} alt={t('alt.preview', 'Preview')} className="image-preview" />
                     ) : (
                         <div className="upload-placeholder">
                             <FaUpload className="upload-icon" />
-                            <p>Görsel yüklemek için tıklayın</p>
+                            <p>{t('ocr.clickToUpload', 'Click to upload an image')}</p>
                             <span>Supports JPG, PNG, GIF</span>
                         </div>
                     )}
@@ -94,7 +96,7 @@ function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
 
                 {selectedFile && (
                     <button className="extract-btn" onClick={extractText} disabled={loading}>
-                        {loading ? 'Çıkarılıyor...' : 'Metni Çıkar'}
+                        {loading ? t('ocr.extracting', 'Extracting...') : t('ocr.extractText', 'Extract Text')}
                     </button>
                 )}
             </div>
@@ -102,7 +104,7 @@ function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
             {extractedText && (
                 <div className="ocr-result">
                     <div className="result-header">
-                        <h3>Çıkarılan Metin</h3>
+                        <h3>{t('ocr.extractedText', 'Extracted Text')}</h3>
                         <div className="result-actions">
                             {language && (
                                 <span className="language-badge">
@@ -114,7 +116,7 @@ function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
                                 onClick={copyToClipboard}
                             >
                                 {copied ? <FaCheckCircle /> : <FaCopy />}
-                                {copied ? 'Kopyalandı!' : 'Kopyala'}
+                                {copied ? t('common.copied', 'Copied!') : t('common.copy', 'Copy')}
                             </button>
                         </div>
                     </div>

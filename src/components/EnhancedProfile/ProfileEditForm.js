@@ -91,7 +91,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
 
 
-                    aria-label="Pronouns"
+                    aria-label={t('profile.pronouns', 'Pronouns')}
 
 
                 />
@@ -127,7 +127,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
 
 
-                    aria-label="Location"
+                    aria-label={t('profile.location', 'Location')}
 
 
                 />
@@ -172,7 +172,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
 
 
-                            aria-label="Twitter Username"
+                            aria-label={t('profile.twitter', 'Twitter username')}
 
 
                         />
@@ -205,7 +205,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
 
 
-                            aria-label="Github Username"
+                            aria-label={t('profile.github', 'GitHub username')}
 
 
                         />
@@ -238,7 +238,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
 
 
-                            aria-label="Instagram Username"
+                            aria-label={t('profile.instagram', 'Instagram username')}
 
 
                         />
@@ -271,7 +271,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
 
 
-                            aria-label="Youtube Channel"
+                            aria-label={t('profile.youtube', 'YouTube channel URL')}
 
 
                         />
@@ -304,7 +304,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
 
 
-                            aria-label="Twitch Username"
+                            aria-label={t('profile.twitch', 'Twitch username')}
 
 
                         />
@@ -337,7 +337,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
 
 
-                            aria-label="Website Url"
+                            aria-label={t('profile.website', 'Website URL')}
 
 
                         />

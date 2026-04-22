@@ -36,7 +36,7 @@ const ReportDetailModal = ({
     };
 
     return (
-        <div aria-label="report detail modal" style={styles.modalOverlay} {...overlayProps}>
+        <div aria-label={t('reportDetail.modal', 'Report detail')} style={styles.modalOverlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.modalHeader}>
                     <h3 style={styles.modalTitle}>{t('report_details')}</h3>
@@ -106,7 +106,7 @@ const ReportDetailModal = ({
                                 onClick={async () => {
                                     if (
                                         await confirmDialog(
-                                            'Bu mesajı silmek istediğinizden emin misiniz?'
+                                            t('reports.deleteMsgConfirm', 'Are you sure you want to delete this message?')
                                         )
                                     ) {
                                         onHandle(report.id, 'delete_message');
@@ -114,7 +114,7 @@ const ReportDetailModal = ({
                                 }}
                                 style={S.bg}
                             >
-                                <FaTrash /> Mesajı Sil
+                                <FaTrash /> {t('reports.deleteMsg', 'Delete Message')}
                             </button>
                         )}
                         {report.reported_user && (
@@ -122,7 +122,7 @@ const ReportDetailModal = ({
                                 onClick={async () => {
                                     if (
                                         await confirmDialog(
-                                            'Bu kullanıcıyı banlamak istediğinizden emin misiniz?'
+                                            t('reports.banUserConfirm', 'Are you sure you want to ban this user?')
                                         )
                                     ) {
                                         const reason = prompt('Ban reason:');

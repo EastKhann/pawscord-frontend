@@ -42,7 +42,7 @@ const CodeSnippetModal = ({ onClose, onSend }) => {
                     <h3 className="flex-align-m0">
                         <FaCode color="#5865f2" /> Kod Share
                     </h3>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -50,7 +50,7 @@ const CodeSnippetModal = ({ onClose, onSend }) => {
                 <div style={styles.body}>
                     <div style={styles.row}>
                         <input
-                            placeholder="Title (Opsiyonel)"
+                            placeholder={t('codeSnippet.title', 'Title (Optional)')}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             style={styles.input}
@@ -76,7 +76,7 @@ const CodeSnippetModal = ({ onClose, onSend }) => {
                     />
 
                     <button
-                        aria-label="handle Submit"
+                        aria-label={t('codeSnippet.submit', 'Submit code snippet')}
                         onClick={handleSubmit}
                         style={styles.sendBtn}
                     >

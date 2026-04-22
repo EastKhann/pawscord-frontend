@@ -31,7 +31,7 @@ const CreateWebhookModal = ({ serverId, token, onClose, onCreated }) => {
 
             .then((data) => setChannels(data.channels || []))
 
-            .catch(() => {});
+            .catch(() => { });
     }, []);
 
     const handleCreate = async () => {
@@ -86,7 +86,7 @@ const CreateWebhookModal = ({ serverId, token, onClose, onCreated }) => {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder={t('example_github_bot')}
-                        aria-label="Name"
+                        aria-label={t('webhooks.nameInput', 'Webhook name')}
                     />
                 </div>
 
@@ -146,7 +146,7 @@ const WebhooksView = ({ serverId, token }) => {
     };
 
     const handleDeleteWebhook = async (webhookId) => {
-        if (!(await confirmDialog('Bu webhook’u silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('webhooks.deleteConfirm', 'Are you sure you want to delete this webhook?')))) return;
 
         try {
             const response = await fetch(

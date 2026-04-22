@@ -25,38 +25,38 @@ const AppsTab = ({ o }) => {
 
             {o.showCreateApp && (
                 <div style={styles.createForm}>
-                    <h3 style={styles.formTitle}>OAuth Uygulaması Oluştur</h3>
+                    <h3 style={styles.formTitle}>{t('oauthApps.createApp','Create OAuth Application')}</h3>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Uygulama Adı</label>
+                        <label style={styles.label}>{t('oauthApps.appName','Application Name')}</label>
                         <input
                             type="text"
                             value={o.newApp.name}
                             onChange={(e) => o.setNewApp({ ...o.newApp, name: e.target.value })}
-                            placeholder="Harika Uygulamamı"
+                            placeholder={t('oauth.appNamePlaceholder', 'My Awesome App')}
                             style={styles.input}
                         />
                     </div>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Açıklama</label>
+                        <label style={styles.label}>{t('common.description','Description')}</label>
                         <textarea
                             value={o.newApp.description}
                             onChange={(e) =>
                                 o.setNewApp({ ...o.newApp, description: e.target.value })
                             }
-                            placeholder="Uygulamanız ne yapar?"
+                            placeholder={t('oauth.appDescription', 'What does your app do?')}
                             style={S.size}
                         />
                     </div>
                     <div style={styles.formGroup}>
                         <label style={styles.label}>
-                            Yönlendirme URI'leri (her satıra bir tane)
+                            {t('oauthApps.redirectUris','Redirect URIs (one per line)')}
                         </label>
                         <textarea
                             value={o.newApp.redirect_uris}
                             onChange={(e) =>
                                 o.setNewApp({ ...o.newApp, redirect_uris: e.target.value })
                             }
-                            placeholder="https://example.com/callback"
+                            placeholder={t('appsTab.callbackUrl', 'https://example.com/callback')}
                             style={S.size2}
                         />
                     </div>
@@ -77,7 +77,7 @@ const AppsTab = ({ o }) => {
                     </div>
                     <div style={styles.formActions}>
                         <button onClick={o.createApp} style={styles.submitButton}>
-                            Uygulama Oluştur
+                            {t('oauthApps.createBtn','Create Application')}
                         </button>
                         <button
                             onClick={() => o.setShowCreateApp(false)}
@@ -92,7 +92,7 @@ const AppsTab = ({ o }) => {
             <div style={styles.appsList}>
                 {o.apps.length === 0 ? (
                     <div style={styles.empty}>
-                        Henüz OAuth uygulaması yok. Başlamak için bir tane oluşturun!
+                        {t('oauthApps.noApps','No OAuth applications yet. Create one to get started!')}
                     </div>
                 ) : (
                     o.apps.map((app) => (

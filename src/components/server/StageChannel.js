@@ -163,16 +163,16 @@ const StageChannel = ({ channelId, userId, onClose }) => {
             <div className="stage-header">
                 <div className="stage-info">
                     <h2>{stageInfo?.topic || t('ui.stage_channeli')</h2>
-                    <p>{speakers.length} konuşmacı • {listners.length} dinleyici</p>
+                    <p>{speakers.length} {t('stage.speakers', 'speakers')} • {listners.length} {t('stage.listeners', 'listeners')}</p>
                 </div>
-                <button aria-label="Close" className="close-btn" onClick={onClose}>×</button>
+                <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>×</button>
             </div>
 
             <div className="stage-body">
                 {/* Speakers Section */}
                 <div className="speakers-section">
                     <h3>
-                        <FaMicrophone /> Konuşmacılar
+                        <FaMicrophone /> {t('stage.speakersLabel', 'Speakers')}
                     </h3>
                     <div className="participants-grid">
                         {speakers.map(speaker => (
@@ -195,8 +195,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
                                 </div>
                                 {userRole === 'moderator' && speaker.id !== userId && (
                                     <button
-                                        aria-label="Action button"
-                                        className="action-btn remove"
+                                        aria-label={t('stage.removeSpeaker', 'Move to audience')}
                                         onClick={() => removeSpeaker(speaker.id)}
                                         title="Dinleyiciye Al"
                                     >
@@ -212,7 +211,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
                 {userRole === 'moderator' && requests.length > 0 && (
                     <div className="requests-section">
                         <h3>
-                            <FaHandPaper /> Konuşma İstaddri ({requests.length})>
+                            <FaHandPaper /> {t('stage.requests', 'Speak Requests ({count})', { count: requests.length })}>
                         </h3>
                         <div className="requests-list">
                             {requests.map(request => (
@@ -220,8 +219,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
                                     <img src={request.user.avatar} alt={request.user.username} />
                                     <span>{request.user.username}</span>
                                     <button
-                                        aria-label="Action button"
-                                        className="btn-approve"
+                                        aria-label={t('stage.approveRequest', 'Approve speak request')}
                                         onClick={() => approveRequest(request.user.id)}>
                                         Confirm
                                     </button>
@@ -245,8 +243,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
                                 </div>
                                 {userRole === 'moderator' && (
                                     <button
-                                        aria-label="Action button"
-                                        className="action-btn invite"
+                                        aria-label={t('stage.inviteToSpeak', 'Invite to speak')}
                                         onClick={() => inviteToSpeak(listner.id)}
                                         title={t('ui.konusmaci_olarak_invite')}>
                                         <FaUserPlus />
@@ -261,7 +258,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
             <div className="stage-controls">
                 {userRole === 'speaker' && (
                     <button
-                        aria-label="toggle Mute"
+                        aria-label={isMuted ? t('stage.unmute', 'Unmute') : t('stage.mute', 'Mute')}
                         className={`control-btn ${isMuted ? 'muted' : ''}`}
                         onClick={toggleMute}>
                         {isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}
@@ -271,15 +268,15 @@ const StageChannel = ({ channelId, userId, onClose }) => {
 
                 {userRole === 'listner' && !hasRequested && (
                     <button
-                        aria-label="request To Speak" className="control-btn request" onClick={requestToSpeak}>
-                        <FaHandPaper /> Konuşma İsteği Gönder
+                        aria-label={t('stage.requestToSpeak', 'Request to speak')} className="control-btn request" onClick={requestToSpeak}>
+                        <FaHandPaper /> {t('stage.requestToSpeak', 'Request to Speak')}
                     </button>
                 )}
 
                 {userRole === 'listner' && hasRequested && (
                     <button
-                        aria-label="cancel Request" className="control-btn cancel-request" onClick={cancelRequest}>
-                        ✋ İsteği İptal Et
+                        aria-label={t('stage.cancelRequest', 'Cancel speak request')} className="control-btn cancel-request" onClick={cancelRequest}>
+                        {t('stage.cancelRequest', '✋ Cancel Request')}
                     </button>
                 )}
             </div>

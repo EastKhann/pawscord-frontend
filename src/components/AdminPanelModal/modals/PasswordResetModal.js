@@ -64,7 +64,7 @@ const PasswordResetModal = ({
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder={t('yeni_şifre_girin_min_6_karakter')}
                         style={S.bg}
-                        aria-label="New Password"
+                        aria-label={t('security.newPassword', 'New Password')}
                     />
                 </div>
                 <div className="flex-gap-8">
@@ -82,7 +82,7 @@ const PasswordResetModal = ({
                             setNewPassword('');
                         }}
                     >
-                        <FaKey /> Şifreyi Değiştir
+                        <FaKey /> {t('adminModal.changePassword', 'Change Password')}
                     </button>
                     <button
                         style={styles.actionBtn('#6b7280')}

@@ -11,8 +11,9 @@ const S = {
 };
 
 const ToggleSwitch = ({ value, onChange, label }) => {
+    const { t } = useTranslation();
     return (
-        <div aria-label="toggle switch" style={S.flex}>
+        <div aria-label={t('settings.toggleSwitch', 'Toggle switch')} style={S.flex}>
             <span className="text-dbd-14n">{label}</span>
             <button
                 type="button"

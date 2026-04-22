@@ -16,8 +16,10 @@ import {
 import { getApiBase } from '../../utils/apiEndpoints';
 import confirmDialog from '../../utils/confirmDialog';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 const PermissionsPanel = ({ serverId, roleId, onClose }) => {
+    const { t } = useTranslation();
     const [roles, setRoles] = useState([]);
     const [selectedRole, setSelectedRole] = useState(null);
     const [permissions, setPermissions] = useState({});
@@ -309,7 +311,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
     const resetPermissions = async () => {
         if (
             !(await confirmDialog(
-                'Tüm izinleri varsayılana sıfırlamak istediğinizden emin misiniz?'
+                t('permissions.resetConfirm', 'Are you sure you want to reset all permissions to default?')
             ))
         )
             return;
@@ -329,7 +331,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
         }
     };
 
-    const showToast = (message, type = 'success') => {};
+    const showToast = (message, type = 'success') => { };
 
     const getRoleIcon = (roleName) => {
         if (roleName.toLowerCase().includes('owner') || roleName.toLowerCase().includes('admin')) {
@@ -346,7 +348,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
             <div className="permissions-overlay">
                 <div className="permissions-panel loading">
                     <div className="spinner" />
-                    <p>İzinler yükleniyor...</p>
+                    <p>{t('permissions.loading', 'Loading permissions...')}</p>
                 </div>
             </div>
         );
@@ -359,7 +361,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
                     <h2>
                         <FaShieldAlt /> Permissions Manager
                     </h2>
-                    <button aria-label="Close" onClick={onClose} className="btn-close">
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} className="btn-close">
                         <FaTimes />
                     </button>
                 </div>
@@ -405,7 +407,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
                                 <div className="editor-header">
                                     <div>
                                         <h3>{selectedRole.name}</h3>
-                                        <p>Bu rol için izinleri yapılandırın</p>
+                                        <p>{t('permissions.configureRole', 'Configure permissions for this role')}</p>
                                     </div>
                                     <div className="editor-actions">
                                         <select
@@ -437,7 +439,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
                                                 ))}
                                         </select>
                                         <button
-                                            aria-label="reset Permissions"
+                                            aria-label={t('permissions.reset', 'Reset permissions')}
                                             onClick={resetPermissions}
                                             className="btn-reset"
                                         >
@@ -466,7 +468,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
                                                                     type="checkbox"
                                                                     checked={
                                                                         permissions[
-                                                                            permission.key
+                                                                        permission.key
                                                                         ] || false
                                                                     }
                                                                     onChange={(e) =>
@@ -489,8 +491,8 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
                         ) : (
                             <div className="no-role-selected">
                                 <FaLock size={64} />
-                                <h3>Rol Seçin</h3>
-                                <p>Yapılandırmak için soldan bir rol seçin</p>
+                                <h3>{t('permissions.selectRole', 'Select Role')}</h3>
+                                <p>{t('permissions.selectRoleHint', 'Select a role from the left to configure')}</p>
                             </div>
                         )}
                     </div>

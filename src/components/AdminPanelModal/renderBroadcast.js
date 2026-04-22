@@ -12,7 +12,7 @@ import styles from './styles';
 const renderBroadcast = () => {
     const { t } = useTranslation();
     return (
-        <div aria-label="render broadcast">
+        <div aria-label={t('admin.broadcast', 'Broadcast')}>
             <h2 className="white-18-mb16">{t('📢_duyuru_merkezi')}</h2>
 
             <div style={styles.statCard}>

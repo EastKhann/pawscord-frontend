@@ -30,8 +30,6 @@ const SettingsModal = ({
     const [tempVadSensitivity, setTempVadSensitivity] = useState(vadSensitivity);
     const [tempScreenQuality, setTempScreenQuality] = useState(screenShareQuality);
     const [tempScreenFPS, setTempScreenFPS] = useState(screenShareFPS);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const { micLevel, isTesting, setIsTesting } = useMicTest();
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Voice Settings' });
 
@@ -40,7 +38,7 @@ const SettingsModal = ({
             <div style={styles.panel} {...dialogProps}>
                 {/* Header */}
                 <div style={styles.header}>
-                    <h2 style={styles.headerTitle}>⚙️ Ses Ayarları</h2>
+                    <h2 style={styles.headerTitle}>{t('voice.audioSettings', '⚙️ Audio Settings')}</h2>
                 </div>
 
                 {/* Content */}
@@ -55,17 +53,17 @@ const SettingsModal = ({
                         }}
                     >
                         <div style={styles.sectionHeader}>
-                            <div style={styles.sectionTitleRow}>🎤 Mikrofon Testi</div>
+                            <div style={styles.sectionTitleRow}>{t('voice.microphoneTest', '🎤 Microphone Test')}</div>
                             <div style={styles.descNoMargin}>
-                                Mikrofonunuzun çalışıp çalışmadığını test edin
+                                {t('voice.micTestDesc', 'Test if your microphone is working')}
                             </div>
                         </div>
                         <button
-                            aria-label={isTesting ? 'Testi durdur' : 'Mikrofon testini başlat'}
+                            aria-label={isTesting ? t('voice.stopTest', 'Stop Test') : t('voice.startTest', 'Start Test')}
                             onClick={() => setIsTesting(!isTesting)}
                             style={styles.testBtn(isTesting)}
                         >
-                            {isTesting ? '⏹️ Testi Durdur' : '▶️ Testi Başlat'}
+                            {isTesting ? t('settingsModal.stopTest', '⏹️ Stop Test') : t('settingsModal.startTest', '▶️ Start Test')}
                         </button>
                         {isTesting && (
                             <div>
@@ -78,8 +76,8 @@ const SettingsModal = ({
                                                 micLevel > 70
                                                     ? '#23a559'
                                                     : micLevel > 40
-                                                      ? '#f0b232'
-                                                      : '#f23f42',
+                                                        ? '#f0b232'
+                                                        : '#f23f42',
                                             borderRadius: '4px',
                                             transition: 'width 0.1s ease',
                                         }}
@@ -94,8 +92,8 @@ const SettingsModal = ({
                                     }}
                                 >
                                     {micLevel > 10
-                                        ? '✅ Mikrofonunuz çalışıyor!'
-                                        : '⚠️ Konuşun veya ses çıkarın'}
+                                        ? t('voice.micWorking', '✅ Your microphone is working!')
+                                        : t('voice.speakOrMakeSound', '⚠️ Speak or make a sound')}
                                 </div>
                             </div>
                         )}
@@ -113,9 +111,9 @@ const SettingsModal = ({
                                 style={styles.checkbox}
                             />
                             <div>
-                                <div style={styles.title}>🔊 Eko İptali</div>
+                                <div style={styles.title}>{t('voice.echoCancellation', '🔊 Echo Cancellation')}</div>
                                 <div style={styles.desc}>
-                                    Hoparlör sesinin mikrofona ulaşmasını engeller
+                                    {t('voice.echoCancellationDesc', 'Prevents speaker sound from reaching microphone')}
                                 </div>
                             </div>
                         </label>
@@ -131,11 +129,11 @@ const SettingsModal = ({
                                 style={styles.checkbox}
                             />
                             <div>
-                                <div style={styles.title}>🎤️ Gürültü Bastırma</div>
+                                <div style={styles.title}>{t('voice.noiseSuppression', '🎤️ Noise Suppression')}</div>
                                 <div style={styles.desc}>
-                                    Arka plan gürültüsünü azaltır (klavye, fan, vb.)
+                                    {t('voice.noiseSuppressionDesc', 'Reduces background noise (keyboard, fan, etc.)')}
                                     <br />
-                                    <span>⚠️ Müzik paylaşırken devre dışı bırakın!</span>
+                                    <span>{t('voice.disableWhenSharing', '⚠️ Disable when sharing music!')}</span>
                                 </div>
                             </div>
                         </label>
@@ -144,8 +142,8 @@ const SettingsModal = ({
                     {/* PTT Mode */}
                     <div style={styles.section}>
                         <div style={styles.sectionHeader}>
-                            <div style={styles.sectionTitleRow}>🎤️ Ses Modu</div>
-                            <div style={styles.descNoMargin}>Ses Aktivitesi veya Bas-Konuş</div>
+                            <div style={styles.sectionTitleRow}>{t('voice.audioMode', '🎤️ Audio Mode')}</div>
+                            <div style={styles.descNoMargin}>{t('voice.audioModeDesc', 'Voice Activity or Push-to-Talk')}</div>
                         </div>
                         <div>
                             <select
@@ -159,13 +157,13 @@ const SettingsModal = ({
                                 }}
                                 style={styles.select}
                             >
-                                <option value="voice">🎤 Voice Activity (Otomatik)</option>
-                                <option value="ptt">⌨️ Bas-Konuş (Tutarak konuş)</option>
+                                <option value="voice">{t('voice.voiceActivity', '🎤 Voice Activity (Automatic)')}</option>
+                                <option value="ptt">{t('voice.pushToTalk', '⌨️ Push-to-Talk (Hold to speak)')}</option>
                             </select>
                         </div>
                         {audioSettings?.pttMode && (
                             <div>
-                                <div>⌨️ PTT Tuşu:</div>
+                                <div>{t('voice.pttKey', '⌨️ PTT Key:')}</div>
                                 <select
                                     value={audioSettings?.pttKey || 'Space'}
                                     onChange={(e) => {
@@ -176,14 +174,14 @@ const SettingsModal = ({
                                     }}
                                 >
                                     <option value="Space">Space (Spacebar)</option>
-                                    <option value="ControlLeft">Ctrl (Sol)</option>
+                                    <option value="ControlLeft">{t('voice.ctrlLeft', 'Ctrl (Left)')}</option>
                                     <option value="ControlRight">Ctrl (Right)</option>
-                                    <option value="ShiftLeft">Shift (Sol)</option>
-                                    <option value="AltLeft">Alt (Sol)</option>
+                                    <option value="ShiftLeft">{t('voice.shiftLeft', 'Shift (Left)')}</option>
+                                    <option value="AltLeft">{t('voice.altLeft', 'Alt (Left)')}</option>
                                     <option value="KeyV">V</option>
                                     <option value="KeyC">C</option>
                                 </select>
-                                <div>ℹ️ Konuşmak için tuşu basılı tutun</div>
+                                <div>{t('voice.pttHoldHint', 'ℹ️ Hold the key to speak')}</div>
                             </div>
                         )}
                     </div>
@@ -191,9 +189,9 @@ const SettingsModal = ({
                     {/* VAD Sensitivity */}
                     <div style={styles.section}>
                         <div style={styles.sectionHeader}>
-                            <div style={styles.sectionTitleRow}>🎚️ Mikrofon Hassasiyeti</div>
+                            <div style={styles.sectionTitleRow}>{t('voice.micSensitivity', '🎚️ Microphone Sensitivity')}</div>
                             <div style={styles.descNoMargin}>
-                                Ses algılama eşiği (Düşük = Hassas, Yüksek = Az Hassas)
+                                {t('voice.micSensitivityDesc', 'Detection threshold (Low = Sensitive, High = Less Sensitive)')}
                             </div>
                         </div>
                         <div>
@@ -228,24 +226,24 @@ const SettingsModal = ({
                                     tempVadSensitivity < 35
                                         ? '#ff9800'
                                         : tempVadSensitivity > 60
-                                          ? '#ff9800'
-                                          : '#23a559',
+                                            ? '#ff9800'
+                                            : '#23a559',
                             }}
                         >
                             {tempVadSensitivity < 35
-                                ? '⚠️ Çok hassas - yanlış pozitifler olabilir'
+                                ? t('voice.tooSensitive', '⚠️ Too sensitive - false positives may occur')
                                 : tempVadSensitivity > 60
-                                  ? '⚠️ Az hassas - konuşma algılanmayabilir'
-                                  : '✅ Optimal hassasiyet'}
+                                    ? t('voice.lessSensitive', '⚠️ Less sensitive - speech may not be detected')
+                                    : t('voice.optimalSensitivity', '✅ Optimal sensitivity')}
                         </div>
                     </div>
 
                     {/* Screen Share Quality */}
                     <div style={styles.section}>
                         <div style={styles.sectionHeader}>
-                            <div style={styles.sectionTitleRow}>📺 Ekran Paylaşım Kalitesi</div>
+                            <div style={styles.sectionTitleRow}>{t('voice.screenShareQuality', '📺 Screen Share Quality')}</div>
                             <div style={styles.descNoMargin}>
-                                Yüksek kalite = Daha fazla bant genişliği
+                                {t('voice.highQualityBandwidthDesc', 'High quality = More bandwidth')}
                             </div>
                         </div>
                         <div>
@@ -257,9 +255,9 @@ const SettingsModal = ({
                                 }}
                                 style={styles.select}
                             >
-                                <option value="720p">720p (HD) - Az bandwidth</option>
-                                <option value="1080p">1080p (Full HD) - Önerilen ✅</option>
-                                <option value="4K">4K (Ultra HD) - Yüksek bant genişliği</option>
+                                <option value="720p">{t('voice.quality720p', '720p (HD) - Low bandwidth')}</option>
+                                <option value="1080p">{t('voice.quality1080p', '1080p (Full HD) - Recommended ✅')}</option>
+                                <option value="4K">{t('voice.quality4K', '4K (Ultra HD) - High bandwidth')}</option>
                             </select>
                         </div>
                         <div>
@@ -285,10 +283,10 @@ const SettingsModal = ({
                             }}
                         >
                             {tempScreenFPS === 30
-                                ? '✅ Optimal (Önerilen)'
+                                ? t('voice.optimalFPS', '✅ Optimal (Recommended)')
                                 : tempScreenFPS < 30
-                                  ? '⚠️ Düşük FPS'
-                                  : '⚠️ Yüksek bant genişliği'}
+                                    ? t('voice.lowFPS', '⚠️ Low FPS')
+                                    : t('voice.highBandwidth', '⚠️ High bandwidth')}
                         </div>
                         <div>
                             <label>
@@ -305,7 +303,7 @@ const SettingsModal = ({
                                             toggleSystemAudio(e.target.checked);
                                     }}
                                 />
-                                <span>🔊 Sistem sesini dahil et (Oyun/Video sesi)</span>
+                                <span>{t('voice.includeSystemAudio', '🔊 Include system audio (Game/Video)')}</span>
                             </label>
                         </div>
                     </div>
@@ -322,8 +320,8 @@ const SettingsModal = ({
                                 style={styles.checkbox}
                             />
                             <div>
-                                <div style={styles.title}>📊 Otomatik Ses Seviyesi</div>
-                                <div style={styles.desc}>Ses seviyesini otomatik ayarlar</div>
+                                <div style={styles.title}>{t('voice.autoGainControl', '📊 Auto Gain Control')}</div>
+                                <div style={styles.desc}>{t('voice.autoGainDesc', 'Automatically adjusts volume')}</div>
                             </div>
                         </label>
                     </div>
@@ -331,11 +329,11 @@ const SettingsModal = ({
 
                 {/* Footer */}
                 <div style={styles.footer}>
-                    <button aria-label="Kapat" onClick={onClose} style={styles.cancelBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.cancelBtn}>
                         {t('common.cancel')}
                     </button>
                     <button
-                        aria-label="Kaydet"
+                        aria-label={t('common.save', 'Save')}
                         onClick={() => onSave(settings)}
                         style={styles.saveBtn}
                     >

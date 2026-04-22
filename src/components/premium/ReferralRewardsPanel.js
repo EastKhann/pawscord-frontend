@@ -95,7 +95,7 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                         <h2 style={styles.title}>{t('referrals.title', 'Yönlendirme Ödülleri')}</h2>
                     </div>
 
-                    <button aria-label="Kapat" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -112,11 +112,11 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                                 value={referralLink}
                                 readOnly
                                 style={styles.referralInput}
-                                aria-label="Yönlendirme Bağlantısı"
+                                aria-label={t('referral.referralLink', 'Referral Link')}
                             />
 
                             <button
-                                aria-label="Yönlendirme bağlantısını kopyala"
+                                aria-label={t('referral.copyLink', 'Copy referral link')}
                                 onClick={copyReferralLink}
                                 style={styles.copyButton}
                             >
@@ -127,7 +127,7 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                         <div style={styles.referralHint}>
                             {t(
                                 'referrals.shareHint',
-                                'Arkadaşlar katıldığında ödül kazanmak için bu bağlantıyı paylaşın!'
+                                t('referral.shareHint', 'Share this link to earn rewards when friends join!')
                             )}
                         </div>
                     </div>
@@ -240,7 +240,7 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                                             </div>
                                         ) : reward.claimable ? (
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('referrals.claim', 'Claim reward')}
                                                 onClick={() => claimReward(reward.id)}
                                                 style={styles.claimButton}
                                             >

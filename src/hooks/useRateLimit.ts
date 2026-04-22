@@ -25,7 +25,7 @@ export const useRateLimit = (maxRequests: number = 5, windowMs: number = 1000): 
 
         // Limit aşıldı mı kontrol et
         if (requests.current.length >= maxRequests) {
-            logger.warn(`⚠️ Rate limit aşıldı! ${maxRequests} istek/${windowMs}ms`);
+            logger.warn(`⚠️ Rate limit exceeded! ${maxRequests} requests/${windowMs}ms`);
             return false;
         }
 

@@ -62,8 +62,8 @@ const UserProfileModal = ({
         typeof rawAvatarUrl === 'string' && rawAvatarUrl.startsWith('http')
             ? rawAvatarUrl
             : typeof rawAvatarUrl === 'string'
-              ? `${apiBaseUrl}${rawAvatarUrl}`
-              : getDeterministicAvatar(user.username);
+                ? `${apiBaseUrl}${rawAvatarUrl}`
+                : getDeterministicAvatar(user.username);
     // Cache busting for avatar updates
     const avatarSrc =
         avatarUrl + (user.avatar && typeof user.avatar === 'string' ? `?t=${Date.now()}` : '');
@@ -163,7 +163,7 @@ const UserProfileModal = ({
                             onClick={handleAvatarClick}
                             role="button"
                             tabIndex={0}
-                            aria-label="Change avatar"
+                            aria-label={t('profile.changeAvatar', 'Change avatar')}
                             onKeyDown={(e) =>
                                 (e.key === 'Enter' || e.key === ' ') && handleAvatarClick()
                             }
@@ -211,7 +211,7 @@ const UserProfileModal = ({
                     <div>
                         <h2>{user.username}</h2>
                         {user.is_premium && <span title="Premium">⭐ PREMIUM</span>}
-                        {user.is_verified && <span title="Doğrulanmış">✓ DOĞRULANMIŞ</span>}
+                        {user.is_verified && <span title={t('common.verified', 'Verified')}>✓ DOĞRULANMIŞ</span>}
                         <span
                             style={{
                                 marginLeft: 'auto',
@@ -235,7 +235,7 @@ const UserProfileModal = ({
                                         : 'none',
                                 }}
                             />
-                            {user.is_online ? 'Çevrimiçi' : 'Çevrimdışı'}
+                            {user.is_online ? t('status.online', 'Online') : t('common.offline', 'Offline')}
                         </span>
                     </div>
 
@@ -271,7 +271,7 @@ const UserProfileModal = ({
                                 ) : (
                                     <FaUserPlus />
                                 )}
-                                {requestStatus === 'success' ? 'Gönderildi' : 'Arkadaş Ekle'}
+                                {requestStatus === 'success' ? t('friends.sent', 'Sent') : t('friends.addFriend', 'Add Friend')}
                             </button>
                         )}
                         {!isSelf && (
@@ -282,7 +282,7 @@ const UserProfileModal = ({
                         {!isSelf && (
                             <button
                                 onClick={handleSendMoney}
-                                title="Coin Gönder"
+                                title={t('premium.sendCoins', 'Send Coins')}
                                 aria-label={t('common.sendCoins')}
                             >
                                 <FaCoins />
@@ -291,7 +291,7 @@ const UserProfileModal = ({
                         {isSelf && (
                             <button
                                 onClick={handleOpenSessionManager}
-                                title="Aktif Oturumları Yönet"
+                                title={t('security.manageSessions', 'Manage Active Sessions')}
                                 aria-label={t('common.manageSessions')}
                             >
                                 <FaDesktop /> Oturumlar
@@ -300,7 +300,7 @@ const UserProfileModal = ({
                         {!isSelf && (
                             <button
                                 onClick={handleOpenNotes}
-                                title="Kullanıcı Notu"
+                                title={t('common.userNote', 'User Note')}
                                 aria-label={t('common.userNotes')}
                             >
                                 <FaStickyNote />
@@ -314,20 +314,20 @@ const UserProfileModal = ({
                     {/* FRIEND CODE */}
                     {user.friend_code && (
                         <div
-                            onClick={() => copyToClipboard(user.friend_code, 'Arkadaş Kodu')}
+                            onClick={() => copyToClipboard(user.friend_code, t('friends.friendCode', 'Friend Code'))}
                             style={styles.friendCodeContainer}
                             onMouseEnter={handleFriendCodeEnter}
                             onMouseLeave={handleFriendCodeLeave}
-                            title="Kopyalamak için tıkla"
+                            title={t('common.clickToCopy', 'Click to copy')}
                             role="button"
                             tabIndex={0}
-                            aria-label="Copy friend code"
+                            aria-label={t('friends.copyFriendCode', 'Copy friend code')}
                             onKeyDown={(e) =>
                                 (e.key === 'Enter' || e.key === ' ') &&
-                                copyToClipboard(user.friend_code, 'Arkadaş Kodu')
+                                copyToClipboard(user.friend_code, t('friends.friendCode', 'Friend Code'))
                             }
                         >
-                            <span style={styles.friendCodeLabel}>Arkadaş Kodu</span>
+                            <span style={styles.friendCodeLabel}>{t('friends.friendCode', 'Friend Code')}</span>
                             <span style={styles.friendCodeValue}>{user.friend_code}</span>
                         </div>
                     )}
@@ -377,7 +377,7 @@ const UserProfileModal = ({
 
                             {validLinks.length > 0 && (
                                 <div style={styles.section}>
-                                    <h4 style={styles.sectionTitle}>Bağlantılar</h4>
+                                    <h4 style={styles.sectionTitle}>{t('profile.connections', 'Connections')}</h4>
                                     <div style={styles.linksContainer}>
                                         {validLinks.map(([key, value]) => {
                                             const displayName =
@@ -432,9 +432,9 @@ const UserProfileModal = ({
                     {/* Activity Tab */}
                     {activeTab === 'activity' && (
                         <div style={styles.section}>
-                            <h4 style={styles.sectionTitle}>Aktivite Zaman Çizelgesi</h4>
+                            <h4 style={styles.sectionTitle}>{t('profile.activityTimeline', 'Activity Timeline')}</h4>
                             {presenceHistory.length === 0 ? (
-                                <p style={styles.noDataText}>Aktivite verisi bulunamadı</p>
+                                <p style={styles.noDataText}>{t('profile.noActivity', 'No activity data found')}</p>
                             ) : (
                                 <div style={styles.presenceTimeline}>
                                     {presenceHistory.map((entry, idx) => (
@@ -446,10 +446,10 @@ const UserProfileModal = ({
                                                         entry.status === 'online'
                                                             ? '#23a559'
                                                             : entry.status === 'idle'
-                                                              ? '#f0b232'
-                                                              : entry.status === 'dnd'
-                                                                ? '#f23f42'
-                                                                : '#80848e',
+                                                                ? '#f0b232'
+                                                                : entry.status === 'dnd'
+                                                                    ? '#f23f42'
+                                                                    : '#80848e',
                                                 }}
                                             />
                                             <div style={styles.presenceDetails}>
@@ -457,10 +457,10 @@ const UserProfileModal = ({
                                                     {entry.status === 'online'
                                                         ? '?? Online'
                                                         : entry.status === 'idle'
-                                                          ? '?? Idle'
-                                                          : entry.status === 'dnd'
-                                                            ? '?? Do Not Disturb'
-                                                            : '? Offline'}
+                                                            ? '?? Idle'
+                                                            : entry.status === 'dnd'
+                                                                ? '?? Do Not Disturb'
+                                                                : '? Offline'}
                                                 </span>
                                                 <span style={styles.presenceTime}>
                                                     {new Date(entry.timestamp).toLocaleString(

@@ -145,7 +145,7 @@ const InputMenu = ({
                             disabled={disabled}
                         >
                             <FaFileAlt />
-                            <span>Şablon (Ctrl+T)</span>
+                            <span>{t('inputMenu.template','Template (Ctrl+T)')}</span>
                         </button>
                         <button
                             onClick={() => menuAction(() => setShowScheduled(true))}

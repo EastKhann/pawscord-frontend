@@ -65,8 +65,8 @@ vi.mock('../../stores/useServerStore', () => ({
 describe('Accessibility: Core Components', () => {
     it('ScrollToBottomButton has no critical a11y violations', async () => {
         const { default: ScrollToBottomButton } =
-            await import('../../components/ScrollToBottomButton');
-        const { container } = render(<ScrollToBottomButton onClick={() => {}} unreadCount={0} />);
+            await import('../../components/chat/ScrollToBottomButton');
+        const { container } = render(<ScrollToBottomButton onClick={() => { }} unreadCount={0} />);
         const violations = await checkA11y(container);
         const critical = violations.filter(
             (v) => v.impact === 'critical' || v.impact === 'serious'
@@ -75,7 +75,7 @@ describe('Accessibility: Core Components', () => {
     });
 
     it('LoadingSkeleton has no critical a11y violations', async () => {
-        const { default: LoadingSkeleton } = await import('../../components/LoadingSkeleton');
+        const { default: LoadingSkeleton } = await import('../../components/shared/LoadingSpinner');
         const { container } = render(<LoadingSkeleton />);
         const violations = await checkA11y(container);
         const critical = violations.filter(
@@ -85,7 +85,7 @@ describe('Accessibility: Core Components', () => {
     });
 
     it('MessageSkeleton has no critical a11y violations', async () => {
-        const { default: MessageSkeleton } = await import('../../components/MessageSkeleton');
+        const { default: MessageSkeleton } = await import('../../components/chat/MessageSkeleton');
         const { container } = render(<MessageSkeleton count={3} />);
         const violations = await checkA11y(container);
         const critical = violations.filter(
@@ -96,7 +96,7 @@ describe('Accessibility: Core Components', () => {
 
     it('TypingIndicatorEnhanced has no critical a11y violations', async () => {
         const { default: TypingIndicatorEnhanced } =
-            await import('../../components/TypingIndicatorEnhanced');
+            await import('../../components/chat/TypingIndicatorEnhanced');
         const { container } = render(<TypingIndicatorEnhanced users={['alice', 'bob']} />);
         const violations = await checkA11y(container);
         const critical = violations.filter(
@@ -106,7 +106,7 @@ describe('Accessibility: Core Components', () => {
     });
 
     it('RouteErrorBoundary has no critical a11y violations', async () => {
-        const { default: RouteErrorBoundary } = await import('../../components/RouteErrorBoundary');
+        const { default: RouteErrorBoundary } = await import('../../components/shared/ErrorBoundary');
         const { container } = render(
             <RouteErrorBoundary>
                 <div>Child content</div>
@@ -169,18 +169,14 @@ describe('Accessibility: Interactive Components', () => {
     it('navigation landmark is accessible', async () => {
         const { container } = render(
             <nav aria-label="Server list">
-                <ul role="list">
-                    <li role="listitem">
-                        <button aria-label="Home" aria-selected="true">
-                            Home
-                        </button>
-                    </li>
-                    <li role="listitem">
-                        <button aria-label="Server A" aria-selected="false">
-                            A
-                        </button>
-                    </li>
-                </ul>
+                <div role="tablist" aria-label="Server navigation">
+                    <button aria-label="Home" role="tab" aria-selected={true}>
+                        Home
+                    </button>
+                    <button aria-label="Server A" role="tab" aria-selected={false}>
+                        A
+                    </button>
+                </div>
             </nav>
         );
         const violations = await checkA11y(container);

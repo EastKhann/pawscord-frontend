@@ -196,7 +196,7 @@ class NotificationManager {
     showFriendRequest({ username, avatar, onClick }) {
         this.show({
             title: t('ui.yeni_friendlik_istegi'),
-            body: `${username} sana arkadaşlık isteği gönderdi`,
+            body: `${username} sent you a friend request`,
             icon: avatar || '/logo192.png',
             tag: 'friend-request',
             onClick,
@@ -222,7 +222,7 @@ class NotificationManager {
     showCall({ username, isVideo = false, onClick }) {
         this.show({
             title: `📞 Gelen ${isVideo ? t('ui.goruntulu') : ''}Search`,
-            body: `${username} seni arıyor...`,
+            body: `${username} is calling you...`,
             tag: 'call',
             requireInteraction: true,
             onClick,

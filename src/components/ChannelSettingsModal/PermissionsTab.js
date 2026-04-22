@@ -48,11 +48,11 @@ const PermissionsTab = ({
                     <FaUserShield /> Channel Permissions
                 </h4>
                 <button
-                    aria-label="Add permission"
+                    aria-label={t('channelSettings.addPermission', 'Add permission')}
                     onClick={() => setShowAddPermission(true)}
                     style={styles.addThumBtn}
                 >
-                    <FaPlus /> İzin Ekle
+                    <FaPlus /> {t('permTab.addPerm', 'Add Permission')}
                 </button>
             </div>
 
@@ -238,7 +238,7 @@ const PermissionsTab = ({
                                 <p className={css.textXs}>
                                     {searchUser.length < 2
                                         ? 'Enter at least 2 characters'
-                                        : 'Kullanıcı bulunamadı'}
+                                        : t('permTab.userNotFound', 'User not found')}
                                 </p>
                             )}
 

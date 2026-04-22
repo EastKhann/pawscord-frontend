@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes, FaEraser, FaPen, FaTrash } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import useModalA11y from '../../hooks/useModalA11y';
 import { useAuth } from '../../AuthContext';
 
@@ -18,13 +19,13 @@ const _st1141 = {
 };
 
 const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Whiteboard' });
+    const { t } = useTranslation();
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('whiteboard.title', 'Whiteboard') });
     const { token } = useAuth();
     const canvasRef = useRef(null);
     const ws = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [wsError, setWsError] = useState(null);
     const [color, setColor] = useState('#000000');
     const [lineWidth, setLineWidth] = useState(3);
 
@@ -56,6 +57,11 @@ const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
             } else if (type === 'clear') {
                 ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
             }
+        };
+
+        ws.current.onerror = () => setWsError(t('whiteboard.connectionError', 'Connection error'));
+        ws.current.onclose = (e) => {
+            if (e.code === 4003) setWsError(t('whiteboard.authRequired', 'Authentication required'));
         };
 
         return () => ws.current.close();
@@ -127,11 +133,17 @@ const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
         <div style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
-                    <h3>🎨 Ortak Whiteboard</h3>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <h3>🎨 {t('whiteboard.title', 'Ortak Whiteboard')}</h3>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
+
+                {wsError && (
+                    <div style={{ padding: '8px 16px', background: 'rgba(242,63,66,0.15)', color: '#f23f42', fontSize: 13, borderRadius: 6, margin: '4px 0' }}>
+                        {wsError}
+                    </div>
+                )}
 
                 <div style={styles.toolbar}>
                     <input
@@ -148,20 +160,20 @@ const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
                         onChange={(e) => setLineWidth(e.target.value)}
                     />
                     <button
-                        aria-label="Action button"
+                        aria-label={t('whiteboard.eraser', 'Eraser')}
                         onClick={() => setColor('#ffffff')}
                         style={styles.toolBtn}
                     >
                         <FaEraser />
                     </button>
                     <button
-                        aria-label="Action button"
+                        aria-label={t('whiteboard.pen', 'Pen')}
                         onClick={() => setColor('#000000')}
                         style={styles.toolBtn}
                     >
                         <FaPen />
                     </button>
-                    <button aria-label="clear Board" onClick={clearBoard} style={_st1141}>
+                    <button aria-label={t('whiteboard.clearBoard', 'Clear Board')} onClick={clearBoard} style={_st1141}>
                         <FaTrash />
                     </button>
                 </div>

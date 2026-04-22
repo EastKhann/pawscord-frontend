@@ -59,15 +59,15 @@ const CreateGroupModal = ({ onClose, friendsList, fetchWithAuth, apiBaseUrl, onG
         <div style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
-                    <h3>Grup Oluştur</h3>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <h3>{t('createGroup.title', 'Create Group')}</h3>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.body}>
                     <p style={S.txt}>
-                        Gruba eklemek istediğin arkadaşlarını seç ({selectedFriends.length})
+                        {t('createGroup.selectFriends', 'Select friends to add to the group ({{count}})', { count: selectedFriends.length })}
                     </p>
 
                     <div style={styles.friendList}>
@@ -99,17 +99,17 @@ const CreateGroupModal = ({ onClose, friendsList, fetchWithAuth, apiBaseUrl, onG
                             </div>
                         ))}
                         {friendsList.length === 0 && (
-                            <p className="icon-muted">Listenizde arkadaş yok.</p>
+                            <p className="icon-muted">{t('createGroup.noFriends', 'No friends on your list.')}</p>
                         )}
                     </div>
 
                     <button
-                        aria-label="handle Create"
+                        aria-label={t('createGroup.create', 'Create group')}
                         onClick={handleCreate}
                         style={styles.createBtn}
                         disabled={loading || selectedFriends.length < 2}
                     >
-                        {loading ? 'Oluşturuluyor...' : 'Grup DM Oluştur'}
+                        {loading ? t('common.creating', 'Creating...') : t('createGroup.createGroupDm', 'Create Group DM')}
                     </button>
                 </div>
             </div>

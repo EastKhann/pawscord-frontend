@@ -1,6 +1,12 @@
 import { renderHook, act } from '@testing-library/react';
 import useDMActions from '../../RoomList/useDMActions';
 
+// Mock confirmDialog to avoid _s reference error
+vi.mock('../../utils/confirmDialog', () => ({
+    default: vi.fn(() => Promise.resolve(true)),
+    confirmDialog: vi.fn(() => Promise.resolve(true)),
+}));
+
 // Mock dependencies
 vi.mock('../../utils/toast', () => ({
     default: {
@@ -157,7 +163,7 @@ describe('useDMActions', () => {
         });
 
         expect(fetchWithAuth).toHaveBeenCalledWith(
-            'http://localhost:8000/api/users/baduser/block/',
+            'http://localhost:8000/api/blocks/block/',
             expect.objectContaining({ method: 'POST' })
         );
     });

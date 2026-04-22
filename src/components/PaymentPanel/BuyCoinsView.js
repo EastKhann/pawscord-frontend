@@ -46,7 +46,7 @@ const BuyCoinsView = ({
     ];
 
     return (
-        <div aria-label="buy coins view" style={styles.buyView}>
+        <div aria-label={t('payment.buyCoins', 'Buy coins')} style={styles.buyView}>
             <h3 style={styles.sectionTitle}>{t('choose_payment_method')}</h3>
             <div style={styles.paymentMethods}>
                 {PAYMENT_METHODS.map((m) => (

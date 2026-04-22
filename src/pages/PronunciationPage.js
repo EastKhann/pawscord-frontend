@@ -22,7 +22,7 @@ const ScoreArc = ({ score }) => {
     const pct = Math.min(score, 100) / 100;
     const color = score >= 80 ? '#23a559' : score >= 50 ? '#f0b232' : '#f23f42';
     return (
-        <div aria-label="score arc">
+        <div aria-label={t('aria.scoreArc', 'Score')}>
             <svg width="90" height="52" viewBox="0 0 90 52">
                 <path
                     d="M 9 46 A 36 36 0 0 1 81 46"

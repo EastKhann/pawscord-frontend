@@ -117,7 +117,7 @@ const useTicketSystem = (serverId) => {
     };
 
     const closeTicket = async (ticketId) => {
-        if (!(await confirmDialog('Bu bileti kapatmak istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('ticketSystem.closeConfirm','Are you sure you want to close this ticket?')))) return;
         try {
             const response = await fetch(`${apiBaseUrl}/tickets/${ticketId}/close/`, {
                 method: 'POST',

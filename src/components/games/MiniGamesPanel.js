@@ -276,7 +276,7 @@ const NumberGuessGame = memo(({ state, onAction }) => {
 
     return (
         <div style={styles.gameArea}>
-            <h3>Sayı Tahmin Et (1-100)</h3>
+            <h3>{t('miniGamesPanel.guessNumber', 'Guess the Number (1-100)')}</h3>
 
             <p>Kalan tahmin: {state.max_guesses - (state.guesses?.length || 0)}</p>
 
@@ -292,9 +292,8 @@ const NumberGuessGame = memo(({ state, onAction }) => {
             />
 
             <button
-                aria-label="Action button"
+                aria-label={t('miniGamesPanel.guess', 'Make a guess')}
                 onClick={() => {
-                    onAction('guess', { number: parseInt(guess) });
                     setGuess('');
                 }}
                 style={styles.guessButton}
@@ -317,10 +316,10 @@ const HangmanGame = memo(({ state, onAction }) => {
             <p style={styles.hangmanWord}>{state.display?.join(' ')}</p>
 
             <p>
-                Yanlış tahmin: {state.wrong_guesses}/{state.max_wrong}
+                {t('miniGamesPanel.wrongGuesses', 'Wrong guesses: {{wrong}}/{{max}}', { wrong: state.wrong_guesses, max: state.max_wrong })}
             </p>
 
-            <p>Kullanılan: {state.guessed_letters?.join(', ')}</p>
+            <p>{t('miniGamesPanel.used', 'Used:')} {state.guessed_letters?.join(', ')}</p>
 
             <input
                 type="text"
@@ -328,13 +327,12 @@ const HangmanGame = memo(({ state, onAction }) => {
                 onChange={(e) => setLetter(e.target.value.slice(-1).toUpperCase())}
                 style={styles.letterInput}
                 maxLength={1}
-                aria-label="Letter"
+                aria-label={t('miniGamesPanel.letterInput', 'Enter a letter')}
             />
 
             <button
-                aria-label="Action button"
+                aria-label={t('miniGamesPanel.guessLetter', 'Guess letter')}
                 onClick={() => {
-                    onAction('guess_letter', { letter });
                     setLetter('');
                 }}
                 style={styles.guessButton}
@@ -366,9 +364,8 @@ const GameRenderer = memo(({ game, onAction }) => {
                 <div style={styles.options}>
                     {question?.options.map((opt, idx) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={opt}
                             key={`item-${idx}`}
-                            onClick={() => onAction('answer', { answer: idx })}
                             style={styles.optionButton}
                         >
                             {opt}
@@ -387,7 +384,7 @@ const GameRenderer = memo(({ game, onAction }) => {
                 <div style={styles.ticTacToeBoard}>
                     {state.board?.map((cell, idx) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={t('miniGamesPanel.cellPosition', 'Cell {{idx}}', { idx: idx + 1 })}
                             key={`item-${idx}`}
                             onClick={() => onAction('move', { position: idx })}
                             style={styles.ticTacToeCell}
@@ -409,13 +406,13 @@ const GameRenderer = memo(({ game, onAction }) => {
         return (
             <div style={styles.gameArea}>
                 <h3>
-                    Taş Kağıt Makas - Tur {state.current_round}/{state.max_rounds}
+                    {t('miniGamesPanel.rpsTitle', 'Rock Paper Scissors - Round {{round}}/{{max}}', { round: state.current_round, max: state.max_rounds })}
                 </h3>
 
                 <div style={styles.rpsButtons}>
                     {['rock', 'paper', 'scissors'].map((choice) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={choice}
                             key={choice}
                             onClick={() => onAction('choose', { choice })}
                             style={styles.rpsButton}
@@ -423,7 +420,7 @@ const GameRenderer = memo(({ game, onAction }) => {
                             {choice === 'rock' ? '🪨' : choice === 'paper' ? '📄' : '✂'}
 
                             <span>
-                                {choice === 'rock' ? 'taş' : choice === 'paper' ? 'kağıt' : 'makas'}
+                                {choice === 'rock' ? t('miniGamesPanel.rock', 'rock') : choice === 'paper' ? t('miniGamesPanel.paper', 'paper') : t('miniGamesPanel.scissors', 'scissors')}
                             </span>
                         </button>
                     ))}

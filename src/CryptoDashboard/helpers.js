@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 // PropTypes validation: N/A for this module (hook/utility — no React props interface)
 import { useState, useEffect } from 'react';
+import i18n from '../i18n';
 
 // -- extracted inline style constants --
 
@@ -57,7 +58,7 @@ export const LivePrice = ({ price }) => {
     const displayPrice = formatPrice(price);
     return (
         <span
-            aria-label="safe render"
+            aria-label={i18n.t('aria.priceDisplay', { defaultValue: 'Price' })}
             className={colorClass}
             style={{
                 fontSize: '0.95em',

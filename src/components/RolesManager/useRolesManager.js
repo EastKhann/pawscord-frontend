@@ -96,7 +96,7 @@ const useRolesManager = (serverId) => {
     };
 
     const deleteRole = async (roleId) => {
-        if (!(await confirmDialog('Bu rolü silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('roles.deleteConfirm','Are you sure you want to delete this role?')))) return;
         try {
             const r = await fetch(`${API_BASE_URL}/roles/${roleId}/delete/`, {
                 method: 'DELETE',

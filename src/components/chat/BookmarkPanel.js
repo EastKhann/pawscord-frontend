@@ -85,26 +85,26 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                         <FaSearch className="icon-gray" />
                         <input
                             type="text"
-                            placeholder="Mesajlarda ara..."
+                            placeholder={t('bookmark.searchPlaceholder', 'Search messages...')}
                             value={searchQuery}
                             onChange={handleSearchChange}
                             style={styles.searchInput}
-                            aria-label="Search messages..."
+                            aria-label={t('common.search', 'Search')}
                         />
                     </div>
                     <button
-                        aria-label="handle Show New Tag"
+                        aria-label={t('bookmark.newTag', 'New tag')}
                         onClick={handleShowNewTag}
                         style={styles.newTagBtn}
                     >
-                        <FaPlus /> Yeni Tag
+                        <FaPlus /> {t('bookmark.newTag', 'New Tag')}
                     </button>
                 </div>
 
                 {/* Tags */}
                 <div style={styles.tagsContainer}>
                     <button
-                        aria-label="handle Select All Tags"
+                        aria-label={t('bookmarks.allTags', 'All tags')}
                         onClick={handleSelectAllTags}
                         style={{
                             ...styles.tagChip,
@@ -115,8 +115,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                     </button>
                     {tags.map((tag) => (
                         <button
-                            aria-label="Action button"
-                            key={tag.id}
+                            aria-label={tag.name}
                             onClick={() => setSelectedTag(tag.id)}
                             style={{
                                 ...styles.tagChip,
@@ -136,7 +135,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                     ) : filteredBookmarks.length === 0 ? (
                         <div style={styles.empty}>
                             <FaBookmark className="icon-lg" />
-                            <p>Henüz yer imi yok</p>
+                            <p>{t('bookmarks.noBookmarks', 'No bookmarks yet')}</p>
                         </div>
                     ) : (
                         filteredBookmarks.map((bookmark) => (
@@ -183,7 +182,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                                     </div>
                                 </div>
                                 <button
-                                    aria-label="Delete"
+                                    aria-label={t('common.delete')}
                                     onClick={() => deleteBookmark(bookmark.id)}
                                     style={styles.deleteBtn}
                                 >
@@ -214,7 +213,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                                 (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
                             }
                         >
-                            <h3>Yeni Etiket Oluştur</h3>
+                            <h3>{t('bookmarks.createTag', 'Create New Tag')}</h3>
                             {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                             <input
                                 type="text"
@@ -232,19 +231,19 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                                     value={newTagColor}
                                     onChange={handleNewTagColorChange}
                                     style={styles.colorPicker}
-                                    aria-label="color"
+                                    aria-label={t('bookmarks.tagColor', 'Tag color')}
                                 />
                             </div>
                             <div className="flex-10-mt20">
                                 <button
-                                    aria-label="create Tag"
+                                    aria-label={t('bookmarks.createTagBtn', 'Create tag')}
                                     onClick={createTag}
                                     style={styles.primaryBtn}
                                 >
-                                    Oluştur
+                                    {t('common.create', 'Create')}
                                 </button>
                                 <button
-                                    aria-label="handle Hide New Tag Modal"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     onClick={handleHideNewTagModal}
                                     style={styles.secondaryBtn}
                                 >

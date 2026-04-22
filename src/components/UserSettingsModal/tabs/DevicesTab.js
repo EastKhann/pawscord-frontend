@@ -106,7 +106,7 @@ const DevicesTab = () => {
                     ))}
                 </div>
             </SettingSection>
-            <SettingSection title="">
+            <SettingSection title={t('settings.tabs.devices.activeSessions', 'Active Sessions')}>
                 <button type="button" onClick={endAllSessions} style={S.bg2}>
                     <FaDesktop style={S.font} /> {t('settings.tabs.devices.endAllSessions')}
                 </button>

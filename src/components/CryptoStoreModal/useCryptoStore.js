@@ -142,7 +142,7 @@ const useCryptoStore = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                 toast.error(data.error);
             }
         } catch (e) {
-            toast.error('❌ Bir hata oluştu.');
+            toast.error('❌ An error occurred.');
         }
         setLoading(false);
     };

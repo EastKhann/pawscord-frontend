@@ -2,6 +2,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FaPlus } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const QUICK_REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '😡', '🎉', '🔥'];
 
@@ -12,6 +13,7 @@ const MessageReactions = ({
     onRemoveReaction,
     messageId,
 }) => {
+    const { t } = useTranslation();
     const [showPicker, setShowPicker] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -78,7 +80,7 @@ const MessageReactions = ({
             return userNames.join(', ');
         } else {
             const shown = userNames.slice(0, 3).join(', ');
-            return `${shown} ve ${userNames.length - 3} kişi daha`;
+            return `${shown} and ${userNames.length - 3} more`;
         }
     };
 
@@ -91,47 +93,48 @@ const MessageReactions = ({
             {/* Mevcut Reactions */}
             {groupedReactions.map((reactionGroup, index) => (
                 <button
-                    aria-label="Action button"
-                    key={`item-${index}`}
-                    onClick={() => handleReactionClick(reactionGroup.emoji)}
-                    style={{
-                        ...styles.reactionButton,
-                        ...(reactionGroup.hasCurrentUser ? styles.reactionButtonActive : {}),
-                    }}
-                    title={getTooltipText(reactionGroup)}
+                    aria-label={reactionGroup.emoji ? `${t('msgReactions.react', 'React with')} ${reactionGroup.emoji}` : t('msgReactions.react', 'React')}
+            style={{
+                ...styles.reactionButton,
+                ...(reactionGroup.hasCurrentUser ? styles.reactionButtonActive : {}),
+            }}
+            title={getTooltipText(reactionGroup)}
                 >
-                    <span style={styles.emoji}>{reactionGroup.emoji}</span>
-                    <span style={styles.count}>{reactionGroup.count}</span>
+            <span style={styles.emoji}>{reactionGroup.emoji}</span>
+            <span style={styles.count}>{reactionGroup.count}</span>
+        </button>
+    ))
+}
+
+{/* Add Reaction Button */ }
+<button
+    aria-label={t('msgReactions.addReaction', 'Add reaction')}
+    onClick={() => setShowPicker(!showPicker)}
+    style={styles.addButton}
+    title="Tepki ekle"
+>
+    <FaPlus className="fs-10" />
+</button>
+
+{/* Quick Emoji Picker */ }
+{
+    showPicker && (
+        <div style={styles.quickPicker}>
+            {QUICK_REACTIONS.map((emoji, index) => (
+                <button
+                    aria-label={emoji}
+                    key={`item-${index}`}
+                    onClick={() => handleReactionClick(emoji)}
+                    style={styles.quickEmoji}
+                    title={emoji}
+                >
+                    {emoji}
                 </button>
             ))}
-
-            {/* Add Reaction Button */}
-            <button
-                aria-label="Toggle visibility"
-                onClick={() => setShowPicker(!showPicker)}
-                style={styles.addButton}
-                title="Tepki ekle"
-            >
-                <FaPlus className="fs-10" />
-            </button>
-
-            {/* Quick Emoji Picker */}
-            {showPicker && (
-                <div style={styles.quickPicker}>
-                    {QUICK_REACTIONS.map((emoji, index) => (
-                        <button
-                            aria-label="Action button"
-                            key={`item-${index}`}
-                            onClick={() => handleReactionClick(emoji)}
-                            style={styles.quickEmoji}
-                            title={emoji}
-                        >
-                            {emoji}
-                        </button>
-                    ))}
-                </div>
-            )}
         </div>
+    )
+}
+        </div >
     );
 };
 const styles = {

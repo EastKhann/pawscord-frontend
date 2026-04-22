@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 const LeaderboardSection = ({ leaderboard, resetUserXP }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="leaderboard section" className="leaderboard-section">
+        <div aria-label={t('levelingSystem.leaderboard', 'Leaderboard')} className="leaderboard-section">
             <h3>
                 {'\u{1F3C6}'} {t('leaderboard.title')}
             </h3>

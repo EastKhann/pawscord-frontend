@@ -262,7 +262,7 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                     </div>
                     <button
                         aria-label={t('download.openWebApp', 'Web Uygulamasını Aç')}
-                        onClick={() => window.open('https://www.pawscord.com', '_blank')}
+                        onClick={() => window.open('https://www.pawscord.com', '_blank', 'noopener,noreferrer')}
                         style={styles.btnWeb}
                         className="dl-btn-web"
                     >

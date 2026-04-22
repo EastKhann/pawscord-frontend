@@ -1,5 +1,5 @@
-﻿// frontend/src/components/Message/MessageActions.js
-// 🎯 MESSAGE ACTIONS - Hover action buttons (compact: core + overflow menu)
+// frontend/src/components/Message/MessageActions.js
+// ?? MESSAGE ACTIONS - Hover action buttons (compact: core + overflow menu)
 
 import { memo, useState, lazy, Suspense, useCallback, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -96,9 +96,9 @@ export const MessageActions = memo(
                     </Suspense>
                 )}
 
-                {/* ─── CORE BUTTONS (always visible) ─── */}
+                {/* --- CORE BUTTONS (always visible) --- */}
                 <button
-                    aria-label="Tepki"
+                    aria-label={t('msgActions.react', 'React')}
                     onClick={() => setShowReactionPicker(true)}
                     style={styles.actionButton}
                     title={t('tepki')}
@@ -106,7 +106,7 @@ export const MessageActions = memo(
                     <FaSmile />
                 </button>
                 <button
-                    aria-label="Yan U0131Tla"
+                    aria-label={t('msgActions.reply', 'Reply')}
                     onClick={() => onSetReply(msg)}
                     style={styles.actionButton}
                     title={t('yan_u0131tla')}
@@ -116,7 +116,7 @@ export const MessageActions = memo(
 
                 {isMyMessage && msg.content && (
                     <button
-                        aria-label="D U00Fczenle"
+                        aria-label={t('msgActions.edit', 'Edit message')}
                         onClick={() => onStartEdit(msg)}
                         style={styles.actionButton}
                         title={t('d_u00fczenle')}
@@ -127,7 +127,7 @@ export const MessageActions = memo(
 
                 {(isMyMessage || isAdmin || currentPermissions?.can_delete_messages) && (
                     <button
-                        aria-label="Delete"
+                        aria-label={t('common.delete')}
                         onClick={() => onDelete(msg.id)}
                         style={styles.actionButton}
                         title={t('sil')}
@@ -136,10 +136,10 @@ export const MessageActions = memo(
                     </button>
                 )}
 
-                {/* ─── OVERFLOW "MORE" MENU ─── */}
+                {/* --- OVERFLOW "MORE" MENU --- */}
                 <div ref={moreRef} className="pos-relative">
                     <button
-                        aria-label="Daha Fazla"
+                        aria-label={t('msgActions.more', 'More actions')}
                         onClick={() => setShowMore((v) => !v)}
                         style={_s({
                             ...styles.actionButton,
@@ -153,63 +153,26 @@ export const MessageActions = memo(
                     {showMore && (
                         <div style={styles.overflowMenu}>
                             <button
-                                aria-label="Action button"
-                                onClick={() => {
-                                    onQuote();
-                                    closeMore();
-                                }}
-                                style={styles.menuItem}
-                            >
-                                <FaQuoteLeft style={styles.menuIcon} />
-                                <span>{t('al_u0131nt_u0131la')}</span>
+                                aria-label={t('common.quote', 'Quote')}>
                             </button>
                             <button
-                                aria-label="Close"
-                                onClick={() => {
-                                    onStartForward(msg);
-                                    closeMore();
-                                }}
-                                style={styles.menuItem}
+                                aria-label={t('common.forward', 'Forward')}
                             >
                                 <FaShareSquare style={styles.menuIcon} />
                                 <span>{t('u0130let')}</span>
                             </button>
                             <button
-                                aria-label="Action button"
-                                onClick={() => {
-                                    onToggleSelection(msg.id);
-                                    closeMore();
-                                }}
-                                style={styles.menuItem}
-                            >
-                                <FaCheck style={styles.menuIcon} />
-                                <span>{t('se_u00e7')}</span>
+                                aria-label={t('common.select', 'Select')}>
                             </button>
                             <button
-                                aria-label="Action button"
-                                onClick={() => {
-                                    onShowThreadModal();
-                                    closeMore();
-                                }}
-                                style={styles.menuItem}
-                            >
-                                <FaComments style={styles.menuIcon} />
-                                <span>{t('thread')}</span>
+                                aria-label={t('common.thread', 'Thread')}>
                             </button>
                             <button
-                                aria-label="Action button"
-                                onClick={() => {
-                                    onShowReminderModal();
-                                    closeMore();
-                                }}
-                                style={styles.menuItem}
-                            >
-                                <FaBell style={styles.menuIcon} />
-                                <span>{t('hat_u0131rlat_u0131c_u0131')}</span>
-                            </button>
+                                aria-label={t('common.remind', 'Set Reminder')}>
+                            </button >
 
-                            {/* Bookmark, Star, Read Later */}
-                            <Suspense fallback={null}>
+    {/* Bookmark, Star, Read Later */ }
+    < Suspense fallback = { null} >
                                 <BookmarkButton
                                     messageId={msg.id}
                                     isBookmarked={msg.is_bookmarked}
@@ -228,38 +191,22 @@ export const MessageActions = memo(
                                     fetchWithAuth={fetchWithAuth}
                                     apiBaseUrl={absoluteHostUrl}
                                 />
-                            </Suspense>
+                            </Suspense >
 
-                            {isAdmin && msg.room && (
-                                <button
-                                    aria-label="Action button"
-                                    onClick={() => {
-                                        onTogglePin(msg.id);
-                                        closeMore();
-                                    }}
-                                    style={styles.menuItem}
-                                >
-                                    <FaThumbtack style={styles.menuIcon} />
-                                    <span>{t('sabitle')}</span>
-                                </button>
+    { isAdmin && msg.room && (
+        <button
+            aria-label={t('common.pin', 'Pin')}>
+                                </ button>
                             )}
-                            {!isMyMessage && (
-                                <button
-                                    aria-label="Action button"
-                                    onClick={() => {
-                                        handleReport();
-                                        closeMore();
-                                    }}
-                                    style={dangerMenuItemStyle}
-                                >
-                                    <FaExclamationTriangle style={styles.menuIcon} />
-                                    <span>{t('rapor_et')}</span>
+            {!isMyMessage && (
+                <button
+                    aria-label={t('common.report', 'Report')}>
                                 </button>
-                            )}
-                        </div>
+    )}
+                        </div >
                     )}
-                </div>
-            </div>
+                </div> 
+            </div >
         );
     }
 );

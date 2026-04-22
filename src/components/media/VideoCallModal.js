@@ -60,7 +60,7 @@ const VideoCallModal = ({
                     </div>
                     <div style={styles.headerActions}>
                         <button
-                            aria-label="Ayarlar"
+                            aria-label={t('videoCall.settings', 'Settings')}
                             onClick={() => v.setShowSettings(!v.showSettings)}
                             style={styles.headerButton}
                             title="Ayarlar"
@@ -71,7 +71,7 @@ const VideoCallModal = ({
                             onClick={v.toggleFullscreen}
                             style={styles.headerButton}
                             title="Tam ekran"
-                            aria-label="Tam ekran"
+                            aria-label={t('videoCall.fullscreen', 'Fullscreen')}
                         >
                             {v.isFullscreen ? <FaCompress /> : <FaExpand />}
                         </button>
@@ -89,7 +89,7 @@ const VideoCallModal = ({
                 {/* Settings Panel */}
                 {v.showSettings && (
                     <div style={styles.settingsPanel}>
-                        <h4 style={styles.settingsTitle}>Video Ayarları</h4>
+                        <h4 style={styles.settingsTitle}>{t('videoCall.settings', 'Video Settings')}</h4>
                         <div style={styles.settingGroup}>
                             <label style={styles.settingLabel}>Kamera</label>
                             <select
@@ -150,7 +150,7 @@ const VideoCallModal = ({
                                 <div style={styles.placeholderAvatar}>
                                     {targetUser?.username?.[0]?.toUpperCase() || 'U'}
                                 </div>
-                                <p>Kamera openılmadı</p>
+                                <p>{t('videoCall.cameraError', 'Camera could not be opened')}</p>
                             </div>
                         )}
                     </div>
@@ -195,7 +195,7 @@ const VideoCallModal = ({
                         onClick={onClose}
                         style={styles.hangupButton}
                         title={t('ui.searchyi_sonlandir')}
-                        aria-label="End search"
+                        aria-label={t('videoCall.endCall', 'End call')}
                     >
                         <FaPhone />
                     </button>

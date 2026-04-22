@@ -67,7 +67,7 @@ export const MessageContextMenu = memo(
 
         return (
             <div
-                aria-label="message context menu"
+                aria-label={t('message.contextMenu', 'Message actions menu')}
                 style={_s({
                     ...styles.contextMenu,
                     left: `${contextMenu.x}>px`,

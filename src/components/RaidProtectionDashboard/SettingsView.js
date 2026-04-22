@@ -70,7 +70,7 @@ const SettingsView = ({ settings, setSettings, handleSaveSettings }) => {
                             min="1"
                             max="30"
                         />
-                        <span>gün</span>
+                        <span>{t('common.days','days')}</span>
                     </div>
                 </div>
             </div>

@@ -14,12 +14,12 @@ const RoleFormModal = ({ role, setRole, onSave, onCancel, title, saveLabel }) =>
                 <h3>{title}</h3>
 
                 <div className="form-group">
-                    <label>Rol Adı</label>
+                    <label>{t('roles.roleName','Role Name')}</label>
                     <input
                         type="text"
                         value={role.name}
                         onChange={(e) => setRole({ ...role, name: e.target.value })}
-                        placeholder="Rol adını girin..."
+                        placeholder={t('roles.namePlaceholder', 'Enter role name...')}
                         maxLength={32}
                     />
                 </div>
@@ -52,7 +52,7 @@ const RoleFormModal = ({ role, setRole, onSave, onCancel, title, saveLabel }) =>
                             checked={role.hoist}
                             onChange={(e) => setRole({ ...role, hoist: e.target.checked })}
                         />
-                        <span>Rol üyelerini çevrimiçi üyelerden ayrı göster</span>
+                        <span>{t('roles.hoistDesc','Show role members separately from online members')}</span>
                     </label>
                 </div>
 
@@ -63,7 +63,7 @@ const RoleFormModal = ({ role, setRole, onSave, onCancel, title, saveLabel }) =>
                             checked={role.mentionable}
                             onChange={(e) => setRole({ ...role, mentionable: e.target.checked })}
                         />
-                        <span>Bu rolü herkes @bahsetmek için kullanabilir</span>
+                        <span>{t('roles.mentionableDesc','Everyone can use @mention for this role')}</span>
                     </label>
                 </div>
 

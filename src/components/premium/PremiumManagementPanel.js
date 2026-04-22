@@ -212,7 +212,7 @@ const PremiumManagementPanel = ({ onClose }) => {
                 {/* Header */}
                 <div className="premium-header">
                     <h2>💎 Pawscord Premium</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -235,7 +235,7 @@ const PremiumManagementPanel = ({ onClose }) => {
                             </div>
                             <div className="subscription-actions">
                                 <button
-                                    aria-label="cancel Subscription"
+                                    aria-label={t('premiumMgmt.cancelSubscription', 'Cancel subscription')}
                                     className="cancel-btn"
                                     onClick={cancelSubscription}
                                 >
@@ -245,7 +245,7 @@ const PremiumManagementPanel = ({ onClose }) => {
                         </div>
                         <div className="subscription-details">
                             <div className="detail-item">
-                                <span className="detail-label">Başlangıç:</span>
+                                <span className="detail-label">{t('premiumMgmt.start', 'Start:')}</span>
                                 <span className="detail-value">
                                     {new Date(currentSubscription.start_date).toLocaleDateString(
                                         'tr-TR'
@@ -253,7 +253,7 @@ const PremiumManagementPanel = ({ onClose }) => {
                                 </span>
                             </div>
                             <div className="detail-item">
-                                <span className="detail-label">Bitiş:</span>
+                                <span className="detail-label">{t('premiumMgmt.end', 'End:')}</span>
                                 <span className="detail-value">
                                     {new Date(currentSubscription.end_date).toLocaleDateString(
                                         'tr-TR'
@@ -271,9 +271,9 @@ const PremiumManagementPanel = ({ onClose }) => {
                 ) : (
                     <div className="no-subscription">
                         <div className="no-subscription-icon">💎</div>
-                        <h3>Premium Üyelik Yok</h3>
+                        <h3>{t('premiumMgmt.noSubscription', 'No Premium Subscription')}</h3>
                         <p>
-                            Premium özelliklerden yararlanmak için aşağıdaki planlardan birini seçin
+                            {t('premiumMgmt.selectPlan', 'Choose one of the plans below to enjoy premium features')}
                         </p>
                     </div>
                 )}
@@ -281,15 +281,13 @@ const PremiumManagementPanel = ({ onClose }) => {
                 {/* Billing Cycle Toggle */}
                 <div className="billing-toggle">
                     <button
-                        aria-label="Action button"
-                        className={`billing - option ${billingCycle === 'monthly' ? 'active' : ''} `}
+                        aria-label={t('premiumMgmt.monthlyBilling', 'Monthly billing')}
                         onClick={() => setBillingCycle('monthly')}
                     >
                         Monthly
                     </button>
                     <button
-                        aria-label="Action button"
-                        className={`billing - option ${billingCycle === 'yearly' ? 'active' : ''} `}
+                        aria-label={t('premiumMgmt.yearlyBilling', 'Yearly billing')}
                         onClick={() => setBillingCycle('yearly')}
                     >
                         Yearly <span className="save-badge">%17 Downloadim</span>
@@ -361,20 +359,18 @@ const PremiumManagementPanel = ({ onClose }) => {
                                     <div className="tier-actions">
                                         {currentSubscription ? (
                                             <button
-                                                aria-label="Action button"
-                                                className="upgrade-btn"
+                                                aria-label={t('premiumMgmt.upgradeBtn', 'Upgrade subscription')}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     upgradeSubscription(tierKey);
                                                 }}
                                                 style={tierActionBtnStyle}
                                             >
-                                                Yükselt
+                                                {t('premiumMgmt.upgrade', 'Upgrade')}
                                             </button>
                                         ) : (
                                             <button
-                                                aria-label="Action button"
-                                                className="subscribe-btn"
+                                                aria-label={t('premiumMgmt.subscribeBtn', 'Subscribe to plan')}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     subscribe();
@@ -395,8 +391,7 @@ const PremiumManagementPanel = ({ onClose }) => {
                 <div className="info-banner">
                     <span className="info-icon">ℹ️</span>
                     <p>
-                        Premium abonelikler Stripe ile güvenli şekilde işlenir. İstediğiniz zaman
-                        iptal edebilirsiniz.
+                        {t('premiumMgmt.stripeNote', 'Premium subscriptions are processed securely with Stripe. You can cancel anytime.')}
                     </p>
                 </div>
             </div>

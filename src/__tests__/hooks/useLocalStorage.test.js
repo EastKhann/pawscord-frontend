@@ -4,11 +4,20 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useLocalStorage } from '../../hooks/useCustomHooks';
 
+// Override the global vi.fn() localStorage mock with a real store for these tests
+const _store: Record<string, string> = {};
+const realLocalStorageMock = {
+    getItem: (key: string) => _store[key] ?? null,
+    setItem: (key: string, value: string) => { _store[key] = value; },
+    removeItem: (key: string) => { delete _store[key]; },
+    clear: () => { Object.keys(_store).forEach((k) => delete _store[k]); },
+};
+Object.defineProperty(window, 'localStorage', { value: realLocalStorageMock, writable: true, configurable: true });
+
 describe('useLocalStorage', () => {
     beforeEach(() => {
         // Clear localStorage before each test
-        localStorage.clear();
-        vi.restoreAllMocks();
+        realLocalStorageMock.clear();
     });
 
     // ── 1. Returns initial value when localStorage is empty ──
@@ -101,7 +110,7 @@ describe('useLocalStorage', () => {
     it('should return initialValue when localStorage has invalid JSON', () => {
         localStorage.setItem('corrupt-key', 'not-valid-json{{{');
         // Suppress console.error from the hook
-        vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.spyOn(console, 'error').mockImplementation(() => { });
 
         const { result } = renderHook(() => useLocalStorage('corrupt-key', 'fallback'));
         const [value] = result.current;

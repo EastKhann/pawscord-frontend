@@ -248,7 +248,7 @@ const ConnectionsPanel = ({ onClose }) => {
                     <div className="connection-details">
                         <span className="connected-as">
                             <FaCheckCircle className="status-icon success" />
-                            Bağlı: <strong>{connection.username}</strong>
+                            {t('connections.connected', 'Connected')}: <strong>{connection.username}</strong>
                         </span>
                         {connection.data && (
                             <div className="connection-data">
@@ -278,7 +278,7 @@ const ConnectionsPanel = ({ onClose }) => {
                 <div className="connection-actions">
                     {isConnected ? (
                         <button
-                            aria-label="Action button"
+                            aria-label={t('connections.disconnect', 'Disconnect')}
                             className="disconnect-btn"
                             onClick={() => handleDisconnect(platform.id)}
                             disabled={isConnecting}
@@ -288,7 +288,7 @@ const ConnectionsPanel = ({ onClose }) => {
                         </button>
                     ) : (
                         <button
-                            aria-label="Action button"
+                            aria-label={t('connections.connect', 'Connect')}
                             className="connect-btn"
                             onClick={() => handleConnect(platform.id)}
                             disabled={isConnecting}
@@ -317,7 +317,7 @@ const ConnectionsPanel = ({ onClose }) => {
                     className="connections-modal"
                     role="dialog"
                     aria-modal="true"
-                    aria-label="Connections"
+                    aria-label={t('connections.title', 'Connections')}
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="connections-panel loading">
@@ -342,10 +342,10 @@ const ConnectionsPanel = ({ onClose }) => {
                 className="connections-modal"
                 role="dialog"
                 aria-modal="true"
-                aria-label="Connections"
+                aria-label={t('connections.title', 'Connections')}
                 onClick={(e) => e.stopPropagation()}
             >
-                <button aria-label="Close" className="connections-close-btn" onClick={onClose}>
+                <button aria-label={t('common.close', 'Close')} className="connections-close-btn" onClick={onClose}>
                     <FaTimes />
                 </button>
                 <div className="connections-panel">

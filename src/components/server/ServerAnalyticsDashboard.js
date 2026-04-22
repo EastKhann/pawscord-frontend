@@ -57,11 +57,11 @@ const ServerAnalyticsDashboard = ({
                             onChange={(e) => setThuiod(e.target.value)}
                             style={styles.periodSelect}
                         >
-                            <option value="7d">Son 7 Gün</option>
-                            <option value="30d">Son 30 Gün</option>
-                            <option value="90d">Son 90 Gün</option>
+                            <option value="7d">{t('common.last7days', 'Last 7 Days')}</option>
+                            <option value="30d">{t('common.last30days', 'Last 30 Days')}</option>
+                            <option value="90d">{t('common.last90days', 'Last 90 Days')}</option>
                         </select>
-                        <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                             <FaTimes />
                         </button>
                     </div>
@@ -71,7 +71,7 @@ const ServerAnalyticsDashboard = ({
                     {loading ? (
                         <div style={styles.loadingState}>
                             <div style={styles.spinner}></div>
-                            <span>Veriler yükleniyor...</span>
+                            <span>{t('analytics.loading', 'Loading data...')}</span>
                         </div>
                     ) : analytics ? (
                         <>
@@ -87,13 +87,13 @@ const ServerAnalyticsDashboard = ({
                                     icon={<FaComments />}
                                     label="Toplam Mesajlar"
                                     value={analytics.message_stats?.total || 0}
-                                    subtext={`Günlük ort: ${analytics.message_stats?.daily_average || 0}`}
+                                    subtext={t('analytics.dailyAvg', 'Daily avg: {{count}}', { count: analytics.message_stats?.daily_average || 0 })}
                                     change={comparison?.change?.messages}
                                     color="#23a559"
                                 />
                                 <StatCard
                                     icon={<FaUsers />}
-                                    label={`Aktif Üye`}
+                                    label={t('analytics.activeMembers', 'Active Members')}
                                     value={analytics.active_users?.total || 0}
                                     subtext={`%${analytics.active_users?.activity_rate || 0} aktivite`}
                                     color="#f0b232"
@@ -164,7 +164,7 @@ const ServerAnalyticsDashboard = ({
                             <div style={styles.listsRow}>
                                 <div style={styles.listCard}>
                                     <h3 style={styles.listTitle}>
-                                        <FaHashtag /> Popüler Kanallar
+                                        <FaHashtag /> {t('analytics.popularChannels', 'Popular Channels')}
                                     </h3>
                                     <div style={styles.list}>
                                         {analytics.popular_channels
@@ -182,14 +182,14 @@ const ServerAnalyticsDashboard = ({
                                             ))}
                                         {(!analytics.popular_channels ||
                                             analytics.popular_channels.length === 0) && (
-                                            <div style={styles.emptyList}>Veri yok</div>
-                                        )}
+                                                <div style={styles.emptyList}>Veri yok</div>
+                                            )}
                                     </div>
                                 </div>
 
                                 <div style={styles.listCard}>
                                     <h3 style={styles.listTitle}>
-                                        <FaUsers /> En Aktif Üyeler
+                                        <FaUsers /> {t('analytics.mostActiveMembers', 'Most Active Members')}
                                     </h3>
                                     <div style={styles.list}>
                                         {analytics.active_users?.top_users
@@ -207,13 +207,13 @@ const ServerAnalyticsDashboard = ({
                                             ))}
                                         {(!analytics.active_users?.top_users ||
                                             analytics.active_users.top_users.length === 0) && (
-                                            <div style={styles.emptyList}>Veri yok</div>
-                                        )}
+                                                <div style={styles.emptyList}>Veri yok</div>
+                                            )}
                                     </div>
                                 </div>
 
                                 <div style={styles.listCard}>
-                                    <h3 style={styles.listTitle}>📊 İçerik Dağılımı</h3>
+                                    <h3 style={styles.listTitle}>📊 {t('analytics.contentDistribution', 'Content Distribution')}</h3>
                                     <div style={styles.pieChart}>
                                         {analytics.content_breakdown && (
                                             <>
@@ -251,7 +251,7 @@ const ServerAnalyticsDashboard = ({
 
                             {comparison && (
                                 <div style={styles.comparisonSection}>
-                                    <h3 style={styles.sectionTitle}>📊 Haftalık Kar{''}laştırma</h3>
+                                    <h3 style={styles.sectionTitle}>📊 {t('analytics.weeklyComparison', 'Weekly Comparison')}</h3>
                                     <div style={styles.comparisonGrid}>
                                         <ComparisonCard
                                             label="Mesajlar"
@@ -260,7 +260,7 @@ const ServerAnalyticsDashboard = ({
                                             change={comparison.change?.messages}
                                         />
                                         <ComparisonCard
-                                            label="Aktif Üyeler"
+                                            label={t('analytics.activeMembers', 'Active Members')}
                                             thisWeek={comparison.this_week?.active_users}
                                             lastWeek={comparison.last_week?.active_users}
                                             change={comparison.change?.active_users}
@@ -272,7 +272,7 @@ const ServerAnalyticsDashboard = ({
                     ) : (
                         <div style={styles.errorState}>
                             <span className="fs-48">📊</span>
-                            <p>Analytics verileri yüklenemedi</p>
+                            <p>{t('analytics.loadFailed', 'Analytics data could not be loaded')}</p>
                         </div>
                     )}
                 </div>

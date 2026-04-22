@@ -401,7 +401,10 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 {/* 🔐 ROADMAP: Passwordmi Unuttum Linki */}
                 {isLoginMode && (
                     <div className="login-forgot-wrap">
-                        <a href="#/forgot-password">{t('login.forgotPassword')}</a>
+                        <a href="#/forgot-password" className="login-forgot-link">
+                            <FaLock size={11} style={{ marginRight: 5, opacity: 0.8 }} />
+                            {t('login.forgotPassword')}
+                        </a>
                     </div>
                 )}
 
@@ -418,7 +421,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                         disabled={isGoogleLoading}
                     >
                         {isGoogleLoading ? (
-                            <span className="google-btn-spinner" aria-label="Loading" />
+                            <span className="google-btn-spinner" aria-label={t('common.loading', 'Loading')} />
                         ) : (
                             <img
                                 src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"

@@ -49,16 +49,16 @@ const LinkClickTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaLink className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Bağlantı Tıklama Takibi</h2>
+                        <h2 style={styles.title}>{t('linkTracking.title', 'Link Click Tracking')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.toolbar}>
                     <button
-                        aria-label="export Stats"
+                        aria-label={t('linkTracking.exportStats', 'Export link statistics')}
                         onClick={exportStats}
                         style={styles.exportButton}
                     >
@@ -69,9 +69,9 @@ const LinkClickTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Bağlantı istatistikleri yükleniyor...</div>
+                        <div style={styles.loading}>{t('linkTracking.loading', 'Loading link statistics...')}</div>
                     ) : linkStats.length === 0 ? (
-                        <div style={styles.empty}>Biçim tıklama verisi bulunamadı</div>
+                        <div style={styles.empty}>{t('linkTracking.noData', 'No click data found')}</div>
                     ) : (
                         <div style={styles.statsTable}>
                             {linkStats.map((stat, idx) => (

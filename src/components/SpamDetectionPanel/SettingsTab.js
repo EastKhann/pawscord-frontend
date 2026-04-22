@@ -19,7 +19,7 @@ const SettingsTab = ({
         backgroundColor: settings.enabled ? '#23a559' : '#949ba4',
     };
     return (
-        <div aria-label="settings tab" style={styles.content}>
+        <div aria-label={t('spamDetection.settingsTab', 'Settings tab')} style={styles.content}>
             {/* Enable/Disable */}
             <div style={styles.settingRow}>
                 <div style={styles.settingInfo}>

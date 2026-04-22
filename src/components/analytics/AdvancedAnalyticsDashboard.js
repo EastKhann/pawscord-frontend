@@ -12,8 +12,8 @@ import { useTranslation } from 'react-i18next';
 
 const TIME_RANGES = [
     { value: '24h', label: '24 Saat' },
-    { value: '7d', label: '7 Gün' },
-    { value: '30d', label: '30 Gün' },
+    { value: '7d', label: t('common.last7days', '7 Days') },
+    { value: '30d', label: t('common.last30days', '30 Days') },
     { value: '90d', label: '90 Days' },
 ];
 
@@ -41,7 +41,7 @@ const AdvancedAnalyticsDashboard = ({ serverId, apiBaseUrl, onClose }) => {
     if (loading) {
         return (
             <div
-                aria-label="advanced analytics dashboard"
+                aria-label={t('analytics.dashboard', 'Advanced analytics dashboard')}
                 className="analytics-overlay"
                 role="button"
                 tabIndex={0}
@@ -59,7 +59,7 @@ const AdvancedAnalyticsDashboard = ({ serverId, apiBaseUrl, onClose }) => {
                 >
                     <div className="loading-state">
                         <div className="spinner" />
-                        <p>Analitik verileri yükleniyor...</p>
+                        <p>{t('analytics.loading', 'Loading analytics data...')}</p>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@ const AdvancedAnalyticsDashboard = ({ serverId, apiBaseUrl, onClose }) => {
             >
                 <div className="analytics-header">
                     <h2>
-                        <FaChartLine /> Gelişmiş Analitik
+                        <FaChartLine /> {t('analytics.advancedAnalytics', 'Advanced Analytics')}
                     </h2>
                     <div className="header-controls">
                         <div className="time-range-selector">
@@ -105,14 +105,14 @@ const AdvancedAnalyticsDashboard = ({ serverId, apiBaseUrl, onClose }) => {
                             <FaSyncAlt className={refreshing ? 'spinning' : ''} />
                         </button>
                         <button
-                            aria-label="Export analytics"
+                            aria-label={t('analytics.export', 'Export analytics')}
                             className="action-btn"
                             onClick={handleExport}
                         >
                             <FaDownload />
                         </button>
                     </div>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>

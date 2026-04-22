@@ -148,7 +148,7 @@ const BlockListPanel = ({ onClose }) => {
                 {/* Header */}
                 <div className="blocklist-header">
                     <h2>🚫 Engelli Users</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -159,29 +159,29 @@ const BlockListPanel = ({ onClose }) => {
                         <span className="stat-icon">🚫</span>
                         <div className="stat-info">
                             <span className="stat-value">{blockedUsers.length}</span>
-                            <span className="stat-label">Engellenen Kullanıcı</span>
+                            <span className="stat-label">{t('blockList.blockedUsers', 'Blocked Users')}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Add User */}
                 <div className="add-user-section">
-                    <h3>Kullanıcı Engeli</h3>
+                    <h3>{t('blockList.userBlock', 'User Block')}</h3>
                     <div className="add-user-form">
                         <input
                             type="text"
-                            placeholder="Kullanıcı adı"
+                            placeholder={t('common.username', 'Username')}
                             value={userToBlock}
                             onChange={(e) => setUserToBlock(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && blockUser()}
                             className="user-input"
                         />
-                        <button aria-label="block User" className="block-btn" onClick={blockUser}>
+                        <button aria-label={t('blockList.blockUser', 'Block user')} className="block-btn" onClick={blockUser}>
                             🚫 Block
                         </button>
                     </div>
                     <p className="info-text">
-                        Engellenen kullanıcılar size mesaj gönderemez ve sizi göremez
+                        {t('blockList.blockDesc', 'Blocked users cannot message you or see you')}
                     </p>
                 </div>
 
@@ -201,11 +201,11 @@ const BlockListPanel = ({ onClose }) => {
                     {filteredUsers.length === 0 ? (
                         <div className="empty-state">
                             <span className="empty-icon">🎉</span>
-                            <h3>Engelli kullanıcı yok</h3>
+                            <h3>{t('blockList.noBlocked', 'No blocked users')}</h3>
                             <p>
                                 {searchQuery
-                                    ? 'Arama sonucu bulunamadı'
-                                    : 'Henüz kimseyi engellemediniz'}
+                                    ? t('blockList.noResults', 'No search results found')
+                                    : t('blockList.noneYet', 'You have not blocked anyone yet')}
                             </p>
                         </div>
                     ) : (
@@ -239,8 +239,7 @@ const BlockListPanel = ({ onClose }) => {
 
                                     <div className="user-actions">
                                         <button
-                                            aria-label="Action button"
-                                            className="unblock-btn"
+                                            aria-label={t('blockList.unblockUser', 'Unblock user')}
                                             onClick={() => unblockUser(user.id)}
                                         >
                                             ✓ Unblock
@@ -256,9 +255,9 @@ const BlockListPanel = ({ onClose }) => {
                 <div className="info-banner">
                     <span className="info-icon">ℹ️</span>
                     <p>
-                        Engellenen kullanıcılar size DM gönderemez, profilinizi göremez ve
-                        paylaşımlarınızla etkileşime geçemez. Ortak sunucularda görünürlük
-                        sınırlıdır.
+                        {t('blockList.detailDesc', 'Blocked users cannot send you DMs, view your profile, or')}
+                        {t('blockList.detailDesc2', 'interact with your content. Visibility in shared servers is')}
+                        {t('blockList.detailDesc3', 'limited.')}
                     </p>
                 </div>
             </div>

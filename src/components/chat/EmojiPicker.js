@@ -84,7 +84,7 @@ const getSkinTone = () => {
 const saveSkinTone = (t) => {
     try {
         localStorage.setItem(SKIN_TONE_KEY, t);
-    } catch {}
+    } catch { }
 };
 
 const getRecents = () => {
@@ -204,7 +204,7 @@ const EMOJI_CATEGORIES = {
         '💝',
         '💟',
     ],
-    'El İşaretleri': [
+    'Hand Signs': [
         '👋',
         '🤚',
         '🖐️',
@@ -1537,8 +1537,8 @@ const EmojiPicker = ({ onSelect }) => {
 
     const filteredEmojis = searchTerm
         ? Object.values(EMOJI_CATEGORIES)
-              .flat()
-              .filter((emoji) => emoji.includes(searchTerm))
+            .flat()
+            .filter((emoji) => emoji.includes(searchTerm))
         : allCategories[effectiveCategory] || [];
 
     return (
@@ -1615,7 +1615,7 @@ const EmojiPicker = ({ onSelect }) => {
                         style={{
                             ...styles.emojiButton,
                             ...(favoriteEmojis.includes(emoji) &&
-                            effectiveCategory !== 'Favoriler ⭐'
+                                effectiveCategory !== 'Favoriler ⭐'
                                 ? styles.favHighlight
                                 : {}),
                         }}
@@ -1631,8 +1631,8 @@ const EmojiPicker = ({ onSelect }) => {
                         {searchTerm
                             ? t('emoji.noResults')
                             : activeCategory === 'Recently Used ⏱️'
-                              ? t('emoji.noRecents')
-                              : t('emoji.rightClickToFavorite')}
+                                ? t('emoji.noRecents')
+                                : t('emoji.rightClickToFavorite')}
                     </div>
                 )}
             </div>
@@ -1641,7 +1641,7 @@ const EmojiPicker = ({ onSelect }) => {
             {contextMenu && (
                 <div>
                     <button
-                        aria-label="Toggle"
+                        aria-label={t('emojiPicker.toggle', 'Toggle emoji section')}
                         style={styles.contextMenuItem}
                         onClick={() => handleToggleFav(contextMenu.emoji)}
                     >

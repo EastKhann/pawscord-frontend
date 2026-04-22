@@ -24,7 +24,7 @@ const LoadingSpinner = ({ size = 'medium', text = 'Loading...', fullscreen = fal
 
     return (
         <div
-            aria-label="loading spinner"
+            aria-label={text}
             className={fullscreen ? styles.fullscreenContainer : styles.inlineContainer}
         >
             <div

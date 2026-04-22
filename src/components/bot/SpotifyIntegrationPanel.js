@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import './SpotifyIntegrationPanel.css';
 import { FaSpotify, FaPlay, FaPause, FaMusic, FaUnlink, FaCheck, FaTimes } from 'react-icons/fa';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
+    const { t } = useTranslation();
     const [connected, setConnected] = useState(false);
     const [currentTrack, setCurrentTrack] = useState(null);
     const [showActivity, setShowActivity] = useState(true);
@@ -45,7 +47,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
             const authUrl = `${apiBaseUrl}/auth/spotify/start/?username=${encodeURIComponent(username)}`;
             window.open(authUrl, '_blank', 'width=500,height=700');
         } catch (err) {
-            setError('Bağlanılamadı: ' + err.message);
+            setError(t('spotify.connectFailed', 'Could not connect:') + ' ' + err.message);
         } finally {
             setLoading(false);
         }
@@ -63,7 +65,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
                 setError('');
             }
         } catch (err) {
-            setError('Bağlantı kesilemedi: ' + err.message);
+            setError(t('spotify.disconnectFailed', 'Could not disconnect:') + ' ' + err.message);
         } finally {
             setLoading(false);
         }
@@ -93,7 +95,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
                 setShowActivity(Boolean(data.enabled));
             }
         } catch (err) {
-            setError('Aktivite durumu değiştirilemedi: ' + err.message);
+            setError(t('spotify.activityFailed', 'Could not change activity status:') + ' ' + err.message);
         }
     };
 
@@ -112,28 +114,28 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
                     <div className="spotify-logo-container">
                         <FaSpotify className="spotify-logo" />
                     </div>
-                    <h3>Spotify'a Bağlan</h3>
-                    <p>Dinlediklerini arkadaşlarınla paylaş!</p>
+                    <h3>{t('spotify.connectTitle', 'Connect to Spotify')}</h3>
+                    <p>{t('spotify.connectDesc', "Share what you're listening to with friends!")}</p>
                     <button
-                        aria-label="connect Spotify"
+                        aria-label={t('spotify.connect', 'Connect Spotify')}
                         className="connect-btn"
                         onClick={connectSpotify}
                         disabled={loading}
                     >
-                        <FaSpotify /> Spotify'a Bağlan
+                        <FaSpotify /> {t('spotify.connect', 'Connect to Spotify')}
                     </button>
                     <div className="spotify-features">
                         <div className="feature-item">
                             <FaCheck className="check-icon" />
-                            <span>Şu an çaldığını göster</span>
+                            <span>{t('spotify.showNowPlaying', "Show what you're playing")}</span>
                         </div>
                         <div className="feature-item">
                             <FaCheck className="check-icon" />
-                            <span>Durumunda görüntüle</span>
+                            <span>{t('spotify.showInStatus', 'Show in status')}</span>
                         </div>
                         <div className="feature-item">
                             <FaCheck className="check-icon" />
-                            <span>Gizlilik kontrolü</span>
+                            <span>{t('spotify.privacyControl', 'Privacy control')}</span>
                         </div>
                     </div>
                 </div>
@@ -141,14 +143,14 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
                 <div className="spotify-connected">
                     <div className="connection-status">
                         <FaCheck className="status-icon" />
-                        <span>Spotify'a Bağlandı</span>
+                        <span>{t('spotify.connected', 'Connected to Spotify')}</span>
                         <button
-                            aria-label="disconnect Spotify"
+                            aria-label={t('spotify.disconnect', 'Disconnect Spotify')}
                             className="disconnect-btn"
                             onClick={disconnectSpotify}
                             disabled={loading}
                         >
-                            <FaUnlink /> Bağlantıyı Kes
+                            <FaUnlink /> {t('spotify.disconnect', 'Disconnect')}
                         </button>
                     </div>
 
@@ -158,10 +160,10 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
                                 type="checkbox"
                                 checked={showActivity}
                                 onChange={toggleActivityStatus}
-                                aria-label="checkbox"
+                                aria-label={t('spotify.enableFeature', 'Enable feature')}
                             />
                             <span className="toggle-slider"></span>
-                            <span className="toggle-text">Dinleme aktivitesini göster</span>
+                            <span className="toggle-text">{t('spotify.showActivity', 'Show listening activity')}</span>
                         </label>
                     </div>
 
@@ -169,13 +171,13 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
                         <div className="current-track">
                             <div className="track-header">
                                 <FaMusic className="music-icon" />
-                                <h3>Şu An Çalıyor</h3>
+                                <h3>{t('spotify.nowPlaying', 'Now Playing')}</h3>
                             </div>
                             <div className="track-info">
                                 {currentTrack.album_art && (
                                     <img
                                         src={currentTrack.album_art}
-                                        alt="Album art"
+                                        alt={t('alt.albumArt', 'Album Art')}
                                         className="album-art"
                                     />
                                 )}
@@ -202,7 +204,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
                     ) : (
                         <div className="no-track">
                             <FaMusic className="no-track-icon" />
-                            <p>Şu an hiçbir şey çalmıyor</p>
+                            <p>{t('spotify.nothingPlaying', 'Not playing anything right now')}</p>
                         </div>
                     )}
                 </div>

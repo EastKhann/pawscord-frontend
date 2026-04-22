@@ -92,14 +92,14 @@ const UsersTab = () => {
                     <option value="message_count">{t('admin.panel.messageCount')}</option>
                 </select>
                 <button
-                    aria-label="Search users"
+                    aria-label={t('common.search', 'Search')}
                     onClick={fetchUsers}
                     style={styles.actionBtn('#5865f2')}
                 >
-                    <FaSearch /> Search
+                    <FaSearch /> {t('common.search', 'Search')}
                 </button>
-                <button aria-label="Export users" style={styles.actionBtn('#23a559')}>
-                    <FaFileExport /> Export
+                <button aria-label={t('common.export', 'Export')} style={styles.actionBtn('#23a559')}>
+                    <FaFileExport /> {t('common.export', 'Export')}
                 </button>
             </div>
 
@@ -162,19 +162,19 @@ const UsersTab = () => {
                                             user.status === 'online'
                                                 ? '#23a559'
                                                 : user.status === 'idle'
-                                                  ? '#f0b132'
-                                                  : user.status === 'dnd'
-                                                    ? '#e74c3c'
-                                                    : '#6b7280'
+                                                    ? '#f0b132'
+                                                    : user.status === 'dnd'
+                                                        ? '#e74c3c'
+                                                        : '#6b7280'
                                         )}
                                     >
                                         {user.status === 'online'
                                             ? '🟢'
                                             : user.status === 'idle'
-                                              ? '🌙'
-                                              : user.status === 'dnd'
-                                                ? '⛔'
-                                                : '⚫'}
+                                                ? '🌙'
+                                                : user.status === 'dnd'
+                                                    ? '⛔'
+                                                    : '⚫'}
                                     </span>
                                 </td>
                                 <td style={styles.td}>
@@ -203,7 +203,7 @@ const UsersTab = () => {
                                 <td style={styles.td}>
                                     <div className="flex-wrap-4g">
                                         <button
-                                            aria-label="View user details"
+                                            aria-label={t('common.viewDetails', 'View user details')}
                                             style={styles.actionBtn('#5865f2')}
                                             onClick={() => setSelectedUser(user)}
                                             title={t('common.view')}
@@ -211,7 +211,7 @@ const UsersTab = () => {
                                             <FaEye />
                                         </button>
                                         <button
-                                            aria-label="Edit user"
+                                            aria-label={t('common.edit', 'Edit user')}
                                             style={styles.actionBtn('#f0b132')}
                                             onClick={() => openEditUserModal(user)}
                                             title={t('common.edit')}
@@ -222,7 +222,7 @@ const UsersTab = () => {
                                             style={styles.actionBtn('#f59e0b')}
                                             onClick={() => setPasswordResetModal(user)}
                                             title={t('change_password')}
-                                            aria-label="Change password"
+                                            aria-label={t('security.changePassword', 'Change password')}
                                         >
                                             <FaKey />
                                         </button>
@@ -233,7 +233,7 @@ const UsersTab = () => {
                                                     setActionModal({ type: 'ban', user })
                                                 }
                                                 title={t('ban_user')}
-                                                aria-label="Ban user"
+                                                aria-label={t('admin.banUser', 'Ban user')}
                                             >
                                                 <FaBan />
                                             </button>
@@ -242,7 +242,7 @@ const UsersTab = () => {
                                                 style={styles.actionBtn('#23a559')}
                                                 onClick={() => handleUserAction('unban', user.id)}
                                                 title={t('unban_user')}
-                                                aria-label="Unban user"
+                                                aria-label={t('common.unblock', 'Unban user')}
                                             >
                                                 <FaCheckCircle />
                                             </button>
@@ -251,7 +251,7 @@ const UsersTab = () => {
                                             style={styles.actionBtn('#dc2626')}
                                             onClick={() => setActionModal({ type: 'delete', user })}
                                             title={t('delete_user')}
-                                            aria-label="Delete user"
+                                            aria-label={t('common.delete', 'Delete user')}
                                         >
                                             <FaTrash />
                                         </button>
@@ -266,7 +266,7 @@ const UsersTab = () => {
             {/* Pagination */}
             <div className="flex-center-8-mt16">
                 <button
-                    aria-label="Previous page"
+                    aria-label={t('common.prevPage', 'Previous page')}
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage((p) => p - 1)}
                     style={prevPageBtnStyle}
@@ -277,7 +277,7 @@ const UsersTab = () => {
                     {t('admin.panel.pageOf', { current: currentPage, total: totalPages })}
                 </span>
                 <button
-                    aria-label="Next page"
+                    aria-label={t('common.nextPage', 'Next page')}
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage((p) => p + 1)}
                     style={nextPageBtnStyle}

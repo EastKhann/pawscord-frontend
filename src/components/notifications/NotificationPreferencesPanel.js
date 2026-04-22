@@ -222,7 +222,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
                     <div style={styles.section}>
                         <h3 style={styles.sectionTitle}>
                             <FaClock className="mr-8" />
-                            Rahatsız Etme Saatleri
+                            {t('notifPrefs.dndHours','Do Not Disturb Hours')}
                         </h3>
 
                         <div style={styles.setting}>

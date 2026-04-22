@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect, useCallback, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
     FaMicrophone,
@@ -25,6 +26,7 @@ import logger from '../../utils/logger';
 import './StageChannelManagementPanel.css';
 
 const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
+    const { t } = useTranslation();
     const [stages, setStages] = useState([]);
     const [activeStage, setActiveStage] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -178,7 +180,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                         (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
                     }
                 >
-                    <div className="loading">Sahneler yükleniyor...</div>
+                    <div className="loading">{t('stage.loading', 'Loading stages...')}</div>
                 </div>
             </div>
         );
@@ -206,18 +208,18 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                             Stage Channel Management
                         </h2>
                         <span className="subtitle">
-                            Sahne etkinliklerini ve konuşmacıları yönetin
+                            {t('stage.subtitle', 'Manage stage events and speakers')}
                         </span>
                     </div>
                     <div className="header-actions">
                         <button
-                            aria-label="handle Open Create Modal"
+                            aria-label={t('stage.openCreate', 'Create stage event')}
                             className="create-btn"
                             onClick={handleOpenCreateModal}
                         >
-                            <FaPlus /> Sahne Oluştur
+                            <FaPlus /> {t('stage.create', 'Create Stage')}
                         </button>
-                        <button aria-label="Close" className="close-btn" onClick={onClose}>
+                        <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                             <FaTimes />
                         </button>
                     </div>
@@ -228,21 +230,21 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                     <div className="stages-sidebar">
                         <div className="tabs">
                             <button
-                                aria-label="handle Tab Active"
+                                aria-label={t('stage.tabActive', 'Active stages')}
                                 className={activeTab === 'active' ? 'active' : ''}
                                 onClick={handleTabActive}
                             >
                                 Live ({liveStages.length})
                             </button>
                             <button
-                                aria-label="handle Tab Scheduled"
+                                aria-label={t('stage.tabScheduled', 'Scheduled stages')}
                                 className={activeTab === 'scheduled' ? 'active' : ''}
                                 onClick={handleTabScheduled}
                             >
                                 Scheduled ({scheduledStages.length})
                             </button>
                             <button
-                                aria-label="handle Tab Past"
+                                aria-label={t('stage.tabPast', 'Past stages')}
                                 className={activeTab === 'past' ? 'active' : ''}
                                 onClick={handleTabPast}
                             >
@@ -301,8 +303,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                             </span>
                                         </div>
                                         <button
-                                            aria-label="Action button"
-                                            className="start-btn"
+                                            aria-label={t('stage.startStage', 'Start stage now')}
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleStartStage(stage.id);
@@ -337,7 +338,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                         <p>{activeStage.description}</p>
                                     </div>
                                     <button
-                                        aria-label="handle End Active Stage"
+                                        aria-label={t('stage.endStage', 'End active stage')}
                                         className="end-stage-btn"
                                         onClick={handleEndActiveStage}
                                     >
@@ -360,7 +361,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                         <span className="stat-value">
                                             {activeStage.hand_raises.length}
                                         </span>
-                                        <span className="stat-label">El Kaldırıldı</span>
+                                        <span className="stat-label">{t('stage.handRaised', 'Hand Raised')}</span>
                                     </div>
                                     <div className="stat">
                                         <span className="stat-value">
@@ -393,8 +394,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                                 </span>
                                                 <div className="speaker-actions">
                                                     <button
-                                                        aria-label="Action button"
-                                                        className={`mute-btn ${speaker.isMuted ? 'muted' : ''}`}
+                                                        aria-label={speaker.isMuted ? t('common.unmute', 'Unmute') : t('common.mute', 'Mute')}
                                                         onClick={() => handleToggleMute(speaker.id)}
                                                     >
                                                         {speaker.isMuted ? (
@@ -405,8 +405,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                                     </button>
                                                     {!speaker.isModerator && (
                                                         <button
-                                                            aria-label="Action button"
-                                                            className="remove-btn"
+                                                            aria-label={t('stage.removeSpeaker', 'Remove speaker')}
                                                             onClick={() =>
                                                                 handleRemoveSpeaker(speaker.id)
                                                             }
@@ -423,7 +422,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                 {/* Hand Raises */}
                                 <div className="section">
                                     <h4>
-                                        <FaHandPaper /> El Kaldırmalar (
+                                        <FaHandPaper /> {t('stage.handRaisings', 'Hand Raisings')} (
                                         {activeStage.hand_raises.length})
                                     </h4>
                                     {activeStage.hand_raises.length > 0 ? (
@@ -443,8 +442,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                                     </div>
                                                     <div className="hand-raise-actions">
                                                         <button
-                                                            aria-label="Action button"
-                                                            className="approve-btn"
+                                                            aria-label={t('stage.inviteSpeaker', 'Invite as speaker')}
                                                             onClick={() =>
                                                                 handlePromoteToSpeaker(user.id)
                                                             }
@@ -452,8 +450,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                                             <FaUserPlus /> Invite
                                                         </button>
                                                         <button
-                                                            aria-label="Action button"
-                                                            className="deny-btn"
+                                                            aria-label={t('stage.denyHandRaise', 'Deny hand raise')}
                                                             onClick={() =>
                                                                 handleDenyHandRaise(user.id)
                                                             }
@@ -465,7 +462,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="empty-state">Henüz el kaldırılmadı</div>
+                                        <div className="empty-state">{t('stage.noHandRaisings', 'No hands raised yet')}</div>
                                     )}
                                 </div>
                             </>
@@ -481,7 +478,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                     <span>Ends: {formatTime(activeStage.scheduled_end)}</span>
                                 </div>
                                 <button
-                                    aria-label="handle Start Active Stage"
+                                    aria-label={t('stage.startStageNow', 'Start stage now')}
                                     className="start-now-btn"
                                     onClick={handleStartActiveStage}
                                 >
@@ -491,8 +488,8 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                         ) : (
                             <div className="no-stage-selected">
                                 <FaMicrophone className="no-stage-icon" />
-                                <h3>Sahne Seçilmedi</h3>
-                                <p>Listeden bir sahne seçin veya yeni bir tane oluşturun</p>
+                                <h3>{t('stage.noneSelected', 'No Stage Selected')}</h3>
+                                <p>{t('stage.selectOrCreate', 'Select a stage from the list or create a new one')}</p>
                             </div>
                         )}
                     </div>
@@ -520,9 +517,9 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                         >
                             <div className="modal-header">
                                 <h3>
-                                    <FaMicrophone /> Sahne Oluştur
+                                    <FaMicrophone /> {t('stage.create', 'Create Stage')}
                                 </h3>
-                                <button aria-label="Close" onClick={handleCloseCreateModal}>
+                                <button aria-label={t('common.close', 'Close')} onClick={handleCloseCreateModal}>
                                     <FaTimes />
                                 </button>
                             </div>
@@ -531,48 +528,48 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                     <label>Konu</label>
                                     <input
                                         type="text"
-                                        placeholder="Bu sahne ne hakkında?"
-                                        aria-label="Bu sahne ne hakkında?"
+                                        placeholder={t('stage.topicPlaceholder', 'What is this stage about?')}
+                                        aria-label={t('stage.topicPlaceholder', 'What is this stage about?')}
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>Açıklama</label>
+                                    <label>{t('stage.description', 'Description')}</label>
                                     <textarea
-                                        placeholder="Sahne etkinliğinizi açıklayın..."
+                                        placeholder={t('stage.descriptionPlaceholder', 'Describe your stage event...')}
                                         rows={3}
-                                        aria-label="Sahne etkinliğinizi açıklayın..."
+                                        aria-label={t('stage.descriptionPlaceholder', 'Describe your stage event...')}>
                                     ></textarea>
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group">
                                         <label>Zamanla</label>
-                                        <select aria-label="select">
-                                            <option value="now">Şimdi Başlat</option>
+                                        <select aria-label={t('stage.schedule', 'Stage schedule')}>
+                                            <option value="now">{t('stage.startNow', 'Start Now')}</option>
                                             <option value="later">Sonraya Zamanla</option>
                                         </select>
                                     </div>
                                     <div className="form-group">
-                                        <label>Maks. Konuşmacı</label>
+                                        <label>{t('stage.maxSpeakers', 'Max Speakers')}</label>
                                         <input
                                             type="number"
                                             min={1}
                                             max={25}
                                             defaultValue={10}
-                                            aria-label="number"
+                                            aria-label={t('stage.maxSpeakers', 'Max Speakers')}
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className="modal-footer">
                                 <button
-                                    aria-label="handle Close Create Modal"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-modal"
                                     onClick={handleCloseCreateModal}
                                 >
-                                    İptal
+                                    {t('stage.cancel', 'Cancel')}
                                 </button>
-                                <button aria-label="Microphone" className="create-modal-btn">
-                                    <FaMicrophone /> Sahne Oluştur
+                                <button aria-label={t('stage.create', 'Create Stage')} className="create-modal-btn">
+                                    <FaMicrophone /> {t('stage.create', 'Create Stage')}
                                 </button>
                             </div>
                         </div>

@@ -1,4 +1,4 @@
-// frontend/src/components/ThemeMarketplace.js
+﻿// frontend/src/components/ThemeMarketplace.js
 // 🎨 Theme Marketplace - User-created theme store
 
 import { useState, useEffect } from 'react';
@@ -70,35 +70,36 @@ const ThemeMarketplace = () => {
         <div className="theme-marketplace">
             <div className="marketplace-header">
                 <h1>🎨 Tema Pazaryeri</h1>
-                <p>Topluluk tarafından oluşturulan temaları keşfedin ve yükleyin</p>
+                <p>{t('themeMarket.desc', 'Discover and install community-created themes')}</p>
             </div>
 
             <div className="marketplace-controls">
                 <input
                     type="text"
-                    placeholder="Tema ara..."
+                    placeholder={t('themeMarket.searchPlaceholder', 'Search themes...')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="theme-search"
+                    aria-label={t('common.search', 'Search')}
                 />
 
                 <div className="theme-filters">
                     <button
-                        aria-label="Action button"
+                        aria-label={t('themeMarket.popularFilter', 'Popular themes')}
                         className={filter === 'popular' ? 'active' : ''}
                         onClick={() => setFilter('popular')}
                     >
                         🔥 Popular
                     </button>
                     <button
-                        aria-label="Action button"
+                        aria-label={t('themeMarket.newFilter', 'New themes')}
                         className={filter === 'new' ? 'active' : ''}
                         onClick={() => setFilter('new')}
                     >
                         ✨ New
                     </button>
                     <button
-                        aria-label="Action button"
+                        aria-label={t('themeMarket.topRatedFilter', 'Top rated themes')}
                         className={filter === 'top-rated' ? 'active' : ''}
                         onClick={() => setFilter('top-rated')}
                     >
@@ -108,7 +109,7 @@ const ThemeMarketplace = () => {
             </div>
 
             {loading ? (
-                <div className="loading">Temalar yükleniyor...</div>
+                <div className="loading">{t('themeMarket.loading', 'Loading themes...')}</div>
             ) : (
                 <div className="theme-grid">
                     {filteredThemes.map((theme) => (
@@ -158,13 +159,13 @@ const ThemeCard = ({ theme, onInstall }) => {
 
                 <div className="theme-actions">
                     <button
-                        aria-label="preview Theme"
+                        aria-label={t('themeMarketplace.previewTheme', 'Preview theme')}
                         onClick={previewTheme}
                         className="btn-preview"
                     >
                         👁️ Preview
                     </button>
-                    <button aria-label="on Install" onClick={onInstall} className="btn-install">
+                    <button aria-label={t('common.install', 'Install')} onClick={onInstall} className="btn-install">
                         📥 Install
                     </button>
                 </div>

@@ -174,7 +174,7 @@ const useLevelingSystem = (serverId) => {
 
     const resetUserXP = async (userId) => {
         const confirmed = await confirmDialog(
-            "Bu kullanıcının XP'sini sıfırlamak istediğinizden emin misiniz?"
+            t('leveling.resetXpConfirm',"Are you sure you want to reset this user's XP?")
         );
         if (!confirmed) return;
         try {

@@ -1,4 +1,4 @@
-﻿/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -44,23 +44,23 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaLink className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Kanal Webhook'ları</h2>
+                        <h2 style={styles.title}>Kanal Webhook'lari</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Webhook'lar yükleniyor...</div>
+                        <div style={styles.loading}>Webhook'lar y�kleniyor...</div>
                     ) : (
                         <>
                             <div style={styles.section}>
                                 <div style={styles.sectionHeader}>
                                     <h3 style={styles.sectionTitle}>Webhooks</h3>
                                     <button
-                                        aria-label="Create"
+                                        aria-label={t('common.create')}
                                         onClick={() => setShowCreateForm(!showCreateForm)}
                                         style={styles.addButton}
                                     >
@@ -72,7 +72,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                 {showCreateForm && (
                                     <div style={styles.createForm}>
                                         <div style={styles.formGroup}>
-                                            <label style={styles.label}>Webhook Adı</label>
+                                            <label style={styles.label}>Webhook Adi</label>
                                             <input
                                                 type="text"
                                                 value={newWebhook.name}
@@ -82,9 +82,9 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                                         name: e.target.value,
                                                     })
                                                 }
-                                                placeholder="Webhooküm"
+                                                placeholder={t('webhooksPanel.webhookName', 'e.g. My Webhook')}
                                                 style={styles.input}
-                                                aria-label="Ad"
+                                                aria-label={t('webhooks.nameInput', 'Webhook name')}
                                             />
                                         </div>
 
@@ -99,9 +99,9 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                                         url: e.target.value,
                                                     })
                                                 }
-                                                placeholder="https://example.com/webhook"
+                                                placeholder={t('webhooksPanel.webhookAvatarUrl', 'https://example.com/webhook')}
                                                 style={styles.input}
-                                                aria-label="Url"
+                                                aria-label={t('webhooks.urlInput', 'Webhook URL')}
                                             />
                                         </div>
 
@@ -129,14 +129,14 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
 
                                         <div style={styles.formActions}>
                                             <button
-                                                aria-label="create Webhook"
+                                                aria-label={t('webhooks.createBtn', 'Create webhook')}
                                                 onClick={createWebhook}
                                                 style={styles.createButton}
                                             >
-                                                Webhook Oluştur
+                                                Webhook Olustur
                                             </button>
                                             <button
-                                                aria-label="Create"
+                                                aria-label={t('common.create')}
                                                 onClick={() => setShowCreateForm(false)}
                                                 style={styles.cancelButton}
                                             >
@@ -149,7 +149,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                 <div style={styles.webhooksList}>
                                     {webhooks.length === 0 ? (
                                         <div style={styles.empty}>
-                                            Bu kanal için webhook yapılandırılmamış
+                                            Bu kanal i�in webhook yapilandirilmamis
                                         </div>
                                     ) : (
                                         webhooks.map((webhook) => (
@@ -169,20 +169,14 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                                     </div>
                                                     <div style={styles.webhookActions}>
                                                         <button
-                                                            aria-label="Gönderimleri görüntüle"
-                                                            onClick={() =>
-                                                                fetchDeliveries(webhook.id)
-                                                            }
+                                                            aria-label={t('webhooks.viewDeliveries', 'View deliveries')}
                                                             style={styles.iconButton}
-                                                            title="Gönderimleri görüntüle"
+                                                            title="G�nderimleri g�r�nt�le"
                                                         >
                                                             <FaHistory />
                                                         </button>
                                                         <button
-                                                            aria-label="Webhook sil"
-                                                            onClick={() =>
-                                                                deleteWebhook(webhook.id)
-                                                            }
+                                                            aria-label={t('webhooks.deleteWebhook', 'Delete webhook')}
                                                             style={S.txt}
                                                             title="Webhook sil"
                                                         >
@@ -201,7 +195,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                     <h3 style={styles.sectionTitle}>Son Teslimatlar</h3>
                                     <div style={styles.deliveriesList}>
                                         {deliveries.length === 0 ? (
-                                            <div style={styles.empty}>Henüz teslimat yok</div>
+                                            <div style={styles.empty}>Hen�z teslimat yok</div>
                                         ) : (
                                             deliveries.map((delivery) => (
                                                 <div key={delivery.id} style={styles.deliveryCard}>
@@ -242,10 +236,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                                     </div>
                                                     {delivery.status === 'failed' && (
                                                         <button
-                                                            aria-label="Action button"
-                                                            onClick={() =>
-                                                                retryDelivery(delivery.id)
-                                                            }
+                                                            aria-label={t('webhooks.retryDelivery', 'Retry delivery')}
                                                             style={styles.retryButton}
                                                         >
                                                             <FaRedo className="mr-5" /> Retry

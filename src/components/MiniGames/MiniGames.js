@@ -56,7 +56,7 @@ export const TicTacToe = ({ opponent, onGameEnd, isMyTurn, mySymbol = 'X' }) => 
     };
 
     return (
-        <div aria-label="tic tac toe" className="tictactoe-game">
+        <div aria-label={t('miniGames.ticTacToe', 'Tic-tac-toe game')} className="tictactoe-game">
             <div className="game-header">
                 <h3>🎮 XOX Oyunu</h3>
                 {opponent && <span className="opponent">vs {opponent}</span>}
@@ -66,7 +66,7 @@ export const TicTacToe = ({ opponent, onGameEnd, isMyTurn, mySymbol = 'X' }) => 
                 {winner === 'draw' ? (
                     <span>🤝 Berabere!</span>
                 ) : winner ? (
-                    <span>🎉 {winner} Kazandı!</span>
+                    <span>🎉 {winner} {t('miniGames.won', 'Won!')}</span>
                 ) : (
                     <span>Rank: {currentPlayer} {currentPlayer === mySymbol ? '(Sen)' : `(${opponent || 'Rakip'})`}</span>
                 )}
@@ -85,7 +85,7 @@ export const TicTacToe = ({ opponent, onGameEnd, isMyTurn, mySymbol = 'X' }) => 
             </div>
 
             <button className="game-reset-btn" onClick={resetGame}>
-                🔄 Yeniden Başla
+                {t('miniGames.restart', '🔄 Restart')}
             </button>
         </div>
     );
@@ -203,28 +203,28 @@ export const Hangman = ({ onGameEnd, customWord }) => {
 // ==================== TRIVIA ====================
 const TRIVIA_QUESTIONS = [
     {
-        question: "JavaScript'te 'typeof null' ne döndürür?",
+        question: t('miniGames.q1', 'What does "typeof null" return in JavaScript?'),
         options: ["null", "undefined", "object", "string"],
         correct: 2
     },
     {
-        question: "React'ın ilk sürümü hangi year ktı?",
+        question: t('miniGames.q2', 'In which year was the first version of React released?'),
         options: ["2011", "2013", "2015", "2017"],
         correct: 1
     },
     {
         question: t('ui.http_protokolunde_404_kodu_ne_anlama_gel'),
-        options: [ t('ui.server_errorsi'), "Not found", "Yetki Yok", "Redirect"],
+        options: [t('ui.server_errorsi'), "Not found", "Yetki Yok", "Redirect"],
         correct: 1
     },
     {
-        question: "Python'un yaratıcısı kimdir?",
+        question: t('miniGames.q3', 'Who is the creator of Python?'),
         options: ["Guido van Rossum", "James Gosling", "Bjarne Stroustrup", "Dennis Ritchie"],
         correct: 0
     },
     {
         question: "Git'te 'HEAD' ne anlama gelir?",
-        options: [ t('ui.ilk_commit'), "Son commit", "Current branch reference", "Uzak repo"],
+        options: [t('ui.ilk_commit'), "Son commit", "Current branch reference", "Uzak repo"],
         correct: 2
     },
     {
@@ -270,7 +270,7 @@ export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
         }
 
         setTimeout(() => {
-            if (currentQuestion <shuffledQuestions.length - 1) {
+            if (currentQuestion < shuffledQuestions.length - 1) {
                 setCurrentQuestion(currentQuestion + 1);
                 setSelectedAnswer(null);
                 setShowResult(false);
@@ -338,9 +338,9 @@ export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
                     <button
                         key={`item-${index}`}
                         className={`trivia-option ${showResult ? (
-                                index === question.correct ? 'correct' :
-                                    index === selectedAnswer ? 'wrong' : ''
-                            ) : ''
+                            index === question.correct ? 'correct' :
+                                index === selectedAnswer ? 'wrong' : ''
+                        ) : ''
                             } ${selectedAnswer === index ? 'selected' : ''}`}
                         onClick={() => handleAnswer(index)}
                         disabled={showResult}>
@@ -359,7 +359,7 @@ const MiniGames = ({ onClose }) => {
     const games = [
         { id: 'tictactoe', name: 'XOX', icon: '⭕', description: 'Klasik tic-tac-toe oyunu' },
         { id: 'hangman', name: 'Adam Asmaca', icon: '🪢', description: 'Kelimeyi tahmin et' },
-        { id: 'trivia', name: 'Trivia', icon: '🧠', description: 'Bilgi yarışması' }
+        { id: 'trivia', name: t('miniGames.triviaName', 'Trivia'), icon: '🧠', description: t('miniGames.triviaDesc', 'Knowledge quiz') }
     ];
 
     const handleGameEnd = (result) => {

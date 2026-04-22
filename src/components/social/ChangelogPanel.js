@@ -81,7 +81,7 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
                         onChange={(e) => setSelectedModel(e.target.value)}
                         className="filter-select"
                     >
-                        <option value="all">Tüm Modeller</option>
+                        <option value="all">{t('changelog.allModels','All Models')}</option>
                         {models.map((model) => (
                             <option key={model} value={model}>
                                 {model}
@@ -97,7 +97,7 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
                         onChange={(e) => setSelectedType(e.target.value)}
                         className="filter-select"
                     >
-                        <option value="all">Tüm Türler</option>
+                        <option value="all">{t('changelog.allTypes','All Types')}</option>
                         <option value="new">New Features</option>
                         <option value="fix">Bug Fixes</option>
                         <option value="improvement">Improvements</option>
@@ -107,11 +107,11 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
 
             <div className="changelog-timeline">
                 {loading ? (
-                    <div className="loading">Değişiklik geçmişi yükleniyor...</div>
+                    <div className="loading">{t('changelog.loading','Loading changelog...')}</div>
                 ) : Object.keys(groupedByDate).length === 0 ? (
                     <div className="empty-changelog">
                         <FaNewspaper className="empty-icon" />
-                        <p>Değişiklik geçmişi bulunamadı</p>
+                        <p>{t('changelog.notFound','Changelog not found')}</p>
                     </div>
                 ) : (
                     Object.entries(groupedByDate).map(([date, dateChanges]) => (

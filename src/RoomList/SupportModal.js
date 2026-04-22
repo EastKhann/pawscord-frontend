@@ -75,7 +75,7 @@ const SupportModal = ({ isOpen, onClose }) => {
                     </div>
                     <button
                         aria-label={t('support.buyCoffee')}
-                        onClick={() => window.open(cryptoAddresses.coffee, '_blank')}
+                        onClick={() => window.open(cryptoAddresses.coffee, '_blank', 'noopener,noreferrer')}
                         style={S.coffeeBtn}
                     >
                         ☕ {t('support.buyCoffee')}
@@ -90,7 +90,7 @@ const SupportModal = ({ isOpen, onClose }) => {
                             <button
                                 key={amount}
                                 aria-label={`${amount}₺ ${t('support.donate', 'bağış yap')}`}
-                                onClick={() => window.open(`${cryptoAddresses.coffee}?amount=${amount}`, '_blank')}
+                                onClick={() => window.open(`${cryptoAddresses.coffee}?amount=${amount}`, '_blank', 'noopener,noreferrer')}
                                 style={S.tierBtn}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.background = 'rgba(255,221,0,0.2)';

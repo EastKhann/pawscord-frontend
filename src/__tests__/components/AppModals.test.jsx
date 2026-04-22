@@ -1,7 +1,7 @@
 // AppModals Orchestrator Tests — Verifies decomposition into 5 sub-components
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor, act } from '@testing-library/react';
 
 // Mock all 5 sub-components
 vi.mock('../../components/AppModals/AppModalsCore', () => ({
@@ -31,7 +31,7 @@ vi.mock('../../components/AppModals/AppModalsStandard', () => ({
 }));
 
 // Mock useUIStore
-const mockModals = {};
+const mockModals = { settings: true }; // need at least one open modal for AppModals to render
 const mockOpenModal = vi.fn();
 const mockCloseModal = vi.fn();
 const mockToggleModal = vi.fn();
@@ -99,18 +99,24 @@ describe('AppModals Orchestrator', () => {
         vi.clearAllMocks();
     });
 
-    it('should render all 5 sub-components', () => {
+    it('should render all 5 sub-components', async () => {
         const { getByTestId } = render(<AppModals {...baseProps} />);
 
-        expect(getByTestId('app-modals-core')).toBeTruthy();
-        expect(getByTestId('app-modals-batch1to8')).toBeTruthy();
-        expect(getByTestId('app-modals-batch10')).toBeTruthy();
-        expect(getByTestId('app-modals-batch11')).toBeTruthy();
-        expect(getByTestId('app-modals-standard')).toBeTruthy();
+        await waitFor(() => {
+            expect(getByTestId('app-modals-core')).toBeTruthy();
+            expect(getByTestId('app-modals-batch1to8')).toBeTruthy();
+            expect(getByTestId('app-modals-batch10')).toBeTruthy();
+            expect(getByTestId('app-modals-batch11')).toBeTruthy();
+            expect(getByTestId('app-modals-standard')).toBeTruthy();
+        });
     });
 
-    it('should pass all props plus store values to each sub-component', () => {
+    it('should pass all props plus store values to each sub-component', async () => {
         const { getByTestId } = render(<AppModals {...baseProps} />);
+
+        await waitFor(() => {
+            expect(getByTestId('app-modals-core')).toBeTruthy();
+        });
 
         const coreProps = JSON.parse(getByTestId('app-modals-core').getAttribute('data-props'));
 
@@ -126,8 +132,12 @@ describe('AppModals Orchestrator', () => {
         expect(coreProps).toContain('toggleModal');
     });
 
-    it('should pass identical props to all sub-components', () => {
+    it('should pass identical props to all sub-components', async () => {
         const { getByTestId } = render(<AppModals {...baseProps} />);
+
+        await waitFor(() => {
+            expect(getByTestId('app-modals-core')).toBeTruthy();
+        });
 
         const coreProps = JSON.parse(getByTestId('app-modals-core').getAttribute('data-props'));
         const batch1Props = JSON.parse(
@@ -150,16 +160,21 @@ describe('AppModals Orchestrator', () => {
         expect(batch11Props).toEqual(standardProps);
     });
 
-    it('should not contain any direct modal rendering', () => {
+    it('should not contain any direct modal rendering', async () => {
         const { container } = render(<AppModals {...baseProps} />);
 
-        // The orchestrator should only render the 5 sub-components (fragments render children directly)
-        const divs = container.querySelectorAll('[data-testid]');
-        expect(divs.length).toBe(5);
+        await waitFor(() => {
+            const divs = container.querySelectorAll('[data-testid]');
+            expect(divs.length).toBe(5);
+        });
     });
 
-    it('should pass voice state props', () => {
+    it('should pass voice state props', async () => {
         const { getByTestId } = render(<AppModals {...baseProps} />);
+
+        await waitFor(() => {
+            expect(getByTestId('app-modals-core')).toBeTruthy();
+        });
 
         const coreProps = JSON.parse(getByTestId('app-modals-core').getAttribute('data-props'));
         expect(coreProps).toContain('isMuted');

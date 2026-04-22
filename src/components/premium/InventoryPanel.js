@@ -97,7 +97,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                         <FaCube className="icon-primary-mr10" />
                         <h2 style={styles.title}>Inventory</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -107,8 +107,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                         const Icon = type.icon;
                         return (
                             <button
-                                aria-label="Action button"
-                                key={type.value}
+                                aria-label={t('inventory.filterBtn', 'Filter by category')}
                                 onClick={() => setFilter(type.value)}
                                 style={
                                     filter === type.value
@@ -125,9 +124,9 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Envanter yükleniyor...</div>
+                        <div style={styles.loading}>{t('inventory.loading', 'Loading inventory...')}</div>
                     ) : inventory.length === 0 ? (
-                        <div style={styles.empty}>Envanterde öge yok</div>
+                        <div style={styles.empty}>{t('inventory.empty', 'No items in inventory')}</div>
                     ) : (
                         <div style={styles.itemsGrid}>
                             {inventory.map((item, idx) => (
@@ -166,7 +165,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                 <>
                                                     {item.equipped ? (
                                                         <button
-                                                            aria-label="Action button"
+                                                            aria-label={t('inventory.unequipBtn', 'Unequip item')}
                                                             onClick={() => unequipItem(item.id)}
                                                             style={styles.unequipButton}
                                                         >
@@ -174,7 +173,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                         </button>
                                                     ) : (
                                                         <button
-                                                            aria-label="Action button"
+                                                            aria-label={t('inventory.equipBtn', 'Equip item')}
                                                             onClick={() => equipItem(item.id)}
                                                             style={styles.equipButton}
                                                         >
@@ -185,7 +184,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                             )}
                                             {item.usable && (
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('inventory.useBtn', 'Use item')}
                                                     onClick={() => useItem(item.id)}
                                                     style={styles.useButton}
                                                 >

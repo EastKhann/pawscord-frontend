@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { getToken } from '../../utils/tokenStorage';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -60,7 +60,7 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
                 }}
             >
                 {onEdit && (
-                    <button aria-label="on Edit" className="edit-btn" onClick={onEdit}>
+                    <button aria-label={t('common.edit', 'Edit')} className="edit-btn" onClick={onEdit}>
                         ✏️
                     </button>
                 )}
@@ -114,7 +114,7 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
                                 year: 'numeric',
                             })}
                         </span>
-                        <span className="stat-label">Joinım</span>
+                        <span className="stat-label">{t('profileCard.joined','Joined')}</span>
                     </div>
                 </div>
 
@@ -135,7 +135,7 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
                     </div>
                 )}
 
-                {profile.spotify_connected && <div className="spotify-badge">🎵 Spotify Bağlı</div>}
+                {profile.spotify_connected && <div className="spotify-badge">{t('profileCard.spotifyConnected','🎵 Spotify Connected')}</div>}
                 {profile.is_premium && <div className="premium-badge">💎 Premium</div>}
             </div>
         </div>

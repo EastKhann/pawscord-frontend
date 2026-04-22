@@ -9,7 +9,7 @@ import useModalA11y from '../hooks/useModalA11y';
 import { useTranslation } from 'react-i18next';
 const ImageModal = ({ imageUrl, onClose }) => {
     const { t } = useTranslation();
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Image Previewme' });
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('common.imagePreview', 'Image Preview') });
 
     const modalContent = (
         <div style={styles.overlay} {...overlayProps}>
@@ -17,7 +17,7 @@ const ImageModal = ({ imageUrl, onClose }) => {
                 <button onClick={onClose} style={styles.closeBtn} aria-label={t('common.close')}>
                     ✕
                 </button>
-                <img src={imageUrl} style={styles.image} alt="Enlarged attachment" />
+                <img src={imageUrl} style={styles.image} alt={t('alt.enlargedAttachment', 'Enlarged Attachment')} />
             </div>
         </div>
     );

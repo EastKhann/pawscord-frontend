@@ -27,7 +27,7 @@ const ScrollToBottomButton = ({ onClick, unreadCount = 0, visible = true }) => {
             title="En alta git"
             aria-label={
                 unreadCount > 0
-                    ? `En alta git (${unreadCount > 99 ? '99+' : unreadCount} okunmamış mesaj)`
+                    ? `Scroll to bottom (${unreadCount > 99 ? '99+' : unreadCount} unread messages)`
                     : 'En alta git'
             }
         >

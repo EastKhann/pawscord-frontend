@@ -214,7 +214,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                     <div className="flex-align-10">
                         <FaSmile className="icon-warning" />
 
-                        <h2 className="m-0">Emoji Yönetimi</h2>
+                        <h2 className="m-0">{t('emojiMgmt.title', 'Emoji Management')}</h2>
                     </div>
 
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -222,8 +222,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
 
                 <div style={styles.tabs}>
                     <button
-                        aria-label="Action button"
-                        onClick={() => setActiveTab('custom')}
+                        aria-label={t('emojiMgmt.customTab', 'Custom emojis')}
                         style={{
                             ...styles.tab,
                             ...(activeTab === 'custom' ? styles.activeTab : {}),
@@ -233,8 +232,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                     </button>
 
                     <button
-                        aria-label="Action button"
-                        onClick={() => setActiveTab('trending')}
+                        aria-label={t('emojiMgmt.trendingTab', 'Trending emojis')}
                         style={{
                             ...styles.tab,
                             ...(activeTab === 'trending' ? styles.activeTab : {}),
@@ -244,8 +242,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                     </button>
 
                     <button
-                        aria-label="Action button"
-                        onClick={() => setActiveTab('suggestions')}
+                        aria-label={t('emojiMgmt.suggestionsTab', 'Emoji suggestions')}
                         style={{
                             ...styles.tab,
                             ...(activeTab === 'suggestions' ? styles.activeTab : {}),
@@ -253,7 +250,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                     >
                         Ãneriler
                     </button>
-                </div>
+                </div >
 
                 {activeTab === 'custom' && (
                     <>
@@ -271,11 +268,11 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                                 onChange={(e) => setEmojiName(e.target.value)}
                                 placeholder={t('ui.emoji_ismi_orn_pog_kekw')}
                                 style={styles.input}
-                                aria-label="Emoji Name"
+                                aria-label={t('emojiMgmt.emojiName', 'Emoji name')}
                             />
 
                             <button
-                                aria-label="upload Emoji"
+                                aria-label={t('emojiMgmt.uploadEmoji', 'Upload emoji')}
                                 onClick={uploadEmoji}
                                 style={styles.uploadBtn}
                             >
@@ -290,7 +287,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                                 <div style={styles.empty}>
                                     <FaSmile className="icon-lg-mb10" />
 
-                                    <p>Henüz özel emoji yok</p>
+                                    <p>{t('emojiMgmt.noEmoji', 'No custom emoji yet')}</p>
                                 </div>
                             ) : (
                                 <div style={styles.emojiGrid}>
@@ -305,7 +302,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                                             <div style={styles.emojiName}>:{emoji.name}:</div>
 
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('emojiMgmt.deleteEmoji', `Delete :${emoji.name}:`)}
                                                 onClick={() => deleteEmoji(emoji.id)}
                                                 style={styles.deleteEmojiBtn}
                                             >
@@ -319,49 +316,53 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                     </>
                 )}
 
-                {activeTab === 'trending' && (
-                    <div style={styles.content}>
-                        <div style={styles.emojiGrid}>
-                            {trendingEmojis.map((emoji, index) => (
-                                <div key={`item-${index}`} style={styles.emojiCard}>
-                                    <img
-                                        src={emoji.url}
-                                        alt={emoji.name}
-                                        style={styles.emojiImage}
-                                    />
+                {
+                    activeTab === 'trending' && (
+                        <div style={styles.content}>
+                            <div style={styles.emojiGrid}>
+                                {trendingEmojis.map((emoji, index) => (
+                                    <div key={`item-${index}`} style={styles.emojiCard}>
+                                        <img
+                                            src={emoji.url}
+                                            alt={emoji.name}
+                                            style={styles.emojiImage}
+                                        />
 
-                                    <div style={styles.emojiName}>:{emoji.name}:</div>
+                                        <div style={styles.emojiName}>:{emoji.name}:</div>
 
-                                    <div style={styles.usageCount}>{emoji.usage_count} kullanm</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'suggestions' && (
-                    <div style={styles.content}>
-                        <div style={styles.emojiGrid}>
-                            {suggestions.map((suggestion, index) => (
-                                <div key={`item-${index}`} style={styles.suggestionCard}>
-                                    <img
-                                        src={suggestion.emoji_url}
-                                        alt={suggestion.emoji_name}
-                                        style={styles.emojiImage}
-                                    />
-
-                                    <div style={styles.emojiName}>:{suggestion.emoji_name}:</div>
-
-                                    <div style={styles.suggester}>
-                                        Öneren: {suggestion.suggested_by}
+                                        <div style={styles.usageCount}>{emoji.usage_count} kullanm</div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )
+                }
+
+                {
+                    activeTab === 'suggestions' && (
+                        <div style={styles.content}>
+                            <div style={styles.emojiGrid}>
+                                {suggestions.map((suggestion, index) => (
+                                    <div key={`item-${index}`} style={styles.suggestionCard}>
+                                        <img
+                                            src={suggestion.emoji_url}
+                                            alt={suggestion.emoji_name}
+                                            style={styles.emojiImage}
+                                        />
+
+                                        <div style={styles.emojiName}>:{suggestion.emoji_name}:</div>
+
+                                        <div style={styles.suggester}>
+                                            {t('emojiMgmt.suggestedBy', 'Suggested by')}: {suggestion.suggested_by}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )
+                }
             </div>
-        </div>
+        </div >
     );
 };
 

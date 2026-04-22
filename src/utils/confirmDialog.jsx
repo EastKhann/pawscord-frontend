@@ -203,7 +203,7 @@ export function confirmDialog(options) {
                         {/* Details */}
                         {details && details.length > 0 && (
                             <div style={_st8}>
-                                <div style={_st9}>⚠️ Bu işlem:</div>
+                                <div style={_st9}>⚠️ {t('confirmDialog.thisAction','This action:')}</div>
                                 {details.map((d, i) => (
                                     <div key={`item-${i}`} style={_st10}>
                                         <span style={_s({ color: tc.color })}>•</span>

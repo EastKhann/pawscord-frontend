@@ -248,14 +248,14 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                         <h2 style={styles.title}>{t('projects.title', 'Project Collaboration')}</h2>
                     </div>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.breadcrumbs}>
                     <button
-                        aria-label="handle Go To Projects"
+                        aria-label={t('projects.goToProjects', 'Go to projects')}
                         onClick={handleGoToProjects}
                         style={styles.breadcrumb}
                     >
@@ -267,7 +267,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                             <span style={styles.breadcrumbSep}>/</span>
 
                             <button
-                                aria-label="handle Go To Project Detail"
+                                aria-label={t('projects.goToProject', '{{name}} project', { name: selectedProject?.name })}
                                 onClick={handleGoToProjectDetail}
                                 style={styles.breadcrumb}
                             >
@@ -289,8 +289,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                     {view === 'projects' && (
                         <>
                             <button
-                                aria-label="handle Go To Create"
-                                onClick={handleGoToCreate}
+                                aria-label={t('projects.createNewProject', 'Create new project')}
                                 style={styles.createProjectBtn}
                             >
                                 <FaPlus /> {t('projects.newProject', 'New Project')}
@@ -344,24 +343,24 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
 
                             <input
                                 type="text"
-                                placeholder="Proje Adı"
+                                placeholder={t('social.projectNamePlaceholder', 'Project Name')}
                                 value={projectName}
                                 onChange={handleProjectNameChange}
                                 style={styles.input}
-                                aria-label="Proje Adı"
+                                aria-label={t('social.projectName', 'Project name')}
                             />
 
                             <textarea
-                                placeholder="Açıklama (opsiyonel)"
+                                placeholder={t('social.projectDescription', 'Description (optional)')}
                                 value={projectDesc}
                                 onChange={handleProjectDescChange}
                                 style={styles.textarea}
-                                aria-label="Description (optional)"
+                                aria-label={t('social.projectDescription', 'Description (optional)')}
                             />
 
                             <div style={styles.formActions}>
                                 <button
-                                    aria-label="handle Cancel To Projects"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     onClick={handleCancelToProjects}
                                     style={styles.cancelBtn}
                                 >
@@ -369,7 +368,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                 </button>
 
                                 <button
-                                    aria-label="create Project"
+                                    aria-label={t('projects.createProject', 'Create project')}
                                     onClick={createProject}
                                     style={styles.submitBtn}
                                     disabled={loading}
@@ -394,7 +393,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                 </div>
 
                                 <button
-                                    aria-label="handle Go To Create Doc"
+                                    aria-label={t('projects.newDocument', 'New document')}
                                     onClick={handleGoToCreateDoc}
                                     style={styles.newDocBtn}
                                 >
@@ -472,24 +471,24 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
 
                             <input
                                 type="text"
-                                placeholder="Belge Başlığı"
+                                placeholder={t('social.documentTitlePlaceholder', 'Document Title')}
                                 value={docTitle}
                                 onChange={handleDocTitleChange}
                                 style={styles.input}
-                                aria-label="Belge Başlığı"
+                                aria-label={t('social.documentTitle', 'Document title')}
                             />
 
                             <textarea
-                                placeholder="Yazmaya başlayın..."
+                                placeholder={t('social.startTypingPlaceholder', 'Start writing...')}
                                 value={docContent}
                                 onChange={handleDocContentChange}
                                 style={styles.textarea}
-                                aria-label="Yazmaya başlayın..."
+                                aria-label={t('social.startTyping', 'Start typing...')}
                             />
 
                             <div style={styles.formActions}>
                                 <button
-                                    aria-label="handle Cancel To Project Detail"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     onClick={handleCancelToProjectDetail}
                                     style={styles.cancelBtn}
                                 >
@@ -497,7 +496,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                 </button>
 
                                 <button
-                                    aria-label="create Document"
+                                    aria-label={t('projects.createDocument', 'Create document')}
                                     onClick={createDocument}
                                     style={styles.submitBtn}
                                     disabled={loading}
@@ -518,19 +517,19 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                     value={selectedDoc.title}
                                     onChange={handleDocEditorTitleChange}
                                     style={styles.docTitleInput}
-                                    aria-label="Title"
+                                    aria-label={t('social.documentTitle', 'Document title')}
                                 />
 
                                 <div style={styles.editorActions}>
                                     <button
-                                        aria-label="save Document"
+                                        aria-label={t('common.save', 'Save')}
                                         onClick={saveDocument}
                                         style={styles.saveBtn}
                                     >
                                         {t('projects.save', 'Save')}
                                     </button>
 
-                                    <button aria-label="Action button" style={styles.historyBtn}>
+                                    <button aria-label={t('common.history', 'History')} style={styles.historyBtn}>
                                         <FaHistory /> {t('projects.history', 'History')}
                                     </button>
                                 </div>
@@ -540,8 +539,8 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                 value={selectedDoc.content}
                                 onChange={handleDocEditorContentChange}
                                 style={styles.editor}
-                                placeholder="Belgenizi yazmaya başlayın..."
-                                aria-label="Belgenizi yazmaya başlayın..."
+                                placeholder={t('social.startWritingPlaceholder', 'Start writing your document...')}
+                                aria-label={t('social.startWriting', 'Start writing your document...')}
                             />
 
                             <div style={styles.editorFooter}>

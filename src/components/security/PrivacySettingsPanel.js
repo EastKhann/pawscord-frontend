@@ -11,7 +11,7 @@ const ToggleItem = ({ label, desc, checked, onChange }) => (
             <div className="setting-desc">{desc}</div>
         </div>
         <label className="toggle-switch">
-            <input type="checkbox" checked={checked} onChange={onChange} aria-label="checkbox" />
+            <input type="checkbox" checked={checked} onChange={onChange} aria-label={t('common.toggle', 'Toggle')} />
             <span className="slider" />
         </label>
     </div>
@@ -52,7 +52,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
             >
                 <div className="privacy-settings-header">
                     <h2>🔒 {t('privacy.title')}</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -141,7 +141,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
                                             <div key={`item-${i}`} className="blocked-word-item">
                                                 <span>{word}</span>
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('privacy.removeWord', 'Remove blocked word')}
                                                     className="remove-word-btn"
                                                     onClick={() => p.removeBlockedWord(word)}
                                                 >

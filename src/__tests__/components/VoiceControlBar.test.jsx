@@ -74,6 +74,6 @@ describe('VoiceControlBar', () => {
 
     it('displays username', () => {
         render(<VoiceControlBar {...defaultProps} />);
-        expect(screen.getByText('TestUser')).toBeInTheDocument();
+        expect(screen.getByAltText('TestUser')).toBeInTheDocument();
     });
 });

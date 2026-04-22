@@ -126,7 +126,7 @@ const EnglishVoicePractice = ({ apiBaseUrl }) => {
     };
 
     return (
-        <div aria-label="english voice practice" style={S.container}>
+        <div aria-label={t('aria.englishVoicePractice', 'English Voice Practice')} style={S.container}>
             <style>{`
                 @keyframes pulse { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.4);opacity:.15} }
                 @keyframes typingDot { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }

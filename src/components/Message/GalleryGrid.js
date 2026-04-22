@@ -1,4 +1,5 @@
 ﻿import { memo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { LazyVideo, FileAttachment } from './MediaComponents';
 
@@ -6,8 +7,8 @@ import { LazyVideo, FileAttachment } from './MediaComponents';
 // -- dynamic style helpers (pass 2) --
 
 const S = {
-  txt: {color: '#b5bac1', fontSize: '12px', marginTop: '4px', opacity: 0.7},
-  border: {width: '100%', height: '100%', objectFit: 'cover', borderRadius: 0},
+  txt: { color: '#b5bac1', fontSize: '12px', marginTop: '4px', opacity: 0.7 },
+  border: { width: '100%', height: '100%', objectFit: 'cover', borderRadius: 0 },
 };
 
 const getMediaUrl = (m, absoluteHostUrl) => {
@@ -21,13 +22,13 @@ const isImageItem = (m) => {
   const url = m.image_url || m.image;
   if (url) return true;
   const fn = (m.file_name || '').toLowerCase();
-  return ['jpg','jpeg','png','gif','webp','bmp','svg','ico'].some(e => fn.endsWith(`.${e}`));
+  return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'ico'].some(e => fn.endsWith(`.${e}`));
 };
 
 const isVideoItem = (m) => {
   const fn = (m.file_name || '').toLowerCase();
   const isVoice = fn.startsWith('voice_') || fn.startsWith('voice-');
-  return !isVoice && ['mp4','mov','mkv','webm'].some(e => fn.endsWith(`.${e}`));
+  return !isVoice && ['mp4', 'mov', 'mkv', 'webm'].some(e => fn.endsWith(`.${e}`));
 };
 
 const getGridStyle = (count) => {
@@ -39,13 +40,14 @@ const getGridStyle = (count) => {
 };
 
 export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, absoluteHostUrl }) => {
+  const { t } = useTranslation();
   const [error, setError] = useState(null);
   const imageItems = galleryGroup.filter(m => isImageItem(m) || isVideoItem(m));
   const fileItems = galleryGroup.filter(m => !isImageItem(m) && !isVideoItem(m));
   const count = imageItems.length;
 
   return (
-    <div aria-label="get media url">
+    <div aria-label={t('message.galleryGrid', 'Image gallery')}>
       {imageItems.length > 0 && (
         <div>
           {imageItems.map((item, idx) => {
@@ -54,7 +56,7 @@ export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, ab
             if (isVideoItem(item)) {
               return (
                 <div key={item.id || idx} style={{ position: 'relative', backgroundColor: '#000', minHeight: count > 4 ? '120px' : '180px' }}>
-                  <LazyVideo src={url} style={S.border}/>
+                  <LazyVideo src={url} style={S.border} />
                 </div>
               );
             }
@@ -62,7 +64,7 @@ export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, ab
               <img
                 key={item.id || idx}
                 src={url}
-                alt="gallery"
+                alt={t('alt.gallery', 'Gallery')}
                 style={{ width: '100%', height: count > 4 ? '120px' : (count > 2 ? '160px' : '200px'), objectFit: 'cover', cursor: 'pointer', display: 'block' }}
                 onClick={() => onImageClick(url)}
                 loading="lazy"
@@ -86,10 +88,10 @@ export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, ab
 
 GalleryGrid.displayName = 'GalleryGrid';
 GalleryGrid.propTypes = {
-    galleryGroup: PropTypes.object,
-    onImageClick: PropTypes.func,
-    onContentLoad: PropTypes.func,
-    absoluteHostUrl: PropTypes.string,
+  galleryGroup: PropTypes.object,
+  onImageClick: PropTypes.func,
+  onContentLoad: PropTypes.func,
+  absoluteHostUrl: PropTypes.string,
 };
 
 export default GalleryGrid;

@@ -45,11 +45,11 @@ const ForgotPasswordPage = ({ apiBaseUrl }) => {
             if (response.ok) {
                 setStatus('sent');
             } else {
-                setError(data.error || 'Bir hata oluştu');
+                setError(data.error || t('common.errorOccurred','An error occurred'));
                 setStatus('idle');
             }
         } catch (error) {
-            setError('Bağlantı hatası oluştu');
+            setError(t('common.connectionError','A connection error occurred'));
             setStatus('idle');
         }
     };

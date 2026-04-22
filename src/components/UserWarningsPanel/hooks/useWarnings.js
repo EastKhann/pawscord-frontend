@@ -124,7 +124,7 @@ const useWarnings = (serverId, fetchWithAuth, apiBaseUrl) => {
 
     const removeWarning = useCallback(
         async (warningId) => {
-            if (!(await confirmDialog('Bu uyardıyı kaldırmak istediğinizden emin misiniz?')))
+            if (!(await confirmDialog(t('warnings.removeConfirm','Are you sure you want to remove this warning?'))))
                 return;
             try {
                 const res = await fetchWithAuth(`${apiBaseUrl}/moderation/warnings/${warningId}/`, {

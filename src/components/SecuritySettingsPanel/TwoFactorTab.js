@@ -17,7 +17,7 @@ const TwoFactorTab = ({
     const { t } = useTranslation();
     return (
         <div className="tab-content">
-            <h3>İki Faktörlü Kimlik Verification (2FA)</h3>
+            <h3>{t('twoFactor.title','Two-Factor Authentication (2FA)')}</h3>
             <p>{t('hesabınızı_ekstra_bir_güvenlik_katmanıyla_koruyun')}</p>
 
             {!twoFactorEnabled && !qrCode ? (
@@ -43,7 +43,7 @@ const TwoFactorTab = ({
                 <div className="setup-2fa">
                     <div className="qr-section">
                         <h4>{t('1_qr_kodu_tarayın')}</h4>
-                        {qrCode && <img src={qrCode} alt="2FA QR Code" className="qr-code" />}
+                        {qrCode && <img src={qrCode} alt={t('alt.qrCode2fa', '2FA QR Code')} className="qr-code" />}
                         <p>{t('authenticator_uygulamanızla_qr_kodu_tarayın')}</p>
                     </div>
                     <div className="verify-section">

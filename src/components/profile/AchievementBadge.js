@@ -84,14 +84,14 @@ export const AchievementsPanel = ({ username, fetchWithAuth, apiBaseUrl }) => {
     }
 
     if (achievements.length === 0 && badges.length === 0) {
-        return <div className="text-949-09em">Not yet başarı kazanılmadı</div>;
+        return <div className="text-949-09em">{t('achievements.none', 'No achievements earned yet')}</div>;
     }
 
     return (
-        <div aria-label="achievement badge" style={S.mar}>
+        <div aria-label={t('achievements.badge', 'Achievement badge')} style={S.mar}>
             {achievements.length > 0 && (
                 <div className="mb-15">
-                    <h4 className="text-949-085em-mb10">🏆 Başarılar ({achievements.length})</h4>
+                    <h4 className="text-949-085em-mb10">{t('achievements.title', '🏆 Achievements')} ({achievements.length})</h4>
                     <div className="flex-wrap-8">
                         {achievements.slice(0, 10).map((ach) => (
                             <AchievementBadge key={ach.id} achievement={ach} size="medium" />

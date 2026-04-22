@@ -30,7 +30,7 @@ const FeatureHubModal = () => {
                 <div style={styles.header}>
                     <h2 style={styles.title}>{t('featureHub.allFeatures', '🚀 All Features')}</h2>
                     <button
-                        aria-label="Action button"
+                        aria-label={t('common.close', 'Close')}
                         onClick={() => closeModal('featureHub')}
                         style={styles.closeBtn}
                     >
@@ -49,7 +49,7 @@ const FeatureHubModal = () => {
                         <div style={styles.grid}>
                             {section.items.map((item, i) => (
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t(`featureHub.${item.modal}`, item.title || 'Feature')}
                                     key={`item-${i}`}
                                     onClick={() => handleSelect(item.modal)}
                                     style={styles.button}

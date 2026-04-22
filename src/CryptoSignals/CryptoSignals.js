@@ -135,7 +135,7 @@ const CryptoSignals = () => {
         return (
             <div style={S.page}>
                 <div style={S.loadingBox}>
-                    <div aria-label="format balance" className="crypto-spin">
+                    <div aria-label={t('aria.cryptoLoading', 'Loading')} className="crypto-spin">
                         ₿
                     </div>
                     <p>{t('crypto.loading', 'Kripto Verileri Yükleniyor...')}</p>
@@ -238,7 +238,7 @@ const CryptoSignals = () => {
                             key: 'winrate_mode',
                             icon: <FaTrophy />,
                             label: isMobile
-                                ? 'Kazan Oranı'
+                                ? t('cryptoSignals.winRate','Win Rate')
                                 : `🏆 ${t('crypto.winrateSort', 'Kazanma Oranı Sıralaması')}`,
                             color: '#23a559',
                         },

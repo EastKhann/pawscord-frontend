@@ -146,10 +146,10 @@ const ServerDiscoveryPage = ({ apiBaseUrl, fetchWithAuth, onJoinServer }) => {
                         onChange={(e) => setFilters({ ...filters, language: e.target.value })}
                     >
                         <option value="all">{t('discovery.allLanguages')}</option>
-                        <option value="tr">🇹🇷 Türkçe</option>
+                        <option value="tr">{t('lang.tr','🇹🇷 Turkish')}</option>
                         <option value="en">🇺🇸 English</option>
                         <option value="de">🇩🇪 Deutsch</option>
-                        <option value="fr">🇫🇷 Français</option>
+                        <option value="fr">{t('lang.fr','🇫🇷 French')}</option>
                         <option value="es">🇪🇸 Español</option>
                     </select>
                 </div>

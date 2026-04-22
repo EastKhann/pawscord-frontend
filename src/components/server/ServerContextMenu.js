@@ -194,7 +194,7 @@ const ServerContextMenu = ({
                     const Icon = item.icon;
                     return (
                         <button
-                            aria-label="Action button"
+                            aria-label={item.label}
                             key={`item-${index}`}
                             onClick={() => handleAction(item.action)}
                             style={_s({

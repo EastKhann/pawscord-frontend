@@ -269,7 +269,7 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
                             </span>
                         </div>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -277,111 +277,105 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
                 {/* 🔥 TAB NAVIGATION - Daha Fazla Tab */}
                 <div style={styles.tabs}>
                     <button
-                        aria-label="Action button"
-                        style={activeTab === 'general' ? styles.tabActive : styles.tab}
-                        onClick={() => setActiveTab('general')}
-                    >
-                        <FaCog /> General
+                        aria-label={t('channel.generalTab', 'General settings')}>
                     </button>
-                    <button
-                        aria-label="Action button"
-                        style={activeTab === 'permissions' ? styles.tabActive : styles.tab}
-                        onClick={() => setActiveTab('permissions')}
-                    >
-                        <FaShieldAlt /> İzinler
-                    </button>
-                    <button
-                        aria-label="Action button"
-                        style={activeTab === 'integrations' ? styles.tabActive : styles.tab}
-                        onClick={() => setActiveTab('integrations')}
-                    >
-                        <FaLink /> Entegrasyonlar
-                    </button>
-                    <button
-                        aria-label="Action button"
-                        style={activeTab === 'advanced' ? styles.tabActive : styles.tab}
-                        onClick={() => setActiveTab('advanced')}
-                    >
-                        <FaHistory /> Advanced
-                    </button>
-                </div>
+                <button
+                    aria-label={t('channel.permissionsTab', 'Permissions settings')}
+                >
+                    <FaShieldAlt /> {t('channel.permissions', 'Permissions')}
+                </button>
+                <button
+                    aria-label={t('channel.integrationsTab', 'Integration settings')}
+                    style={activeTab === 'integrations' ? styles.tabActive : styles.tab}
+                    onClick={() => setActiveTab('integrations')}
+                >
+                    <FaLink /> {t('channel.integrations', 'Integrations')}
+                </button>
+                <button
+                    aria-label={t('channel.advancedTab', 'Advanced settings')}
+                    style={activeTab === 'advanced' ? styles.tabActive : styles.tab}
+                    onClick={() => setActiveTab('advanced')}
+                >
+                    <FaHistory /> {t('common.advanced', 'Advanced')}
+                </button>
+            </div>
 
-                <div style={styles.body}>
-                    {activeTab === 'general' && (
-                        <GeneralTab
-                            name={name}
-                            setName={setName}
-                            isPrivate={isPrivate}
-                            handlePrivateChange={handlePrivateChange}
-                            isNsfw={isNsfw}
-                            handleNsfwChange={handleNsfwChange}
-                            isLocked={isLocked}
-                            handleLockedChange={handleLockedChange}
-                            isReadOnly={isReadOnly}
-                            handleReadOnlyChange={handleReadOnlyChange}
-                            isVoiceChannel={isVoiceChannel}
-                            userLimit={userLimit}
-                            handleUserLimitChange={handleUserLimitChange}
-                            bitrate={bitrate}
-                            setBitrate={setBitrate}
-                            selectedRoles={selectedRoles}
-                            toggleRole={toggleRole}
-                            serverRoles={serverRoles}
-                            handleDelete={handleDelete}
-                            handleSave={handleSave}
-                        />
-                    )}
+            <div style={styles.body}>
+                {activeTab === 'general' && (
+                    <GeneralTab
+                        name={name}
+                        setName={setName}
+                        isPrivate={isPrivate}
+                        handlePrivateChange={handlePrivateChange}
+                        isNsfw={isNsfw}
+                        handleNsfwChange={handleNsfwChange}
+                        isLocked={isLocked}
+                        handleLockedChange={handleLockedChange}
+                        isReadOnly={isReadOnly}
+                        handleReadOnlyChange={handleReadOnlyChange}
+                        isVoiceChannel={isVoiceChannel}
+                        userLimit={userLimit}
+                        handleUserLimitChange={handleUserLimitChange}
+                        bitrate={bitrate}
+                        setBitrate={setBitrate}
+                        selectedRoles={selectedRoles}
+                        toggleRole={toggleRole}
+                        serverRoles={serverRoles}
+                        handleDelete={handleDelete}
+                        handleSave={handleSave}
+                    />
+                )}
 
-                    {activeTab === 'permissions' && (
-                        <PermissionsTab
-                            permissions={permissions}
-                            showAddPermission={showAddPermission}
-                            setShowAddPermission={setShowAddPermission}
-                            permissionType={permissionType}
-                            setPermissionType={setPermissionType}
-                            selectedRoleForThum={selectedRoleForThum}
-                            setSelectedRoleForThum={setSelectedRoleForThum}
-                            selectedUserForThum={selectedUserForThum}
-                            setSelectedUserForThum={setSelectedUserForThum}
-                            searchUser={searchUser}
-                            setSearchUser={setSearchUser}
-                            searchResults={searchResults}
-                            setSearchResults={setSearchResults}
-                            searchUsers={searchUsers}
-                            removePermission={removePermission}
-                            addPermission={addPermission}
-                        />
-                    )}
+                {activeTab === 'permissions' && (
+                    <PermissionsTab
+                        permissions={permissions}
+                        showAddPermission={showAddPermission}
+                        setShowAddPermission={setShowAddPermission}
+                        permissionType={permissionType}
+                        setPermissionType={setPermissionType}
+                        selectedRoleForThum={selectedRoleForThum}
+                        setSelectedRoleForThum={setSelectedRoleForThum}
+                        selectedUserForThum={selectedUserForThum}
+                        setSelectedUserForThum={setSelectedUserForThum}
+                        searchUser={searchUser}
+                        setSearchUser={setSearchUser}
+                        searchResults={searchResults}
+                        setSearchResults={setSearchResults}
+                        searchUsers={searchUsers}
+                        removePermission={removePermission}
+                        addPermission={addPermission}
+                    />
+                )}
 
-                    {activeTab === 'integrations' && (
-                        <IntegrationsTab
-                            room={room}
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={apiBaseUrl}
-                            notificationPref={notificationPref}
-                            setNotificationPref={setNotificationPref}
-                        />
-                    )}
+                {activeTab === 'integrations' && (
+                    <IntegrationsTab
+                        room={room}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={apiBaseUrl}
+                        notificationPref={notificationPref}
+                        setNotificationPref={setNotificationPref}
+                    />
+                )}
 
-                    {activeTab === 'advanced' && (
-                        <AdvancedTab
-                            room={room}
-                            serverRoles={serverRoles}
-                            deleteHistoryDays={deleteHistoryDays}
-                            setDeleteHistoryDays={setDeleteHistoryDays}
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={apiBaseUrl}
-                            updateChannelRestriction={updateChannelRestriction}
-                            handleDelete={handleDelete}
-                        />
-                    )}
-                </div>
+                {activeTab === 'advanced' && (
+                    <AdvancedTab
+                        room={room}
+                        serverRoles={serverRoles}
+                        deleteHistoryDays={deleteHistoryDays}
+                        setDeleteHistoryDays={setDeleteHistoryDays}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={apiBaseUrl}
+                        updateChannelRestriction={updateChannelRestriction}
+                        handleDelete={handleDelete}
+                    />
+                )}
             </div>
         </div>
+        </div >
     );
 
-    // 🔥 Portal with document.body'ye render et (positioning sorununu zer)
-    return ReactDOM.createPortal(modalContent, document.body);
+// 🔥 Portal with document.body'ye render et (positioning sorununu zer)
+return ReactDOM.createPortal(modalContent, document.body);
 };
 
 ChannelSettingsModal.propTypes = {

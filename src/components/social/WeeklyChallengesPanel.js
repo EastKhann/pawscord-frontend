@@ -19,7 +19,7 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
             <div style={styles.container}>
                 <div style={styles.loading}>
                     <FaTrophy className="pulse" size={32} color="#f0b232" />
-                    <span>Görevler yükleniyor...</span>
+                    <span>{t('challenges.loading', 'Loading tasks...')}</span>
                 </div>
             </div>
         );
@@ -35,14 +35,14 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
                 <div style={styles.headerLeft}>
                     <FaTrophy size={24} color="#f0b232" />
                     <div>
-                        <h2 style={styles.title}>Haftalık Görevler</h2>
+                        <h2 style={styles.title}>{t('challenges.title', 'Weekly Challenges')}</h2>
                         <p style={styles.subtitle}>Complete challenges, earn rewards!</p>
                     </div>
                 </div>
                 <div style={styles.timer}>
                     <FaClock size={14} color="#949ba4" />
                     <span>
-                        {timeRemaining.days}g {timeRemaining.hours}s {timeRemaining.minutes}d kaldı
+                        {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m {t('challenges.remaining', 'left')}
                     </span>
                 </div>
             </div>
@@ -85,21 +85,21 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
                     {
                         key: 'weekly',
                         icon: <FaTrophy size={14} />,
-                        label: `Haftalık (${challenges.weekly.length})`,
+                        label: `${t('challenges.weekly', 'Weekly')} (${challenges.weekly.length})`,
                     },
                     {
                         key: 'daily',
                         icon: <FaStar size={14} />,
-                        label: `Günlük (${challenges.daily.length})`,
+                        label: `${t('challenges.daily', 'Daily')} (${challenges.daily.length})`,
                     },
                     {
                         key: 'special',
                         icon: <FaGem size={14} />,
-                        label: `Özel (${challenges.special.length})`,
+                        label: `${t('challenges.special', 'Special')} (${challenges.special.length})`,
                     },
                 ].map((t) => (
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('challenges.switchTab', 'Switch tab')}
                         key={t.key}
                         onClick={() => setActiveTab(t.key)}
                         style={{ ...styles.tab, ...(activeTab === t.key ? styles.tabActive : {}) }}
@@ -123,7 +123,7 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
             {userProgress.rewards.length > 0 && (
                 <div style={styles.rewardsSection}>
                     <h3 style={styles.rewardsSectionTitle}>
-                        <FaGift size={14} /> Kazanılan Rewardler
+                        <FaGift size={14} /> {t('challenges.earnedRewards', 'Earned Rewards')}
                     </h3>
                     <div style={styles.rewardsList}>
                         {userProgress.rewards.map((reward, index) => (

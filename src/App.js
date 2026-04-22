@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🐾 PAWSCORD — App.js (Refactored)
  * Main application orchestrator.
  *
@@ -627,7 +627,7 @@ const AppContent = () => {
                 `${ABSOLUTE_HOST_URL}/media/build/Pawscord-Setup.exe`
             );
         } else {
-            window.open(`${ABSOLUTE_HOST_URL}/media/build/Pawscord-Setup.exe`, '_blank');
+            window.open(`${ABSOLUTE_HOST_URL}/media/build/Pawscord-Setup.exe`, '_blank', 'noopener,noreferrer');
         }
     };
 
@@ -775,7 +775,7 @@ const AppContent = () => {
     if (showVanityInvite)
         return (
             <SectionErrorBoundary section="Vanity Invite">
-                <Suspense fallback={<LoadingSpinner size="large" text="Davet yükleniyor..." />}>
+                <Suspense fallback={<LoadingSpinner size="large" text={t('app.loadingInvite', 'Loading invitation...')} />}>
                     <VanityInviteScreen
                         vanityPath={showVanityInvite}
                         fetchWithAuth={fetchWithAuth}
@@ -789,7 +789,7 @@ const AppContent = () => {
     if (showInviteCode)
         return (
             <SectionErrorBoundary section="Invite Code">
-                <Suspense fallback={<LoadingSpinner size="large" text="Davet yükleniyor..." />}>
+                <Suspense fallback={<LoadingSpinner size="large" text={t('app.loadingInvite', 'Loading invitation...')} />}>
                     <InviteCodeScreen
                         inviteCode={showInviteCode}
                         fetchWithAuth={fetchWithAuth}
@@ -870,7 +870,7 @@ const AppContent = () => {
                 <div
                     style={styles.mobileOverlay}
                     role="presentation"
-                    aria-label="Kenar çubuğunu kapat"
+                    aria-label={t('nav.closeSidebar', 'Close sidebar')}
                     onClick={handleCloseLeftSidebar}
                 />
             )}
@@ -878,7 +878,7 @@ const AppContent = () => {
                 <div
                     style={styles.mobileOverlay}
                     role="presentation"
-                    aria-label="Kenar çubuğunu kapat"
+                    aria-label={t('nav.closeSidebar', 'Close sidebar')}
                     onClick={handleCloseRightSidebar}
                 />
             )}
@@ -888,13 +888,13 @@ const AppContent = () => {
             <div style={styles.chatLayout}>
                 {/* ─── LEFT SIDEBAR ─── */}
                 {(!isMobile || isLeftSidebarVisible) && (
-                    <nav style={_st1004} aria-label="Kanal listesi">
+                    <nav style={_st1004} aria-label={t('nav.channelList', 'Channel list')}>
                         {isMobile && (
                             <div style={styles.mobileSidebarHeader}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <img
                                         src="https://media.pawscord.com/assets/logo.png"
-                                        alt="Pawscord"
+                                        alt={t('alt.pawscordLogo', 'Pawscord')}
                                         style={styles.mobileSidebarLogo}
                                         onError={(e) => {
                                             e.target.style.display = 'none';
@@ -905,7 +905,7 @@ const AppContent = () => {
                                 <button
                                     onClick={handleCloseLeftSidebar}
                                     style={styles.closeSidebarButton}
-                                    aria-label="Kenar çubuğunu kapat"
+                                    aria-label={t('nav.closeSidebar', 'Close sidebar')}
                                 >
                                     <FaTimes />
                                 </button>
@@ -1005,7 +1005,7 @@ const AppContent = () => {
                     id="main-content"
                     style={styles.mainContent}
                     role="main"
-                    aria-label="Sohbet alanı"
+                    aria-label={t('nav.chatArea', 'Chat area')}
                 >
                     <div>
                         <Suspense fallback={null}>
@@ -1102,7 +1102,7 @@ const AppContent = () => {
                                         <button
                                             onClick={() => setActiveChat('welcome', 'welcome')}
                                             style={styles.mobileMenuButton}
-                                            aria-label="Geri git"
+                                            aria-label={t('common.goBack', 'Go back')}
                                         >
                                             ←
                                         </button>
@@ -1234,7 +1234,7 @@ const AppContent = () => {
                                     <button
                                         onClick={() => setIsRightSidebarVisible(false)}
                                         style={styles.closeSidebarButton}
-                                        aria-label="Üyeler panelini kapat"
+                                        aria-label={t('nav.closeMembersPanel', 'Close members panel')}
                                     >
                                         <FaTimes />
                                     </button>

@@ -143,7 +143,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.management')}
                                 </span>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.generalSettings', 'General settings')}
                                     className={`ss-nav-item${activeTab === 'management' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -155,7 +155,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.generalSettings')}
                                 </button>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.roles', 'Roles')}
                                     className={`ss-nav-item${activeTab === 'roles' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -167,7 +167,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.roles')}
                                 </button>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.members', 'Members')}
                                     className={`ss-nav-item${activeTab === 'members' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -187,7 +187,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.features')}
                                 </span>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('autoResponder.title', 'Auto responders')}
                                     className={`ss-nav-item${activeTab === 'autoresponders' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -200,7 +200,7 @@ const ServerSettingsModal = ({
                                     <FaRobot style={styles.navIcon} /> {t('autoResponder.title')}
                                 </button>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.vanityUrl', 'Vanity URL')}
                                     className={`ss-nav-item${activeTab === 'vanity' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -212,7 +212,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.vanityUrl')}
                                 </button>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.welcomeMessage', 'Welcome message')}
                                     className={`ss-nav-item${activeTab === 'welcome' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -224,7 +224,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.welcomeMessage')}
                                 </button>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.systemBot', 'System bot')}
                                     className={`ss-nav-item${activeTab === 'systembot' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -245,7 +245,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.security')}
                                 </span>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.moderation', 'Moderation')}
                                     className={`ss-nav-item${activeTab === 'moderation' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -257,7 +257,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.moderation')}
                                 </button>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.banManagement', 'Ban management')}
                                     className={`ss-nav-item${activeTab === 'bans' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -269,7 +269,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.banManagement')}
                                 </button>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.auditLog', 'Audit log')}
                                     className={`ss-nav-item${activeTab === 'auditlog' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -289,7 +289,7 @@ const ServerSettingsModal = ({
                                     {t('serverSettings.analytics')}
                                 </span>
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('serverSettings.analytics', 'Analytics')}
                                     className={`ss-nav-item${activeTab === 'stats' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -324,7 +324,7 @@ const ServerSettingsModal = ({
                                 {activeTab === 'systembot' && `🤖 ${t('serverSettings.systemBot')}`}
                             </h2>
                             <button
-                                aria-label="on Close"
+                                aria-label={t('common.close', 'Close')}
                                 className="ss-close-btn"
                                 onClick={onClose}
                                 style={styles.closeBtn}
@@ -351,7 +351,7 @@ const ServerSettingsModal = ({
                                     serverId={server.id}
                                     fetchWithAuth={fetchWithAuth}
                                     apiBaseUrl={apiBaseUrl}
-                                    onRefresh={() => {}}
+                                    onRefresh={() => { }}
                                 />
                             )}
 

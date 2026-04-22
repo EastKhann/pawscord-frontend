@@ -40,7 +40,7 @@ const renderDashboard = () => {
     };
 
     return (
-        <div aria-label="render dashboard">
+        <div aria-label={t('admin.dashboard', 'Dashboard')}>
             {/* Header */}
 
             <div className={css.flexBetweenMb20}>
@@ -118,21 +118,21 @@ const renderDashboard = () => {
                     {
                         icon: <FaUsers color="#5865f2" />,
                         value: detailedStats?.users?.total || stats?.totalUsers,
-                        label: 'Total Users',
+                        label: t('admin.dashboard.totalUsers'),
                         color: '#5865f2',
                     },
 
                     {
                         icon: <FaGlobe color="#23a559" />,
                         value: detailedStats?.users?.active || stats?.onlineUsers,
-                        label: 'Active (24s)',
+                        label: t('admin.dashboard.activeUsers'),
                         color: '#23a559',
                     },
 
                     {
                         icon: <FaServer color="#f0b132" />,
                         value: detailedStats?.servers?.total || stats?.totalServers,
-                        label: 'Server',
+                        label: t('admin.dashboard.serverCount'),
                         color: '#f0b132',
                     },
 
@@ -141,21 +141,21 @@ const renderDashboard = () => {
                         value: (
                             detailedStats?.messages?.total || stats?.totalMessages
                         )?.toLocaleString(),
-                        label: 'Messages',
+                        label: t('admin.dashboard.messageCount'),
                         color: '#e74c3c',
                     },
 
                     {
                         icon: <FaShieldAlt color="#5865f2" />,
                         value: detailedStats?.users?.verified || 0,
-                        label: 'Verified',
+                        label: t('admin.dashboard.verified'),
                         color: '#5865f2',
                     },
 
                     {
                         icon: <FaCrown color="#ffd700" />,
                         value: detailedStats?.premium?.total || stats?.premiumUsers,
-                        label: 'Premium',
+                        label: t('admin.dashboard.premiumCount'),
                         color: '#ffd700',
                     },
                 ].map((stat, idx) => (
@@ -185,25 +185,25 @@ const renderDashboard = () => {
                         {[
                             {
                                 value: `+${detailedStats?.users?.new_1h || 0}`,
-                                label: 'Last 1 Hour',
+                                label: t('admin.dashboard.last1h'),
                                 color: '#23a559',
                             },
 
                             {
                                 value: `+${detailedStats?.users?.new_24h || 0}`,
-                                label: 'Last 24 Hours',
+                                label: t('admin.dashboard.last24h'),
                                 color: '#5865f2',
                             },
 
                             {
                                 value: `+${detailedStats?.users?.new_7d || 0}`,
-                                label: 'Last 7 Days',
+                                label: t('admin.dashboard.last7d'),
                                 color: '#f0b132',
                             },
 
                             {
                                 value: `+${detailedStats?.users?.new_30d || 0}`,
-                                label: t('admin.dashboard.last30d', 'Last 30 Days'),
+                                label: t('admin.dashboard.last30d'),
                                 color: '#e74c3c',
                             },
                         ].map((item, idx) => {
@@ -234,7 +234,7 @@ const renderDashboard = () => {
                             {
                                 value: `${detailedStats?.system?.cpu_percent?.toFixed(1) || 0}%`,
 
-                                label: 'CPU',
+                                label: t('admin.health.cpu'),
 
                                 color:
                                     (detailedStats?.system?.cpu_percent || 0) > 80
@@ -245,7 +245,7 @@ const renderDashboard = () => {
                             {
                                 value: `${detailedStats?.system?.memory_percent?.toFixed(1) || 0}%`,
 
-                                label: 'RAM',
+                                label: t('admin.health.memory'),
 
                                 color:
                                     (detailedStats?.system?.memory_percent || 0) > 80
@@ -256,7 +256,7 @@ const renderDashboard = () => {
                             {
                                 value: `${detailedStats?.system?.disk_percent?.toFixed(1) || 0}%`,
 
-                                label: 'Disk',
+                                label: t('admin.health.disk'),
 
                                 color:
                                     (detailedStats?.system?.disk_percent || 0) > 90
@@ -302,7 +302,7 @@ const renderDashboard = () => {
                         {[
                             {
                                 value: (detailedStats?.messages?.total || 0).toLocaleString(),
-                                label: 'Total Messages',
+                                label: t('admin.dashboard.totalMessages'),
                                 color: '#5865f2',
                             },
 
@@ -310,19 +310,19 @@ const renderDashboard = () => {
                                 value: (
                                     detailedStats?.messages?.direct_messages || 0
                                 ).toLocaleString(),
-                                label: 'DM',
+                                label: t('admin.dashboard.dmCount'),
                                 color: '#23a559',
                             },
 
                             {
                                 value: (detailedStats?.messages?.reactions || 0).toLocaleString(),
-                                label: 'Reactions',
+                                label: t('admin.dashboard.reactions'),
                                 color: '#f0b132',
                             },
 
                             {
                                 value: detailedStats?.messages?.pinned || 0,
-                                label: 'Pinned',
+                                label: t('admin.dashboard.pinned'),
                                 color: '#e74c3c',
                             },
                         ].map((item, idx) => {
@@ -420,12 +420,12 @@ const renderDashboard = () => {
                                         activity.type === 'user_join'
                                             ? '#23a559'
                                             : activity.type === 'message'
-                                              ? '#5865f2'
-                                              : activity.type === 'server_create'
-                                                ? '#f0b132'
-                                                : activity.type === 'premium'
-                                                  ? '#ffd700'
-                                                  : '#5865f2',
+                                                ? '#5865f2'
+                                                : activity.type === 'server_create'
+                                                    ? '#f0b132'
+                                                    : activity.type === 'premium'
+                                                        ? '#ffd700'
+                                                        : '#5865f2',
                                 };
 
                                 return (
@@ -465,10 +465,10 @@ const renderDashboard = () => {
                                         idx === 0
                                             ? '#ffd700'
                                             : idx === 1
-                                              ? '#c0c0c0'
-                                              : idx === 2
-                                                ? '#cd7f32'
-                                                : '#6b7280',
+                                                ? '#c0c0c0'
+                                                : idx === 2
+                                                    ? '#cd7f32'
+                                                    : '#6b7280',
                                 };
 
                                 return (
@@ -491,10 +491,10 @@ const renderDashboard = () => {
 
                         {(!detailedStats?.servers?.top_servers ||
                             detailedStats.servers.top_servers.length === 0) && (
-                            <div className={css.textCenterGray20}>
-                                {t('admin.dashboard.noServerData', 'Server verisi yok')}
-                            </div>
-                        )}
+                                <div className={css.textCenterGray20}>
+                                    {t('admin.dashboard.noServerData', 'Server verisi yok')}
+                                </div>
+                            )}
                     </div>
                 </div>
             </div>

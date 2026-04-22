@@ -1,4 +1,4 @@
-﻿/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/StageChannelPanel.js
 import { useState, useEffect, useCallback, useMemo, memo } from 'react';
@@ -181,12 +181,12 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const getRoleIcon = (role) => {
         const icons = {
-            host: '👑',
-            moderator: '🛡️',
-            speaker: '🎙️',
-            listner: '👂',
+            host: '??',
+            moderator: '???',
+            speaker: '???',
+            listner: '??',
         };
-        return icons[role] || '👤';
+        return icons[role] || '??';
     };
 
     const getRoleColor = (role) => {
@@ -242,28 +242,28 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="stage-header">
-                    <h2>🎙️ Stage Channelları</h2>
+                    <h2>??? Stage Channellari</h2>
                     <div className="header-actions">
                         {roomId && (
                             <>
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('stage.tabActive', 'Active stages')}
                                     className={`view-toggle ${view === 'list' ? 'active' : ''}`}
                                     onClick={() => setView('list')}
                                 >
-                                    📋 Active Stage'ler
+                                    ?? Active Stage'ler
                                 </button>
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('stage.openCreate', 'Create stage')}
                                     className={`view-toggle ${view === 'create' ? 'active' : ''}`}
                                     onClick={() => setView('create')}
                                 >
-                                    ➕ Create
+                                    ? Create
                                 </button>
                             </>
                         )}
-                        <button aria-label="Close" className="close-btn" onClick={onClose}>
-                            ✕
+                        <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
+                            ?
                         </button>
                     </div>
                 </div>
@@ -275,7 +275,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                 activeStages.map((stage) => (
                                     <div key={stage.id} className="stage-card">
                                         <div className="stage-info">
-                                            <div className="stage-icon">🎙️</div>
+                                            <div className="stage-icon">???</div>
                                             <div className="stage-details">
                                                 <h3>{stage.topic}</h3>
                                                 {stage.description && (
@@ -284,12 +284,12 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                                     </p>
                                                 )}
                                                 <div className="stage-meta">
-                                                    <span>👑 Host: {stage.host_username}</span>
+                                                    <span>?? Host: {stage.host_username}</span>
                                                     <span>
-                                                        🎙️ {stage.speakers_count || 0} konuşmacı
+                                                        ??? {stage.speakers_count || 0} konusmaci
                                                     </span>
                                                     <span>
-                                                        👂 {stage.audience_count || 0} dinleyici
+                                                        ?? {stage.audience_count || 0} dinleyici
                                                     </span>
                                                 </div>
                                             </div>
@@ -297,7 +297,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
                                         {stage.speakers && stage.speakers.length > 0 && (
                                             <div className="speakers-list">
-                                                <h4>Konuşmacılar</h4>
+                                                <h4>Konusmacilar</h4>
                                                 <div className="speakers-grid">
                                                     {stage.speakers
                                                         .slice(0, 6)
@@ -333,30 +333,30 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                         <div className="stage-actions">
                                             {!stage.is_member ? (
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('stage.joinStage', 'Join stage')}
                                                     className="join-stage-btn"
                                                     onClick={() => handleJoinStage(stage.id)}
                                                 >
-                                                    🎧 Dinle
+                                                    ?? Dinle
                                                 </button>
                                             ) : (
                                                 <>
                                                     <button
-                                                        aria-label="Action button"
+                                                        aria-label={t('stage.leaveStage', 'Leave stage')}
                                                         className="leave-stage-btn"
                                                         onClick={() => handleLeaveStage(stage.id)}
                                                     >
-                                                        👋 Leave
+                                                        ?? Leave
                                                     </button>
                                                     {stage.user_role === 'listner' && (
                                                         <button
-                                                            aria-label="Action button"
+                                                            aria-label={t('stage.requestToSpeak', 'Request to speak')}
                                                             className="request-speak-btn"
                                                             onClick={() =>
                                                                 handleRequestToSpeak(stage.id)
                                                             }
                                                         >
-                                                            ✋ Konuşmak İsticomment
+                                                            ? Konusmak Isticomment
                                                         </button>
                                                     )}
                                                 </>
@@ -366,13 +366,13 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                 ))
                             ) : (
                                 <div className="no-stages">
-                                    <p>🎤 Aktif sahne yok</p>
+                                    <p>?? Aktif sahne yok</p>
                                     {roomId && (
                                         <button
-                                            aria-label="Create"
+                                            aria-label={t('common.create')}
                                             onClick={() => setView('create')}
                                         >
-                                            İlk stage'i oluştur
+                                            Ilk stage'i olustur
                                         </button>
                                     )}
                                 </div>
@@ -380,10 +380,10 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                         </div>
                     ) : (
                         <div className="create-stage-form">
-                            <h3>🎙️ Yeni Stage Create</h3>
+                            <h3>??? Yeni Stage Create</h3>
 
                             <div className="form-group">
-                                <label>Konu Başlığı *</label>
+                                <label>Konu Basligi *</label>
                                 <input
                                     type="text"
                                     placeholder={t('ui.konusma_konusu')}
@@ -409,7 +409,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Maks. Konuşmacı (1-10)</label>
+                                    <label>Maks. Konusmaci (1-10)</label>
                                     <input
                                         type="number"
                                         value={newStage.max_speakers}
@@ -459,20 +459,20 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                             })
                                         }
                                     />
-                                    <span>🌍 Public</span>
+                                    <span>?? Public</span>
                                 </label>
                             </div>
 
                             <div className="form-actions">
                                 <button
-                                    aria-label="handle Create Stage"
+                                    aria-label={t('stage.startStage', 'Create stage')}
                                     className="submit-btn"
                                     onClick={handleCreateStage}
                                 >
-                                    ✨ Stage Create
+                                    ? Stage Create
                                 </button>
                                 <button
-                                    aria-label="Switch view"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-btn"
                                     onClick={() => setView('list')}
                                 >

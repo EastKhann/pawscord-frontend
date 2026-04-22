@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
     FaShieldAlt,
@@ -20,6 +21,7 @@ const S = {
 };
 
 const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const r = useRaidProtection(serverId, fetchWithAuth, apiBaseUrl);
@@ -47,12 +49,12 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                                 color: r.protection.enabled ? '#23a559' : '#949ba4',
                             }}
                         />
-                        <h2 style={styles.title}>Baskın Koruması</h2>
+                        <h2 style={styles.title}>{t('moderation.raidProtection', 'Raid Protection')}</h2>
                         {r.protection.lockdown_mode && (
                             <span style={styles.lockdownBadge}>🔒 LOCKDOWN</span>
                         )}
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -61,17 +63,17 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                     <div style={styles.statCard}>
                         <FaUserSlash style={S.txt} />
                         <div style={styles.statValue}>{r.stats.blocked_joins}</div>
-                        <div style={styles.statLabel}>Engellenen Katılımlar</div>
+                        <div style={styles.statLabel}>{t('moderation.blockedJoins', 'Blocked Joins')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaBolt style={S.txt2} />
                         <div style={styles.statValue}>{r.stats.kicked_users}</div>
-                        <div style={styles.statLabel}>Otomatik Atıldı</div>
+                        <div style={styles.statLabel}>{t('moderation.autoKicked', 'Auto Kicked')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaExclamationCircle style={S.txt} />
                         <div style={styles.statValue}>{r.stats.raid_attempts}</div>
-                        <div style={styles.statLabel}>Baskın Denemeleri</div>
+                        <div style={styles.statLabel}>{t('moderation.raidAttempts', 'Raid Attempts')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaChartBar style={S.txt3} />
@@ -92,7 +94,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                                 type="checkbox"
                                 checked={r.protection.enabled}
                                 onChange={r.toggleProtection}
-                                aria-label="checkbox"
+                                aria-label={t('raidProtection.toggle', 'Toggle raid protection')}
                             />
                             <span style={styles.switchSlider}></span>
                             <span style={styles.switchLabel}>
@@ -104,7 +106,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                     <div style={styles.settings}>
                         <div style={styles.setting}>
                             <div style={styles.settingInfo}>
-                                <div style={styles.settingLabel}>Katılım Hızı Limiti</div>
+                                <div style={styles.settingLabel}>{t('moderation.joinRateLimit', 'Join Rate Limit')}</div>
                                 <div style={styles.settingDesc}>
                                     Maximum users per minute: {r.protection.join_rate_limit}
                                 </div>
@@ -124,7 +126,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
 
                         <div style={styles.setting}>
                             <div style={styles.settingInfo}>
-                                <div style={styles.settingLabel}>Yeni Hesap Yaşı Sınırı</div>
+                                <div style={styles.settingLabel}>{t('moderation.newAccountAge', 'New Account Age Limit')}</div>
                                 <div style={styles.settingDesc}>
                                     Block accounts younger than {r.protection.new_account_age} days
                                 </div>
@@ -147,7 +149,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
 
                         <div style={styles.setting}>
                             <div style={styles.settingInfo}>
-                                <div style={styles.settingLabel}>Doğrulama Seviyesi</div>
+                                <div style={styles.settingLabel}>{t('moderation.verificationLevel', 'Verification Level')}</div>
                                 <div style={styles.settingDesc}>
                                     {r.protection.verification_level === 'low' &&
                                         'Basic: Email verification'}
@@ -175,7 +177,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                             <div style={styles.settingInfo}>
                                 <div style={styles.settingLabel}>Auto-Kick Suspicious Accounts</div>
                                 <div style={styles.settingDesc}>
-                                    Şüpheli olarak işaretlenen hesapları otomatik olarak at
+                                    {t('moderation.autoKickSuspicious', 'Automatically kick accounts marked as suspicious')}
                                 </div>
                             </div>
                             <label style={styles.toggleSwitch}>
@@ -200,20 +202,20 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                             </div>
                             {r.protection.lockdown_mode ? (
                                 <button
-                                    aria-label="Devre Dışı Bırak"
+                                    aria-label={t('moderation.disableRaidProtection', 'Disable')}
                                     onClick={() => r.updateSetting('lockdown_mode', false)}
                                     style={styles.lockdownDeactivateBtn}
                                 >
-                                    Devre Dışı Bırak
+                                    {t('moderation.disableRaidProtection', 'Disable')}
                                 </button>
                             ) : (
                                 <button
-                                    aria-label="Kilitleme Modunu Etkinleştir"
+                                    aria-label={t('moderation.enableLockdown', 'Enable Lockdown Mode')}
                                     onClick={r.activateLockdown}
                                     style={styles.lockdownBtn}
                                     disabled={!r.protection.enabled}
                                 >
-                                    Etkinleştir
+                                    {t('moderation.enable', 'Enable')}
                                 </button>
                             )}
                         </div>
@@ -226,7 +228,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                     </h3>
                     <div style={styles.activityList}>
                         {r.raidActivity.length === 0 ? (
-                            <div style={styles.empty}>Şüpheli aktivite algılanmadı</div>
+                            <div style={styles.empty}>{t('moderation.noSuspiciousActivity', 'No suspicious activity detected')}</div>
                         ) : (
                             r.raidActivity.map((activity, idx) => (
                                 <div key={`item-${idx}`} style={styles.activityItem}>
@@ -234,8 +236,8 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                                         {activity.type === 'raid'
                                             ? '⚠️'
                                             : activity.type === 'suspicious'
-                                              ? '👀'
-                                              : '✅'}
+                                                ? '👀'
+                                                : '✅'}
                                     </div>
                                     <div style={styles.activityContent}>
                                         <div style={styles.activityText}>{activity.message}</div>
@@ -259,12 +261,12 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                 <div style={styles.infoBox}>
                     <FaShieldAlt style={styles.infoIcon} />
                     <div style={styles.infoContent}>
-                        <strong>Baskın Koruması Nasıl Çalışır:</strong>
+                        <strong>{t('moderation.raidHowItWorks', 'How Raid Protection Works:')}</strong>
                         <ul style={styles.infoList}>
-                            <li>Katılım hızını izler (dakikada kullanıcı sayısı)</li>
-                            <li>Hesap yaşını ve aktiviteyi kontrol eder</li>
-                            <li>Şüpheli desenleri otomatik olarak atar</li>
-                            <li>Aktif baskınlarda kilitlenme modülü devreye girer</li>
+                            <li>{t('moderation.raidBullet1', 'Monitors join rate (users per minute)')}</li>
+                            <li>{t('moderation.raidBullet2', 'Checks account age and activity')}</li>
+                            <li>{t('moderation.raidBullet3', 'Automatically kicks suspicious patterns')}</li>
+                            <li>{t('moderation.raidBullet4', 'Lockdown module activates during active raids')}</li>
                         </ul>
                     </div>
                 </div>

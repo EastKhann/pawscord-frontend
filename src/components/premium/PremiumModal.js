@@ -218,28 +218,26 @@ const PremiumModal = ({ isOpen, onClose }) => {
         <div style={S.overlay} {...overlayProps}>
             <div style={S.modal} {...dialogProps}>
                 {/* Close Button */}
-                <button aria-label="on Close" onClick={onClose} style={S.closeBtn}>
+                <button aria-label={t('common.close', 'Close')} onClick={onClose} style={S.closeBtn}>
                     ✕
                 </button>
 
                 {/* Header */}
-                <h1 style={S.title}>Pawscord Premium'a Geçin! 💎</h1>
+                <h1 style={S.title}>{t('premium.title', 'Upgrade to Pawscord Premium! 💎')}</h1>
                 <p className="text-aaa-center-mb40">
-                    Profilinizi privateleştirin ve premium özelliklere erişin!
+                    {t('premium.subtitle', 'Privatize your profile and access premium features!')}
                 </p>
 
                 {/* Billing Cycle Toggle */}
                 <div style={S.toggleRow}>
                     <button
-                        aria-label="Action button"
-                        onClick={() => setBillingCycle('monthly')}
+                        aria-label={t('premiumModal.monthlyBilling', 'Monthly billing')}
                         style={monthlyBtnStyle}
                     >
                         Monthly
                     </button>
                     <button
-                        aria-label="Action button"
-                        onClick={() => setBillingCycle('yearly')}
+                        aria-label={t('premiumModal.yearlyBilling', 'Yearly billing')}
                         style={yearlyBtnStyle}
                     >
                         Yearly
@@ -311,7 +309,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                                 {/* Price */}
                                 <div style={S.priceBox}>
                                     {tier.id === 'free' ? (
-                                        <div className="white-bold-32">ÜCRETSİZ</div>
+                                        <div className="white-bold-32">{t('premium.free', 'FREE')}</div>
                                     ) : (
                                         <>
                                             <div className="white-bold-32">₺{price.toFixed(2)}</div>
@@ -335,7 +333,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                                 {/* Button */}
                                 {tier.id !== 'free' && !isCurrentTier && (
                                     <button
-                                        aria-label="Action button"
+                                        aria-label={t('premiumModal.selectTier', 'Select tier')}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setSelectedTier(tier.id);
@@ -354,7 +352,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                 {selectedTier !== 'free' && selectedTier !== currentTier && (
                     <div style={S.subscribeRow}>
                         <button
-                            aria-label="handle Subscribe"
+                            aria-label={t('premiumModal.subscribe', 'Subscribe')}
                             onClick={handleSubscribe}
                             disabled={loading}
                             style={subscribeBtnStyle}
@@ -364,7 +362,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                                 : `${selectedTier === 'elite' ? '👑 Elite' : '💎 Premium'} Purchase`}
                         </button>
                         <p className="text-888-10t">
-                            ⚠️ Bu bir prototip - gerçek ödeme entegrasyonu yapılmamıştır
+                            {t('premium.prototypeNotice', '⚠️ This is a prototype - real payment integration has not been implemented')}
                         </p>
                     </div>
                 )}

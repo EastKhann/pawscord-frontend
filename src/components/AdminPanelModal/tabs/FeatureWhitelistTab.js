@@ -38,7 +38,7 @@ const S = {
 const FEATURE_KEYS = {
     access_education: {
         labelKey: 'admin.panel.englishLearning',
-        fallback: '📚 İngilizce Öğrenme',
+        fallback: t('featureWhitelist.engLearning', '📚 English Learning'),
         color: '#5865f2',
         icon: <FaBookOpen size={10} />,
     },
@@ -179,7 +179,7 @@ const FeatureWhitelistTab = () => {
                         {entries.length} {t('admin.panel.usersCount')}
                     </span>
                     <button
-                        aria-label="Refresh feature whitelist"
+                        aria-label={t('admin.refreshLogs', 'Refresh feature whitelist')}
                         onClick={fetchList}
                         style={styles.actionBtn('#5865f2')}
                         title={t('refresh')}
@@ -190,10 +190,7 @@ const FeatureWhitelistTab = () => {
             </div>
 
             <p className={css.featureDesc}>
-                {t(
-                    'admin.panel.featureWhitelistDesc',
-                    'Bu liste, ücretsiz kullanıcılara Premium gerektirmeden seçili bölümlere (İngilizce Öğrenme veya Kripto Sinyaller) erişim sağlar.'
-                )}
+                {t('featureWhitelist.desc', 'This list gives free users access to selected sections (English Learning, Crypto Signals).')}
             </p>
 
             {/* Add new entry */}
@@ -205,7 +202,7 @@ const FeatureWhitelistTab = () => {
                 {/* Mode toggle */}
                 <div className={css.flexGap8Mb12}>
                     <button
-                        aria-label="Add by username"
+                        aria-label={t('featureWhitelist.addByUsername', 'Add by username')}
                         onClick={() => setAddMode('username')}
                         style={{
                             ...styles.actionBtn(addMode === 'username' ? '#5865f2' : '#333'),
@@ -215,7 +212,7 @@ const FeatureWhitelistTab = () => {
                         <FaUser size={10} /> {t('admin.panel.username', 'Kullanıcı Adı')}
                     </button>
                     <button
-                        aria-label="Add by friend code"
+                        aria-label={t('featureWhitelist.addByFriendCode', 'Add by friend code')}
                         onClick={() => setAddMode('friend_code')}
                         style={{
                             ...styles.actionBtn(addMode === 'friend_code' ? '#5865f2' : '#333'),
@@ -239,7 +236,7 @@ const FeatureWhitelistTab = () => {
                                 : t('admin.panel.enterFriendCode', '7 haneli arkadaş kodu girin...')
                         }
                         className={css.siMW280}
-                        aria-label="Input Value"
+                        aria-label={t('admin.inputValue', 'Input value')}
                     />
                 </div>
 
@@ -286,7 +283,7 @@ const FeatureWhitelistTab = () => {
                 </div>
 
                 <button
-                    aria-label="Add to feature whitelist"
+                    aria-label={t('featureWhitelist.addUser', 'Add to feature whitelist')}
                     onClick={handleAdd}
                     disabled={adding || !inputValue.trim() || (!accessEducation && !accessCrypto)}
                     style={{
@@ -316,7 +313,7 @@ const FeatureWhitelistTab = () => {
                     onChange={(e) => setSearchFilter(e.target.value)}
                     placeholder={t('admin.panel.searchPlaceholder')}
                     className={css.siMW300}
-                    aria-label="Search Filter"
+                    aria-label={t('common.search', 'Search')}
                 />
             </div>
 
@@ -386,7 +383,7 @@ const FeatureWhitelistTab = () => {
                                     </td>
                                     <td style={styles.td}>
                                         <button
-                                            aria-label="Remove from feature whitelist"
+                                            aria-label={t('featureWhitelist.removeUser', 'Remove from feature whitelist')}
                                             onClick={() =>
                                                 handleRemove(entry.friend_code, entry.username)
                                             }

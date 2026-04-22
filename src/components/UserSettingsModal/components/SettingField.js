@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const S = {
     txt: {
@@ -12,8 +13,9 @@ const S = {
 };
 
 const SettingField = ({ label, value, masked }) => {
+    const { t } = useTranslation();
     return (
-        <div aria-label="setting field" style={S.bg}>
+        <div aria-label={t('settings.field', 'Setting field')} style={S.bg}>
             <div style={S.txt}>{label}</div>
             <div className="text-dbd-14n">{masked ? '' : value}</div>
         </div>

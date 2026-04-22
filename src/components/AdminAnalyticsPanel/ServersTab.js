@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const ServersTab = ({ stats }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="servers tab" style={styles.tabContent}>
+        <div aria-label={t('admin.serversTab', 'Servers tab')} style={styles.tabContent}>
             <div style={styles.statsGrid}>
                 <StatCard
                     icon={<FaServer />}

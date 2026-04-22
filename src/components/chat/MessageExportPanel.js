@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/MessageExportPanel.js
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -90,7 +90,7 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
 
     const downloadExport = () => {
         if (downloadUrl) {
-            window.open(downloadUrl, '_blank');
+            window.open(downloadUrl, '_blank', 'noopener,noreferrer');
             toast.success(t('ui.downloadme_baslatildi'));
         }
     };
@@ -113,7 +113,7 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaFileExport className="icon-success" />
-                        <h2 className="m-0">Sohbet Geçmişini Dışa Aktar</h2>
+                        <h2 className="m-0">{t('export.title', 'Export Chat History')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
@@ -124,12 +124,12 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
                             <div style={styles.field}>
                                 <label style={styles.label}>
                                     <FaDownload className="mr-8" />
-                                    File Formatı
+                                    {t('export.fileFormat', 'File Format')}
                                 </label>
                                 <div style={styles.formatGrid}>
                                     {formats.map((fmt) => (
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={fmt.label}
                                             key={fmt.value}
                                             onClick={() => setFormat(fmt.value)}
                                             style={{
@@ -148,7 +148,7 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
                             <div style={styles.field}>
                                 <label style={styles.label}>
                                     <FaCalendar className="mr-8" />
-                                    Tarih Aralığı (opsiyonel)
+                                    {t('export.dateRange', 'Date Range (optional)')}
                                 </label>
                                 <div style={styles.dateRange}>
                                     <input
@@ -190,22 +190,22 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
                             {processing && (
                                 <div style={styles.progress}>
                                     <div style={styles.progressSpinner}></div>
-                                    <p>Mesajlar işleniyor...</p>
-                                    <p className="text-gray-12">Bu işlem birkaç dakika sürebilir</p>
+                                    <p>{t('export.processing', 'Processing messages...')}</p>
+                                    <p className="text-gray-12">{t('export.mayTakeMinutes', 'This may take a few minutes')}</p>
                                 </div>
                             )}
                         </>
                     ) : (
                         <div style={styles.success}>
                             <div style={styles.successIcon}>✅</div>
-                            <h3>Dışa Aktarma Tamamlandı!</h3>
-                            <p>Dosyanız hazır ve indirilebilir.</p>
+                            <h3>{t('export.complete', 'Export Complete!')}</h3>
+                            <p>{t('export.fileReady', 'Your file is ready to download.')}</p>
                             <button
-                                aria-label="download Export"
+                                aria-label={t('msgExport.downloadExport', 'Download export')}
                                 onClick={downloadExport}
                                 style={styles.downloadBtn}
                             >
-                                <FaDownload /> Dosyayı İndir
+                                <FaDownload /> {t('export.download', 'Download File')}
                             </button>
                         </div>
                     )}
@@ -213,16 +213,16 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
 
                 {!downloadUrl && (
                     <div style={styles.footer}>
-                        <button aria-label="on Close" onClick={onClose} style={styles.cancelBtn}>
-                            İptal
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.cancelBtn}>
+                            {t('common.cancel', 'Cancel')}
                         </button>
                         <button
-                            aria-label="start Export"
+                            aria-label={t('msgExport.startExport', 'Start export')}
                             onClick={startExport}
                             disabled={processing}
                             style={styles.exportBtn}
                         >
-                            {processing ? 'İşleniyor...' : 'Dışa Aktar'}
+                            {processing ? t('export.exportProcessing', 'Processing...') : t('export.export', 'Export')}
                         </button>
                     </div>
                 )}

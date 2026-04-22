@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const UsersTab = ({ stats }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="users tab" style={styles.tabContent}>
+        <div aria-label={t('admin.usersTab', 'Users tab')} style={styles.tabContent}>
             <div style={styles.statsGrid}>
                 <StatCard
                     icon={<FaUsers />}

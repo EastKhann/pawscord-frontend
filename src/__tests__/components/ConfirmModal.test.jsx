@@ -22,11 +22,11 @@ const MockConfirmModal = ({
 
     title = 'Emin misiniz?',
 
-    message = 'Bu işlemi perform istediÄŸinizden emin misiniz?',
+    message = 'Are you sure you want to perform this action?',
 
     confirmText = 'Evet',
 
-    cancelText = 'Hayır',
+    cancelText = 'No',
 
     type = 'warning',
 
@@ -34,7 +34,7 @@ const MockConfirmModal = ({
 
     confirmationText = '',
 
-    inputPlaceholder = 'Onaylamak for buraya yazın...',
+    inputPlaceholder = 'Type here to confirm...',
 
     dangerDetails = null,
 }) => {
@@ -96,7 +96,7 @@ const MockConfirmModal = ({
 
                     {dangerDetails && dangerDetails.length > 0 && (
                         <div data-testid="danger-details">
-                            <div data-testid="danger-header">⚠ Bu işlem:</div>
+                            <div data-testid="danger-header">⚠ This action:</div>
 
                             <ul data-testid="danger-list">
                                 {dangerDetails.map((detail, idx) => (
@@ -115,7 +115,7 @@ const MockConfirmModal = ({
                     {requireTextConfirmation && (
                         <div data-testid="confirmation-input-container">
                             <label data-testid="confirmation-label">
-                                Continuemek for <strong>"{confirmationText}"</strong> yazın:
+                                Type <strong>"{confirmationText}"</strong> to confirm:
                             </label>
 
                             <input
@@ -194,7 +194,7 @@ describe('ConfirmModal Component', () => {
             expect(screen.getByTestId('modal-title')).toHaveTextContent('Emin misiniz?');
 
             expect(screen.getByTestId('modal-message')).toHaveTextContent(
-                'Bu işlemi perform istediÄŸinizden emin misiniz?'
+                'Are you sure you want to perform this action?'
             );
         });
 
@@ -205,14 +205,14 @@ describe('ConfirmModal Component', () => {
                     onClose={mockOnClose}
                     onConfirm={mockOnConfirm}
                     title="Sunucuyu Sil"
-                    message="This server kalıcı olarak deleteinecek."
+                    message="This server will be permanently deleted."
                 />
             );
 
             expect(screen.getByTestId('modal-title')).toHaveTextContent('Sunucuyu Sil');
 
             expect(screen.getByTestId('modal-message')).toHaveTextContent(
-                'This server kalıcı olarak deleteinecek.'
+                'This server will be permanently deleted.'
             );
         });
 
@@ -266,14 +266,14 @@ describe('ConfirmModal Component', () => {
                     isOpen={true}
                     onClose={mockOnClose}
                     onConfirm={mockOnConfirm}
-                    dangerDetails={['Tüm messagelar deleteinecek', 'Memberler atılacak']}
+                    dangerDetails={['All messages will be deleted', 'Memberler atılacak']}
                 />
             );
 
             expect(screen.getByTestId('danger-details')).toBeInTheDocument();
 
             expect(screen.getByTestId('danger-item-0')).toHaveTextContent(
-                'Tüm messagelar deleteinecek'
+                'All messages will be deleted'
             );
 
             expect(screen.getByTestId('danger-item-1')).toHaveTextContent('Memberler atılacak');

@@ -180,7 +180,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
                                     <div className="stat-info">
                                         <h3>{stats.total_translations}</h3>
 
-                                        <p>Toplam Çeviri</p>
+                                        <p>{t('translate.totalTranslations', 'Total Translations')}</p>
                                     </div>
                                 </div>
 
@@ -190,7 +190,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
                                     <div className="stat-info">
                                         <h3>{stats.translations_today}</h3>
 
-                                        <p>Bugün</p>
+                                        <p>{t('common.today', 'Today')}</p>
                                     </div>
                                 </div>
 
@@ -200,7 +200,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
                                     <div className="stat-info">
                                         <h3>{stats.top_languages[0] || 'N/A'}</h3>
 
-                                        <p>En Popüler</p>
+                                        <p>{t('translate.mostPopular', 'Most Popular')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -255,7 +255,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
                                                     translation_emoji: e.target.value,
                                                 })
                                             }
-                                            aria-label="Translation Emoji"
+                                            aria-label={t('translation.emojiInput', 'Translation emoji')}
                                         />
                                     </div>
 
@@ -272,7 +272,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
                                                 }
                                             />
 
-                                            <span>Auto çeviri</span>
+                                            <span>{t('translate.autoTranslate', 'Auto translate')}</span>
                                         </label>
                                     </div>
 
@@ -289,13 +289,13 @@ const TranslationPanel = ({ serverId, onClose }) => {
                                                 }
                                             />
 
-                                            <span>Emoji ile çevir</span>
+                                            <span>{t('translate.emojiTranslate', 'Translate with emoji')}</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div className="languages-section">
-                                    <h4>İzin Verilen Diller</h4>
+                                    <h4>{t('translate.allowedLangs', 'Allowed Languages')}</h4>
 
                                     <div className="languages-grid">
                                         {languages.map((lang) => (
@@ -329,7 +329,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
 
                             {stats.top_languages.length > 0 && (
                                 <div className="top-languages-section">
-                                    <h3>📊 En Çok Kullanılan Diller</h3>
+                                    <h3>{t('translate.topLangs', '📊 Most Used Languages')}</h3>
 
                                     <div className="top-languages-list">
                                         {stats.top_languages.slice(0, 5).map((lang, idx) => {
@@ -349,7 +349,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
                                                     <span className="name">{langData?.name}</span>
 
                                                     <span className="count">
-                                                        {lang.count} çeviri
+                                                        {lang.count} {t('translate.translations', 'translations')}
                                                     </span>
                                                 </div>
                                             );

@@ -114,7 +114,7 @@ const MutualsPanel = ({ userId, username, onClose, onNavigateToUser, onNavigateT
                         <FaUserFriends /> {t('profile.mutualConnections')}
                     </h2>
                     <span className="target-user">@{username}</span>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -122,7 +122,7 @@ const MutualsPanel = ({ userId, username, onClose, onNavigateToUser, onNavigateT
                 {/* Tabs */}
                 <div className="tabs">
                     <button
-                        aria-label="Action button"
+                        aria-label={t('mutuals.friendsTab', 'Mutual friends')}
                         className={`tab ${activeTab === 'friends' ? 'active' : ''}`}
                         onClick={() => setActiveTab('friends')}
                     >
@@ -131,7 +131,7 @@ const MutualsPanel = ({ userId, username, onClose, onNavigateToUser, onNavigateT
                         <span className="count">{mutualFriends.length}</span>
                     </button>
                     <button
-                        aria-label="Action button"
+                        aria-label={t('mutuals.serversTab', 'Mutual servers')}
                         className={`tab ${activeTab === 'servers' ? 'active' : ''}`}
                         onClick={() => setActiveTab('servers')}
                     >
@@ -206,8 +206,7 @@ const MutualsPanel = ({ userId, username, onClose, onNavigateToUser, onNavigateT
                                         </div>
                                         <div className="friend-actions">
                                             <button
-                                                aria-label="Action button"
-                                                className="action-btn message"
+                                                aria-label={t('mutuals.sendMessage', 'Send message')}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleSendMessage(friend);

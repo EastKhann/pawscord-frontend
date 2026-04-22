@@ -78,16 +78,16 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaChartLine className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Tepki Analitiği</h2>
+                        <h2 style={styles.title}>{t('reactionAnalytics.title', 'Reaction Analytics')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.tabs}>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('reactionAnalytics.heatmapTab', 'Heatmap')}
                         onClick={() => setActiveTab('heatmap')}
                         style={tabStyles.heatmap}
                     >
@@ -95,7 +95,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                         Heatmap
                     </button>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('reactionAnalytics.dailyTab', 'Daily stats')}
                         onClick={() => setActiveTab('daily')}
                         style={tabStyles.daily}
                     >
@@ -103,7 +103,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                         Daily Stats
                     </button>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('reactionAnalytics.leaderboardTab', 'Leaderboard')}
                         onClick={() => setActiveTab('leaderboard')}
                         style={tabStyles.leaderboard}
                     >
@@ -114,7 +114,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Analitik yükleniyor...</div>
+                        <div style={styles.loading}>{t('reactionAnalytics.loading', 'Loading analytics...')}</div>
                     ) : activeTab === 'heatmap' ? (
                         <div style={styles.heatmapContainer}>
                             <div style={styles.heatmapGrid}>
@@ -162,13 +162,13 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                                 {[0, 25, 50, 75, 100].map((level) => (
                                     <div key={level} />
                                 ))}
-                                <span style={styles.legendLabel}>Çok</span>
+                                <span style={styles.legendLabel}>{t('reactionAnalytics.many', 'Many')}</span>
                             </div>
                         </div>
                     ) : activeTab === 'daily' ? (
                         <div style={styles.dailyStats}>
                             {dailyStats.length === 0 ? (
-                                <div style={styles.empty}>Günlük istatistik yok</div>
+                                <div style={styles.empty}>{t('reactionAnalytics.noDaily', 'No daily statistics')}</div>
                             ) : (
                                 <div style={styles.chartContainer}>
                                     {dailyStats.map((stat, idx) => (
@@ -193,7 +193,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                     ) : (
                         <div style={styles.leaderboard}>
                             {leaderboard.length === 0 ? (
-                                <div style={styles.empty}>Sıralama verisi yok</div>
+                                <div style={styles.empty}>{t('reactionAnalytics.noRanking', 'No ranking data')}</div>
                             ) : (
                                 leaderboard.map((user, idx) => (
                                     <div key={`item-${idx}`} style={styles.leaderboardItem}>
@@ -201,10 +201,10 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                                             {idx === 0
                                                 ? '🥇'
                                                 : idx === 1
-                                                  ? '🥈'
-                                                  : idx === 2
-                                                    ? '🥉'
-                                                    : `${idx + 1}`}
+                                                    ? '🥈'
+                                                    : idx === 2
+                                                        ? '🥉'
+                                                        : `${idx + 1}`}
                                         </div>
                                         <div style={styles.userInfo}>
                                             <div style={styles.username}>{user.username}</div>

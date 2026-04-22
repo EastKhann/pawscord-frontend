@@ -83,28 +83,28 @@ const PollCreator = ({ roomSlug, onClose, onPollCreated, isMobile }) => {
             >
                 <div className="poll-header">
                     <h2 className="poll-title">
-                        <span>📊</span> Anket Oluştur
+                        <span>📊</span> {t('poll.createTitle', 'Create Poll')}
                     </h2>
-                    <button aria-label="Close poll" onClick={onClose} className="poll-close-btn">
+                    <button aria-label={t('pollCreator.closePoll', 'Close poll')} onClick={onClose} className="poll-close-btn">
                         ✕
                     </button>
                 </div>
 
                 <div className="poll-form-group">
-                    <label className="poll-label">Soru</label>
+                    <label className="poll-label">{t('poll.question', 'Soru')}</label>
                     <input
                         type="text"
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        placeholder="What's your question?"
+                        placeholder={t('poll.questionPlaceholder', "What's your question?")}
                         className="poll-input"
                         maxLength={200}
-                        aria-label="Poll question"
+                        aria-label={t('poll.question', 'Poll question')}
                     />
                 </div>
 
                 <div className="poll-form-group">
-                    <label className="poll-label">Options (2-10)</label>
+                    <label className="poll-label">{t('poll.options', 'Options')} (2-10)</label>
                     {options.map((option, index) => (
                         <div key={index} className="poll-option-container">
                             <input
@@ -129,17 +129,17 @@ const PollCreator = ({ roomSlug, onClose, onPollCreated, isMobile }) => {
                     ))}
                     {options.length < 10 && (
                         <button
-                            aria-label="Add option"
+                            aria-label={t('pollCreator.addOption', 'Add option')}
                             onClick={addOption}
                             className="poll-add-btn"
                         >
-                            <span>➕</span> Seçenek Ekle
+                            <span>➕</span> {t('poll.addOption', 'Add Option')}
                         </button>
                     )}
                 </div>
 
                 <div className="poll-form-group">
-                    <label className="poll-label">Anket Süresi</label>
+                    <label className="poll-label">{t('poll.duration', 'Poll Duration')}</label>
                     <div className="poll-duration-grid">
                         {durationOptions.map((hours) => (
                             <button
@@ -155,11 +155,9 @@ const PollCreator = ({ roomSlug, onClose, onPollCreated, isMobile }) => {
                 </div>
 
                 <div className="poll-actions">
-                    <button aria-label="Cancel" onClick={onClose} className="poll-cancel-btn">
-                        İptal
-                    </button>
+                    <button aria-label={t('common.cancel')} onClick={onClose} className="poll-cancel-btn">{t('common.cancel', 'Cancel')}</button>
                     <button
-                        aria-label="Create poll"
+                        aria-label={t('pollCreator.createPoll', 'Create poll')}
                         onClick={handleCreate}
                         disabled={isCreating}
                         className="poll-create-btn"

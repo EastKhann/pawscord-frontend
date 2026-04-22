@@ -24,7 +24,7 @@ const OverviewView = ({
     const { t } = useTranslation();
 
     return (
-        <div aria-label="overview view" className="overview-view">
+        <div aria-label={t('raidProtection.overview', 'Overview')} className="overview-view">
             <div className="quick-actions">
                 <button
                     className={`action-btn ${protectionStatus.enabled ? 'enabled' : ''}`}

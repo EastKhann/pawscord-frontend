@@ -1,14 +1,13 @@
 ﻿// frontend/src/components/KeyboardShortcutsModal.js
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { FaTimes, FaKeyboard } from 'react-icons/fa';
+import { FaTimes, FaKeyboard, FaSearch } from 'react-icons/fa';
 import useModalA11y from '../../hooks/useModalA11y';
 
 const KeyboardShortcutsModal = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const { overlayProps, dialogProps } = useModalA11y({
         onClose,
         isOpen,
@@ -60,6 +59,18 @@ const KeyboardShortcutsModal = ({ isOpen, onClose }) => {
         return <kbd style={styles.key}>{displayKey}</kbd>;
     };
 
+    const q = searchQuery.toLowerCase().trim();
+    const filteredShortcuts = q
+        ? KEYBOARD_SHORTCUTS.map((cat) => ({
+            ...cat,
+            shortcuts: cat.shortcuts.filter(
+                (s) =>
+                    s.description.toLowerCase().includes(q) ||
+                    s.keys.some((k) => k.toLowerCase().includes(q))
+            ),
+        })).filter((cat) => cat.shortcuts.length > 0)
+        : KEYBOARD_SHORTCUTS;
+
     return (
         <div style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
@@ -68,36 +79,62 @@ const KeyboardShortcutsModal = ({ isOpen, onClose }) => {
                         <FaKeyboard style={styles.headerIcon} />
                         <h2>{t('shortcuts.title')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
+                <div style={styles.searchBar}>
+                    <FaSearch style={styles.searchIcon} />
+                    <input
+                        type="search"
+                        placeholder={t('shortcuts.searchPlaceholder', 'Kısayol ara...')}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        style={styles.searchInput}
+                        aria-label={t('shortcuts.searchPlaceholder', 'Kısayol ara...')}
+                        autoComplete="off"
+                    />
+                    {searchQuery && (
+                        <button
+                            onClick={() => setSearchQuery('')}
+                            style={styles.clearSearch}
+                            aria-label={t('common.clear', 'Temizle')}
+                        >
+                            <FaTimes size={10} />
+                        </button>
+                    )}
+                </div>
+
                 <div style={styles.content}>
-                    {KEYBOARD_SHORTCUTS.map((category, idx) => (
-                        <div key={`item-${idx}`} style={styles.category}>
-                            <h3 style={styles.categoryTitle}>{category.category}</h3>
-                            <div style={styles.shortcutList}>
-                                {category.shortcuts.map((shortcut, i) => (
-                                    <div key={`item-${i}`} style={styles.shortcutItem}>
-                                        <div style={styles.shortcutKeys}>
-                                            {shortcut.keys.map((key, j) => (
-                                                <React.Fragment key={j}>
-                                                    {renderKey(key)}
-                                                    {j < shortcut.keys.length - 1 && (
-                                                        <span style={styles.plus}>+</span>
-                                                    )}
-                                                </React.Fragment>
-                                            ))}
+                    {filteredShortcuts.length === 0 ? (
+                        <div style={styles.noResults}>{t('shortcuts.noResults', 'Sonuç bulunamadı')}</div>
+                    ) : (
+                        filteredShortcuts.map((category, idx) => (
+                            <div key={`item-${idx}`} style={styles.category}>
+                                <h3 style={styles.categoryTitle}>{category.category}</h3>
+                                <div style={styles.shortcutList}>
+                                    {category.shortcuts.map((shortcut, i) => (
+                                        <div key={`item-${i}`} style={styles.shortcutItem}>
+                                            <div style={styles.shortcutKeys}>
+                                                {shortcut.keys.map((key, j) => (
+                                                    <React.Fragment key={j}>
+                                                        {renderKey(key)}
+                                                        {j < shortcut.keys.length - 1 && (
+                                                            <span style={styles.plus}>+</span>
+                                                        )}
+                                                    </React.Fragment>
+                                                ))}
+                                            </div>
+                                            <div style={styles.shortcutDescription}>
+                                                {shortcut.description}
+                                            </div>
                                         </div>
-                                        <div style={styles.shortcutDescription}>
-                                            {shortcut.description}
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
 
                 <div style={styles.footer}>
@@ -233,6 +270,46 @@ const styles = {
         fontSize: '13px',
         margin: 0,
         textAlign: 'center',
+    },
+    searchBar: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '10px 24px',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        backgroundColor: '#111214',
+        position: 'relative',
+    },
+    searchIcon: {
+        color: '#80848e',
+        flexShrink: 0,
+        fontSize: '13px',
+    },
+    searchInput: {
+        flex: 1,
+        background: 'transparent',
+        border: 'none',
+        outline: 'none',
+        color: '#dbdee1',
+        fontSize: '14px',
+        padding: '2px 0',
+        fontFamily: "'gg sans', 'Noto Sans', sans-serif",
+    },
+    clearSearch: {
+        background: 'none',
+        border: 'none',
+        color: '#80848e',
+        cursor: 'pointer',
+        padding: '4px',
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: '4px',
+    },
+    noResults: {
+        color: '#80848e',
+        textAlign: 'center',
+        padding: '40px 0',
+        fontSize: '14px',
     },
 };
 

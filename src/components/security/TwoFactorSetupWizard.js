@@ -104,7 +104,7 @@ const TwoFactorSetupWizard = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         </h2>
                     </div>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -140,7 +140,7 @@ const TwoFactorSetupWizard = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                             </div>
 
                             <button
-                                aria-label="start Setup"
+                                aria-label={t('twoFactor.startSetupBtn', 'Start 2FA setup')}
                                 onClick={startSetup}
                                 style={styles.primaryButton}
                                 disabled={loading}
@@ -166,7 +166,7 @@ const TwoFactorSetupWizard = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
                             {qrCode && (
                                 <div style={styles.qrContainer}>
-                                    <img src={qrCode} alt="QR Code" style={styles.qrCode} />
+                                    <img src={qrCode} alt={t('alt.qrCode', 'QR Code')} style={styles.qrCode} />
                                 </div>
                             )}
 
@@ -179,98 +179,97 @@ const TwoFactorSetupWizard = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                             </div>
 
                             <button
-                                aria-label="Action button"
-                                onClick={() => setStep(3)}
-                                style={styles.primaryButton}
+                                aria-label={t('twoFactor.nextStep', 'Next step')}
+                            style={styles.primaryButton}
                             >
-                                {t('twoFactor.nextStep', 'Next Step')}
-                            </button>
+                            {t('twoFactor.nextStep', 'Next Step')}
+                        </button>
                         </div>
                     )}
 
-                    {step === 3 && (
-                        <div style={styles.stepContainer}>
-                            <div style={styles.stepIcon}>🔑</div>
+                {step === 3 && (
+                    <div style={styles.stepContainer}>
+                        <div style={styles.stepIcon}>🔑</div>
 
-                            <h3 style={styles.stepTitle}>
-                                {t('twoFactor.verifySetup', 'Verify Setup')}
-                            </h3>
+                        <h3 style={styles.stepTitle}>
+                            {t('twoFactor.verifySetup', 'Verify Setup')}
+                        </h3>
 
-                            <p style={styles.stepDescription}>
-                                Enter the 6-digit code from your authenticator app to complete
-                                setup.
-                            </p>
+                        <p style={styles.stepDescription}>
+                            Enter the 6-digit code from your authenticator app to complete
+                            setup.
+                        </p>
 
-                            <input
-                                type="text"
-                                value={verificationCode}
-                                onChange={(e) =>
-                                    setVerificationCode(
-                                        e.target.value.replace(/\D/g, '').slice(0, 6)
-                                    )
-                                }
-                                placeholder="000000"
-                                style={styles.codeInput}
-                                maxLength={6}
-                                aria-label="Verification Code"
-                            />
+                        <input
+                            type="text"
+                            value={verificationCode}
+                            onChange={(e) =>
+                                setVerificationCode(
+                                    e.target.value.replace(/\D/g, '').slice(0, 6)
+                                )
+                            }
+                            placeholder={t('twoFactor.code', '000000')}
+                            style={styles.codeInput}
+                            maxLength={6}
+                            aria-label={t('twoFactor.verificationCode', 'Verification code')}
+                        />
 
-                            <button
-                                aria-label="verify And Complete"
-                                onClick={verifyAndComplete}
-                                style={styles.primaryButton}
-                                disabled={loading}
-                            >
-                                {loading
-                                    ? t('twoFactor.verifying', 'Doğrulanıyor...')
-                                    : t('twoFactor.verifyEnable', "Doğrula & 2FA'yı Etkinleştir")}
-                            </button>
+                        <button
+                            aria-label={t('twoFactor.verifySetupBtn', 'Verify and complete setup')}
+                            onClick={verifyAndComplete}
+                            style={styles.primaryButton}
+                            disabled={loading}
+                        >
+                            {loading
+                                ? t('twoFactor.verifying', 'Doğrulanıyor...')
+                                : t('twoFactor.verifyEnable', "Doğrula & 2FA'yı Etkinleştir")}
+                        </button>
+                    </div>
+                )}
+
+                {step === 4 && (
+                    <div style={styles.stepContainer}>
+                        <div style={styles.stepIcon}>✅</div>
+
+                        <h3 style={styles.stepTitle}>
+                            {t('twoFactor.setupComplete', 'Setup Complete!')}
+                        </h3>
+
+                        <p style={styles.stepDescription}>
+                            Save these backup codes in a secure location. You can use them if
+                            you lose access to your authenticator app.
+                        </p>
+
+                        <div style={styles.backupCodesContainer}>
+                            {backupCodes.map((code, idx) => (
+                                <div key={`item-${idx}`} style={styles.backupCode}>
+                                    {code}
+                                </div>
+                            ))}
                         </div>
-                    )}
 
-                    {step === 4 && (
-                        <div style={styles.stepContainer}>
-                            <div style={styles.stepIcon}>✅</div>
+                        <button
+                            aria-label={t('twoFactor.copyBackupCodes', 'Copy backup codes')}
+                            onClick={copyBackupCodes}
+                            style={styles.copyButton}
+                        >
+                            <FaCopy className="mr-8" />
 
-                            <h3 style={styles.stepTitle}>
-                                {t('twoFactor.setupComplete', 'Setup Complete!')}
-                            </h3>
+                            {t('twoFactor.copyBackupCodes', 'Copy Backup Codes')}
+                        </button>
 
-                            <p style={styles.stepDescription}>
-                                Save these backup codes in a secure location. You can use them if
-                                you lose access to your authenticator app.
-                            </p>
-
-                            <div style={styles.backupCodesContainer}>
-                                {backupCodes.map((code, idx) => (
-                                    <div key={`item-${idx}`} style={styles.backupCode}>
-                                        {code}
-                                    </div>
-                                ))}
-                            </div>
-
-                            <button
-                                aria-label="copy Backup Codes"
-                                onClick={copyBackupCodes}
-                                style={styles.copyButton}
-                            >
-                                <FaCopy className="mr-8" />
-
-                                {t('twoFactor.copyBackupCodes', 'Copy Backup Codes')}
-                            </button>
-
-                            <button
-                                aria-label="on Close"
-                                onClick={onClose}
-                                style={styles.primaryButton}
-                            >
-                                {t('twoFactor.done', 'Done')}
-                            </button>
-                        </div>
-                    )}
-                </div>
+                        <button
+                            aria-label={t('common.close', 'Close')}
+                            onClick={onClose}
+                            style={styles.primaryButton}
+                        >
+                            {t('twoFactor.done', 'Done')}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
+        </div >
     );
 };
 

@@ -1,4 +1,4 @@
-import { memo, lazy, Suspense, useState, useEffect, useRef } from 'react';
+﻿import { memo, lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaDownload } from 'react-icons/fa';
 import styles from './messageMediaStyles';
@@ -151,7 +151,7 @@ export const VoiceMessage = memo(
                 )}
                 {!transcription && !isTranscribing && (
                     <button
-                        aria-label="on Transcribe"
+                        aria-label={t('common.transcribe', 'Transcribe')}
                         onClick={onTranscribe}
                         style={styles.transcribeButton}
                     >

@@ -79,7 +79,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
     try {
         return (
             <div
-                aria-label="user profile panel"
+                aria-label={t('aria.userProfilePanel', 'User Profile')}
                 role="presentation"
                 style={styles.overlay}
                 onClick={onClose}
@@ -89,7 +89,8 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
                 <div
                     role="dialog"
                     aria-modal="true"
-                    aria-label="User Profile"
+                    aria-label={t('profile.panel', 'User Profile')}
+                    data-testid="user-profile-panel"
                     style={panelStyle}
                     onClick={(e) => e.stopPropagation()}
                     onKeyDown={(e) => e.stopPropagation()}

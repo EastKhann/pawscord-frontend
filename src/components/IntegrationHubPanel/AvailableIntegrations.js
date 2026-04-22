@@ -10,7 +10,7 @@ const AvailableIntegrations = ({ integrations, icons, colors, getCategoryIcon, o
 
     if (integrations.length === 0) {
         return (
-            <div aria-label="available integrations" className="empty-state">
+            <div aria-label={t('integrations.available', 'Available integrations')} className="empty-state">
                 <FaPlug />
                 <p>{t('tüm_entegrasyonlar_zaten_bağlı')}</p>
             </div>
@@ -63,7 +63,7 @@ const AvailableIntegrations = ({ integrations, icons, colors, getCategoryIcon, o
                                             className="connect-btn"
                                             onClick={() => onConnect(integration.id)}
                                         >
-                                            <FaLink /> Bağla
+                                            <FaLink /> {t('integrations.connect', 'Connect')}
                                         </button>
                                     </div>
                                 );

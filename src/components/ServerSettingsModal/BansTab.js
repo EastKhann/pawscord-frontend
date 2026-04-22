@@ -110,7 +110,7 @@ const BansTab = ({ server, fetchWithAuth, apiBaseUrl }) => {
                 </div>
                 <button
                     onClick={loadBans}
-                    aria-label="Refresh ban list"
+                    aria-label={t('serverSettings.refreshBans', 'Refresh ban list')}
                     className={css.actionBtnPrimary}
                 >
                     <FaUndo /> Refresh
@@ -141,12 +141,12 @@ const BansTab = ({ server, fetchWithAuth, apiBaseUrl }) => {
                                         <FaCalendarAlt style={S.mar} />
                                         {ban.created_at
                                             ? new Date(ban.created_at).toLocaleDateString('tr-TR', {
-                                                  year: 'numeric',
-                                                  month: 'long',
-                                                  day: 'numeric',
-                                                  hour: '2-digit',
-                                                  minute: '2-digit',
-                                              })
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })
                                             : 'No date'}
                                         {ban.expires_at && !ban.is_permanent && (
                                             <span style={S.txt4}>

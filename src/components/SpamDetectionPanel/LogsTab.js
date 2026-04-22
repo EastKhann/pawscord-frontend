@@ -9,7 +9,7 @@ const LogsTab = ({ stats }) => {
         <div style={styles.content}>
             <div style={styles.logsHeader}>
                 <h3 style={styles.sectionTitle}>{t('spam_kayıtları')}</h3>
-                <select style={styles.filterSelect} aria-label="select">
+                <select style={styles.filterSelect} aria-label={t('spamDetection.filterSelect', 'Filter logs')}>
                     <option value="all">{t('all_actions')}</option>
                     <option value="warn">{t('uyarılar')}</option>
                     <option value="mute">{t('sessize_almalar')}</option>

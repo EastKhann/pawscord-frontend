@@ -26,7 +26,7 @@ const ServerEvents = ({ serverId }) => {
     }
 
     return (
-        <div aria-label="server events" className="server-events">
+        <div aria-label={t('serverEvents.container', 'Server events')} className="server-events">
             {/* Header */}
             <div className="se-header">
                 <div className="se-title">
@@ -41,59 +41,63 @@ const ServerEvents = ({ serverId }) => {
                             onClick={() => setView('list')}
                             Liste
                         </button>
-                        <button
-                            className={view === 'calendar' ? 'active' : ''}
-                            onClick={() => setView('calendar')}
-                            Takvim
-                        </button>
-                    </div>
-
                     <button
-                        className="se-create-btn"
-                        onClick={() => setShowCreateModal(true)}>
-                        <FaPlus /> Event Create
-                    </button>
-                </div>
+                        className={view === 'calendar' ? 'active' : ''}
+                        onClick={() => setView('calendar')}
+                        Takvim
+                        </button>
             </div>
 
-            {/* Content */}
-            {view === 'list' ? (
-                <div className="se-list">
-                    {events.length > 0 ? (
-                        events.map(event => (
-                            <EventCard
-                                key={event.id}
-                                event={event}
-                                onRSVP={handleRSVP}
-                                onView={setSelectedEvent}
-                            />
-                        ))
-                    ) : (
-                        <div className="se-empty">
-                            <FaCalendarAlt />
-                            <p>{t('not_yet_etkinlik_yok')}</p>
-                            <button onClick={() => setShowCreateModal(true)}>
-                                İlk etkinliği oluştur
-                            </button>
-                        </div>
-                    )}
-                </div>
-            ) : (
-                <CalendarView
-                    events={calendarEvents}
-                    onEventClick={setSelectedEvent}
-                />
-            )}
+            <button
+                className="se-create-btn"
+                onClick={() => setShowCreateModal(true)}>
+                <FaPlus /> Event Create
+            </button>
+        </div>
+            </div >
 
-            {/* Create Modal */}
-            {showCreateModal && (
-                <CreateEventModal
-                    serverId={serverId}
-                    onClose={() => setShowCreateModal(false)}
-                    onCreated={handleEventCreated}
-                />
+    {/* Content */ }
+{
+    view === 'list' ? (
+        <div className="se-list">
+            {events.length > 0 ? (
+                events.map(event => (
+                    <EventCard
+                        key={event.id}
+                        event={event}
+                        onRSVP={handleRSVP}
+                        onView={setSelectedEvent}
+                    />
+                ))
+            ) : (
+                <div className="se-empty">
+                    <FaCalendarAlt />
+                    <p>{t('not_yet_etkinlik_yok')}</p>
+                    <button onClick={() => setShowCreateModal(true)}>
+                        {t('serverEvents.createFirst', 'Create the first event')}
+                    </button>
+                </div>
             )}
         </div>
+    ) : (
+    <CalendarView
+        events={calendarEvents}
+        onEventClick={setSelectedEvent}
+    />
+)
+}
+
+{/* Create Modal */ }
+{
+    showCreateModal && (
+        <CreateEventModal
+            serverId={serverId}
+            onClose={() => setShowCreateModal(false)}
+            onCreated={handleEventCreated}
+        />
+    )
+}
+        </div >
     );
 };
 

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     FaTimes,
@@ -48,7 +48,7 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
                                 </span>
                             )}
                         </h2>
-                        <button aria-label="Close" onClick={onClose} style={s.closeBtn}>
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={s.closeBtn}>
                             <FaTimes />
                         </button>
                     </div>
@@ -68,7 +68,7 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
                                 ) : (
                                     <div style={s.placeholder}>
                                         <FaVideo size={64} />
-                                        <p>Başlamak için "Yayını Başlat" butonuna tıklayın</p>
+                                        <p>Baslamak i�in "Yayini Baslat" butonuna tiklayin</p>
                                     </div>
                                 )}
                             </div>
@@ -77,31 +77,31 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
                                 {!stream.isStreaming ? (
                                     <>
                                         <button
-                                            aria-label="Kamerayı seç"
+                                            aria-label={t('liveStream.selectCamera', 'Select camera')}
                                             onClick={() => stream.setStreamType('camera')}
                                             style={s.controlBtn(stream.streamType === 'camera')}
                                         >
                                             <FaVideo /> Kamera
                                         </button>
                                         <button
-                                            aria-label="Ekranı seç"
+                                            aria-label={t('liveStream.selectScreen', 'Select screen')}
                                             onClick={() => stream.setStreamType('screen')}
                                             style={s.controlBtn(stream.streamType === 'screen')}
                                         >
                                             <FaDesktop /> Ekran
                                         </button>
                                         <button
-                                            aria-label="Yayını başlat"
+                                            aria-label={t('liveStream.startStream', 'Start stream')}
                                             onClick={stream.startStream}
                                             style={s.startBtn}
                                         >
-                                            <FaVideo /> Yayını Başlat
+                                            <FaVideo /> Yayini Baslat
                                         </button>
                                     </>
                                 ) : (
                                     <>
                                         <button
-                                            aria-label="Sesi aç/kapat"
+                                            aria-label={t('liveStream.toggleAudio', 'Toggle audio')}
                                             onClick={stream.toggleMute}
                                             style={s.controlBtn(stream.isMuted)}
                                         >
@@ -110,13 +110,13 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
                                             ) : (
                                                 <FaMicrophone />
                                             )}
-                                            {stream.isMuted ? 'Sesi Aç' : 'Sessize Al'}
+                                            {stream.isMuted ? 'Sesi A�' : 'Sessize Al'}
                                         </button>
                                         <button
-                                            aria-label="Yayını durdur"
+                                            aria-label={t('liveStream.stopStream', 'Stop stream')}
                                             onClick={stream.stopStream}
                                         >
-                                            <FaStop /> Yayını Durdur
+                                            <FaStop /> Yayini Durdur
                                         </button>
                                     </>
                                 )}
@@ -126,7 +126,7 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
                         {stream.isStreaming && (
                             <div style={s.chatSection}>
                                 <div style={s.chatHeader}>
-                                    <FaUsers /> Yayın Sohbeti
+                                    <FaUsers /> Yayin Sohbeti
                                 </div>
                                 <div style={s.chatMessages}>
                                     {stream.chatMessages.map((msg) => (
@@ -141,10 +141,10 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
                                         type="text"
                                         value={stream.chatInput}
                                         onChange={(e) => stream.setChatInput(e.target.value)}
-                                        placeholder="Mesaj gönderin..."
+                                        placeholder={t('liveStream.messagePlaceholder', 'Send a message...')}
                                         style={s.input}
                                     />
-                                    <button aria-label="Submit" type="submit" style={s.sendBtn}>
+                                    <button aria-label={t('common.submit')} type="submit" style={s.sendBtn}>
                                         {t('common.send')}
                                     </button>
                                 </form>

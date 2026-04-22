@@ -41,23 +41,23 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaRobot className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Geliştirici Portalı</h2>
+                        <h2 style={styles.title}>{t('oauthApps.title', 'Developer Portal')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <div style={styles.tabs}>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('oauthApps.appsTab', 'OAuth Apps')}
                         onClick={() => o.setActiveTab('apps')}
                         style={_st1161}
                     >
                         <FaCode className="mr-5" /> OAuth Apps ({o.apps.length})
                     </button>
                     <button
-                        aria-label="Switch tab"
+                        aria-label={t('oauthApps.botsTab', 'Bots')}
                         onClick={() => o.setActiveTab('bots')}
                         style={_st1162}
                     >

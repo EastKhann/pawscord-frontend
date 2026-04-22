@@ -88,7 +88,7 @@ const ReminderModal = ({ messageId, messageContent, onClose, fetchWithAuth, apiB
                         <FaBell /> Set Reminder
                     </h3>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -102,24 +102,21 @@ const ReminderModal = ({ messageId, messageContent, onClose, fetchWithAuth, apiB
 
                     <div style={styles.presets}>
                         <button
-                            aria-label="Action button"
-                            onClick={() => setReminderTime(getPresetTime(1))}
+                            aria-label={t('reminderModal.in1Hour', 'Remind in 1 hour')}
                             style={styles.presetButton}
                         >
                             1 hour sonra
                         </button>
 
                         <button
-                            aria-label="Action button"
-                            onClick={() => setReminderTime(getPresetTime(3))}
+                            aria-label={t('reminderModal.in3Hours', 'Remind in 3 hours')}
                             style={styles.presetButton}
                         >
                             3 hour sonra
                         </button>
 
                         <button
-                            aria-label="Action button"
-                            onClick={() => setReminderTime(getPresetTime(24))}
+                            aria-label={t('reminderModal.tomorrow', 'Remind tomorrow')}
                             style={styles.presetButton}
                         >
                             Yarn
@@ -146,12 +143,12 @@ const ReminderModal = ({ messageId, messageContent, onClose, fetchWithAuth, apiB
                             onChange={(e) => setReminderNote(e.target.value)}
                             placeholder={t('ui.add_reminder_note')}
                             style={styles.input}
-                            aria-label="Reminder Note"
+                            aria-label={t('reminderModal.noteInput', 'Reminder note')}
                         />
                     </div>
 
                     <button
-                        aria-label="handle Create"
+                        aria-label={t('reminderModal.createBtn', 'Create reminder')}
                         onClick={handleCreate}
                         disabled={loading || !reminderTime}
                         style={{
@@ -164,9 +161,9 @@ const ReminderModal = ({ messageId, messageContent, onClose, fetchWithAuth, apiB
                     >
                         {loading ? 'Oluşturuluyor...' : t('ui.hatirlatici_create')}
                     </button>
-                </div>
-            </div>
-        </div>
+                </div> 
+            </div> 
+        </div >
     );
 };
 

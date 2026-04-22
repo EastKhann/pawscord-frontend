@@ -1,9 +1,11 @@
 // frontend/src/components/ReadReceipt.js
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaCheck, FaCheckDouble } from 'react-icons/fa';
 
 const ReadReceipt = ({ status, readBy = [] }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     /*
@@ -33,14 +35,14 @@ const ReadReceipt = ({ status, readBy = [] }) => {
             } else if (readBy.length === 2) {
                 return `${readBy[0]} ve ${readBy[1]} by a okundu`;
             } else {
-                return `${readBy.length} kişi by a okundu`;
+                return `Read by ${readBy.length}`;
             }
         }
         return status === 'sent' ? 'Sent' : status === 'delivered' ? 'Forwardildi' : 'Read';
     };
 
     return (
-        <span aria-label="read receipt" style={styles.container} title={getTooltip()}>
+        <span aria-label={t('chat.readReceipt', 'Read receipt')} style={styles.container} title={getTooltip()}>
             {getIcon()}
         </span>
     );

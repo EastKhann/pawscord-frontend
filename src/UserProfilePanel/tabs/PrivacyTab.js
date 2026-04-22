@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
 
 // -- extracted inline style constants --
@@ -21,16 +22,17 @@ const _st8 = { color: '#b5bac1', margin: 0, fontSize: '13px' };
 const PrivacyTab = ({ blockedUsers: rawBU, unblockUser }) => {
     const blockedUsers = rawBU || [];
     const styles = profileStyles;
+    const { t } = useTranslation();
     const [error, setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (
         <div style={styles.card}>
-            <h3 style={styles.sectionTitle}>🚫 Blocked Users</h3>
+            <h3 style={styles.sectionTitle}>🚫 {t('privacy.blockedUsers', 'Blocked Users')}</h3>
 
-            <p style={_st1}>Blocked users cannot contact you or see your messages.</p>
+            <p style={_st1}>{t('privacy.blockedDesc', 'Blocked users cannot contact you or see your messages.')}</p>
 
-            {blockedUsers.length === 0 && <p style={_st2}>No blocked users.</p>}
+            {blockedUsers.length === 0 && <p style={_st2}>{t('privacy.noBlocked', 'No blocked users.')}</p>}
 
             {blockedUsers.map((blockedUser) => (
                 <div key={blockedUser.id} style={styles.sessionCard}>
@@ -53,10 +55,10 @@ const PrivacyTab = ({ blockedUsers: rawBU, unblockUser }) => {
                     </div>
                     <button
                         style={styles.button('secondary')}
-                        aria-label="action-button"
                         onClick={() => unblockUser(blockedUser.user_id)}
+                        aria-label={t('privacy.unblock', 'Unblock {{user}}', { user: blockedUser.username })}
                     >
-                        ✅ Unblock
+                        ✅ {t('privacy.unblockBtn', 'Unblock')}
                     </button>
                 </div>
             ))}

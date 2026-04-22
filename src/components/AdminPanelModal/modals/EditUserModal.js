@@ -63,7 +63,7 @@ const EditUserModal = ({
 
     const { modalRef, overlayProps, dialogProps } = useModalA11y({
         onClose,
-        label: 'Kullanıcıyı Düzenle',
+        label: t('adminModal.editUser', 'Edit User'),
     });
 
     return (
@@ -104,7 +104,7 @@ const EditUserModal = ({
                                 setEditUserForm((f) => ({ ...f, username: e.target.value }))
                             }
                             style={styles.searchInput}
-                            aria-label="Kullanıcı adı"
+                            aria-label={t('common.username', 'Username')}
                         />
                     </div>
 
@@ -120,7 +120,7 @@ const EditUserModal = ({
                                 setEditUserForm((f) => ({ ...f, email: e.target.value }))
                             }
                             style={styles.searchInput}
-                            aria-label="E-posta"
+                            aria-label={t('common.email', 'Email')}
                         />
                     </div>
 
@@ -209,7 +209,7 @@ const EditUserModal = ({
                             }
                             style={styles.searchInput}
                             placeholder={t('ui.status_messagei')}
-                            aria-label="Status Message"
+                            aria-label={t('profile.statusMessage', 'Status Message')}
                         />
                     </div>
                 </div>

@@ -49,8 +49,8 @@ const FriendList = ({
                             {searchQuery
                                 ? t('ui.sonuc_not_found_2')
                                 : friends.length === 0
-                                  ? t('ui.not_yet_arkadasin_yok')
-                                  : t('ui.eslesen_arkadas_yok')}
+                                    ? t('ui.not_yet_arkadasin_yok')
+                                    : t('ui.eslesen_arkadas_yok')}
                         </span>
                     </div>
                 ) : (
@@ -64,7 +64,7 @@ const FriendList = ({
                         };
                         return (
                             <div
-                                aria-label="friend list"
+                                aria-label={t('inviteModal.friendList', 'Friend list')}
                                 key={f.id}
                                 style={st.friendItem}
                                 className="invite-friend-item"

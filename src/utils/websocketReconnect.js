@@ -84,7 +84,7 @@ class WebSocketReconnectManager {
 
         const delay = this.calculateDelay();
         this.log(
-            `🔄 Yeniden bağlanma ${this.reconnectAttempts}/${this.options.maxReconnectAttempts} (${delay}ms sonra)`
+            `🔄 Reconnecting ${this.reconnectAttempts}/${this.options.maxReconnectAttempts} (in ${delay}ms)`
         );
 
         this.notify('reconnecting', {

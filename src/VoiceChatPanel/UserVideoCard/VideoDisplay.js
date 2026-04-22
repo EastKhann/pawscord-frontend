@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { getDeterministicAvatarFallback } from '../avatarUtils';
+import i18n from '../../i18n';
 
 // -- extracted inline style constants --
 
@@ -17,7 +18,7 @@ const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
     const hasVideo = stream && stream.active && stream.getVideoTracks().length > 0;
 
     return (
-        <div aria-label="video display">
+        <div aria-label={i18n.t('aria.videoDisplay', { defaultValue: 'Video' })}>
             {badge}
             {hasVideo ? (
                 <video

@@ -147,7 +147,7 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
     };
 
     const getPermissionIcon = (value) => {
-        if (value === true) return { icon: '✅', color: '#23a559', text: 'İzin Ver' };
+        if (value === true) return { icon: '✅', color: '#23a559', text: t('channelPerms.allow', 'Allow') };
         if (value === false) return { icon: '❌', color: '#f23f42', text: 'Reject' };
         return { icon: '➖', color: '#949ba4', text: 'Default' };
     };
@@ -171,7 +171,7 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaLock className="icon-warning" />
-                        <h2 className="m-0">Kanal İzinleri</h2>
+                        <h2 className="m-0">{t('channelPerms.title', 'Channel Permissions')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
@@ -183,7 +183,7 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
                     ) : (
                         <div style={styles.matrix}>
                             <div style={styles.matrixHeader}>
-                                <div style={styles.headerCell}>İzin</div>
+                                <div style={styles.headerCell}>{t('channelPerms.allow', 'Allow')}</div>
                                 {roles.map((role) => (
                                     <div key={role.id} style={styles.headerCell}>
                                         <div style={_st1164}>{role.name}</div>
@@ -204,15 +204,15 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
                                         return (
                                             <div key={role.id} style={styles.permissionCell}>
                                                 <button
-                                                    aria-label="Action button"
+                                                    aria-label={t('permissions.togglePermission', 'Toggle permission')}
                                                     onClick={() => {
                                                         // Cycle: null → true → false → null
                                                         const newValue =
                                                             value === null
                                                                 ? true
                                                                 : value === true
-                                                                  ? false
-                                                                  : null;
+                                                                    ? false
+                                                                    : null;
                                                         updatePermission(
                                                             role.id,
                                                             perm.key,
@@ -238,7 +238,7 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
                     <div style={styles.legend}>
                         <div style={styles.legendItem}>
                             <span className="text-23a559-18">✅</span>
-                            <span>İzin Ver</span>
+                            <span>{t('channelPerms.allow', 'Allow')}</span>
                         </div>
                         <div style={styles.legendItem}>
                             <span className="text-f23f42-18">❌</span>

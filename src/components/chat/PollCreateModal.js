@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaPlus, FaTrash, FaTimes } from 'react-icons/fa';
@@ -142,7 +142,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                 setError(data.error || t('ui.poll_olusturulamadi'));
             }
         } catch (err) {
-            setError('Bir hata oluştu: ' + err.message);
+            setError(t('common.errorOccurred', 'An error occurred: ') + err.message);
         } finally {
             setIsLoading(false);
         }
@@ -152,8 +152,8 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
         <div style={S.flex} {...overlayProps}>
             <div style={S.flex2} {...dialogProps}>
                 <div className="flex-between-center">
-                    <h3 className="m-0">Anket Oluştur</h3>
-                    <button aria-label="Close" onClick={onClose} className="btn-ghost-muted">
+                    <h3 className="m-0">{t('poll.createTitle', 'Create Poll')}</h3>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} className="btn-ghost-muted">
                         <FaTimes />
                     </button>
                 </div>
@@ -162,7 +162,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
 
                 <input
                     type="text"
-                    placeholder="Soru ne?"
+                    placeholder={t('poll.questionPlaceholder', "What's your question?")}
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     style={S.bg}
@@ -173,14 +173,14 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                         <div key={`item-${idx}`} className="flex-gap-5">
                             <input
                                 type="text"
-                                placeholder={`Selectenek ${idx + 1}`}
+                                placeholder={t('poll.optionN', 'Option {{n}}', { n: idx + 1 })}
                                 value={opt}
                                 onChange={(e) => handleOptionChange(idx, e.target.value)}
                                 style={S.bg2}
                             />
                             {options.length > 2 && (
                                 <button
-                                    aria-label="Delete"
+                                    aria-label={t('common.delete')}
                                     onClick={() => removeOption(idx)}
                                     className="btn-ghost-danger"
                                 >
@@ -192,7 +192,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                 </div>
 
                 {options.length < 10 && (
-                    <button aria-label="add Option" onClick={addOption} style={S.flex3}>
+                    <button aria-label={t('poll.addOption', 'Add option')} onClick={addOption} style={S.flex3}>
                         <FaPlus /> Selectenek Add
                     </button>
                 )}
@@ -204,7 +204,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                             checked={allowMultiple}
                             onChange={(e) => setAllowMultiple(e.target.checked)}
                         />
-                        Birden çok seçime izin ver
+                        {t('poll.allowMultiple', 'Allow multiple selections')}
                     </label>
 
                     <select
@@ -220,11 +220,11 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                 </div>
 
                 <div className="flex-end-10-mt10">
-                    <button aria-label="on Close" onClick={onClose} style={S.bg4}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={S.bg4}>
                         {t('common.cancel')}
                     </button>
                     <button
-                        aria-label="handle Submit"
+                        aria-label={t('poll.submit', 'Create poll')}
                         onClick={handleSubmit}
                         disabled={isLoading}
                         style={{
@@ -237,7 +237,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                             opacity: isLoading ? 0.7 : 1,
                         }}
                     >
-                        {isLoading ? 'Oluşturuluyor...' : 'Oluştur'}
+                        {isLoading ? t('common.creating', 'Creating...') : t('common.create', 'Create')}
                     </button>
                 </div>
             </div>

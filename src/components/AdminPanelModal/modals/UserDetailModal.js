@@ -140,7 +140,7 @@ const UserDetailModal = ({
         [setActionModal, selectedUser]
     );
     return (
-        <div aria-label="user detail modal" className={css.absoOverlay8} {...overlayProps}>
+        <div aria-label={t('admin.userDetailModal', 'User detail')} className={css.absoOverlay8} {...overlayProps}>
             <div style={S.bg} {...dialogProps}>
                 {/* Header */}
                 <div className={css.flexAlignGap14Mb20}>
@@ -286,11 +286,11 @@ const UserDetailModal = ({
                         </button>
                     ) : (
                         <button style={styles.actionBtn('#23a559')} onClick={handleUnban}>
-                            <FaCheckCircle /> Yasağı Kaldır
+                            <FaCheckCircle /> {t('adminUser.unban', 'Unban')}
                         </button>
                     )}
                     <button style={styles.actionBtn('#dc2626')} onClick={handleDelete}>
-                        <FaTrash /> Kullanıcıyı Sil
+                        <FaTrash /> {t('adminUser.deleteUser', 'Delete User')}
                     </button>
                     <button style={_st1186} onClick={() => setSelectedUser(null)}>
                         Kapat

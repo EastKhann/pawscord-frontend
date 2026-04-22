@@ -29,7 +29,7 @@ const BroadcastModal = ({ announceText, handleBroadcast, setAnnounceText, setBro
     const onClose = useCallback(() => setBroadcastModal(false), [setBroadcastModal]);
     const { modalRef, overlayProps, dialogProps } = useModalA11y({
         onClose,
-        label: 'Duyuru Yayınla',
+        label: t('broadcast.title','Broadcast Announcement'),
     });
     return (
         <div className={css.absoOverlay8} {...overlayProps}>
@@ -38,18 +38,18 @@ const BroadcastModal = ({ announceText, handleBroadcast, setAnnounceText, setBro
                 <textarea
                     value={announceText}
                     onChange={(e) => setAnnounceText(e.target.value)}
-                    placeholder="Mesajınızı yazın..."
+                    placeholder={t('common.typeMessage', 'Type a message...')}
                     style={S.bg}
                 />
                 <div className="flex-gap-8">
                     <button style={styles.actionBtn('#5865f2')} onClick={handleBroadcast}>
-                        <FaPaperPlane /> Gönder
+                        <FaPaperPlane /> {t('common.send','Send')}
                     </button>
                     <button
                         style={styles.actionBtn('#6b7280')}
                         onClick={() => setBroadcastModal(false)}
                     >
-                        İptal
+                        {t('common.cancel','Cancel')}
                     </button>
                 </div>
             </div>

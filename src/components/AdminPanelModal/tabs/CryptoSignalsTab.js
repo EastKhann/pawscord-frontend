@@ -121,22 +121,22 @@ const CryptoSignalsTab = () => {
                         </span>
                     )}
                     <button
-                        aria-label="Refresh signals"
+                        aria-label={t('crypto.refreshSignals', 'Refresh signals')}
                         onClick={() => {
                             fetchFiles();
                             if (activeFile) fetchSignals(activeFile);
                         }}
                         style={styles.actionBtn('#5865f2')}
                     >
-                        <FaSync size={11} /> Refresh
+                        <FaSync size={11} /> {t('crypto.refresh', 'Refresh')}
                     </button>
                     <a
                         href="/crypto-signals"
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="Open Crypto Signals panel in new tab"
+                        aria-label={t('crypto.openFullPanel', 'Open Crypto Signals panel in new tab')}
                     >
-                        <FaExternalLinkAlt size={10} /> Full Panel
+                        <FaExternalLinkAlt size={10} /> {t('crypto.fullPanel', 'Full Panel')}
                     </a>
                 </div>
             </div>
@@ -163,7 +163,7 @@ const CryptoSignalsTab = () => {
             {/* Stats overview */}
             {loading && !signalData ? (
                 <div className={css.loadingCenter}>
-                    <FaSync className="spin" size={20} /> Yükleniyor...
+                    <FaSync className="spin" size={20} /> {t('common.loading', 'Loading...')}
                 </div>
             ) : signalData ? (
                 <>

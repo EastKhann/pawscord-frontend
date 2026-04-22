@@ -7,7 +7,7 @@ import useModalA11y from '../../hooks/useModalA11y';
 
 const DailyRewardsModal = ({ isOpen, onClose, fetchWithAuth, apiBaseUrl }) => {
     const { t } = useTranslation();
-    const { dialogProps } = useModalA11y({ onClose, label: 'Daily Rewards' });
+    const { dialogProps } = useModalA11y({ onClose, label: t('dailyRewards.title', 'Daily Rewards') });
     const hookData = useDailyRewards({ fetchWithAuth, apiBaseUrl });
     const { loading = false, error = null } = hookData || {};
     if (loading) {

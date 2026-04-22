@@ -45,7 +45,7 @@ const ConfigurationModal = ({ integration, serverId, token, onClose, onSave }) =
         <div className="modal-overlay" {...overlayProps}>
             <div className="config-modal" {...dialogProps}>
                 <h3>
-                    <FaCog /> {integration.name} Ayarları
+                    <FaCog /> {integration.name} {t('integrations.settings','Settings')}
                 </h3>
 
                 <div className="config-section">

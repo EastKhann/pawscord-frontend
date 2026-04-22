@@ -177,7 +177,7 @@ describe('useFetchWithAuth', () => {
             await act(async () => {
                 await expect(
                     result.current.fetchWithAuth('https://api.test.com/data')
-                ).rejects.toThrow('İstek zaman aşımına uğradı');
+                ).rejects.toThrow('Request timed out');
             });
         });
     });
@@ -185,13 +185,16 @@ describe('useFetchWithAuth', () => {
     // ─── ERROR HANDLING ───
     describe('Error handling', () => {
         it('should re-throw network errors', async () => {
-            global.fetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+            // Hook retries up to MAX_RETRIES=3 times, so reject all attempts
+            global.fetch.mockRejectedValue(new TypeError('Failed to fetch'));
             const { result } = renderHook(() => useFetchWithAuth());
             await act(async () => {
                 await expect(
                     result.current.fetchWithAuth('https://api.test.com/data')
                 ).rejects.toThrow('Failed to fetch');
             });
+            // Restore default mock for subsequent tests
+            global.fetch.mockResolvedValue({ ok: true, status: 200, json: vi.fn().mockResolvedValue({}), text: vi.fn().mockResolvedValue('') });
         });
     });
 });

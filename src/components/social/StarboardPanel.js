@@ -127,7 +127,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
             >
                 <div className="starboard-header">
                     <h2>⭐ Starboard</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -157,7 +157,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
 
                                 <div className="config-grid">
                                     <div className="form-group">
-                                        <label>📢 Starboard Channelı</label>
+                                        <label>{t('starboard.channel', '📢 Starboard Channel')}</label>
                                         <select
                                             value={config.channel_id}
                                             onChange={(e) =>
@@ -181,12 +181,12 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                             onChange={(e) =>
                                                 setConfig({ ...config, emoji: e.target.value })
                                             }
-                                            placeholder="⭐"
+                                            placeholder={t('starboard.emoji', '⭐')}
                                         />
                                     </div>
 
                                     <div className="form-group">
-                                        <label>🎯 Eşik Değeri</label>
+                                        <label>{t('starboard.threshold', '🎯 Threshold Value')}</label>
                                         <input
                                             type="number"
                                             min="1"
@@ -200,8 +200,8 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                             }
                                         />
                                         <small>
-                                            Mesajın starboard'a eklenebilmesi için gereken minimum
-                                            yıldız sayısı
+                                            {t('starboard.thresholdDesc', 'Minimum number of stars required for a message to be added to starboard.')}
+                                            {t('starboard.starCount', '')}
                                         </small>
                                     </div>
 
@@ -217,7 +217,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                                     })
                                                 }
                                             />
-                                            <span>Kendi mesajına yıldız verebilir</span>
+                                            <span>{t('starboard.selfStar', 'Can star own message')}</span>
                                         </label>
                                     </div>
 
@@ -239,7 +239,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                 </div>
 
                                 <button
-                                    aria-label="save Config"
+                                    aria-label={t('starboard.saveConfig', 'Save configuration')}
                                     className="save-btn"
                                     onClick={saveConfig}
                                 >
@@ -248,11 +248,11 @@ const StarboardPanel = ({ serverId, onClose }) => {
                             </div>
 
                             <div className="stars-section">
-                                <h3>⭐ Starboard Mesajları ({stars.length})</h3>
+                                <h3>⭐ {t('starboard.messages', 'Starboard Messages')} ({stars.length})</h3>
                                 {stars.length === 0 ? (
                                     <div className="empty-state">
                                         <span className="empty-icon">⭐</span>
-                                        <p>Not yet starboard mesajı yok</p>
+                                        <p>{t('starboard.noMessages', 'No starboard messages yet')}</p>
                                     </div>
                                 ) : (
                                     <div className="stars-list">
@@ -300,8 +300,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                                         )}
                                                     </span>
                                                     <button
-                                                        aria-label="Action button"
-                                                        className="remove-btn"
+                                                        aria-label={t('starboard.removeMessage', 'Remove from starboard')}
                                                         onClick={() =>
                                                             removeMessage(star.message_id)
                                                         }

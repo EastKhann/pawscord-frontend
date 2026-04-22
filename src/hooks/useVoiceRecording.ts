@@ -146,7 +146,7 @@ const useVoiceRecording = (onFileUpload) => {
                 setRecordingTime((prev) => prev + 1);
             }, 1000);
         } catch (err) {
-            logger.error('Mikrofon erişim hatası:', err);
+            logger.error('Microphone access error:', err);
             toast.error(t('chat.micDenied'));
         }
     };

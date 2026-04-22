@@ -131,7 +131,7 @@ const WhitelistTab = () => {
                         {entries.length} {t('admin.panel.usersCount')}
                     </span>
                     <button
-                        aria-label="Refresh whitelist"
+                        aria-label={t('admin.refreshLogs', 'Refresh whitelist')}
                         onClick={fetchWhitelist}
                         style={styles.actionBtn('#5865f2')}
                         title={t('refresh')}
@@ -143,28 +143,28 @@ const WhitelistTab = () => {
 
             {/* Add new entry */}
             <div style={S.bg}>
-                <div className={css.cardTitleMb12}>➕ Add to Whitelist</div>
+                <div className={css.cardTitleMb12}>➕ {t('featureWhitelist.addUser', 'Add to Whitelist')}</div>
 
                 <div className={css.flexGap8Mb12}>
                     <button
-                        aria-label="Add by username"
+                        aria-label={t('featureWhitelist.addByUsername', 'Add by username')}
                         onClick={() => setAddMode('username')}
                         style={{
                             ...styles.actionBtn(addMode === 'username' ? '#5865f2' : '#333'),
                             padding: '8px 14px',
                         }}
                     >
-                        <FaUser size={10} /> Username
+                        <FaUser size={10} /> {t('admin.panel.username', 'Username')}
                     </button>
                     <button
-                        aria-label="Add by friend code"
+                        aria-label={t('featureWhitelist.addByFriendCode', 'Add by friend code')}
                         onClick={() => setAddMode('friend_code')}
                         style={{
                             ...styles.actionBtn(addMode === 'friend_code' ? '#5865f2' : '#333'),
                             padding: '8px 14px',
                         }}
                     >
-                        # Friend Code
+                        # {t('admin.panel.friendCode', 'Friend Code')}
                     </button>
                 </div>
 
@@ -180,10 +180,10 @@ const WhitelistTab = () => {
                                 : '7 haneli friend code girin...'
                         }
                         style={S.size}
-                        aria-label="Input Value"
+                        aria-label={t('common.search', 'Search')}
                     />
                     <button
-                        aria-label="Add to whitelist"
+                        aria-label={t('featureWhitelist.addUser', 'Add to whitelist')}
                         onClick={handleAdd}
                         disabled={adding || !inputValue.trim()}
                         style={{
@@ -193,7 +193,7 @@ const WhitelistTab = () => {
                             cursor: adding || !inputValue.trim() ? 'not-allowed' : 'pointer',
                         }}
                     >
-                        <FaPlus size={11} /> {adding ? 'Addniyor...' : 'Add'}
+                        <FaPlus size={11} /> {adding ? t('common.adding', 'Adding...') : t('common.add', 'Add')}
                     </button>
                 </div>
             </div>
@@ -207,14 +207,14 @@ const WhitelistTab = () => {
                     onChange={(e) => setSearchFilter(e.target.value)}
                     placeholder={t('admin.panel.searchPlaceholder')}
                     className={css.siMW300}
-                    aria-label="Search Filter"
+                    aria-label={t('common.search', 'Search')}
                 />
             </div>
 
             {/* Whitelist table */}
             {loading ? (
                 <div className={css.loadingCenter}>
-                    <FaSync className="spin" size={20} /> Yükleniyor...
+                    <FaSync className="spin" size={20} /> {t('common.loading', 'Loading...')}
                 </div>
             ) : (
                 <table style={styles.table}>
@@ -265,12 +265,12 @@ const WhitelistTab = () => {
                                     </td>
                                     <td style={styles.td}>
                                         <button
-                                            aria-label="Remove from whitelist"
+                                            aria-label={t('featureWhitelist.removeUser', 'Remove from whitelist')}
                                             onClick={() => handleRemove(entry.friend_code)}
                                             style={styles.actionBtn('#e74c3c')}
                                             title={t('admin.panel.removeFromWhitelist')}
                                         >
-                                            <FaTrash size={10} /> Remove
+                                            <FaTrash size={10} /> {t('common.remove', 'Remove')}
                                         </button>
                                     </td>
                                 </tr>

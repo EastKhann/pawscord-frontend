@@ -58,7 +58,7 @@ const QuickActionsMenu = ({
         {
             icon: FaChartBar,
             label: t('ui.server_istatistikleri_2'),
-            onClick: () => window.open('/analytics', '_blank'),
+            onClick: () => window.open('/analytics', '_blank', 'noopener,noreferrer'),
             color: '#f0b132',
         },
     ];
@@ -82,7 +82,7 @@ const QuickActionsMenu = ({
                 <div style={styles.actions}>
                     {adminActions.map((action, idx) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={t('quickActions.action', 'Quick action')}
                             key={`item-${idx}`}
                             onClick={() => {
                                 action.onClick?.();

@@ -15,7 +15,7 @@ const S = {
 const StoreTab = ({ storeItems, loading, balance, handleBuy }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="store tab" style={styles.grid}>
+        <div aria-label={t('cryptoStore.storeTab', 'Store')} style={styles.grid}>
             {storeItems.map((item) => (
                 <div key={item.id} style={styles.itemCard}>
                     <div style={styles.iconPlace}>

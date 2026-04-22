@@ -419,7 +419,7 @@ const UserContextMenu = ({
                         >
                             <FaArrowRight /> {t('contextMenu.moveToChannel', 'Move to Channel')}
                             {showMoveSubmenu && voiceChannels.length > 0 && (
-                                <div role="menu" aria-label="Hedef kanallar" style={styles.submenu}>
+                                <div role="menu" aria-label={t('contextMenu.targetChannels', 'Target channels')} style={styles.submenu}>
                                     {voiceChannels.map((channel) => (
                                         <div
                                             key={channel.slug}

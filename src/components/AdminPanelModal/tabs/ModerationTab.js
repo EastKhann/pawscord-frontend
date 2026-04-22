@@ -90,11 +90,11 @@ const ModerationTab = () => {
                                     <td style={styles.td}>{user.banned_by}</td>
                                     <td style={styles.td}>
                                         <button
-                                            aria-label="Moderation action"
+                                            aria-label={t('ban.removeBan', 'Remove ban')}
                                             style={styles.actionBtn('#23a559')}
                                             onClick={() => handleUserAction('unban', user.id)}
                                         >
-                                            <FaUnlock /> Remove
+                                            <FaUnlock /> {t('common.remove', 'Remove')}
                                         </button>
                                     </td>
                                 </tr>

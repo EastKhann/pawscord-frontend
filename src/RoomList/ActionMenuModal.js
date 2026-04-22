@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FaCog, FaEdit, FaTrash } from '../utils/iconOptimization';
 import { styles } from '../styles/SidebarStyles';
@@ -53,8 +53,6 @@ const ActionMenuModal = ({ actionMenu, onClose, onRename, onDelete, onSettings }
         isOpen: !!actionMenu,
         label: 'Channel Menu',
     });
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     if (!actionMenu) return null;
 
     return (
@@ -64,20 +62,20 @@ const ActionMenuModal = ({ actionMenu, onClose, onRename, onDelete, onSettings }
 
                 <div style={_st2}>
                     {actionMenu.type === 'room' && (
-                        <button aria-label="on Settings" onClick={onSettings} style={_st3}>
+                        <button aria-label={t('server.settings', 'Settings')} onClick={onSettings} style={_st3}>
                             <FaCog /> Channel Settings
                         </button>
                     )}
 
-                    <button aria-label="on Rename" onClick={onRename} style={_st3}>
+                    <button aria-label={t('common.rename', 'Rename')} onClick={onRename} style={_st3}>
                         <FaEdit /> Rename
                     </button>
 
-                    <button aria-label="on Delete" onClick={onDelete} style={_st4}>
+                    <button aria-label={t('common.delete', 'Delete')} onClick={onDelete} style={_st4}>
                         <FaTrash /> Sil
                     </button>
                 </div>
-                <button aria-label="on Close" style={_st5} onClick={onClose}>
+                <button aria-label={t('common.close', 'Close')} style={_st5} onClick={onClose}>
                     {t('common.cancel')}
                 </button>
             </div>

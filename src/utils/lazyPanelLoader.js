@@ -40,7 +40,7 @@ const PanelLoadingFallback = ({ name }) => (
 const PanelErrorFallback = ({ error, resetError }) => (
     <div className="panel-error-fallback">
         <span className="error-icon">⚠️</span>
-        <h3>Panel yüklenemedi</h3>
+        <h3>Panel could not be loaded</h3>
         <p>{error?.message || 'Unknown error'}</p>
         <button onClick={resetError}>Tekrar Dene</button>
         <style>{`

@@ -1,9 +1,10 @@
 // frontend/src/VoiceChatPanel/UserVideoCard/HoverControls.js
-// 🎮 Hover action buttons (pin, expand, fullscreen) and volume slider
+// ?? Hover action buttons (pin, expand, fullscreen) and volume slider
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ActionButton from '../ActionButton';
+import { useTranslation } from 'react-i18next';
 const _s = (o) => o;
 
 // -- extracted inline style constants --
@@ -41,11 +42,10 @@ const HoverControls = ({
     videoRef,
     cardRef,
 }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const { t } = useTranslation();
     return (
         <div
-            aria-label="hover controls"
+            aria-label={t('aria.hoverControls', 'Video Controls')}
             style={_s({
                 position: 'absolute',
                 top: '12px',
@@ -60,7 +60,7 @@ const HoverControls = ({
             })}
         >
             <ActionButton
-                icon={isPinned ? '📌' : '📍'}
+                icon={isPinned ? '??' : '??'}
                 onClick={(e) => {
                     e.stopPropagation();
                     onPin();
@@ -69,19 +69,19 @@ const HoverControls = ({
                 bgColor="rgba(88, 101, 242, 0.9)"
             />
             <ActionButton
-                icon="⛶"
+                icon="?"
                 onClick={(e) => {
                     e.stopPropagation();
                     onExpand();
                 }}
-                title="Büyüt / Küçült"
+                title={t('common.expandCollapse', 'Expand / Collapse')}
                 bgColor="rgba(67, 181, 129, 0.9)"
             />
             <ActionButton
-                icon="🖥️"
+                icon="???"
                 onClick={(e) => {
                     e.stopPropagation();
-                    // 🔥 FIX: Use cardRef for fullscreen (the UserVideoCard root div)
+                    // ?? FIX: Use cardRef for fullscreen (the UserVideoCard root div)
                     // so the fullscreen overlay with exit button is visible.
                     const element =
                         cardRef?.current ||
@@ -103,15 +103,15 @@ const HoverControls = ({
                 bgColor="rgba(250, 166, 26, 0.9)"
             />
 
-            {/* 🔥 Volume Slider (only for remote users, visible on hover) */}
+            {/* ?? Volume Slider (only for remote users, visible on hover) */}
             {!user.isLocal && showFullControls && (
                 <div style={_st1}>
                     <span style={_st2}>
                         {(user.volume || 100) === 0
-                            ? '🔇'
+                            ? '??'
                             : (user.volume || 100) > 100
-                              ? '🔊'
-                              : '🔉'}
+                              ? '??'
+                              : '??'}
                     </span>
                     <input
                         type="range"

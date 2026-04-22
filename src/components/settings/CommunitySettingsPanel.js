@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     FaUsers,
@@ -76,9 +76,9 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
             >
                 <div className="panel-header">
                     <h2>
-                        <FaUsers /> Topluluk Ayarları
+                        <FaUsers /> {t('communitySettings.title', 'Community Settings')}
                     </h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -87,12 +87,11 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
                     <div className="toggle-info">
                         <span className="toggle-label">Topluluk Sunucusu</span>
                         <span className="toggle-description">
-                            Community özelliklerini aktifleştir (keşfet, kar{''}lama ekranı vb.)
+                            {t('communitySettings.enableDesc', "Activate community features (discover, welcome screen, etc.)")}
                         </span>
                     </div>
                     <button
-                        aria-label="Action button"
-                        className={`toggle-btn ${state.settings.is_community ? 'active' : ''}`}
+                        aria-label={state.settings.is_community ? t('communitySettings.disableCommunity', 'Disable community server') : t('communitySettings.enableCommunity', 'Enable community server')}
                         onClick={() =>
                             state.setSettings((prev) => ({
                                 ...prev,
@@ -107,8 +106,7 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
                 <div className="tabs">
                     {TABS.map(({ key, label, Icon }) => (
                         <button
-                            aria-label="Switch tab"
-                            key={key}
+                            aria-label={label}
                             className={`tab ${state.activeTab === key ? 'active' : ''}`}
                             onClick={() => state.setActiveTab(key)}
                         >
@@ -152,11 +150,11 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
                 </div>
 
                 <div className="panel-footer">
-                    <button aria-label="on Close" className="cancel-btn" onClick={onClose}>
-                        İptal
+                    <button aria-label={t('common.close', 'Close')} className="cancel-btn" onClick={onClose}>
+                        {t('common.cancel', 'Cancel')}
                     </button>
                     <button
-                        aria-label="state save Settings"
+                        aria-label={t('communitySettings.saveBtn', 'Save community settings')}
                         className="save-btn"
                         onClick={state.saveSettings}
                         disabled={state.saving}

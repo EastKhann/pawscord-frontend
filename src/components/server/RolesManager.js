@@ -37,9 +37,9 @@ const RolesManager = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="roles-manager-header">
-                    <h2>🎭 {t('roles.title')}</h2>
-                    <button aria-label="on Close" className="close-btn" onClick={onClose}>
-                        ✕
+                    <h2>?? {t('roles.title')}</h2>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
+                        ?
                     </button>
                 </div>
 
@@ -50,18 +50,18 @@ const RolesManager = ({ serverId, onClose }) => {
                             className="create-role-btn"
                             onClick={() => s.setShowCreateModal(true)}
                         >
-                            ➕ {t('roles.createRole')}
+                            ? {t('roles.createRole')}
                         </button>
                         <div className="roles-info">
                             <span>{t('roles.rolesCount', { count: s.roles.length })}</span>
-                            <span className="info-tip">💡 {t('roles.dragToReorder')}</span>
+                            <span className="info-tip">?? {t('roles.dragToReorder')}</span>
                         </div>
                     </div>
 
                     <div className="roles-list">
                         {s.roles.length === 0 ? (
                             <div className="empty-state">
-                                <div className="empty-icon">🎭</div>
+                                <div className="empty-icon">??</div>
                                 <h3>{t('roles.noRolesYet')}</h3>
                                 <p>{t('roles.createRolesDesc')}</p>
                             </div>
@@ -75,7 +75,7 @@ const RolesManager = ({ serverId, onClose }) => {
                                     onDragOver={s.handleDragOver}
                                     onDrop={(e) => s.handleDrop(e, role)}
                                 >
-                                    <div className="role-drag-handle">☰</div>
+                                    <div className="role-drag-handle">?</div>
                                     <div
                                         className="role-color-badge"
                                         style={{ backgroundColor: role.color }}
@@ -86,14 +86,14 @@ const RolesManager = ({ serverId, onClose }) => {
                                         </div>
                                         <div className="role-meta">
                                             <span className="role-members">
-                                                👥{' '}
+                                                ??{' '}
                                                 {t('roles.membersCount', {
                                                     count: role.member_count || 0,
                                                 })}
                                             </span>
                                             {role.hoist && (
                                                 <span className="role-badge">
-                                                    📌 {t('roles.hoisted')}
+                                                    ?? {t('roles.hoisted')}
                                                 </span>
                                             )}
                                             {role.mentionable && (
@@ -105,28 +105,28 @@ const RolesManager = ({ serverId, onClose }) => {
                                     </div>
                                     <div className="role-actions">
                                         <button
-                                            aria-label="Edit"
+                                            aria-label={t('common.edit')}
                                             className="role-action-btn edit"
                                             onClick={() => s.setEditingRole(role)}
                                             title={t('common.edit')}
                                         >
-                                            ✏️
+                                            ??
                                         </button>
                                         <button
-                                            aria-label="Copy"
+                                            aria-label={t('roles.copy', 'Copy role')}
                                             className="role-action-btn copy"
                                             onClick={() => s.copyRole(role.id)}
                                             title={t('roles.copy')}
                                         >
-                                            📋
+                                            ??
                                         </button>
                                         <button
-                                            aria-label="Delete"
+                                            aria-label={t('common.delete')}
                                             className="role-action-btn delete"
                                             onClick={() => s.deleteRole(role.id)}
                                             title={t('common.delete')}
                                         >
-                                            🗑️
+                                            ???
                                         </button>
                                     </div>
                                 </div>

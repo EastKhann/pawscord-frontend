@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import './WebAuthnPanel.css';
 import { FaKey, FaShieldAlt, FaPlus, FaTrash, FaFingerprint, FaUsb } from 'react-icons/fa';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
+    const { t } = useTranslation();
     const [keys, setKeys] = useState([]);
     const [registering, setRegistering] = useState(false);
     const [keyName, setKeyName] = useState('');
@@ -29,7 +31,7 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
 
     const registerKey = async () => {
         if (!keyName.trim()) {
-            setError('Lütfen bir anahtar adı girin');
+            setError(t('webauthn.enterKeyName', 'Please enter a key name'));
             return;
         }
 
@@ -95,7 +97,7 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
             );
 
             if (completeResponse.ok) {
-                setSuccess('Güvenlik anahtarı başarıyla kaydedildi!');
+                setSuccess(t('webauthn.keyRegistered', 'Security key registered successfully!'));
                 setKeyName('');
                 loadKeys();
             }
@@ -116,11 +118,11 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
             );
 
             if (response.ok) {
-                setSuccess('Güvenlik anahtarı kaldırıldı');
+                setSuccess(t('webauthn.keyRemoved', 'Security key removed'));
                 loadKeys();
             }
         } catch (err) {
-            setError('Anahtar kaldırılamadı: ' + err.message);
+            setError(t('webauthn.removeError', 'Key could not be removed: ') + err.message);
         }
     };
 
@@ -135,7 +137,7 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
             <div className="webauthn-info">
                 <FaFingerprint className="info-icon" />
                 <div>
-                    <h3>Donanım Güvenlik Anahtarları</h3>
+                    <h3>{t('webauthn.title', 'Hardware Security Keys')}</h3>
                     <p>Use physical security keys (YubiKey, etc.) for maximum account protection</p>
                 </div>
             </div>
@@ -150,33 +152,33 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
                 <div className="register-form">
                     <input
                         type="text"
-                        placeholder="Anahtar adı (örn: YubiKey Work)"
+                        placeholder={t('security.keyNamePlaceholder', 'Key name (e.g. YubiKey Work)')}
                         value={keyName}
                         onChange={(e) => setKeyName(e.target.value)}
                         className="key-input"
                     />
                     <button
-                        aria-label="register Key"
+                        aria-label={t('webAuthn.registerKey', 'Register security key')}
                         className="register-btn"
                         onClick={registerKey}
                         disabled={registering}
                     >
-                        {registering ? 'Anahtarınızı takın...' : 'Anahtar Kaydet'}
+                        {registering ? t('webauthn.insertKey', 'Insert your key...') : t('webauthn.registerKey', 'Register Key')}
                     </button>
                 </div>
                 <div className="register-help">
                     <FaUsb />
-                    <span>Tarayıcınız istemde bulunduğunda güvenlik anahtarınızı takın</span>
+                    <span>{t('webauthn.insertHint', 'Insert your security key when your browser prompts you')}</span>
                 </div>
             </div>
 
             <div className="keys-list">
                 <h3>
-                    <FaKey /> Kayıtlı Anahtarlar ({keys.length})
+                    <FaKey /> {t('webauthn.registeredKeys', 'Registered Keys')} ({keys.length})
                 </h3>
                 {keys.length === 0 ? (
                     <div className="empty-keys">
-                        <p>Henüz kayıtlı güvenlik anahtarı yok</p>
+                        <p>{t('webauthn.noKeys', 'No security keys registered yet')}</p>
                     </div>
                 ) : (
                     keys.map((key) => (
@@ -191,7 +193,7 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
                                 </div>
                             </div>
                             <button
-                                aria-label="Action button"
+                                aria-label={t('webAuthn.removeKey', 'Remove security key')}
                                 className="remove-key-btn"
                                 onClick={() => removeKey(key.id)}
                             >

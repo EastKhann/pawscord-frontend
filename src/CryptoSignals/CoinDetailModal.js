@@ -15,7 +15,7 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
     const { overlayProps, dialogProps } = useModalA11y({
         onClose,
         isOpen: !!selectedCoin,
-        label: 'Coin Detail',
+        label: t('crypto.coinDetail', 'Coin Detail'),
     });
 
     // ⚠️ useMemo MUST be called before any early return (Rules of Hooks)
@@ -82,7 +82,7 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
     const binanceUrl = `https://www.binance.com/en/futures/${selectedCoin.name.endsWith('USDT') ? selectedCoin.name : selectedCoin.name + 'USDT'}`;
 
     return (
-        <div aria-label="coin detail modal" style={S.modalOverlay} {...overlayProps}>
+        <div aria-label={t('aria.coinDetailModal', 'Coin Detail')} style={S.modalOverlay} {...overlayProps}>
             <div style={S.modal} {...dialogProps}>
                 <div style={S.modalHeader}>
                     <div>
@@ -217,118 +217,118 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                                     <div style={S.strategyGrid}>
                                         {(isBLRow
                                             ? [
-                                                  {
-                                                      label: t(
-                                                          'crypto.signalPrice',
-                                                          'Signal Price'
-                                                      ),
-                                                      val: `$${formatPrice(row.signal_price)}`,
-                                                  },
-                                                  {
-                                                      label: t('crypto.blPrice', 'BL Price'),
-                                                      val: `$${formatPrice(row.bl_price)}`,
-                                                      color: '#e74c3c',
-                                                  },
-                                                  {
-                                                      label: t('crypto.current', 'Current'),
-                                                      val: `$${formatPrice(row.current_price)}`,
-                                                  },
-                                                  {
-                                                      label: t('crypto.advantage', 'Advantage'),
-                                                      val: `${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)}%`,
-                                                      color: isProfit ? '#23a559' : '#da373c',
-                                                      bold: true,
-                                                  },
-                                                  {
-                                                      label: 'BL%',
-                                                      val: `${parseFloat(row.bl_pct || 0).toFixed(2)}%`,
-                                                      color: '#e74c3c',
-                                                  },
-                                                  {
-                                                      label: t('crypto.day', 'Day'),
-                                                      val: `${row.bl_days}g`,
-                                                      color:
-                                                          row.bl_days > 5
-                                                              ? '#da373c'
-                                                              : row.bl_days > 2
+                                                {
+                                                    label: t(
+                                                        'crypto.signalPrice',
+                                                        'Signal Price'
+                                                    ),
+                                                    val: `$${formatPrice(row.signal_price)}`,
+                                                },
+                                                {
+                                                    label: t('crypto.blPrice', 'BL Price'),
+                                                    val: `$${formatPrice(row.bl_price)}`,
+                                                    color: '#e74c3c',
+                                                },
+                                                {
+                                                    label: t('crypto.current', 'Current'),
+                                                    val: `$${formatPrice(row.current_price)}`,
+                                                },
+                                                {
+                                                    label: t('crypto.advantage', 'Advantage'),
+                                                    val: `${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)}%`,
+                                                    color: isProfit ? '#23a559' : '#da373c',
+                                                    bold: true,
+                                                },
+                                                {
+                                                    label: 'BL%',
+                                                    val: `${parseFloat(row.bl_pct || 0).toFixed(2)}%`,
+                                                    color: '#e74c3c',
+                                                },
+                                                {
+                                                    label: t('crypto.day', 'Day'),
+                                                    val: `${row.bl_days}g`,
+                                                    color:
+                                                        row.bl_days > 5
+                                                            ? '#da373c'
+                                                            : row.bl_days > 2
                                                                 ? '#f0b232'
                                                                 : '#23a559',
-                                                  },
-                                                  {
-                                                      label: 'TP%',
-                                                      val: `${parseFloat(row.tp_pct || 0).toFixed(0)}%`,
-                                                      color: '#23a559',
-                                                  },
-                                                  {
-                                                      label: 'SL%',
-                                                      val: `${parseFloat(row.sl_pct || 0).toFixed(0)}%`,
-                                                      color: '#da373c',
-                                                  },
-                                                  {
-                                                      label: 'WR',
-                                                      val: `${parseFloat(row.win_rate || 0).toFixed(1)}%`,
-                                                  },
-                                                  {
-                                                      label: t('crypto.trades', 'Trades'),
-                                                      val: row.trades || '-',
-                                                  },
-                                              ]
+                                                },
+                                                {
+                                                    label: 'TP%',
+                                                    val: `${parseFloat(row.tp_pct || 0).toFixed(0)}%`,
+                                                    color: '#23a559',
+                                                },
+                                                {
+                                                    label: 'SL%',
+                                                    val: `${parseFloat(row.sl_pct || 0).toFixed(0)}%`,
+                                                    color: '#da373c',
+                                                },
+                                                {
+                                                    label: 'WR',
+                                                    val: `${parseFloat(row.win_rate || 0).toFixed(1)}%`,
+                                                },
+                                                {
+                                                    label: t('crypto.trades', 'Trades'),
+                                                    val: row.trades || '-',
+                                                },
+                                            ]
                                             : [
-                                                  {
-                                                      label: 'Entry',
-                                                      val: `$${formatPrice(row.entry_price)}`,
-                                                  },
-                                                  {
-                                                      label: t('crypto.current', 'Current'),
-                                                      val: `$${formatPrice(row.current_price)}`,
-                                                  },
-                                                  {
-                                                      label: 'PNL',
-                                                      val: row.pnl_percent || '-',
-                                                      color: isProfit ? '#23a559' : '#da373c',
-                                                      bold: true,
-                                                  },
-                                                  { label: 'WR', val: row.win_rate || '-' },
-                                                  {
-                                                      label: t('crypto.xMultiplier', 'X Mult'),
-                                                      val: row.x_kat || '-',
-                                                      color: '#f0b232',
-                                                  },
-                                                  {
-                                                      label: t('crypto.target', 'Target'),
-                                                      val: row.hedef_roe || '-',
-                                                      color: '#5865f2',
-                                                  },
-                                                  ...(row.days_ago != null
-                                                      ? [
-                                                            {
-                                                                label: t(
-                                                                    'crypto.daysAgo',
-                                                                    'Days Ago'
-                                                                ),
-                                                                val: `${row.days_ago}d`,
-                                                                color:
-                                                                    row.days_ago > 30
-                                                                        ? '#da373c'
-                                                                        : row.days_ago > 14
-                                                                          ? '#f0b232'
-                                                                          : '#23a559',
-                                                            },
-                                                        ]
-                                                      : []),
-                                                  ...(row.bars_ago != null
-                                                      ? [
-                                                            {
-                                                                label: t(
-                                                                    'crypto.barsAgo',
-                                                                    'Bars Ago'
-                                                                ),
-                                                                val: `${row.bars_ago}`,
-                                                                color: '#949ba4',
-                                                            },
-                                                        ]
-                                                      : []),
-                                              ]
+                                                {
+                                                    label: 'Entry',
+                                                    val: `$${formatPrice(row.entry_price)}`,
+                                                },
+                                                {
+                                                    label: t('crypto.current', 'Current'),
+                                                    val: `$${formatPrice(row.current_price)}`,
+                                                },
+                                                {
+                                                    label: 'PNL',
+                                                    val: row.pnl_percent || '-',
+                                                    color: isProfit ? '#23a559' : '#da373c',
+                                                    bold: true,
+                                                },
+                                                { label: 'WR', val: row.win_rate || '-' },
+                                                {
+                                                    label: t('crypto.xMultiplier', 'X Mult'),
+                                                    val: row.x_kat || '-',
+                                                    color: '#f0b232',
+                                                },
+                                                {
+                                                    label: t('crypto.target', 'Target'),
+                                                    val: row.hedef_roe || '-',
+                                                    color: '#5865f2',
+                                                },
+                                                ...(row.days_ago != null
+                                                    ? [
+                                                        {
+                                                            label: t(
+                                                                'crypto.daysAgo',
+                                                                'Days Ago'
+                                                            ),
+                                                            val: `${row.days_ago}d`,
+                                                            color:
+                                                                row.days_ago > 30
+                                                                    ? '#da373c'
+                                                                    : row.days_ago > 14
+                                                                        ? '#f0b232'
+                                                                        : '#23a559',
+                                                        },
+                                                    ]
+                                                    : []),
+                                                ...(row.bars_ago != null
+                                                    ? [
+                                                        {
+                                                            label: t(
+                                                                'crypto.barsAgo',
+                                                                'Bars Ago'
+                                                            ),
+                                                            val: `${row.bars_ago}`,
+                                                            color: '#949ba4',
+                                                        },
+                                                    ]
+                                                    : []),
+                                            ]
                                         ).map(({ label, val, color, bold }, i) => (
                                             <div key={`item-${Math.random()}`} style={S.stratItem}>
                                                 <span style={S.stratItemLabel}>{label}</span>

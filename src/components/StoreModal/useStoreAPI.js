@@ -8,13 +8,13 @@ import { STORE_PURCHASES_ENABLED } from '../../constants/featureFlags';
 // Preview items shown when store is in "Coming Soon" mode
 const PREVIEW_ITEMS = [
     { id: 'p1', name: 'Neon Paw Badge', category: 'badges', price: 500, rarity: 'rare', featured: true, preview: true, emoji: '🐾' },
-    { id: 'p2', name: 'Galaxy Theme', category: 'themes', price: 1200, rarity: 'epic', featured: true, preview: true, emoji: '🌌' },
-    { id: 'p3', name: 'Gold Crown', category: 'accessories', price: 2500, rarity: 'legendary', featured: false, preview: true, emoji: '👑' },
-    { id: 'p4', name: 'Retro Profile Frame', category: 'accessories', price: 800, rarity: 'uncommon', featured: false, preview: true, emoji: '🖼️' },
-    { id: 'p5', name: 'Rainbow Banner', category: 'themes', price: 600, rarity: 'uncommon', featured: false, preview: true, emoji: '🌈' },
+    { id: 'p2', name: 'Galaxy Theme', category: 'cosmetics', price: 1200, rarity: 'epic', featured: true, preview: true, emoji: '🌌' },
+    { id: 'p3', name: 'Gold Crown', category: 'special', price: 2500, rarity: 'legendary', featured: false, preview: true, emoji: '👑' },
+    { id: 'p4', name: 'Retro Profile Frame', category: 'cosmetics', price: 800, rarity: 'uncommon', featured: false, preview: true, emoji: '🖼️' },
+    { id: 'p5', name: 'Rainbow Banner', category: 'cosmetics', price: 600, rarity: 'uncommon', featured: false, preview: true, emoji: '🌈' },
     { id: 'p6', name: 'VIP Star Badge', category: 'badges', price: 1500, rarity: 'epic', featured: false, preview: true, emoji: '⭐' },
-    { id: 'p7', name: 'Pixel Cat Sticker', category: 'stickers', price: 250, rarity: 'common', featured: false, preview: true, emoji: '🐱' },
-    { id: 'p8', name: 'Dark Matter Pack', category: 'stickers', price: 999, rarity: 'rare', featured: false, preview: true, emoji: '🌑' },
+    { id: 'p7', name: 'XP Booster Pack', category: 'boosters', price: 250, rarity: 'common', featured: false, preview: true, emoji: '🚀' },
+    { id: 'p8', name: 'Dark Matter Pack', category: 'special', price: 999, rarity: 'rare', featured: false, preview: true, emoji: '🌑' },
 ];
 
 const useStoreAPI = ({ fetchWithAuth, apiBaseUrl }) => {

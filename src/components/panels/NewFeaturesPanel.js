@@ -71,7 +71,7 @@ const NewFeaturesPanel = ({ onClose }) => {
     const ActiveComponent = features.find((f) => f.id === activeFeature)?.component;
 
     return (
-        <div aria-label="new features panel" className="new-features-dashboard">
+        <div aria-label={t('newFeatures.panel', 'New features panel')} className="new-features-dashboard">
             <div className="panel-header">
                 <h2>{t('🚀_yeni_özellikler')}</h2>
                 <button onClick={onClose} className="close-btn">

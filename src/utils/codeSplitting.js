@@ -6,6 +6,7 @@ import { lazy, Suspense } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import logger from '../utils/logger';
+import i18n from '../i18n';
 
 // -- extracted inline style constants --
 const _st1 = { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' };
@@ -108,7 +109,7 @@ export const estimateChunkSize = async (importFunc) => {
  * 🎨 Default Loading Spinner Component
  */
 const LoadingSpinner = () => (
-    <div aria-label="code splitting" style={_st1}>
+    <div aria-label={i18n.t('aria.loadingSpinner', { defaultValue: 'Loading' })} style={_st1}>
         <div style={_st2} />
         <style>{`
             @keyframes spin {

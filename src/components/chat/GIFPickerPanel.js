@@ -1,4 +1,5 @@
-﻿/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useTranslation } from 'react-i18next';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -7,6 +8,7 @@ import { FaImage, FaSearch, FaTh, FaList, FaHeart } from 'react-icons/fa';
 import logger from '../../utils/logger';
 
 function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
+    const { t } = useTranslation();
     const [gifs, setGifs] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -95,18 +97,18 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
         <div className="gif-picker-panel">
             <div className="gif-header">
                 <h2>
-                    <FaImage /> GIF Kütüphanesi
+                    <FaImage /> {t('gifPicker.title', 'GIF Library')}
                 </h2>
                 <div className="view-controls">
                     <button
-                        aria-label="Action button"
+                        aria-label={t('gifPicker.gridView', 'Grid view')}
                         className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                         onClick={() => setViewMode('grid')}
                     >
                         <FaTh />
                     </button>
                     <button
-                        aria-label="Action button"
+                        aria-label={t('gifPicker.listView', 'List view')}
                         className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
                         onClick={() => setViewMode('list')}
                     >
@@ -119,7 +121,7 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
                 <FaSearch className="search-icon" />
                 <input
                     type="text"
-                    placeholder="GIF ara..."
+                    placeholder={t('gif.search', 'GIF ara...')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="search-input"
@@ -128,7 +130,7 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
 
             <div className="gif-categories">
                 <button
-                    aria-label="Action button"
+                    aria-label={t('gifPicker.allCategories', 'All categories')}
                     className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
                     onClick={() => setSelectedCategory('all')}
                 >
@@ -136,7 +138,7 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
                 </button>
                 {categories.map((cat) => (
                     <button
-                        aria-label="Action button"
+                        aria-label={cat.name}
                         key={cat.id}
                         className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
                         onClick={() => setSelectedCategory(cat.id)}
@@ -148,11 +150,11 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
 
             <div className={`gif-grid ${viewMode}`}>
                 {loading ? (
-                    <div className="gif-loading">GIF'ler yükleniyor...</div>
+                    <div className="gif-loading">{t('gifPicker.loading', 'Loading GIFs...')}</div>
                 ) : gifs.length === 0 ? (
                     <div className="empty-gifs">
                         <FaImage className="empty-icon" />
-                        <p>GIF bulunamadı</p>
+                        <p>{t('gifPicker.notFound', 'No GIFs found')}</p>
                     </div>
                 ) : (
                     gifs.map((gif) => (
@@ -166,8 +168,8 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
                             />
                             <div className="gif-overlay">
                                 <button
-                                    aria-label="Action button"
-                                    className={`fav-btn ${favorites.has(gif.id) ? 'favorited' : ''}`}
+                                    aria-label={t('gifPicker.toggleFavorite', 'Toggle favorite')}
+                                    className={`gif-favorite-btn ${favorites.has(gif.id) ? 'favorited' : ''}`}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         toggleFavorite(gif.id);

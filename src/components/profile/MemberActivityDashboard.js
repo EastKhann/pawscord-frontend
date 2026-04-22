@@ -215,13 +215,13 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                 <div className="panel-header">
                     <div className="header-info">
                         <h2>
-                            <FaChartLine /> Üye Aktivitesi Panosu
+                            <FaChartLine /> {t('memberActivity.title', 'Member Activity Dashboard')}
                         </h2>
                         <span className="active-count">
-                            {serverStats?.active_members || 0} aktif üye
+                            {serverStats?.active_members || 0} {t('memberActivity.activeMembers', 'active members')}
                         </span>
                     </div>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -250,7 +250,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                 <span className="stat-value">
                                     {formatTime(serverStats.total_voice_minutes)}
                                 </span>
-                                <span className="stat-label">Ses Süresi</span>
+                                <span className="stat-label">{t('memberActivity.voiceTime', 'Voice Time')}</span>
                             </div>
                             <span
                                 className={`trend ${serverStats.voice_trend >= 0 ? 'up' : 'down'}`}
@@ -283,7 +283,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                         <FaSearch />
                         <input
                             type="text"
-                            placeholder="Üye ara..."
+                            placeholder={t('common.searchMembers', 'Search members...')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -294,11 +294,11 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                             <option value="day">Today</option>
                             <option value="week">Bu Hafta</option>
                             <option value="month">Bu Ay</option>
-                            <option value="all">Tüm Zaman</option>
+                            <option value="all">{t('admin.allTime', 'All Time')}</option>
                         </select>
                     </div>
                     <button
-                        aria-label="handle Export"
+                        aria-label={t('memberActivity.export', 'Export activity data')}
                         className="export-btn"
                         onClick={handleExport}
                     >
@@ -309,11 +309,11 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                 {/* Members Table */}
                 <div className="content">
                     {loading ? (
-                        <div className="loading">Aktivite verileri yükleniyor...</div>
+                        <div className="loading">{t('memberActivity.loading', 'Loading activity data...')}</div>
                     ) : selectedMember ? (
                         <div className="member-detail">
                             <button
-                                aria-label="Action button"
+                                aria-label={t('memberActivity.backToList', 'Back to list')}
                                 className="back-btn"
                                 onClick={() => setSelectedMember(null)}
                             >
@@ -347,7 +347,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                     <span className="value">
                                         {formatTime(selectedMember.stats.voice_minutes)}
                                     </span>
-                                    <span className="label">Ses Süresi</span>
+                                    <span className="label">{t('memberActivity.voiceTime', 'Voice Time')}</span>
                                 </div>
                                 <div className="detail-stat">
                                     <FaSmile />
@@ -361,12 +361,12 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                     <span className="value">
                                         {selectedMember.stats.reactions_received}
                                     </span>
-                                    <span className="label">Alınan Tepkiler</span>
+                                    <span className="label">{t('memberActivity.reactionsReceived', 'Reactions Received')}</span>
                                 </div>
                             </div>
 
                             <div className="activity-chart">
-                                <h4>Aktivite Trendi (Son 7 Gün)</h4>
+                                <h4>{t('memberActivity.trend', 'Activity Trend (Last 7 Days)')}</h4>
                                 <div className="chart-container">
                                     {selectedMember.activity_history.map((val, i) => (
                                         <div key={`item-${i}`} className="chart-column">

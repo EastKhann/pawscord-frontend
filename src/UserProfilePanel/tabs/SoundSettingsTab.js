@@ -42,7 +42,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (
-        <div aria-label="sound settings tab" style={styles.card}>
+        <div aria-label={t('aria.soundSettingsTab', 'Sound Settings')} style={styles.card}>
             <h3 style={styles.sectionTitle}>🎵 Voice Settings</h3>
 
             <p style={_st1}>Customize application sounds.</p>

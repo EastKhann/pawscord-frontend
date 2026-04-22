@@ -143,7 +143,7 @@ const useIntegrationHub = (serverId) => {
     };
 
     const handleDisconnect = async (integrationId) => {
-        if (!(await confirmDialog('Bu entegrasyonu kaldırmak istediğinizden emin misiniz?')))
+        if (!(await confirmDialog(t('integrations.removeConfirm','Are you sure you want to remove this integration?'))))
             return;
 
         try {

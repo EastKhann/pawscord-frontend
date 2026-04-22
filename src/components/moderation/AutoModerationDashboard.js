@@ -73,7 +73,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                         <FaShieldAlt style={styles.headerIcon} />
                         <h2 style={styles.title}>Auto-Moderation</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -83,7 +83,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                     <div style={styles.statCard}>
                         <FaExclamationTriangle style={S.txt} />
                         <div style={styles.statValue}>{stats.total_violations}</div>
-                        <div style={styles.statLabel}>Toplam İhlaller</div>
+                        <div style={styles.statLabel}>{t('autoModDash.totalViolations', 'Total Violations')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaBan style={S.txt} />
@@ -93,7 +93,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                     <div style={styles.statCard}>
                         <FaClock style={S.txt2} />
                         <div style={styles.statValue}>{stats.warnings_issued}</div>
-                        <div style={styles.statLabel}>Uyarılar</div>
+                        <div style={styles.statLabel}>{t('autoModDash.warnings', 'Warnings')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaCheck style={S.txt3} />
@@ -111,7 +111,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                             <FaCog /> Moderation Rules
                         </h3>
                         <button
-                            aria-label="Create"
+                            aria-label={t('common.create')}
                             onClick={() => setShowCreateRule(true)}
                             style={styles.addButton}
                         >
@@ -123,7 +123,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                         <div style={styles.loading}>{t('common.loading')}</div>
                     ) : rules.length === 0 ? (
                         <div style={styles.empty}>
-                            Henüz moderasyon kuralı yok. Başlamak için bir tane oluşturun!
+                            {t('autoModDash.noRules', 'No moderation rules yet. Create one to get started!')}
                         </div>
                     ) : (
                         <div style={styles.rulesList}>
@@ -144,7 +144,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                                                 <span style={styles.slider}></span>
                                             </label>
                                             <button
-                                                aria-label="Close"
+                                                aria-label={t('autoMod.deleteRule', 'Delete rule')}
                                                 onClick={() => deleteRule(rule.id)}
                                                 style={styles.deleteBtn}
                                             >

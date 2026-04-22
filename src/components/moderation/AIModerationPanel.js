@@ -63,7 +63,7 @@ const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
                 <p style={styles.subtitle}>
                     {t(
                         'aiModeration.subtitle',
-                        'Makine öğrenimi destekli otomatik içerik filtreleme'
+                        t('aiMod.desc', 'Automatic content filtering powered by machine learning')
                     )}
                 </p>
             </div>
@@ -121,7 +121,7 @@ const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
                         <div style={styles.settingDesc}>
                             {t(
                                 'aiModeration.toxicityDesc',
-                                'Toksik içerik için hassasiyet seviyesi'
+                                t('aiMod.sensitivityDesc', 'Sensitivity level for toxic content')
                             )}
                         </div>
                     </div>
@@ -167,7 +167,7 @@ const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
                 )}
             </div>
 
-            <button aria-label="save Settings" onClick={saveSettings} style={styles.saveBtn}>
+            <button aria-label={t('aiModeration.saveSettings', 'Save settings')} onClick={saveSettings} style={styles.saveBtn}>
                 💾 {t('panels.saveSettings')}
             </button>
         </div>

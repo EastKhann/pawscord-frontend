@@ -126,7 +126,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
     };
 
     const deleteReactionRole = async (id) => {
-        if (!(await confirmDialog('Bu tepki rolünü silmek istediğinizden emin misiniz?'))) {
+        if (!(await confirmDialog(t('reactionRoles.deleteConfirm', 'Are you sure you want to delete this reaction role?')))) {
             return;
         }
 
@@ -198,7 +198,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                 <div className="reaction-roles-panel">
                     <div className="loading-state">
                         <div className="spinner"></div>
-                        <p>Tepki rolleri yükleniyor...</p>
+                        <p>{t('reactionRoles.loading', 'Loading reaction roles...')}</p>
                     </div>
                 </div>
             </div>
@@ -222,7 +222,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
             >
                 <div className="reaction-header">
                     <h2>⭐ Reaction Roles</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -242,7 +242,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                                     })
                                 }
                             >
-                                <option value="">Kanal seç (isteğe bağlı)</option>
+                                <option value="">{t('reactionRoles.selectChannel', 'Select channel (optional)')}</option>
                                 {channels.map((channel) => (
                                     <option key={channel.id} value={channel.id}>
                                         #{channel.name}
@@ -255,7 +255,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                             <label>Mesaj ID *</label>
                             <input
                                 type="text"
-                                placeholder="Mesaj ID'sini girin"
+                                placeholder={t('reactionRoles.messageId', 'Enter message ID')}
                                 value={newReactionRole.message_id}
                                 onChange={(e) =>
                                     setNewReactionRole({
@@ -265,7 +265,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                                 }
                             />
                             <span className="input-hint">
-                                Mesaja sağ tıklayın → Mesaj ID'sini kopyalayın
+                                {t('reactionRoles.copyIdHint', 'Right-click on the message → Copy Message ID')}
                             </span>
                         </div>
 
@@ -280,7 +280,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                                     })
                                 }
                             >
-                                <option value="">Rol seç</option>
+                                <option value="">{t('reactionRoles.selectRole', 'Select role')}</option>
                                 {roles.map((role) => (
                                     <option key={role.id} value={role.id}>
                                         {role.name}
@@ -305,7 +305,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                                     readOnly
                                 />
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('reactionRoles.toggleEmojiPicker', 'Open emoji picker')}
                                     className="emoji-picker-btn"
                                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                                 >
@@ -317,8 +317,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                                 <div className="emoji-picker">
                                     {commonEmojis.map((emoji) => (
                                         <button
-                                            aria-label="Action button"
-                                            key={emoji}
+                                            aria-label={t('reactionRoles.selectEmoji', emoji)}
                                             className="emoji-option"
                                             onClick={() => {
                                                 setNewReactionRole({ ...newReactionRole, emoji });
@@ -349,7 +348,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                     </div>
 
                     <button
-                        aria-label="create Reaction Role"
+                        aria-label={t('reactionRoles.createBtn', 'Create reaction role')}
                         className="create-btn"
                         onClick={createReactionRole}
                     >
@@ -363,7 +362,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                         role
                     </div>
                     <button
-                        aria-label="sync Reaction Roles"
+                        aria-label={t('reactionRoles.syncBtn', 'Sync reaction roles')}
                         className="sync-btn"
                         onClick={syncReactionRoles}
                     >
@@ -375,8 +374,8 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                     {reactionRoles.length === 0 ? (
                         <div className="empty-state">
                             <span className="empty-icon">⭐</span>
-                            <p>Henüz tepki rolü yok</p>
-                            <span>Kullanıcıların emoji ile rol almasını sağlayın</span>
+                            <p>{t('reactionRoles.noRoles', 'No reaction roles yet')}</p>
+                            <span>{t('reactionRoles.subtitle', 'Let users get roles by reacting with emoji')}</span>
                         </div>
                     ) : (
                         reactionRoles.map((rr) => (
@@ -390,8 +389,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                                         )}
                                     </div>
                                     <button
-                                        aria-label="Action button"
-                                        className="delete-btn"
+                                        aria-label={t('reactionRoles.deleteRole', 'Delete reaction role')}
                                         onClick={() => deleteReactionRole(rr.id)}
                                     >
                                         🗑️
@@ -412,9 +410,9 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                                         <span className="meta-value mono">{rr.message_id}</span>
                                     </div>
                                     <div className="meta-item">
-                                        <span className="meta-label">👥 Kullanımlar:</span>
+                                        <span className="meta-label">{t('reactionRoles.usagesLabel', '👥 Uses:')}</span>
                                         <span className="meta-value">
-                                            {rr.usage_count || 0} kez kullanıldı
+                                            {rr.usage_count || 0} {t('reactionRoles.timesUsed', 'times used')}
                                         </span>
                                     </div>
                                 </div>

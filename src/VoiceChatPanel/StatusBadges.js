@@ -1,8 +1,8 @@
 // frontend/src/VoiceChatPanel/StatusBadges.js
 // 🎨 Status badge components for voice chat header
 
-import React, { useState } from 'react';
-
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 const badgeBase = {
@@ -93,8 +93,6 @@ export const StatusBadges = React.memo(
         isPTTActive,
         isReconnecting,
     }) => {
-        const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
         const badges = [];
 
         if (isRecording) {
@@ -148,9 +146,10 @@ StatusBadges.displayName = 'StatusBadges';
  * StreamBadge — renders screen share or camera badge overlay on a video card
  */
 export const StreamBadge = React.memo(({ user }) => {
+    const { t } = useTranslation();
     if (user.streamType === 'screen') {
         return (
-            <div aria-label="status badges" style={_st2}>
+            <div aria-label={t('aria.streamBadge', 'Screen Share')} style={_st2}>
                 🖥️ <span style={_st3}>{user.username} - Screen Sharing</span>
             </div>
         );

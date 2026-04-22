@@ -52,7 +52,7 @@ const NotificationsTab = ({ handleNotificationSettingsUpdate, notificationSettin
   const { t } = useTranslation();
   const styles = profileStyles;
   return (
-    <div aria-label="notifications tab" style={styles.card}>
+    <div aria-label={t('aria.notificationsTab', 'Notifications')} style={styles.card}>
       <h3 style={styles.sectionTitle}>🔔 {t('notifications.settings', 'Notification Settings')}</h3>
       <p style={_st1}>{t('notifications.settingsDesc', 'Choose which notifications you want to receive.')}</p>
       {SETTINGS.map((s) => (

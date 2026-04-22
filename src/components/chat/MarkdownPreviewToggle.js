@@ -3,6 +3,7 @@
 // Live preview of markdown before sending
 
 import { useState, memo, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import DOMPurify from 'dompurify';
@@ -55,12 +56,13 @@ const parseMarkdown = (text) => {
 };
 
 const MarkdownPreviewToggle = ({ text, show, onToggle }) => {
+    const { t } = useTranslation();
     const html = useMemo(() => parseMarkdown(text), [text]);
 
     return (
         <div style={S.container}>
             <button
-                aria-label="on Toggle"
+                aria-label={t('common.toggle', 'Toggle')}
                 onClick={onToggle}
                 className={`md-toggle-btn${show ? ' active' : ''}`}
                 style={{ ...S.toggleBtn, ...(show ? S.toggleBtnActive : {}) }}
@@ -76,7 +78,7 @@ const MarkdownPreviewToggle = ({ text, show, onToggle }) => {
 
             {show && text && (
                 <div style={S.preview}>
-                    <div style={S.previewLabel}>Markdown Önizleme</div>
+                    <div style={S.previewLabel}>{t('markdownPreview.label','Markdown Preview')}</div>
                     <div
                         style={S.previewContent}
                         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}

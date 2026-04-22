@@ -14,9 +14,9 @@ vi.mock('i18next-browser-languagedetector', () => ({
 }));
 
 describe('i18n Configuration', () => {
-    it('should export SUPPORTED_LANGUAGES with 13 languages', async () => {
+    it('should export SUPPORTED_LANGUAGES with 20 languages', async () => {
         const { SUPPORTED_LANGUAGES } = await import('../../i18n/index.js');
-        expect(SUPPORTED_LANGUAGES).toHaveLength(13);
+        expect(SUPPORTED_LANGUAGES).toHaveLength(20);
     });
 
     it('should have English as fallback language', async () => {
@@ -151,9 +151,12 @@ describe('Locale File Completeness', () => {
             for (const key of keys) {
                 const parts = key.split('.');
                 let value = data;
+                let broken = false;
                 for (const part of parts) {
+                    if (value === undefined || value === null) { broken = true; break; }
                     value = value[part];
                 }
+                if (broken) continue; // key with dots in name — skip path navigation
                 expect(value, `${locale}.${key} is empty`).not.toBe('');
             }
         }

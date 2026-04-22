@@ -1,4 +1,4 @@
-﻿// frontend/src/components/EventCalendar.js
+// frontend/src/components/EventCalendar.js
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaCalendarAlt, FaUsers, FaClock, FaMapMarkerAlt, FaPlus } from 'react-icons/fa';
@@ -52,9 +52,9 @@ const EventCalendar = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
         const diffMs = date - now;
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-        if (diffDays === 0) return 'Bugün';
+        if (diffDays === 0) return 'Bug�n';
         if (diffDays === 1) return t('ui.yarin_3');
-        if (diffDays > 0 && diffDays < 7) return `${diffDays} gün sonra`;
+        if (diffDays > 0 && diffDays < 7) return `${diffDays} g�n sonra`;
 
         return date.toLocaleDateString('tr-TR', {
             day: 'numeric',
@@ -71,7 +71,7 @@ const EventCalendar = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
     };
 
     if (loading) {
-        return <div style={styles.loading}>Etkinlikler yükleniyor...</div>;
+        return <div style={styles.loading}>Etkinlikler y�kleniyor...</div>;
     }
 
     return (
@@ -81,19 +81,19 @@ const EventCalendar = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
                     <FaCalendarAlt /> Etkinlikler
                 </h2>
                 <button
-                    aria-label="Create"
+                    aria-label={t('common.create')}
                     onClick={() => setShowCreateModal(true)}
                     style={styles.createButton}
                 >
-                    <FaPlus /> Etkinlik Oluştur
+                    <FaPlus /> Etkinlik Olustur
                 </button>
             </div>
 
             {events.length === 0 ? (
                 <div style={styles.empty}>
                     <FaCalendarAlt style={styles.emptyIcon} />
-                    <p>Henüz etkinlik yok</p>
-                    <p style={styles.emptySubtext}>İlk etkinliği sen oluştur!</p>
+                    <p>Hen�z etkinlik yok</p>
+                    <p style={styles.emptySubtext}>Ilk etkinligi sen olustur!</p>
                 </div>
             ) : (
                 <div style={styles.eventsList}>
@@ -150,7 +150,7 @@ const EventCard = ({ event, onRSVP, formatDate, formatTime }) => {
                 <div style={styles.detail}>
                     <FaUsers style={styles.detailIcon} />
                     <span>
-                        {event.going_count} katılacak,
+                        {event.going_count} katilacak,
                         {event.interested_count} ilgwithniyor
                     </span>
                 </div>
@@ -158,24 +158,24 @@ const EventCard = ({ event, onRSVP, formatDate, formatTime }) => {
 
             <div style={styles.rsvpButtons}>
                 <button
-                    aria-label="Action button"
+                    aria-label={t('eventCalendar.going', 'Going')}
                     onClick={() => handleRsvpClick('going')}
                     style={{
                         ...styles.rsvpButton,
                         ...(userRsvp === 'going' ? styles.rsvpButtonActive : {}),
                     }}
                 >
-                    ✓ Joinacağım
+                    ? Joinacagim
                 </button>
                 <button
-                    aria-label="Action button"
+                    aria-label={t('eventCalendar.interested', 'Interested')}
                     onClick={() => handleRsvpClick('interested')}
                     style={{
                         ...styles.rsvpButton,
                         ...(userRsvp === 'interested' ? styles.rsvpButtonInterested : {}),
                     }}
                 >
-                    ⭐ İlgwithnicomment
+                    ? Ilgwithnicomment
                 </button>
             </div>
         </div>

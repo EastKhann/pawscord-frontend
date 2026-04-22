@@ -13,10 +13,10 @@ const _st5 = { margin: 0, color: '#f04747' };
 
 const SummaryModal = ({ isLoading, summaryText, onClose }) => {
     const { t } = useTranslation();
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'AI Chat Summary' });
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('summary.title', 'AI Chat Summary') });
 
     return (
-        <div aria-label="summary modal" style={styles.overlay} {...overlayProps}>
+        <div aria-label={t('aria.summaryModal', 'AI Summary')} style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 {/* Header */}
                 <div style={styles.header}>

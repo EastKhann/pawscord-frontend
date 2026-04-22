@@ -137,12 +137,12 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
         <div className="flex-col-gap20">
             <div className="flex-between-center">
                 <div>
-                    <h4 className="text-dbd-m0">API Anahtarları</h4>
+                    <h4 className="text-dbd-m0">{t('apiKeys.title', 'API Keys')}</h4>
                     <p style={S.txt}>
-                        Harici entegrasyonlar için API anahtarları oluşturun ve yönetin
+                        {t('apiKeys.subtitle', 'Create and manage API keys for external integrations')}
                     </p>
                 </div>
-                <button aria-label="create Key" onClick={createKey} style={S.flex}>
+                <button aria-label={t('apiKeys.createKey', 'Create API key')} onClick={createKey} style={S.flex}>
                     <FaPlus /> Yeni Anahtar
                 </button>
             </div>
@@ -150,7 +150,7 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
             {keys.length === 0 ? (
                 <div className={css.emptyStatePad40}>
                     <FaKey style={S.mar} />
-                    <p>Henüz API anahtarı yok</p>
+                    <p>{t('apiKeys.noKeys', 'No API keys yet')}</p>
                 </div>
             ) : (
                 <div className="flex-col-gap12">
@@ -165,7 +165,7 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                                     <div style={S.flex2}>
                                         <span>{showKey[key.id] ? key.key : maskKey(key.key)}</span>
                                         <button
-                                            aria-label="Toggle visibility"
+                                            aria-label={t('apiKeys.toggleVisibility', 'Toggle key visibility')}
                                             onClick={() =>
                                                 setShowKey((prev) => ({
                                                     ...prev,
@@ -177,7 +177,7 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                                             {showKey[key.id] ? <FaEyeSlash /> : <FaEye />}
                                         </button>
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('apiKeys.copyKey', 'Copy API key')}
                                             onClick={() => copyKey(key.key)}
                                             className={css.btnGhostPad4}
                                         >
@@ -185,21 +185,21 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                                         </button>
                                     </div>
                                     <div style={S.txt2}>
-                                        Oluşturuldu: {new Date(key.created_at).toLocaleDateString()}
+                                        {t('apiKeys.created', 'Created:')} {new Date(key.created_at).toLocaleDateString()}
                                         {key.last_used && (
                                             <>
                                                 {' '}
-                                                • Son kullanım:{' '}
+                                                • {t('apiKeys.lastUsed', 'Last used:')}{' '}
                                                 {new Date(key.last_used).toLocaleDateString()}
                                             </>
                                         )}
                                     </div>
                                 </div>
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={t('apiKeys.deleteKey', 'Delete API key')}
                                     onClick={() => deleteKey(key.id)}
                                     style={S.bg2}
-                                    title="Anahtarı sil"
+                                    title={t('common.deleteKey', 'Delete key')}
                                 >
                                     <FaTrash />
                                 </button>
@@ -210,8 +210,8 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
             )}
 
             <div style={S.bg3}>
-                ⚠️ <strong>Güvenlik:</strong> API anahtarlarınızı gizli tutun! Anahtarınıza sahip
-                olan herkes hesabınıza erişebilir.
+                {t('apiKeys.secWarning', '⚠️')} <strong>{t('apiKeys.security', 'Security:')}</strong> {t('apiKeys.securityDesc', 'Keep your API keys secret! Anyone with your key can access your account.')}
+                {t('apiKeys.securityDesc2', 'your key can access your account.')}
             </div>
         </div>
     );

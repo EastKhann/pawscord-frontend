@@ -60,7 +60,7 @@ const AnnouncementForm = ({
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Duyuru mesajı..."
+                        placeholder={t('announcements.messagePlaceholder', 'Announcement message...')}
                         style={_st1159}
                         required
                     />

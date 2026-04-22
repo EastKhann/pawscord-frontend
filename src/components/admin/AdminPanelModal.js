@@ -1,4 +1,4 @@
-// frontend/src/components/AdminPanelModal.js
+﻿// frontend/src/components/AdminPanelModal.js
 // Thin orchestrator - state & API logic in useAdminAPI hook
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -79,7 +79,7 @@ const MENU_ITEMS = [
         label: 'Moderation',
         icon: <FaUserShield size={14} />,
     },
-    { id: 'logs', labelKey: 'admin.panel.Logs', label: 'Logs', icon: <FaBook size={14} /> },
+    { id: 'logs', labelKey: 'admin.panel.logs', label: 'Logs', icon: <FaBook size={14} /> },
     {
         id: 'database',
         labelKey: 'admin.panel.database',
@@ -225,7 +225,7 @@ const AdminPanelModal = ({
                             <span style={S.txt} className="admin-panel-online-info">
                                 🟢 {api.realtimeStats.online} {t('common.online', 'Çevrimici')}
                             </span>
-                            <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                            <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                                 <FaTimes />
                             </button>
                         </div>
@@ -235,7 +235,7 @@ const AdminPanelModal = ({
                         <div style={styles.sidebar} className="admin-panel-sidebar">
                             {MENU_ITEMS.map((item) => (
                                 <button
-                                    aria-label="Switch tab"
+                                    aria-label={t('common.switchTab', 'Switch tab')}
                                     key={item.id}
                                     onClick={() => api.setActiveTab(item.id)}
                                     className="admin-panel-sidebar-btn"

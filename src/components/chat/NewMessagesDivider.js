@@ -3,6 +3,7 @@
 // Shows "X new message" separator between old and new messages
 
 import { useState, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 /**
@@ -11,10 +12,11 @@ import PropTypes from 'prop-types';
  * @param {number} [props.count=0] - Number of new unread messages
  */
 const NewMessagesDivider = ({ count = 0 }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     return (
-        <div aria-label="new messages divider" style={S.container}>
+        <div aria-label={t('chat.newMessagesDivider', 'New messages')} style={S.container}>
             <div style={S.line} />
             <span style={S.label}>{count > 0 ? `${count} new message` : 'New messages'}</span>
             <div style={S.line} />

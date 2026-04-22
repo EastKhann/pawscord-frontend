@@ -22,6 +22,26 @@ import DevicesTab from '../UserSettingsModal/tabs/DevicesTab';
 import AdvancedTab from '../UserSettingsModal/tabs/AdvancedTab';
 import useModalA11y from '../../hooks/useModalA11y';
 
+if (typeof document !== 'undefined') {
+    const _id = 'settings-tab-anim-css';
+    if (!document.getElementById(_id)) {
+        const _s = document.createElement('style');
+        _s.id = _id;
+        _s.textContent = `
+@keyframes settingsTabIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0);    }
+}
+.settings-tab-content {
+    animation: settingsTabIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+    .settings-tab-content { animation: none !important; }
+}`;
+        document.head.appendChild(_s);
+    }
+}
+
 const M = {
     txt3: { fontSize: 11, color: '#949ba4' },
     txt2: { color: '#fff', fontSize: 20, fontWeight: 700, margin: 0 },
@@ -139,7 +159,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                                 <div style={S.divider} />
                             </div>
                         ))}
-                        <button aria-label="on Close" type="button" style={M.txt} onClick={handleClose}>
+                        <button aria-label={t('common.close', 'Close')} type="button" style={M.txt} onClick={handleClose}>
                             <FaSignOutAlt className="fs-14" />
                             <span>{t('common.logout', 'Log Out')}</span>
                         </button>
@@ -156,7 +176,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                             })()}
                         </h2>
                         <button
-                            aria-label="on Close"
+                            aria-label={t('common.close', 'Close')}
                             type="button"
                             style={S.closeBtn}
                             onClick={handleClose}
@@ -165,7 +185,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                             <span style={M.txt3}>ESC</span>
                         </button>
                     </div>
-                    <div style={S.contentBody}>
+                    <div style={S.contentBody} key={activeTab} className="settings-tab-content">
                         <ActiveComponent user={user} onDirtyChange={handleDirtyChange} />
                     </div>
                 </div>

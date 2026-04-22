@@ -50,7 +50,7 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
         });
         const roundKeys = Object.keys(rounds).sort((a, b) => a - b);
         return (
-            <div aria-label="tournament detail modal" style={S.flex}>
+            <div aria-label={t('tournament.detailModal', 'Tournament detail')} style={S.flex}>
                 {roundKeys.map((rk) => (
                     <div key={rk} style={S.size}>
                         <div style={S.txt}>{roundKeys.length === 1 ? 'Final' : `Tur ${rk}`}</div>
@@ -143,16 +143,16 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
                             <strong>{t('oyun')}</strong> {tournament.game}
                         </p>
                         <p>
-                            <strong>Katılımcı:</strong> {tournament.participants?.length}/
+                            <strong>{t('tournament.participants', 'Participants:')}</strong> {tournament.participants?.length}/
                             {tournament.max_participants}
                         </p>
                         <p>
-                            <strong>Başlangıç:</strong>{' '}
+                            <strong>{t('tournament.startTime', 'Start:')}</strong>{' '}
                             {new Date(tournament.start_date).toLocaleString('tr-TR')}
                         </p>
                         {tournament.prize && (
                             <p>
-                                <strong>Ödül:</strong> {tournament.prize}
+                                <strong>{t('tournament.prize', 'Prize:')}</strong> {tournament.prize}
                             </p>
                         )}
                     </div>
@@ -166,13 +166,13 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
 
                     {bracket && (
                         <div style={styles.detailSection}>
-                            <h4>Eşleşmeler</h4>
+                            <h4>{t('tournament.matches', 'Matches')}</h4>
                             {renderBracket()}
                         </div>
                     )}
 
                     <div style={styles.detailSection}>
-                        <h4>Katılımcılar</h4>
+                        <h4>{t('tournament.participantsTitle', 'Participants')}</h4>
                         <div style={styles.participantList}>
                             {tournament.participants?.map((p) => (
                                 <div key={p.id} style={styles.participant}>

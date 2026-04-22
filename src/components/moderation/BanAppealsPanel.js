@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import './BanAppealsPanel.css';
 import { FaGavel, FaPaperPlane, FaHistory, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import logger from '../../utils/logger';
 
 function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
+    const { t } = useTranslation();
     const [appeals, setAppeals] = useState([]);
     const [reason, setReason] = useState('');
     const [details, setDetails] = useState('');
@@ -102,7 +104,7 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
                     <div className="ban-warning">
                         <FaTimesCircle className="warning-icon" />
                         <div className="warning-text">
-                            <h3>Şu an banlısınız</h3>
+                            <h3>{t('ban.youAreBanned', 'You are currently banned')}</h3>
                             <p>{banInfo.ban_reason || 'Sebep belirtilmedi'}</p>
                             <div className="ban-meta">
                                 <span>
@@ -121,14 +123,14 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
 
             <div className="submit-appeal-section">
                 <h3>
-                    <FaPaperPlane /> Yeni Başvuru Gönder
+                    <FaPaperPlane /> {t('ban.newAppeal', 'Send New Appeal')}
                 </h3>
                 <div className="appeal-form">
                     <div className="form-group">
-                        <label>İtiraz Nedeni:</label>
+                        <label>{t('ban.appealReason', 'Appeal Reason:')}</label>
                         <input
                             type="text"
-                            placeholder="Neden banınızın kaldırılması gerekiyor?"
+                            placeholder={t('moderation.banAppealReason', 'Why should your ban be lifted?')}
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
                             className="form-input"
@@ -137,9 +139,9 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
                         <div className="char-count">{reason.length}/200</div>
                     </div>
                     <div className="form-group">
-                        <label>Ek Bilgiler (isteğe bağlı):</label>
+                        <label>{t('ban.additionalInfo', 'Additional Information (optional):')}</label>
                         <textarea
-                            placeholder="Ek bağlam veya kanıt sağlayın..."
+                            placeholder={t('moderation.banAppealContext', 'Provide additional context or evidence...')}
                             value={details}
                             onChange={(e) => setDetails(e.target.value)}
                             className="form-textarea"
@@ -149,38 +151,37 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
                         <div className="char-count">{details.length}/1000</div>
                     </div>
                     <button
-                        aria-label="submit Appeal"
+                        aria-label={t('banAppeals.submitAppeal', 'Submit appeal')}
                         className="submit-btn"
                         onClick={submitAppeal}
                         disabled={loading || !reason.trim()}
                     >
-                        <FaPaperPlane /> Başvuruyu Gönder
+                        <FaPaperPlane /> {t('ban.submitAppeal', 'Submit Appeal')}
                     </button>
                 </div>
                 <div className="appeal-guidelines">
-                    <h4>📋 Kılavuzlar:</h4>
+                    <h4>{t('ban.guidelines', '📋 Guidelines:')}</h4>
                     <ul>
-                        <li>Dürüst ve saygılı olun</li>
+                        <li>{t('ban.guideline1', 'Be honest and respectful')}</li>
                         <li>
-                            Banın haksız ya da yanlışlıkla uygulandığını düşünüyorsanız nedeni
-                            açıklayın
+                            {t('ban.guideline2', 'If you believe the ban was unfair or applied by mistake, explain why')}
                         </li>
-                        <li>Mümkünse kanıt ekleyin</li>
-                        <li>İtirazlar 24-48 saat içinde incelenir</li>
+                        <li>{t('ban.guideline3', 'Add evidence if possible')}</li>
+                        <li>{t('ban.guideline4', 'Appeals are reviewed within 24-48 hours')}</li>
                     </ul>
                 </div>
             </div>
 
             <div className="appeals-history">
                 <h3>
-                    <FaHistory /> İtirazlarınız ({appeals.length})
+                    <FaHistory /> {t('ban.yourAppeals', 'Your Appeals')} ({appeals.length})
                 </h3>
                 {loading && appeals.length === 0 ? (
-                    <div className="loading">İtirazlar yükleniyor...</div>
+                    <div className="loading">{t('ban.appealsLoading', 'Loading appeals...')}</div>
                 ) : appeals.length === 0 ? (
                     <div className="empty-appeals">
                         <FaGavel className="empty-icon" />
-                        <p>Henüz itiraz gönderilmedi</p>
+                        <p>{t('ban.noAppeals', 'No appeals submitted yet')}</p>
                     </div>
                 ) : (
                     <div className="appeals-list">

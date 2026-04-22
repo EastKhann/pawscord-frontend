@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FaVideo, FaTimes, FaMicrophone, FaDesktop, FaUsers, FaComments } from 'react-icons/fa';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 const LiveStreamPanel = ({
     onClose,
@@ -14,6 +15,7 @@ const LiveStreamPanel = ({
     apiBaseUrl,
     roomSlug,
 }) => {
+    const { t } = useTranslation();
     const [isStreaming, setIsStreaming] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [viewers, setViewers] = useState([]);
@@ -35,9 +37,9 @@ const LiveStreamPanel = ({
             const constraints = {
                 video: streamSettings.camera
                     ? {
-                          width: { ideal: streamSettings.quality === '1080p' ? 1920 : 1280 },
-                          height: { ideal: streamSettings.quality === '1080p' ? 1080 : 720 },
-                      }
+                        width: { ideal: streamSettings.quality === '1080p' ? 1920 : 1280 },
+                        height: { ideal: streamSettings.quality === '1080p' ? 1080 : 720 },
+                    }
                     : false,
                 audio: streamSettings.microphone,
             };
@@ -91,11 +93,11 @@ const LiveStreamPanel = ({
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaVideo size={20} color="#f23f42" />
-                        <h2 style={styles.title}>Canlı Yayın</h2>
+                        <h2 style={styles.title}>{t('liveStream.title', 'Live Stream')}</h2>
                         {isStreaming && <span style={styles.liveBadge}>🔴 CANLI</span>}
                     </div>
                     <button
-                        aria-label="Close"
+                        aria-label={t('common.close', 'Close')}
                         onClick={() => {
                             if (isStreaming) stopStream();
                             onClose();
@@ -115,7 +117,7 @@ const LiveStreamPanel = ({
                             {!isStreaming && (
                                 <div style={styles.noStream}>
                                     <FaVideo size={48} color="#4e5058" />
-                                    <p>Yayın başlatılmadı</p>
+                                    <p>{t('liveStream.notStarted', 'Stream not started')}</p>
                                 </div>
                             )}
                         </div>
@@ -161,7 +163,7 @@ const LiveStreamPanel = ({
                                                     })
                                                 }
                                             />
-                                            <FaDesktop size={14} /> <span>Ekranımı Paylaş</span>
+                                            <FaDesktop size={14} /> <span>{t('liveStream.shareScreen', 'Share My Screen')}</span>
                                         </label>
                                     </div>
                                     <select
@@ -179,20 +181,20 @@ const LiveStreamPanel = ({
                                         <option value="1080p">1080p Full HD</option>
                                     </select>
                                     <button
-                                        aria-label="start Stream"
+                                        aria-label={t('liveStream.startStream', 'Start stream')}
                                         onClick={startStream}
                                         style={styles.startButton}
                                     >
-                                        Yayını Start
+                                        {t('liveStream.start', 'Start Stream')}
                                     </button>
                                 </>
                             ) : (
                                 <button
-                                    aria-label="stop Stream"
+                                    aria-label={t('liveStream.stopStream', 'Stop stream')}
                                     onClick={stopStream}
                                     style={styles.stopButton}
                                 >
-                                    Yayını Stop
+                                    {t('liveStream.stop', 'Stop Stream')}
                                 </button>
                             )}
                         </div>
@@ -201,7 +203,7 @@ const LiveStreamPanel = ({
                     <div style={styles.sidebar}>
                         <div style={styles.viewersSection}>
                             <div style={styles.sectionHeader}>
-                                <FaUsers size={16} /> <span>İzleyicwithr ({viewers.length})</span>
+                                <FaUsers size={16} /> <span>{t('liveStream.viewers', 'Viewers')} ({viewers.length})</span>
                             </div>
                             <div style={styles.viewersList}>
                                 {viewers.map((viewer, idx) => (
@@ -230,18 +232,18 @@ const LiveStreamPanel = ({
                             <div style={styles.chatInput}>
                                 <input
                                     type="text"
-                                    placeholder="Mesaj yazın..."
+                                    placeholder={t('common.typeMessage', 'Type a message...')}
                                     value={messageInput}
                                     onChange={(e) => setMessageInput(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && sendChatMessage()}
                                     style={styles.input}
                                 />
                                 <button
-                                    aria-label="send Chat Message"
+                                    aria-label={t('liveStream.sendChat', 'Send chat message')}
                                     onClick={sendChatMessage}
                                     style={styles.sendButton}
                                 >
-                                    Gönder
+                                    {t('common.send', 'Send')}
                                 </button>
                             </div>
                         </div>

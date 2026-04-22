@@ -1,7 +1,7 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+﻿/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useEffect } from 'react';
-
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import {
@@ -17,6 +17,7 @@ import {
 import useModalA11y from '../../hooks/useModalA11y';
 
 const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
+    const { t } = useTranslation();
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kanban Kart' });
 
     const [title, setTitle] = useState(card.content || '');
@@ -38,13 +39,13 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
     // Label renkleri
 
     const LABEL_COLORS = [
-        { color: '#ef5350', name: 'Kırmızı' },
+        { color: '#ef5350', name: t('kanban.red', 'Red') },
 
         { color: '#ffa726', name: 'Turuncu' },
 
-        { color: '#ffee58', name: 'Sarı' },
+        { color: '#ffee58', name: t('kanban.yellow', 'Yellow') },
 
-        { color: '#66bb6a', name: 'Yeşil' },
+        { color: '#66bb6a', name: t('kanban.green', 'Green') },
 
         { color: '#42a5f5', name: 'Mavi' },
 
@@ -264,7 +265,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                         </div>
                     </div>
 
-                    <button aria-label="Close" onClick={onClose} style={S.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={S.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -277,7 +278,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
 
                         {labels.length > 0 && (
                             <div>
-                                <h4 className="text-949-08em-mb8">ETİKETLER</h4>
+                                <h4 className="text-949-08em-mb8">{t('kanban.labels', 'LABELS')}</h4>
 
                                 <div className="flex-wrap-8">
                                     {labels.map((l, i) => (
@@ -299,13 +300,13 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
 
                         <div>
                             <div className="flex-align-10-mb10">
-                                <FaAlignLeft /> <h3 className="m0-fs1em">Açıklama</h3>
+                                <FaAlignLeft /> <h3 className="m0-fs1em">{t('kanban.description', 'Description')}</h3>
                             </div>
 
                             <textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Daha detaylı bir açıklama ekleyin..."
+                                placeholder={t('moderation.cardDescriptionPlaceholder', 'Add a more detailed description...')}
                                 style={S.descArea}
                             />
                         </div>
@@ -325,7 +326,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                                         {Math.round(
                                             (checklist.filter((i) => i.done).length /
                                                 checklist.length) *
-                                                100
+                                            100
                                         )}
                                         %
                                     </span>
@@ -366,7 +367,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                                         </span>
 
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('kanbanCard.removeItem', 'Remove checklist item')}
                                             onClick={() => removeChecklistItem(index)}
                                             style={S.removeBtn}
                                         >
@@ -380,18 +381,18 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                                         type="text"
                                         value={newCheckliItem}
                                         onChange={(e) => setNewCheckliItem(e.target.value)}
-                                        placeholder="Öğe ekle"
+                                        placeholder={t('moderation.checklistItemPlaceholder', 'Add item')}
                                         onKeyDown={(e) => e.key === 'Enter' && addChecklistItem()}
                                         style={S.checkInput}
-                                        aria-label="New Checkli Item"
+                                        aria-label={t('kanbanCard.newChecklistItem', 'New checklist item')}
                                     />
 
                                     <button
-                                        aria-label="Kontrol listesi öğesi ekle"
+                                        aria-label={t('common.addChecklistItem', 'Add checklist item')}
                                         onClick={addChecklistItem}
                                         style={S.addBtn}
                                     >
-                                        Ekle
+                                        {t('common.add', 'Add')}
                                     </button>
                                 </div>
                             </div>
@@ -443,7 +444,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
 
                         <div className="flex-col-gap5">
                             <div style={S.sidebarRow}>
-                                <FaCalendarAlt /> Bitiş Tarihi
+                                <FaCalendarAlt /> {t('kanban.dueDate', 'Due Date')}
                             </div>
 
                             <input
@@ -455,10 +456,10 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                         </div>
 
                         <div className="mt-auto">
-                            <h4 className="text-949-08em-mb5">İŞLEMLER</h4>
+                            <h4 className="text-949-08em-mb5">{t('kanban.actions', 'ACTIONS')}</h4>
 
-                            <button aria-label="on Delete" onClick={onDelete} style={S.deleteBtn}>
-                                <FaTrash /> Kartı Sil
+                            <button aria-label={t('common.delete', 'Delete')} onClick={onDelete} style={S.deleteBtn}>
+                                <FaTrash /> {t('kanban.deleteCard', 'Delete Card')}
                             </button>
                         </div>
                     </div>
@@ -467,8 +468,8 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                 {/* FOOTER */}
 
                 <div style={S.footer}>
-                    <button aria-label="on Save" onClick={onSave} style={S.saveBtn}>
-                        Değişiklikleri Kaydet
+                    <button aria-label={t('common.save', 'Save')} onClick={onSave} style={S.saveBtn}>
+                        {t('common.saveChanges', 'Save Changes')}
                     </button>
                 </div>
             </div>

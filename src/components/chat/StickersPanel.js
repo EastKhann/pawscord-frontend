@@ -134,7 +134,7 @@ const StickersPanel = ({ serverId, onClose }) => {
     };
 
     const deleteSticker = async (stickerId) => {
-        if (!(await confirmDialog('Bu stickeri silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('stickers.deleteConfirm', 'Are you sure you want to delete this sticker?')))) return;
 
         try {
             const token = getToken();
@@ -226,14 +226,14 @@ const StickersPanel = ({ serverId, onClose }) => {
                 <div className="stickers-panel-header">
                     <h2>🎨 Stickers</h2>
 
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
 
                 <div className="stickers-tabs">
                     <button
-                        aria-label="Action button"
+                        aria-label={t('stickers.myStickers', 'My stickers')}
                         className={`tab-btn ${activeTab === 'my-stickers' ? 'active' : ''}`}
                         onClick={() => setActiveTab('my-stickers')}
                     >
@@ -241,7 +241,7 @@ const StickersPanel = ({ serverId, onClose }) => {
                     </button>
 
                     <button
-                        aria-label="Action button"
+                        aria-label={t('stickers.stickerPacks', 'Sticker packs')}
                         className={`tab-btn ${activeTab === 'packs' ? 'active' : ''}`}
                         onClick={() => setActiveTab('packs')}
                     >
@@ -254,7 +254,7 @@ const StickersPanel = ({ serverId, onClose }) => {
                         <>
                             <div className="sticker-actions">
                                 <button
-                                    aria-label="Toggle visibility"
+                                    aria-label={t('stickers.showUpload', 'Upload sticker')}
                                     className="upload-sticker-btn"
                                     onClick={() => setShowUploadModal(true)}
                                 >
@@ -265,14 +265,14 @@ const StickersPanel = ({ serverId, onClose }) => {
                             </div>
 
                             {loading ? (
-                                <div className="loading-spinner">Etiketler yükleniyor...</div>
+                                <div className="loading-spinner">{t('stickers.loading', 'Loading stickers...')}</div>
                             ) : stickers.length === 0 ? (
                                 <div className="empty-state">
                                     <div className="empty-icon">🎨</div>
 
-                                    <h3>Henüz Sticker Yok</h3>
+                                    <h3>{t('stickers.noStickers', 'No Stickers Yet')}</h3>
 
-                                    <p>İlk özel etiketinizi yükleyin</p>
+                                    <p>{t('stickers.uploadFirst', 'Upload your first custom sticker')}</p>
                                 </div>
                             ) : (
                                 <div className="stickers-grid">
@@ -287,7 +287,7 @@ const StickersPanel = ({ serverId, onClose }) => {
                                             <div className="sticker-name">{sticker.name}</div>
 
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={t('stickers.deleteSticker', 'Delete sticker')}
                                                 className="delete-sticker-btn"
                                                 onClick={() => deleteSticker(sticker.id)}
                                                 title="Sil"
@@ -304,15 +304,15 @@ const StickersPanel = ({ serverId, onClose }) => {
                     {activeTab === 'packs' && (
                         <>
                             {loading ? (
-                                <div className="loading-spinner">Paketler yükleniyor...</div>
+                                <div className="loading-spinner">{t('stickers.loadingPacks', 'Loading packs...')}</div>
                             ) : stickerPacks.length === 0 ? (
                                 <div className="empty-state">
                                     <div className="empty-icon">📦</div>
 
-                                    <h3>Paket Bulunamadı</h3>
+                                    <h3>{t('stickers.noPacks', 'No Packs Found')}</h3>
 
                                     <p>
-                                        Yeni sticker paketleri için daha sonra tekrar kontrol edin
+                                        {t('stickers.checkBackLater', 'Check back later for new sticker packs')}
                                     </p>
                                 </div>
                             ) : (
@@ -339,7 +339,7 @@ const StickersPanel = ({ serverId, onClose }) => {
                                             </div>
 
                                             <button
-                                                aria-label="Action button"
+                                                aria-label={pack.installed ? t('stickers.installed', 'Installed') : t('stickers.installPack', 'Install pack')}
                                                 className={`install-pack-btn ${pack.installed ? 'installed' : ''}`}
                                                 onClick={() =>
                                                     !pack.installed && installPack(pack.id)
@@ -373,27 +373,27 @@ const StickersPanel = ({ serverId, onClose }) => {
                             className="upload-modal"
                             role="dialog"
                             aria-modal="true"
-                            aria-label="Upload Sticker"
+                            aria-label={t('stickers.uploadModal', 'Upload sticker')}
                             onClick={(e) => e.stopPropagation()}
                         >
                             <h3>➕ Upload Sticker</h3>
 
                             <div className="form-group">
-                                <label>Sticker Adı</label>
+                                <label>{t('stickers.name', 'Sticker Name')}</label>
 
                                 <input
                                     type="text"
                                     value={stickerName}
                                     onChange={(e) => setStickerName(e.target.value)}
-                                    placeholder="Stickerim"
+                                    placeholder={t('stickers.name', 'My Sticker')}
                                     maxLength={32}
                                     className="sticker-name-input"
-                                    aria-label="Sticker Name"
+                                    aria-label={t('stickers.nameInput', 'Sticker name')}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label>Sticker Görseli</label>
+                                <label>{t('stickers.image', 'Sticker Image')}</label>
 
                                 <div
                                     className="file-upload-area"
@@ -408,14 +408,14 @@ const StickersPanel = ({ serverId, onClose }) => {
                                     {previewUrl ? (
                                         <img
                                             src={previewUrl}
-                                            alt="Preview"
+                                            alt={t('alt.preview', 'Preview')}
                                             className="upload-preview"
                                         />
                                     ) : (
                                         <>
                                             <div className="upload-icon">📤</div>
 
-                                            <p>Görsel seçmek için tıklayın</p>
+                                            <p>{t('stickers.clickToSelect', 'Click to select an image')}</p>
 
                                             <p className="upload-hint">
                                                 PNG, GIF • Max 512KB • 512x512px recommended
@@ -430,13 +430,13 @@ const StickersPanel = ({ serverId, onClose }) => {
                                     accept="image/*"
                                     onChange={handleFileSelect}
                                     className="display-none"
-                                    aria-label="sticker file"
+                                    aria-label={t('stickers.fileInput', 'Sticker image file')}
                                 />
                             </div>
 
                             <div className="modal-actions">
                                 <button
-                                    aria-label="Toggle visibility"
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     className="cancel-btn"
                                     onClick={() => setShowUploadModal(false)}
                                 >
@@ -444,7 +444,7 @@ const StickersPanel = ({ serverId, onClose }) => {
                                 </button>
 
                                 <button
-                                    aria-label="upload Sticker"
+                                    aria-label={t('stickers.uploadBtn', 'Upload sticker')}
                                     className="upload-btn"
                                     onClick={uploadSticker}
                                     disabled={uploading || !stickerName || !stickerFile}

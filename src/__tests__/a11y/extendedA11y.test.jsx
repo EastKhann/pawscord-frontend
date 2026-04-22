@@ -32,6 +32,16 @@ vi.mock('../../stores/useVoiceStore', () => ({
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key) => key, i18n: { language: 'en', changeLanguage: vi.fn() } }),
     Trans: ({ children }) => children,
+    I18nextProvider: ({ children }) => children,
+    withTranslation: () => (Component) => {
+        const Wrapped = (props) => {
+            const tFn = (key, fallback) => (typeof fallback === 'string' ? fallback : key);
+            return React.createElement(Component, { ...props, t: tFn, i18n: { language: 'en' } });
+        };
+        Wrapped.displayName = `withI18n(${Component.displayName || Component.name})`;
+        return Wrapped;
+    },
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
 }));
 
 describe('Accessibility - Critical Components', () => {
@@ -48,7 +58,7 @@ describe('Accessibility - Critical Components', () => {
         const ThrowError = () => {
             throw new Error('test');
         };
-        vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.spyOn(console, 'error').mockImplementation(() => { });
         const { container } = render(
             <ErrorBoundary>
                 <ThrowError />

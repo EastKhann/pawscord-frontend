@@ -151,7 +151,7 @@ export default function useServerHandlers({
                         window.location.href = `/#/2fa-login?temp_token=${encodeURIComponent(data.temp_token)}`;
                         return;
                     }
-                    if (res.status === 401) setAuthError('Geçersiz kullanıcı adı veya şifre');
+                    if (res.status === 401) setAuthError(t('errors.invalid_credentials'));
                     else if (res.status === 400)
                         setAuthError(data.detail || data.error || t('errors.invalid_credentials'));
                     else if (res.status >= 500) setAuthError(t('errors.server_error'));
@@ -184,7 +184,7 @@ export default function useServerHandlers({
                 else if (data.detail) errorMessage = data.detail;
                 else errorMessage = Object.values(data).flat().join(' ');
 
-                setAuthError(errorMessage || 'Kayıt başarısız');
+                setAuthError(errorMessage || t('errors.registration_failed'));
                 return false;
             } catch (err) {
                 logger.error('❌ [Auth] Network error:', err);
@@ -288,10 +288,10 @@ export default function useServerHandlers({
                         try {
                             const friendship = Array.isArray(friendsList)
                                 ? friendsList.find(
-                                      (f) =>
-                                          f.sender_username === user.username ||
-                                          f.receiver_username === user.username
-                                  )
+                                    (f) =>
+                                        f.sender_username === user.username ||
+                                        f.receiver_username === user.username
+                                )
                                 : null;
                             if (friendship) {
                                 const res = await fetchWithAuth(

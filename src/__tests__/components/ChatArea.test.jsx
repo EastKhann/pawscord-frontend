@@ -34,7 +34,7 @@ const MockChatArea = ({
             <div data-testid="chat-area-empty">
                 <div data-testid="no-chat-selected">
                     <h2>Chat seçilmedi</h2>
-                    <p>Sol panelden bir sohbet seçin</p>
+                    <p>Sol panelden bir sohbet seç</p>
                 </div>
             </div>
         );
@@ -95,7 +95,7 @@ const MockChatArea = ({
 
                 {/* "Load more" indicator */}
                 {hasMoreMessages && !messageHistoryLoading && (
-                    <div data-testid="load-more-indicator">Daha fazla message yükleniyor...</div>
+                    <div data-testid="load-more-indicator">Loading more messages...</div>
                 )}
 
                 {/* Messages */}
@@ -119,7 +119,7 @@ const MockChatArea = ({
                                         prev.includes(msg.id) ? prev.filter(id => id !== msg.id) : [...prev, msg.id]
                                     );
                                 } : undefined}
-                            
+
                                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
                                 <span data-testid={`msg-author-${msg.id}`}>{msg.username}</span>
                                 <span data-testid={`msg-content-${msg.id}`}>{msg.content}</span>
@@ -138,7 +138,7 @@ const MockChatArea = ({
 
             {/* Scroll to bottom button */}
             {showScrollToBottom && (
-                <button data-testid="scroll-to-bottom" onClick={onScrollToBottom} aria-label="En alta kaydır">
+                <button data-testid="scroll-to-bottom" onClick={onScrollToBottom} aria-label="Scroll to bottom">
                     ↓
                 </button>
             )}
@@ -237,7 +237,7 @@ describe('ChatArea Component', () => {
                 <MockChatArea
                     activeChat={mockActiveChat}
                     messages={mockMessages}
-                    activeTypingUsers={['Alice', 'Bob']}>
+                    activeTypingUsers={['Alice', 'Bob']}
                     {...handlers}
                 />
             );

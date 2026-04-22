@@ -6,7 +6,7 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
     const { t } = useTranslation();
     return (
         <div className="ticket-config-section">
-            <h3>⚙️ Sistem Ayarları</h3>
+            <h3>{t('ticketConfig.title','⚙️ System Settings')}</h3>
 
             <div className="config-grid">
                 <div className="config-item">
@@ -105,7 +105,7 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
             </div>
 
             <button className="save-config-btn" onClick={updateConfig}>
-                💾 Ayarları Kaydet
+                {t('ticketConfig.save','💾 Save Settings')}
             </button>
         </div>
     );

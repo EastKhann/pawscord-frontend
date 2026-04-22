@@ -53,7 +53,7 @@ const TicketDetail = ({
                     <div className="message-input-container">
                         <input
                             type="text"
-                            placeholder="Mesajınızı yazın..."
+                            placeholder={t('common.typeMessage', 'Type a message...')}
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && sendMessage()}

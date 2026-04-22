@@ -86,14 +86,14 @@ const PremiumMarketplace = () => {
             {/* Billing Toggle */}
             <div className="billing-toggle">
                 <button
-                    aria-label="Action button"
+                    aria-label={t('premium.monthly', 'Monthly billing')}
                     className={billingCycle === 'monthly' ? 'active' : ''}
                     onClick={() => setBillingCycle('monthly')}
                 >
                     {t('premium.monthly')}
                 </button>
                 <button
-                    aria-label="Action button"
+                    aria-label={t('premium.yearly', 'Yearly billing')}
                     className={billingCycle === 'yearly' ? 'active' : ''}
                     onClick={() => setBillingCycle('yearly')}
                 >
@@ -193,7 +193,7 @@ const PremiumPlanCard = ({
                 ))}
             </ul>
 
-            <button aria-label="on Purchase" className="purchase-btn" onClick={onPurchase}>
+            <button aria-label={t('common.purchase', 'Purchase')} className="purchase-btn" onClick={onPurchase}>
                 {featured ? t('premium.upgradeNow') : t('premium.getStarted')}
             </button>
 

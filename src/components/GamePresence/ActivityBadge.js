@@ -1,5 +1,5 @@
 ﻿import { FaGamepad, FaTwitch, FaSpotify, FaYoutube } from 'react-icons/fa';
-
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 
@@ -11,13 +11,13 @@ const ICONS = { playing: FaGamepad, streaming: FaTwitch, listening: FaSpotify, w
 const COLORS = { playing: '#23a559', streaming: '#9146ff', listening: '#1db954', watching: '#ff0000' };
 
 export const ActivityBadge = ({ activity, size = 'medium' }) => {
-
+  const { t } = useTranslation();
   if (!activity) return null;
   const Icon = ICONS[activity.type] || FaGamepad;
   const color = COLORS[activity.type] || '#5865f2';
 
   return (
-    <div aria-label="activity badge" className={`activity-badge activity-badge-${size}`} style={{ borderColor: color }}>
+    <div aria-label={t('gamePresence.activityBadge', 'Activity badge')} className={`activity-badge activity-badge-${size}`} style={{ borderColor: color }}>
       <span className="activity-icon" style={S.txt}<Icon /></span>
       <span className="activity-name">{activity.name}</span>
     </div >

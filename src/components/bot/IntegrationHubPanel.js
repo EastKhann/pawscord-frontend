@@ -46,7 +46,7 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
                     <h2>
                         <FaPlug /> Entegrasyon Merkezi
                     </h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -54,21 +54,21 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
                 <div className="tabs-bar">
                     <div className="tabs">
                         <button
-                            aria-label="Switch tab"
+                            aria-label={t('integrations.connectedTab', 'Connected integrations')}
                             className={`tab ${activeTab === 'connected' ? 'active' : ''}`}
                             onClick={() => setActiveTab('connected')}
                         >
-                            <FaLink /> Bağlı ({integrations.length})
+                            <FaLink /> {t('integrations.connectedCount', 'Connected')} ({integrations.length})
                         </button>
                         <button
-                            aria-label="Switch tab"
+                            aria-label={t('integrations.availableTab', 'Available integrations')}
                             className={`tab ${activeTab === 'available' ? 'active' : ''}`}
                             onClick={() => setActiveTab('available')}
                         >
-                            <FaPlus /> Mevcut ({notConnected.length})
+                            <FaPlus /> {t('integrations.available', 'Available')} ({notConnected.length})
                         </button>
                         <button
-                            aria-label="Switch tab"
+                            aria-label={t('integrations.webhooksTab', 'Webhooks')}
                             className={`tab ${activeTab === 'webhooks' ? 'active' : ''}`}
                             onClick={() => setActiveTab('webhooks')}
                         >
@@ -82,9 +82,10 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
                         <FaSearch />
                         <input
                             type="text"
-                            placeholder="Entegrasyon ara..."
+                            placeholder={t('integrations.searchPlaceholder', 'Search integrations...')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            aria-label={t('common.search', 'Search')}
                         />
                     </div>
                 )}

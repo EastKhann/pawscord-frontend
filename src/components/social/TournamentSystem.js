@@ -41,14 +41,14 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                     </div>
                     <div style={styles.headerActions}>
                         <button
-                            aria-label="Create"
+                            aria-label={t('common.create')}
                             onClick={() => setShowCreateModal(true)}
                             style={styles.createButton}
                         >
                             <FaPlus size={14} />
                             <span>Yeni Turnuva</span>
                         </button>
-                        <button aria-label="on Close" onClick={onClose} style={styles.closeButton}>
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                             <FaTimes size={20} />
                         </button>
                     </div>
@@ -57,7 +57,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                 <div style={styles.filters}>
                     {['all', 'active', 'upcoming', 'completed'].map((f) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={t('tournament.joinTournament', 'Join tournament')}
                             key={f}
                             onClick={() => setFilter(f)}
                             style={{
@@ -68,10 +68,10 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                             {f === 'all'
                                 ? 'All'
                                 : f === 'active'
-                                  ? 'Active'
-                                  : f === 'upcoming'
-                                    ? t('ui.yaklasan')
-                                    : 'Completed'}
+                                    ? 'Active'
+                                    : f === 'upcoming'
+                                        ? t('ui.yaklasan')
+                                        : 'Completed'}
                         </button>
                     ))}
                 </div>
@@ -80,7 +80,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                     {tournaments.length === 0 ? (
                         <div style={styles.empty}>
                             <FaTrophy size={48} color="#4e5058" />
-                            <p>Henüz turnuva yok</p>
+                            <p>Hen�z turnuva yok</p>
                         </div>
                     ) : (
                         <div style={styles.tournamentGrid}>

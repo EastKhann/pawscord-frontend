@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { getToken } from '../../utils/tokenStorage';
 import PropTypes from 'prop-types';
 import './ClipsSystem.css';
@@ -123,7 +123,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
   };
 
   const deleteClip = async (clipId) => {
-    if (!await confirmDialog('Bu klibi silmek istediğinizden emin misiniz?')) return;
+    if (!await confirmDialog(t('clips.deleteConfirm', 'Are you sure you want to delete this clip?'))) return;
 
     try {
       const token = getToken();
@@ -170,18 +170,18 @@ const ClipsSystem = ({ serverId, onClose }) => {
       <div className="clips-system-modal" role="button" tabIndex={0} onClick={e => e.stopPropagation()} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
         <div className="clips-system-header">
           <h2>🎬 Clips</h2>
-          <button aria-label="Close" className="close-btn" onClick={onClose}>✕</button>
+          <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>✕</button>
         </div>
 
         <div className="clips-tabs">
           <button
-          aria-label="Action button"
+          aria-label={t('clips.myClips', 'My clips')}
             className={`tab-btn ${activeTab === 'my-clips' ? 'active' : ''}`}
             onClick={() => setActiveTab('my-clips')}
             📁 My Clips
           </button>
           <button
-          aria-label="Action button"
+          aria-label={t('clips.serverClips', 'Server clips')}
             className={`tab-btn ${activeTab === 'server-clips' ? 'active' : ''}`}
             onClick={() => setActiveTab('server-clips')}
             🎭 Server Clips
@@ -194,7 +194,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
             <div className="clip-name-input-wrapper">
               <input
                 type="text"
-                placeholder="Klip adı..."
+                placeholder={t('media.clipName', 'Clip name...')}
                 value={clipName}
                 onChange={(e) => setClipName(e.target.value)}
                 className="clip-name-input"
@@ -202,7 +202,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
               />
             </div>
             <button
-          aria-label="recording null start Clip"
+          aria-label={t('clips.startRecording', 'Start recording')}
               className={`record-btn ${recording ? 'recording' : ''}`}
               onClick={recording ? null : startClip}
               disabled={recording || !clipName.trim()}>
@@ -212,12 +212,12 @@ const ClipsSystem = ({ serverId, onClose }) => {
 
           {/* Clips Grid */}
           {loading ? (
-            <div className="loading-spinner">Klipler yükleniyor...</div>
+            <div className="loading-spinner">{t('clips.loading','Loading clips...')}</div>
           ) : clips.length === 0 ? (
             <div className="empty-state">
               <div className="empty-icon">🎬</div>
-              <h3>Henüz Klip Yok</h3>
-              <p>Sesli sohbet sırasında ilk klibini kaydet</p>
+              <h3>{t('clips.noClips','No Clips Yet')}</h3>
+              <p>{t('clips.recordFirst','Record your first clip during voice chat')}</p>
             </div>
           ) : (
             <div className="clips-grid">
@@ -226,7 +226,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
                   <div className="clip-thumbnail">
                     <div className="clip-duration">{clip.duration || '0:30'}</div>
                     <button
-          aria-label="Action button"
+          aria-label={t('clips.playClip', 'Play clip')}
                       className={`play-clip-btn ${playingClip === clip.id ? 'playing' : ''}`}
                       onClick={() => playClip(clip)}>
                       {playingClip === clip.id ? '⏸️' : '▶️'}
@@ -247,25 +247,25 @@ const ClipsSystem = ({ serverId, onClose }) => {
                   <div className="clip-actions">
                     {activeTab === 'my-clips' && (
                       <button
-          aria-label="Action button"
+          aria-label={t('clips.shareClip', 'Share clip')}
                         className="share-clip-btn"
                         onClick={() => shareClip(clip.id)}
-                        title="Sunucuda paylaş"
+                        title={t('common.shareToServer', 'Share to server')}
                       >
                         📤
                       </button>
                     )}
                     <button
-          aria-label="Action button"
+          aria-label={t('clips.downloadClip', 'Download clip')}
                       className="download-clip-btn"
-                      onClick={() => window.open(clip.url, '_blank')}
-                      title="İndir"
+                      onClick={() => window.open(clip.url, '_blank', 'noopener,noreferrer')}
+                      title={t('common.download', 'Download')}
                     >
                       💾
                     </button>
                     {activeTab === 'my-clips' && (
                       <button
-          aria-label="Action button"
+          aria-label={t('clips.deleteClip', 'Delete clip')}
                         className="delete-clip-btn"
                         onClick={() => deleteClip(clip.id)}
                         title={t("common.delete")}

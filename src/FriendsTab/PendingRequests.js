@@ -38,7 +38,7 @@ const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRes
                             <LazyImage
                                 src={senderAvatar || getDeterministicAvatar(senderUsername)}
                                 style={styles.avatar}
-                                alt="avatar"
+                                alt={t('alt.userAvatar', 'User Avatar')}
                             />
                             <div style={_st1}>
                                 <strong style={_st2}>{senderUsername}</strong>
@@ -88,7 +88,7 @@ const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRes
                                             getDeterministicAvatar(receiverUsername)
                                         }
                                         style={styles.avatar}
-                                        alt="avatar"
+                                        alt={t('alt.userAvatar', 'User Avatar')}
                                     />
                                     <span style={_st4}>
                                         {receiverUsername} ({t('friends.pending')}...)

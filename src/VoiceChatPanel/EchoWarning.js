@@ -49,7 +49,7 @@ const EchoWarning = React.memo(({ onDismiss }) => {
                 <div style={_st5}>
                     {t(
                         'voice.echoDescription',
-                        'Kulaklık kullanmanız önerilir. Hoparlör kullanımı yankıya neden olabilir.'
+                        t('echoWarning.message','Using headphones is recommended. Using speakers may cause echo.')
                     )}
                 </div>
             </div>

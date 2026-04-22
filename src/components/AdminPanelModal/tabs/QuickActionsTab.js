@@ -9,7 +9,7 @@ const QuickActionsTab = () => {
         useAdminAPIContext();
     const { t } = useTranslation();
     return (
-        <div aria-label="quick actions tab">
+        <div aria-label={t('admin.quickActionsTab', 'Quick actions tab')}>
             <h2 className={css.sectionTitle}>{t('⚡_quick_actionsler')}</h2>
 
             <div className="grid-auto-250-12">

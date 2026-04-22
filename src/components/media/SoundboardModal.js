@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { FaTimes, FaMusic, FaVolumeUp } from 'react-icons/fa';
 import useModalA11y from '../../hooks/useModalA11y';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 // -- extracted inline style constants --
 const _st1 = {
@@ -19,6 +20,7 @@ const _st1 = {
 const _st2 = { color: '#eb459e', fontSize: '24px' };
 
 const SoundboardModal = ({ onClose, fetchWithAuth, apiBaseUrl, sendSignal, absoluteHostUrl }) => {
+    const { t } = useTranslation();
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Sound Board' });
     const [sounds, setSounds] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +79,7 @@ const SoundboardModal = ({ onClose, fetchWithAuth, apiBaseUrl, sendSignal, absol
                     <h3 style={_st1}>
                         <FaMusic color="#eb459e" /> Sound Board
                     </h3>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -85,7 +87,7 @@ const SoundboardModal = ({ onClose, fetchWithAuth, apiBaseUrl, sendSignal, absol
                 <div style={styles.grid}>
                     {displaySounds.map((sound) => (
                         <button
-                            aria-label="Action button"
+                            aria-label={sound.name}
                             key={sound.id}
                             onClick={() => playSound(sound.file)}
                             style={styles.soundBtn}

@@ -109,14 +109,14 @@ const MessageOCRPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) => {
                         <>
                             <div style={styles.toolbar}>
                                 <button
-                                    aria-label="copy Text"
+                                    aria-label={t('msgOCR.copyText', 'Copy text')}
                                     onClick={copyText}
                                     style={styles.toolBtn}
                                 >
                                     <FaCopy /> Copy
                                 </button>
                                 <button
-                                    aria-label="download Text"
+                                    aria-label={t('msgOCR.downloadText', 'Download text')}
                                     onClick={downloadText}
                                     style={styles.toolBtn}
                                 >
@@ -132,12 +132,12 @@ const MessageOCRPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) => {
                             <FaImage className="icon-lg-mb15" />
                             <p>Bu mesajda OCR metni yok</p>
                             <button
-                                aria-label="request O C R"
+                                aria-label={t('msgOCR.requestOCR', 'Extract text from image')}
                                 onClick={requestOCR}
                                 disabled={processing}
                                 style={styles.requestBtn}
                             >
-                                {processing ? 'İşleniyor...' : 'OCR İşlemini Başlat'}
+                                {processing ? t('ocrPanel.processing', 'Processing...') : t('ocrPanel.start', 'Start OCR Process')}
                             </button>
                         </div>
                     )}

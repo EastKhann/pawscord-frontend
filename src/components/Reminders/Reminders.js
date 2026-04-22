@@ -283,7 +283,7 @@ const Reminders = ({ userId, onReminderDue }) => {
                     <span className="empty-icon">⏰</span>
                     <p>{t('not_yet_hatırlatma_yok')}</p>
                     <span className="help-text">
-                        /remind 30m toplantı veya yukarıdan ekle
+                        /remind 30m meeting or add from above
                     </span>
                 </div>
             )}

@@ -1,6 +1,7 @@
 // frontend/src/components/VirtualMessageList.js
 // 10/10 Edition: Adaptive overscan, scroll position restore, load-more trigger
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { VariableSizeList as List } from 'react-window';
 import { AutoSizer } from 'react-virtualized-auto-sizer';
@@ -47,7 +48,7 @@ const Row = memo(
         // During fast scroll show a lightweight placeholder
         if (isScrolling && data.showPlaceholderWhileScrolling) {
             return (
-                <div aria-label="virtual message list" style={style}>
+                <div aria-label={t('chat.messageList', 'Message list')} style={style}>
                     <div style={S.txt}>{message.username || '...'}</div>
                 </div>
             );
@@ -90,6 +91,7 @@ const VirtualMessageList = memo(
         showPlaceholderWhileScrolling = false,
     }) => {
         const listRef = useRef();
+        const { t } = useTranslation();
         const sizeMap = useRef({});
         const scrollOffsetRef = useRef(0);
         const prevMessageCountRef = useRef(0);

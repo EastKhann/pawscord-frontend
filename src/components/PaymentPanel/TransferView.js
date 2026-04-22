@@ -36,12 +36,12 @@ const TransferView = ({
                         type="number"
                         value={transferAmount}
                         onChange={(e) => setTransferAmount(e.target.value)}
-                        placeholder="0"
+                        placeholder={t('transfer.amount', '0')}
                         min="1"
                         max={balance}
                         style={styles.input}
                     />
-                    <div style={styles.hint}>Available: {balance} coins</div>
+                    <div style={styles.hint}>{t('payment.available', 'Available')}: {balance} {t('payment.coins', 'coins')}</div>
                 </div>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>{t('note_optional')}</label>
@@ -49,11 +49,11 @@ const TransferView = ({
                         type="text"
                         value={transferNote}
                         onChange={(e) => setTransferNote(e.target.value)}
-                        placeholder="Mesaj ekleyin..."
+                        placeholder={t('common.addMessage', 'Add a message...')}
                         style={styles.input}
                     />
                 </div>
-                <button onClick={handleTransfer} style={styles.transferBtn}>
+                <button aria-label={t('transfer_coins')} onClick={handleTransfer} style={styles.transferBtn}>
                     <FaCoins />
                     {t('transfer_coins')}
                 </button>

@@ -191,7 +191,7 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                 {/* Header */}
                 <div className="search-header">
                     <h2>🔍 {t('search.advancedSearch')}</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -211,7 +211,7 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                     />
                     {searchQuery && (
                         <button
-                            aria-label="handle Clear Search"
+                            aria-label={t('search.clearSearch', 'Clear search')}
                             type="button"
                             className="clear-btn"
                             onClick={handleClearSearch}
@@ -224,7 +224,7 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                 {/* Filter Toggle */}
                 <div className="filter-toggle">
                     <button
-                        aria-label="handle Toggle Filters"
+                        aria-label={t('search.toggleFilters', 'Toggle filters')}
                         className={`filter-btn ${showFilters ? 'active' : ''}`}
                         onClick={handleToggleFilters}
                     >
@@ -232,7 +232,7 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                     </button>
                     {Object.values(filters).some((f) => f) && (
                         <button
-                            aria-label="clear Filters"
+                            aria-label={t('search.clearFilters', 'Clear filters')}
                             className="clear-filters-btn"
                             onClick={clearFilters}
                         >
@@ -250,7 +250,7 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                                 <select
                                     value={filters.user}
                                     onChange={handleUserFilter}
-                                    aria-label="select"
+                                    aria-label={t('search.userFilter', 'Filter by user')}
                                 >
                                     <option value="">{t('search.all')}</option>
                                     {[...new Set(messages.map((m) => m.username))].map((user) => (
@@ -266,16 +266,7 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                                     type="date"
                                     value={filters.dateFrom}
                                     onChange={handleDateFromFilter}
-                                    aria-label="date"
-                                />
-                            </label>
-                            <label>
-                                <FaCalendar /> {t('search.dateTo')}:
-                                <input
-                                    type="date"
-                                    value={filters.dateTo}
-                                    onChange={handleDateToFilter}
-                                    aria-label="date"
+                                    aria-label={t('search.dateFrom', 'From date')}
                                 />
                             </label>
                         </div>
@@ -286,27 +277,21 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                                     type="checkbox"
                                     checked={filters.hasFile}
                                     onChange={handleHasFileFilter}
-                                    aria-label="checkbox"
-                                />
-                                <FaFile /> {t('search.hasFiles')}
+                                    aria-label={t('search.hasFiles', 'Has files filter')}>
                             </label>
                             <label>
                                 <input
                                     type="checkbox"
                                     checked={filters.hasImage}
                                     onChange={handleHasImageFilter}
-                                    aria-label="checkbox"
-                                />
-                                🖼️ {t('search.hasImages')}
+                                    aria-label={t('search.hasImages', 'Has images filter')}>
                             </label>
                             <label>
                                 <input
                                     type="checkbox"
                                     checked={filters.hasReaction}
                                     onChange={handleHasReactionFilter}
-                                    aria-label="checkbox"
-                                />
-                                <FaHeart /> {t('search.hasReactions')}
+                                    aria-label={t('search.hasReactions', 'Has reactions filter')}>
                             </label>
                         </div>
                     </div>
@@ -319,7 +304,7 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                         <div className="history-items">
                             {searchHistory.map((query, index) => (
                                 <button
-                                    aria-label="Action button"
+                                    aria-label={query}
                                     key={`item-${index}`}
                                     className="history-item"
                                     onClick={() => setSearchQuery(query)}

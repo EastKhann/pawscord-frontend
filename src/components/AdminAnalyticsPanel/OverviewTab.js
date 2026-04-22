@@ -37,7 +37,7 @@ const axisProps = {
 const OverviewTab = ({ stats }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="overview tab" style={styles.tabContent}>
+        <div aria-label={t('admin.overviewTab', 'Overview tab')} style={styles.tabContent}>
             {/* Growth Indicators */}
             <div style={styles.growthSection}>
                 <GrowthCard
@@ -128,7 +128,7 @@ const OverviewTab = ({ stats }) => {
                                         ((stats.mobile_views || 0) /
                                             ((stats.mobile_views || 0) +
                                                 (stats.desktop_views || 1))) *
-                                            100
+                                        100
                                     )}
                                     %
                                 </span>
@@ -146,7 +146,7 @@ const OverviewTab = ({ stats }) => {
                                         ((stats.desktop_views || 0) /
                                             ((stats.mobile_views || 0) +
                                                 (stats.desktop_views || 1))) *
-                                            100
+                                        100
                                     )}
                                     %
                                 </span>

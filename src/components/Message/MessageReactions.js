@@ -6,8 +6,10 @@
 import { memo, useCallback, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ReactionUsersPopup from '../chat/ReactionUsersPopup';
+import { useTranslation } from 'react-i18next';
 
 export const MessageReactions = memo(({ reactions, currentUser, onToggleReaction, messageId }) => {
+    const { t } = useTranslation();
     const [hoveredEmoji, setHoveredEmoji] = useState(null);
     const [popupAnchor, setPopupAnchor] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -58,12 +60,14 @@ export const MessageReactions = memo(({ reactions, currentUser, onToggleReaction
         : null;
 
     return (
-        <div aria-label="message reactions" style={styles.reactionsRow}>
+        <div aria-label={t('message.reactions', 'Message reactions')} style={styles.reactionsRow}>
             {groupedReactions.map(({ emoji, users, count }) => (
                 <span
                     key={emoji}
                     role="button"
                     tabIndex={0}
+                    aria-label={`${emoji} — ${count} reaction${count !== 1 ? 's' : ''}${myReaction(emoji) ? ', active' : ''}`}
+                    aria-pressed={myReaction(emoji)}
                     onClick={() => onToggleReaction(messageId, emoji)}
                     onKeyDown={(e) =>
                         (e.key === 'Enter' || e.key === ' ') && onToggleReaction(messageId, emoji)
@@ -75,7 +79,6 @@ export const MessageReactions = memo(({ reactions, currentUser, onToggleReaction
                         border: myReaction(emoji) ? '1px solid #5865f2' : '1px solid transparent',
                         backgroundColor: myReaction(emoji) ? 'rgba(88, 101, 242, 0.15)' : '#111214',
                     }}
-                    title={`${emoji} reaction add/remove`}
                 >
                     {emoji} {count}
                 </span>

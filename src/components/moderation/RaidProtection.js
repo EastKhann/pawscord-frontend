@@ -91,8 +91,8 @@ const RaidProtection = ({ serverId, isOwner, isAdmin }) => {
             } else {
                 toast.error(
                     t('raidProtection.toggleFailed') +
-                        ': ' +
-                        (data.error || t('common.unknownError'))
+                    ': ' +
+                    (data.error || t('common.unknownError'))
                 );
             }
         } catch (error) {
@@ -142,8 +142,8 @@ const RaidProtection = ({ serverId, isOwner, isAdmin }) => {
         <div className="raid-protection-container">
             <div className="raid-header">
                 <div>
-                    <h2>🛡️ Baskın Koruması</h2>
-                    <p>Sunucunuzu koordineli baskınlardan ve toplu katılımlardan koruyun</p>
+                    <h2>🛡️ {t('raid.title', 'Raid Protection')}</h2>
+                    <p>{t('raid.subtitle', 'Protect your server from coordinated raids and mass joins')}</p>
                 </div>
                 <label className="toggle-switch">
                     <input
@@ -151,7 +151,7 @@ const RaidProtection = ({ serverId, isOwner, isAdmin }) => {
                         checked={enabled}
                         onChange={toggleProtection}
                         disabled={isLoading}
-                        aria-label="checkbox"
+                        aria-label={t('raidProtection.checkbox', 'Toggle option')}
                     />
                     <span className="toggle-slider"></span>
                 </label>
@@ -160,20 +160,20 @@ const RaidProtection = ({ serverId, isOwner, isAdmin }) => {
             {raidStatus?.under_raid && (
                 <div className="raid-alert">
                     <div className="alert-header">
-                        <span>⚠️ BASKIN TESPİT EDİLDİ</span>
+                        <span>⚠️ {t('raid.detected', 'RAID DETECTED')}</span>
                         <span className="join-count">
                             {raidStatus.join_count}/{raidStatus.threshold} joins/min
                         </span>
                     </div>
                     {raidStatus.is_locked && (
                         <div className="lockdown-notice">
-                            🔒 Sunucu kilitli modda. Yeni üyeler katılamıyor.
+                            {t('raid.locked', 'Server is in locked mode. New members cannot join.')}
                             <button
-                                aria-label="Sunucunun kilidini aç"
+                                aria-label={t('moderation.unlockServer', 'Unlock server')}
                                 onClick={unlockServer}
                                 className="unlock-btn"
                             >
-                                Sunucunun Kilidini Aç
+                                {t('raid.unlock', 'Unlock Server')}
                             </button>
                         </div>
                     )}
@@ -184,9 +184,9 @@ const RaidProtection = ({ serverId, isOwner, isAdmin }) => {
                 <div className="raid-settings">
                     <div className="setting-group">
                         <label>
-                            Katılım Hızı Limiti
+                            {t('raidProt.joinRateLimit', 'Join Rate Limit')}
                             <span className="setting-hint">
-                                Korumayı tetiklemeden önce dakikadaki maksimum katılım sayısı
+                                {t('raidProt.joinRateLimitDesc', 'Maximum number of joins per minute before protection is triggered')}
                             </span>
                         </label>
                         <input
@@ -202,9 +202,9 @@ const RaidProtection = ({ serverId, isOwner, isAdmin }) => {
 
                     <div className="setting-group">
                         <label>
-                            Minimum Hesap Yaşı
+                            {t('raidProt.minAccountAge', 'Minimum Account Age')}
                             <span className="setting-hint">
-                                Katılım için gerekli minimum hesap yaşı (gün)
+                                {t('raidProt.minAccountAgeDesc', 'Minimum account age required to join (days)')}
                             </span>
                         </label>
                         <input
@@ -220,9 +220,9 @@ const RaidProtection = ({ serverId, isOwner, isAdmin }) => {
 
                     <div className="setting-group">
                         <label>
-                            Kilitleme Süresi
+                            {t('raidProt.lockDuration', 'Lock Duration')}
                             <span className="setting-hint">
-                                Baskın algılandığında sunucunun kilitlenme süresi (dakika)
+                                {t('raidProt.lockDurationDesc', 'Server lock duration when a raid is detected (minutes)')}
                             </span>
                         </label>
                         <input

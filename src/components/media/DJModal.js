@@ -69,14 +69,14 @@ const DJModal = ({ onClose, ws, roomSlug }) => {
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3>🎵 DJ Room</h3>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
 
                 {/* Player (Gizli or Görünür) */}
                 <div style={styles.playerWrapper}>
-                    <Suspense fallback={<div style={loadingStyle}>Oynatıcı yükleniyor...</div>}>
+                    <Suspense fallback={<div style={loadingStyle}>{t('djModal.loading', 'Player loading...')}</div>}>
                         <ReactPlayer
                             url={currentUrl}
                             playing={playing}
@@ -94,10 +94,10 @@ const DJModal = ({ onClose, ws, roomSlug }) => {
                         placeholder={t('ui.youtube_sarki_linki')}
                         style={styles.input}
                     />
-                    <button aria-label="add To Queue" onClick={addToQueue} style={styles.addBtn}>
+                    <button aria-label={t('dj.addToQueue', 'Add to queue')} onClick={addToQueue} style={styles.addBtn}>
                         <FaPlus />
                     </button>
-                    <button aria-label="play Next" onClick={playNext} style={styles.nextBtn}>
+                    <button aria-label={t('dj.playNext', 'Play next')} onClick={playNext} style={styles.nextBtn}>
                         <FaForward /> Rankdaki
                     </button>
                 </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
 
 // -- dynamic style helpers (pass 2) --
@@ -34,6 +35,7 @@ const _st8 = { color: '#b5bac1', margin: '4px 0 0 0', fontSize: '12px' };
 const GDPRTab = ({ exportRequested, gdprExports: rawGE, requestGDPRExport }) => {
     const gdprExports = rawGE || [];
     const styles = profileStyles;
+    const { t } = useTranslation();
     const [error, setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
@@ -52,11 +54,11 @@ const GDPRTab = ({ exportRequested, gdprExports: rawGE, requestGDPRExport }) => 
 
             <button
                 style={styles.button('primary')}
-                aria-label="requestGDPRExport"
+                aria-label={t('gdpr.requestExport', 'Request GDPR data export')}
                 onClick={requestGDPRExport}
                 disabled={exportRequested}
             >
-                {exportRequested ? '⏳ Processing...' : '📥 GDPR Exportma Talebi Create'}
+                {exportRequested ? `⏳ ${t('gdpr.processing', 'Processing...')}` : `📥 ${t('gdpr.createExport', 'Request GDPR Data Export')}`}
             </button>
 
             {gdprExports.length > 0 && (

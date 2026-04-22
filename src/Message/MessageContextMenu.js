@@ -36,8 +36,8 @@ const MessageContextMenu = ({
     absoluteHostUrl,
 }) => {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [reportMode, setReportMode] = useState(false);
+    const [reportReason, setReportReason] = useState('');
     if (!contextMenu) return null;
 
     const menuItem = (icon, label, onClick, danger) => (
@@ -55,12 +55,12 @@ const MessageContextMenu = ({
 
     return (
         <div
-            aria-label="message context menu"
+            aria-label={t('aria.messageContextMenu', 'Message Menu')}
             role="menu"
             tabIndex={-1}
             style={_s({
                 ...styles.contextMenu,
-                left: `${contextMenu.x}>px`,
+                left: `${contextMenu.x}px`,
                 top: `${contextMenu.y}px`,
             })}
             onClick={(e) => e.stopPropagation()}
@@ -123,7 +123,7 @@ const MessageContextMenu = ({
                             await confirmDialog(
                                 t(
                                     'messageMenu.deleteConfirm',
-                                    'Bu mesajı silmek istediğinizden emin misiniz?'
+                                    t('msgContextMenu.deleteConfirm', 'Are you sure you want to delete this message?')
                                 )
                             )
                         ) {
@@ -135,22 +135,46 @@ const MessageContextMenu = ({
                 )}
 
             {!isMyMessage &&
-                menuItem(
-                    <FaExclamationTriangle />,
-                    t('messageMenu.report', 'Bildir'),
-                    async () => {
-                        const reason = prompt(t('messageMenu.reportReason', 'Bildirme sebebi:'));
-                        if (reason) {
-                            await fetchWithAuth(`${absoluteHostUrl}/api/messages/report/`, {
-                                method: 'POST',
-                                body: JSON.stringify({ message_id: msg.id, reason }),
-                            });
-                            toast.success(t('messageMenu.reportSent', '✅ Bildiri gönderildi'));
-                            setContextMenu(null);
-                        }
-                    },
-                    true
-                )}
+                (reportMode ? (
+                    <div style={{ padding: '8px 12px' }}>
+                        <textarea
+                            autoFocus
+                            value={reportReason}
+                            onChange={(e) => setReportReason(e.target.value)}
+                            placeholder={t('messageMenu.reportReason', 'Bildirme sebebi...')}
+                            rows={3}
+                            style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.15)', background: '#1e1f23', color: '#fff', fontSize: 12, resize: 'none', boxSizing: 'border-box' }}
+                            onKeyDown={(e) => e.stopPropagation()}
+                        />
+                        <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                            <button
+                                style={{ flex: 1, padding: '5px', background: '#f23f42', border: 'none', borderRadius: 6, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
+                                onClick={async () => {
+                                    if (!reportReason.trim()) return;
+                                    await fetchWithAuth(`${absoluteHostUrl}/api/messages/report/`, {
+                                        method: 'POST',
+                                        body: JSON.stringify({ message_id: msg.id, reason: reportReason.trim() }),
+                                    });
+                                    toast.success(t('messageMenu.reportSent', '✅ Bildiri gönderildi'));
+                                    setReportMode(false);
+                                    setReportReason('');
+                                    setContextMenu(null);
+                                }}
+                            >{t('messageMenu.submitReport', 'Gönder')}</button>
+                            <button
+                                style={{ padding: '5px 10px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: 6, color: '#b5bac1', cursor: 'pointer', fontSize: 12 }}
+                                onClick={() => { setReportMode(false); setReportReason(''); }}
+                            >{t('common.cancel', 'İptal')}</button>
+                        </div>
+                    </div>
+                ) : (
+                    menuItem(
+                        <FaExclamationTriangle />,
+                        t('messageMenu.report', 'Bildir'),
+                        () => setReportMode(true),
+                        true
+                    )
+                ))}
         </div>
     );
 };

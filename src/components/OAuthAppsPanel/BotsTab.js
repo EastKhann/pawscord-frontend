@@ -26,32 +26,30 @@ const BotsTab = ({ o }) => {
 
             {o.showCreateBot && (
                 <div style={styles.createForm}>
-                    <h3 style={styles.formTitle}>Bot Hesabı Oluştur</h3>
+                    <h3 style={styles.formTitle}>{t('botsTab.createBot','Create Bot Account')}</h3>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Bot Adı</label>
+                        <label style={styles.label}>{t('botsTab.botName','Bot Name')}</label>
                         <input
                             type="text"
                             value={o.newBot.name}
                             onChange={(e) => o.setNewBot({ ...o.newBot, name: e.target.value })}
-                            placeholder="Botum"
+                            placeholder={t('botsTab.botName', 'My Bot')}
                             style={styles.input}
                         />
                     </div>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Açıklama</label>
+                        <label style={styles.label}>{t('common.description','Description')}</label>
                         <textarea
                             value={o.newBot.description}
                             onChange={(e) =>
                                 o.setNewBot({ ...o.newBot, description: e.target.value })
                             }
-                            placeholder="Botunuz ne yapar?"
+                            placeholder={t('botsTab.botDesc', 'What does your bot do?')}
                             style={S.size}
                         />
                     </div>
                     <div style={styles.formActions}>
-                        <button onClick={o.createBot} style={styles.submitButton}>
-                            Bot Oluştur
-                        </button>
+                        <button onClick={o.createBot} style={styles.submitButton}>{t('botsTab.createBtn','Create Bot')}</button>
                         <button
                             onClick={() => o.setShowCreateBot(false)}
                             style={styles.cancelButton}
@@ -65,7 +63,7 @@ const BotsTab = ({ o }) => {
             <div style={styles.botsList}>
                 {o.bots.length === 0 ? (
                     <div style={styles.empty}>
-                        Henüz bot yok. Görevleri otomatikleştirmek için bir tane oluşturun!
+                        {t('botsTab.noBots','No bots yet. Create one to automate tasks!')}
                     </div>
                 ) : (
                     o.bots.map((bot) => (

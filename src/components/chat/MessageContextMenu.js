@@ -136,7 +136,7 @@ const MessageContextMenu = ({
     };
 
     return (
-        <div ref={menuRef} role="menu" aria-label="Message actions" style={styles.menu}>
+        <div ref={menuRef} role="menu" aria-label={t('message.actionsMenu', 'Message actions')} style={styles.menu}>
             {visibleItems.map((item, index) => {
                 const Icon = item.icon;
                 return (

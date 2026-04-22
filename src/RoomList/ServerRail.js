@@ -1,5 +1,5 @@
-﻿// frontend/src/RoomList/ServerRail.js
-import React, { useState, useCallback, useRef } from 'react';
+// frontend/src/RoomList/ServerRail.js
+import React, { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaCompass, FaPlus } from '../utils/iconOptimization';
@@ -71,12 +71,10 @@ const ServerRail = ({
     const handleImgError = useCallback((e) => {
         e.target.style.display = 'none';
     }, []);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
 
     return (
-        <div style={styles.serverRail} role="navigation" aria-label="Server listsi">
-            {/* 🏠 Home Icon */}
+        <div style={styles.serverRail} role="navigation" aria-label={t('nav.serverList', 'Server list')}>
+            {/* ?? Home Icon */}
             <div>
                 <div
                     style={{
@@ -119,7 +117,7 @@ const ServerRail = ({
                 >
                     <img
                         src="https://media.pawscord.com/assets/logo.png"
-                        alt="Pawscord"
+                        alt={t('alt.pawscordLogo', 'Pawscord')}
                         onError={handleImgError}
                     />
                 </div>
@@ -127,7 +125,7 @@ const ServerRail = ({
             <div style={styles.separator} />
 
             {/* Server Icons */}
-            <div role="list" aria-label="Serverlar" ref={serverListRef} onKeyDown={handleServerListKeyDown}>
+            <div role="list" aria-label={t('nav.servers', 'Servers')} ref={serverListRef} onKeyDown={handleServerListKeyDown}>
                 {servers &&
                     servers.map((server, index) => {
                         const serverName = server.name || '';
@@ -283,10 +281,10 @@ const ServerRail = ({
                 onClick={onDiscoverClick}
                 onMouseEnter={handleDiscoverHover}
                 onMouseLeave={handleDiscoverLeave}
-                title="Sunucuları Keşfet"
+                title={t('server.discover', 'Discover Servers')}
                 role="button"
                 tabIndex={0}
-                aria-label="Sunucuları Keşfet"
+                aria-label={t('nav.discoverServers', 'Discover Servers')}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onDiscoverClick()}
             >
                 <FaCompass size={24} />
@@ -309,13 +307,13 @@ const ServerRail = ({
                 onClick={onOpenStore}
                 onMouseEnter={handleStoreHover}
                 onMouseLeave={handleStoreLeave}
-                title="Premium Mağaza"
+                title={t('premium.store', 'Premium Store')}
                 role="button"
                 tabIndex={0}
-                aria-label="Premium Mağaza"
+                aria-label={t('nav.premiumStore', 'Premium Store')}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onOpenStore()}
             >
-                🛒
+                ??
             </div>
 
             {/* Add */}
@@ -334,7 +332,7 @@ const ServerRail = ({
                 title="Ekle"
                 role="button"
                 tabIndex={0}
-                aria-label="Server add"
+                aria-label={t('server.add', 'Add Server')}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onAddClick()}
             >
                 <FaPlus size={20} />

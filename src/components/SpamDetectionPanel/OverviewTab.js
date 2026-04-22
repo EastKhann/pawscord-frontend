@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const OverviewTab = ({ stats, settings }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="overview tab" style={styles.content}>
+        <div aria-label={t('spamDetection.overviewTab', 'Overview tab')} style={styles.content}>
             {/* Stats Cards */}
             <div style={styles.statsGrid}>
                 <div style={styles.statCard}>
@@ -24,7 +24,7 @@ const OverviewTab = ({ stats, settings }) => {
                         <FaExclamationTriangle size={20} color="#f0b232" />
                     </div>
                     <div style={styles.statInfo}>
-                        <div style={styles.statValue}>{stats.togünDetected}</div>
+                        <div style={styles.statValue}>{stats.todayDetected}</div>
                         <div style={styles.statLabel}>{t('today')}</div>
                     </div>
                 </div>

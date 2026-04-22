@@ -7,23 +7,32 @@ import { useMediaQuery } from '../../hooks/useCustomHooks';
 describe('useMediaQuery', () => {
     let listners;
     let mockMatchMedia;
+    let mediaObjects;
 
     beforeEach(() => {
         listners = {};
-        mockMatchMedia = vi.fn().mockImplementation((query) => ({
-            matches: false,
-            media: query,
-            onchange: null,
-            addEventListener: vi.fn((event, handler) => {
-                listners[query] = handler;
-            }),
-            removeEventListener: vi.fn((event, handler) => {
-                delete listners[query];
-            }),
-            addListener: vi.fn(),
-            removeListener: vi.fn(),
-            dispatchEvent: vi.fn(),
-        }));
+        mediaObjects = {};
+        mockMatchMedia = vi.fn().mockImplementation((query) => {
+            // Return cached object so effect re-runs read the same (mutated) state
+            if (!mediaObjects[query]) {
+                const obj = {
+                    matches: false,
+                    media: query,
+                    onchange: null,
+                    addEventListener: vi.fn((event, handler) => {
+                        listners[query] = handler;
+                    }),
+                    removeEventListener: vi.fn((event, handler) => {
+                        delete listners[query];
+                    }),
+                    addListener: vi.fn(),
+                    removeListener: vi.fn(),
+                    dispatchEvent: vi.fn(),
+                };
+                mediaObjects[query] = obj;
+            }
+            return mediaObjects[query];
+        });
 
         Object.defineProperty(window, 'matchMedia', {
             writable: true,
@@ -66,15 +75,11 @@ describe('useMediaQuery', () => {
         // Simulate the media query starting to match
         act(() => {
             if (listners[query]) {
-                // Simulate the MediaQueryList firing a change event
-                mockMatchMedia.mockImplementation((q) => ({
-                    matches: true,
-                    media: q,
-                    addEventListener: vi.fn((event, handler) => {
-                        listners[q] = handler;
-                    }),
-                    removeEventListener: vi.fn(),
-                }));
+                // Update the captured media object's matches in-place
+                // (the listener reads media.matches from its closure)
+                if (mediaObjects[query]) {
+                    mediaObjects[query].matches = true;
+                }
                 listners[query]();
             }
         });

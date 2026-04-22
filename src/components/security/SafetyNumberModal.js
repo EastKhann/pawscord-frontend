@@ -54,7 +54,7 @@ const SafetyNumberModal = ({ username, targetUser, apiBaseUrl, fetchWithAuth, on
 
             toast.success(
                 t('safetyNumber.verified') +
-                    (data.bothVerified ? t('ui.nnher_iki_taraf_da_dogruladi') : '')
+                (data.bothVerified ? t('ui.nnher_iki_taraf_da_dogruladi') : '')
             );
         } catch (err) {
             logger.error('Failed to verify safety number:', err);
@@ -77,8 +77,8 @@ const SafetyNumberModal = ({ username, targetUser, apiBaseUrl, fetchWithAuth, on
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <FaShieldAlt size={32} color={verified ? '#23a559' : '#f0b232'} />
-                    <h2 style={styles.title}>Güvenlik Numarası</h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <h2 style={styles.title}>{t('e2ee.safetyNumber', 'Safety Number')}</h2>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -96,11 +96,11 @@ const SafetyNumberModal = ({ username, targetUser, apiBaseUrl, fetchWithAuth, on
                         </div>
 
                         <button
-                            aria-label="Toggle visibility"
+                            aria-label={t('safetyNumber.showQR', 'Show QR code')}
                             onClick={() => setShowQR(true)}
                             style={styles.qrButton}
                         >
-                            <FaQrcode /> QR Kodu Göster
+                            <FaQrcode /> {t('e2ee.showQR', 'Show QR Code')}
                         </button>
                     </>
                 ) : (
@@ -110,11 +110,11 @@ const SafetyNumberModal = ({ username, targetUser, apiBaseUrl, fetchWithAuth, on
                         </div>
 
                         <button
-                            aria-label="Toggle visibility"
+                            aria-label={t('safetyNumber.showNumber', 'Show safety number')}
                             onClick={() => setShowQR(false)}
                             style={styles.qrButton}
                         >
-                            Numarayı Göster
+                            {t('e2ee.showNumber', 'Show Number')}
                         </button>
                     </>
                 )}
@@ -123,17 +123,17 @@ const SafetyNumberModal = ({ username, targetUser, apiBaseUrl, fetchWithAuth, on
                     {verified ? (
                         <div style={styles.statusVerified}>
                             <FaCheck size={20} />
-                            <span>Her iki taraf da doğruladı! ✅</span>
+                            <span>{t('e2ee.bothVerified', 'Both parties verified! ✅')}</span>
                         </div>
                     ) : verifiedByMe ? (
                         <div style={styles.statusPartial}>
                             <FaCheck size={20} />
-                            <span>Siz doğruladınız. {targetUser} henüz doğrulamadı.</span>
+                            <span>{t('e2ee.youVerified', 'You verified. {{user}} has not yet verified.', { user: targetUser })}</span>
                         </div>
                     ) : (
                         <div style={styles.statusUnverified}>
                             <FaTimes size={20} />
-                            <span>Henüz doğrulanmadı</span>
+                            <span>{t('e2ee.notVerified', 'Not yet verified')}</span>
                         </div>
                     )}
                 </div>
@@ -141,26 +141,24 @@ const SafetyNumberModal = ({ username, targetUser, apiBaseUrl, fetchWithAuth, on
                 <div style={styles.info}>
                     <h3>Safety Number Nedir?</h3>
                     <p>
-                        Safety number, sizin ve {targetUser}'in şifreleme anahtarlarının parmak
-                        izidir (fingerprint). Bu numarayı karlaştırarak identity key'lerini
-                        doğrulayabilirsiniz.
+                        {t('e2ee.safetyNumberDesc', 'The safety number is the fingerprint of your and {{user}}&#x27;s encryption keys. By comparing this number you can verify identity keys.', { user: targetUser })}
                     </p>
-                    <h3>Nasıl Doğrulanır?</h3>
+                    <h3>{t('e2ee.howToVerify', 'How to Verify?')}</h3>
                     <ol>
-                        <li>{targetUser} with yüz yüze görüşün or güvenilir bir kanal kullanın</li>
-                        <li>Her ikiniz de safety number'ı openın</li>
-                        <li>Numaraları karşılaştırın (ayını olmalı!)</li>
+                        <li>{t('e2ee.verifyStep1', 'Meet {{user}} in person or use a trusted channel', { user: targetUser })}</li>
+                        <li>{t('e2ee.verifyStep2', "Both of you open the safety number")}</li>
+                        <li>{t('e2ee.verifyStep3', 'Compare the numbers (they should match!)')}</li>
                         <li>Eşleşiyorsa {t('auth.verify')} butonuna basın</li>
                     </ol>
                 </div>
 
                 {!verifiedByMe && (
                     <button
-                        aria-label="handle Verify"
+                        aria-label={t('safetyNumber.verifyBtn', 'Verify safety number')}
                         onClick={handleVerify}
                         style={styles.verifyButton}
                     >
-                        <FaCheck /> Bu Numarayı Doğrula
+                        <FaCheck /> {t('e2ee.verifyButton', 'Verify This Number')}
                     </button>
                 )}
             </div>

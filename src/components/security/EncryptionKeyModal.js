@@ -32,17 +32,17 @@ const EncryptionKeyModal = ({ onClose, onSetKey, existingKey }) => {
         <div style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
-                    <h3> Güvenli Chat Anahtarı</h3>
+                    <h3> {t('encryption.title', 'Secure Chat Key')}</h3>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
 
                 <form onSubmit={handleSubmit} style={styles.body}>
                     <p className="text-b5-09em">
-                        Bu sohbet için ortak bir şifre belirleyin. Bu şifre sunucuya gönderilmez.
-                        Sadece aynı şifreyi giren taraf mesajları okuyabilir.
+                        {t('encryption.desc', 'Set a shared password for this conversation. This password is not sent to the server.')}
+                        {t('encryption.desc2', 'Only the party who enters the same password can read the messages.')}
                     </p>
                     <input
                         type="password"
@@ -51,16 +51,16 @@ const EncryptionKeyModal = ({ onClose, onSetKey, existingKey }) => {
                         placeholder={t('ui.gizli_anahtar_orn_123456')}
                         style={styles.input}
                         autoFocus
-                        aria-label="Key"
+                        aria-label={t('encryption.keyInput', 'Encryption key')}
                     />
 
-                    <button aria-label="Submit" type="submit" style={styles.saveBtn}>
+                    <button aria-label={t('common.submit')} type="submit" style={styles.saveBtn}>
                         {t('common.save')}
                     </button>
 
                     {existingKey && (
                         <button
-                            aria-label="Close"
+                            aria-label={t('encryption.disableEncryption', 'Disable encryption')}
                             type="button"
                             onClick={() => {
                                 onSetKey('');
@@ -68,7 +68,7 @@ const EncryptionKeyModal = ({ onClose, onSetKey, existingKey }) => {
                             }}
                             style={styles.clearBtn}
                         >
-                            Şifrelemeyi Kapat
+                            {t('encryption.disable', 'Disable Encryption')}
                         </button>
                     )}
                 </form>

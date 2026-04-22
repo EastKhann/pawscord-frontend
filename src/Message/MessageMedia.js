@@ -37,11 +37,11 @@ const MessageMedia = ({
             {/* Signal Button */}
             {signalCoin && (
                 <button
-                    aria-label="Show chart"
+                    aria-label={t('msgMedia.showChart', 'Show chart')}
                     onClick={() => onShowChart(signalCoin)}
                     style={styles.chartBtn}
                 >
-                    <FaChartLine /> {signalCoin} Grafiği
+                    <FaChartLine /> {signalCoin} {t('msgMedia.chart', 'Chart')}
                 </button>
             )}
 
@@ -59,8 +59,8 @@ const MessageMedia = ({
                 <div style={styles.pollContainer}>
                     <h4>{msg.poll.question}</h4>
                     <div>
-                        {msg.poll.allow_multiple_votes ? 'Multiple Selection' : 'Tek Selectim'} •{' '}
-                        {msg.poll.total_votes || 0} Oy
+                        {msg.poll.allow_multiple_votes ? t('poll.multipleSelection', 'Multiple Selection') : t('poll.singleSelection', 'Single Selection')} •{' '}
+                        {msg.poll.total_votes || 0} {t('poll.votes', 'Votes')}
                     </div>
                     {msg.poll.options.map((opt) => {
                         const voted = opt.is_voted;
@@ -69,7 +69,7 @@ const MessageMedia = ({
                         return (
                             <div key={opt.id}>
                                 <button
-                                    aria-label="Vote"
+                                    aria-label={t('poll.voteFor', 'Vote for {{option}}', { option: opt.text })}
                                     onClick={() => handleVote(opt.id)}
                                     style={{
                                         ...styles.pollOption,
@@ -112,7 +112,7 @@ const MessageMedia = ({
                         );
                     })}
                     {msg.poll.expires_at && (
-                        <div>Bitiş: {new Date(msg.poll.expires_at).toLocaleString()}</div>
+                        <div>{t('msgMedia.expires', 'Expires')}: {new Date(msg.poll.expires_at).toLocaleString()}</div>
                     )}
                 </div>
             )}
@@ -122,7 +122,7 @@ const MessageMedia = ({
                 // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
                 <img
                     src={finalImageUrl}
-                    alt="attachment"
+                    alt={t('alt.attachment', 'Attachment')}
                     style={styles.messageImage}
                     onClick={() => onImageClick(finalImageUrl)}
                     loading="lazy"
@@ -155,15 +155,15 @@ const MessageMedia = ({
                         )}
                         {!localTranscription && !localIsTranscribing && (
                             <button
-                                aria-label="Transkribe Et"
+                                aria-label={t('message.transcribe', 'Transcribe')}
                                 onClick={handleTranscribe}
                                 style={styles.transcribeButton}
                             >
-                                📝 Transkribe Et
+                                📝 {t('message.transcribe', 'Transcribe')}
                             </button>
                         )}
                         {localIsTranscribing && (
-                            <div style={styles.transcribingLoader}>⏳ Dönüştürülüyor...</div>
+                            <div style={styles.transcribingLoader}>{t('media.converting', '⏳ Converting...')}</div>
                         )}
                     </div>
                 </Suspense>
@@ -260,16 +260,16 @@ const MessageMedia = ({
                                 {['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)
                                     ? '📦'
                                     : ['pdf'].includes(ext)
-                                      ? '📄'
-                                      : ['doc', 'docx'].includes(ext)
-                                        ? '📝'
-                                        : ['xls', 'xlsx'].includes(ext)
-                                          ? '📊'
-                                          : ['ppt', 'pptx'].includes(ext)
-                                            ? '📽️'
-                                            : ['txt'].includes(ext)
-                                              ? '📃'
-                                              : '📎'}
+                                        ? '📄'
+                                        : ['doc', 'docx'].includes(ext)
+                                            ? '📝'
+                                            : ['xls', 'xlsx'].includes(ext)
+                                                ? '📊'
+                                                : ['ppt', 'pptx'].includes(ext)
+                                                    ? '📽️'
+                                                    : ['txt'].includes(ext)
+                                                        ? '📃'
+                                                        : '📎'}
                             </div>
                             <div style={styles.fileInfo}>
                                 <div style={styles.fileName}>{msg.file_name || 'File'}</div>
@@ -285,7 +285,7 @@ const MessageMedia = ({
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <FaDownload size={18} />
-                                <span>İndir</span>
+                                <span>{t('common.download', 'Download')}</span>
                             </a>
                         </div>
                     );

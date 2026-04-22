@@ -18,6 +18,30 @@ import ItemDetailModal from '../StoreModal/ItemDetailModal';
 import s, { CATEGORIES } from '../StoreModal/storeModalStyles';
 import useModalA11y from '../../hooks/useModalA11y';
 
+if (typeof document !== 'undefined') {
+    const _soonCssId = 'store-soon-badge-css';
+    if (!document.getElementById(_soonCssId)) {
+        const _s = document.createElement('style');
+        _s.id = _soonCssId;
+        _s.textContent = `
+@keyframes soonShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+.store-soon-badge {
+    background: linear-gradient(90deg,
+        rgba(240,178,50,0.10) 0%,
+        rgba(240,178,50,0.15) 30%,
+        rgba(240,178,50,0.40) 50%,
+        rgba(240,178,50,0.15) 70%,
+        rgba(240,178,50,0.10) 100%) !important;
+    background-size: 200% 100% !important;
+    animation: soonShimmer 2.2s linear infinite;
+}`;
+        document.head.appendChild(_s);
+    }
+}
+
 const ITEM_ICON_STYLE = { fontSize: '48px', color: '#949ba4' };
 const _st1145 = {
     fontSize: '14px',
@@ -59,50 +83,57 @@ const EMPTY_DESC_STYLE = {
     maxWidth: '420px',
 };
 
-const ItemCard = ({ item, onClick }) => (
-    <div
-        style={{
-            ...s.itemCard,
-            ...(item.preview ? { opacity: 0.75, position: 'relative', cursor: 'default' } : {}),
-        }}
-        role="button"
-        tabIndex={0}
-        onClick={() => !item.preview && onClick(item)}
-        onKeyDown={(e) => !item.preview && (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
-    >
-        {item.preview && (
-            <div style={{
-                position: 'absolute', top: 6, right: 6, background: 'rgba(240,178,50,0.15)',
-                border: '1px solid rgba(240,178,50,0.4)', borderRadius: '6px',
-                padding: '2px 6px', fontSize: '10px', fontWeight: 700, color: '#f0b232',
-                letterSpacing: '0.05em', zIndex: 1,
-            }}>SOON</div>
-        )}
-        {item.emoji ? (
-            <div style={{ ...s.itemPlaceholder, fontSize: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {item.emoji}
+const ItemCard = ({ item, onClick }) => {
+    const { t } = useTranslation();
+    return (
+        <div
+            style={{
+                ...s.itemCard,
+                ...(item.preview ? { opacity: 0.75, position: 'relative', cursor: 'default' } : {}),
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={item.name}
+            onClick={() => !item.preview && onClick(item)}
+            onKeyDown={(e) => !item.preview && (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+        >
+            {item.preview && (
+                <div
+                    className="store-soon-badge"
+                    style={{
+                        position: 'absolute', top: 6, right: 6,
+                        border: '1px solid rgba(240,178,50,0.4)', borderRadius: '6px',
+                        padding: '2px 6px', fontSize: '10px', fontWeight: 700, color: '#f0b232',
+                        letterSpacing: '0.05em', zIndex: 1,
+                    }}
+                >{t('store.soon', 'SOON')}</div>
+            )}
+            {item.emoji ? (
+                <div style={{ ...s.itemPlaceholder, fontSize: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {item.emoji}
+                </div>
+            ) : item.image ? (
+                <img src={item.image} alt={item.name} style={s.itemImage} />
+            ) : (
+                <div style={s.itemPlaceholder}>
+                    <FaGift style={ITEM_ICON_STYLE} />
+                </div>
+            )}
+            <div style={s.itemInfo}>
+                <div style={_st1145}>{item.name}</div>
+                <div style={s.itemPrice}>
+                    <FaCoins className="icon-warning" />
+                    {(item.price ?? 0).toLocaleString()}
+                </div>
             </div>
-        ) : item.image ? (
-            <img src={item.image} alt={item.name} style={s.itemImage} />
-        ) : (
-            <div style={s.itemPlaceholder}>
-                <FaGift style={ITEM_ICON_STYLE} />
-            </div>
-        )}
-        <div style={s.itemInfo}>
-            <div style={_st1145}>{item.name}</div>
-            <div style={s.itemPrice}>
-                <FaCoins className="icon-warning" />
-                {(item.price ?? 0).toLocaleString()}
-            </div>
+            {item.limited && <div style={s.limitedBadge}>{t('store.limited', 'LIMITED')}</div>}
         </div>
-        {item.limited && <div style={s.limitedBadge}>LIMITED</div>}
-    </div>
-);
+    );
+};
 
 const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     const { t } = useTranslation();
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Store' });
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('store.title', 'Ürün Mağazası') });
     const store = useStoreAPI({ fetchWithAuth, apiBaseUrl });
 
     return (
@@ -118,7 +149,7 @@ const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             <FaCoins className="icon-warning" />
                             <span>{store.balance.toLocaleString()}</span>
                         </div>
-                        <button aria-label="Close" onClick={onClose} style={s.closeBtn}>
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={s.closeBtn}>
                             <FaTimes />
                         </button>
                     </div>
@@ -134,7 +165,7 @@ const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
                         return (
                             <button
-                                aria-label="Action button"
+                                aria-label={t('store.category.' + cat.id, cat.name)}
                                 key={cat.id}
                                 onClick={() => store.setSelectedCategory(cat.id)}
                                 style={categoryButtonStyle}
@@ -194,11 +225,11 @@ const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                             {STORE_PURCHASES_ENABLED
                                                 ? t(
                                                     'store.empty.desc',
-                                                    'Bu kategoride yakında yeni ürünler eklenecek.'
+                                                    t('store.comingSoon', 'New items will be added to this category soon.')
                                                 )
                                                 : t(
                                                     'store.comingSoon.desc',
-                                                    'Mağaza özelliği şu anda geliştirme aşamasında. Yakında muhteşem kozmetik ürünler, rozetler ve özel itemler ile karşınızda olacağız!'
+                                                    t('store.devNotice', 'The store feature is currently in development. Amazing cosmetic items, badges and special items will be here soon!')
                                                 )}
                                         </p>
                                     </div>

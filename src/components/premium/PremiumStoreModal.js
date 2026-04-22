@@ -13,6 +13,18 @@ import BoostTab from '../PremiumStoreModal/BoostTab';
 import useModalA11y from '../../hooks/useModalA11y';
 import logger from '../../utils/logger';
 
+// Preview items shown when store API returns no items
+const PREVIEW_ITEMS = [
+    { id: 'p1', name: 'Neon Paw Badge', category: 'badges', price: 500, rarity: 'rare', featured: true, preview: true, icon: '🐾' },
+    { id: 'p2', name: 'Galaxy Theme', category: 'cosmetics', price: 1200, rarity: 'epic', featured: true, preview: true, icon: '🌌' },
+    { id: 'p3', name: 'Gold Crown', category: 'special', price: 2500, rarity: 'legendary', featured: false, preview: true, icon: '👑' },
+    { id: 'p4', name: 'Retro Profile Frame', category: 'cosmetics', price: 800, rarity: 'uncommon', featured: false, preview: true, icon: '🖼️' },
+    { id: 'p5', name: 'Rainbow Banner', category: 'cosmetics', price: 600, rarity: 'uncommon', featured: false, preview: true, icon: '🌈' },
+    { id: 'p6', name: 'VIP Star Badge', category: 'badges', price: 1500, rarity: 'epic', featured: false, preview: true, icon: '⭐' },
+    { id: 'p7', name: 'XP Booster Pack', category: 'boosters', price: 250, rarity: 'common', featured: false, preview: true, icon: '🚀' },
+    { id: 'p8', name: 'Dark Matter Pack', category: 'special', price: 999, rarity: 'rare', featured: false, preview: true, icon: '🌑' },
+];
+
 const UI_STYLES = {
     balanceText: { fontWeight: 'bold', color: '#000', fontSize: '14px' },
     balanceBadge: {
@@ -68,9 +80,12 @@ const PremiumStoreModal = ({ onClose }) => {
     const fetchStoreItems = async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/store/items/`);
-            setStoreItems(await response.json());
+            const data = await response.json();
+            const apiItems = data.items || [];
+            setStoreItems(apiItems.length > 0 ? apiItems : PREVIEW_ITEMS);
         } catch (error) {
             logger.error('Store items error:', error);
+            setStoreItems(PREVIEW_ITEMS);
         } finally {
             setLoading(false);
         }
@@ -165,7 +180,7 @@ const PremiumStoreModal = ({ onClose }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaCrown style={UI_STYLES.crownIcon} />
-                        <h2 style={styles.title}>Premium Mağazası</h2>
+                        <h2 style={styles.title}>{t('premiumStore.title', 'Premium Store')}</h2>
                     </div>
                     <div className="flex-align-12">
                         <div
@@ -183,7 +198,7 @@ const PremiumStoreModal = ({ onClose }) => {
                                 {(premiumStatus?.coins || 0).toLocaleString()}
                             </span>
                         </div>
-                        <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                             <FaTimes />
                         </button>
                     </div>

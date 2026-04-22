@@ -129,7 +129,7 @@ function ToolbarMenu({
     }, [openModal, closeModal]);
 
     return (
-        <div role="menu" aria-label="Chat tools menu">
+        <div role="menu" aria-label={t('toolbar.chatToolsMenu', 'Chat tools menu')}>
             {/* 🔐 Encryptme (Sadece DM) */}
             {activeChat.type === 'dm' && (
                 <button
@@ -301,11 +301,11 @@ function ToolbarMenu({
                                     e.currentTarget.style.color = '#ffffff';
                                 }}
                                 onMouseLeave={(e) => hoverOff(e, '#f23f42')}
-                                title="Yönetici: Konuşmayı kalıcı sil"
+                                title={t('admin.permanentlyDeleteConversation', 'Admin: Permanently delete conversation')}
                                 role="menuitem"
                             >
                                 <FaTrash />
-                                <span>⚠️ KALIİCI SİL (YÖNETİCİ)</span>
+                                <span>{t('admin.permanentlyDeleteAdmin', '⚠️ PERMANENTLY DELETE (ADMIN)')}</span>
                             </button>
                         </>
                     )}

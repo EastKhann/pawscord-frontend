@@ -9,8 +9,7 @@ import { getToken } from '../../utils/tokenStorage';
  */
 
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { withTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 
 import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
@@ -52,7 +51,7 @@ class FeatureErrorBoundary extends React.Component {
                     url: window.location.href,
                     timestamp: new Date().toISOString(),
                 }),
-            }).catch(() => {}); // silent
+            }).catch(() => { }); // silent
         } catch (e) {
             /* silent */
         }
@@ -90,7 +89,7 @@ class FeatureErrorBoundary extends React.Component {
                             })}
                         </p>
                         <button
-                            aria-label="button"
+                            aria-label={t('errors.refreshPage', 'Refresh page')}
                             onClick={() => window.location.reload()}
                             style={styles.button}
                         >
@@ -110,7 +109,7 @@ class FeatureErrorBoundary extends React.Component {
                         })}
                     </p>
                     <button
-                        aria-label="this handle Retry"
+                        aria-label={t('errors.tryAgain', 'Try again')}
                         onClick={this.handleRetry}
                         style={styles.button}
                     >

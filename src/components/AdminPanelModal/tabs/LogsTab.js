@@ -114,16 +114,16 @@ const LogsTab = () => {
                         className={css.siW150}
                     />
                     <button
-                        aria-label="Refresh system logs"
+                        aria-label={t('admin.refreshLogs', 'Refresh system logs')}
                         onClick={fetchSystemLogs}
                         style={styles.actionBtn('#5865f2')}
                         disabled={logLoading}
                     >
-                        <FaSync className={logLoading ? 'spin' : ''} /> Refresh
+                        <FaSync className={logLoading ? 'spin' : ''} /> {t('crypto.refresh', 'Refresh')}
                     </button>
                     <div className={css.relative}>
                         <button
-                            aria-label="Export logs as CSV"
+                            aria-label={t('admin.exportCsv', 'Export logs as CSV')}
                             style={styles.actionBtn('#23a559')}
                             onClick={() => handleExportLogs('csv')}
                         >
@@ -131,7 +131,7 @@ const LogsTab = () => {
                         </button>
                     </div>
                     <button
-                        aria-label="Export logs as JSON"
+                        aria-label={t('admin.exportJson', 'Export logs as JSON')}
                         style={styles.actionBtn('#f0b132')}
                         onClick={() => handleExportLogs('json')}
                     >
@@ -158,14 +158,14 @@ const LogsTab = () => {
                 />
                 {(logDateFrom || logDateTo) && (
                     <button
-                        aria-label="Clear date filter"
+                        aria-label={t('admin.clearDateFilter', 'Clear date filter')}
                         onClick={() => {
                             setLogDateFrom('');
                             setLogDateTo('');
                         }}
                         style={styles.actionBtnRedSm}
                     >
-                        ✕ Clear
+                        ✕ {t('common.clear', 'Clear')}
                     </button>
                 )}
             </div>
@@ -239,7 +239,7 @@ const LogsTab = () => {
                         <div>{t('loading_logs')}</div>
                     </div>
                 ) : systemLogs.length === 0 ? (
-                    <div className={css.emptyState40}>📭 Sapítałanan kayıt yok</div>
+                    <div className={css.emptyState40}>{t('adminLogs.noLogs', '📭 No logs found')}</div>
                 ) : (
                     <table className={css.tableBase}>
                         <thead className={css.stickyDark}>
@@ -324,7 +324,7 @@ const LogsTab = () => {
                                 👤 {userActivityModal.user?.username}'s Activity Timeline
                             </h3>
                             <button
-                                aria-label="Close activity timeline"
+                                aria-label={t('common.close', 'Close')}
                                 onClick={() => setUserActivityModal(null)}
                                 style={styles.actionBtn('#e74c3c')}
                             >
@@ -354,9 +354,9 @@ const LogsTab = () => {
                                     <span className={css.textWhite}>
                                         {userActivityModal.user?.last_login
                                             ? new Date(
-                                                  userActivityModal.user.last_login
-                                              ).toLocaleString()
-                                            : 'Hiçbir zaman'}
+                                                userActivityModal.user.last_login
+                                            ).toLocaleString()
+                                            : t('adminLogs.never', 'Never')}
                                     </span>
                                 </div>
                             </div>
@@ -370,12 +370,12 @@ const LogsTab = () => {
                                         {activity.type === 'login'
                                             ? '🔐'
                                             : activity.type === 'message'
-                                              ? '💬'
-                                              : activity.type === 'moderation'
-                                                ? '⚖️'
-                                                : activity.type === 'server'
-                                                  ? '🏠'
-                                                  : '📝'}
+                                                ? '💬'
+                                                : activity.type === 'moderation'
+                                                    ? '⚖️'
+                                                    : activity.type === 'server'
+                                                        ? '🏠'
+                                                        : '📝'}
                                     </div>
                                     <div className={css.flex1}>
                                         <div className={css.textWhite13}>{activity.action}</div>

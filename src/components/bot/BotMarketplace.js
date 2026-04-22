@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import BotCard from '../BotMarketplace/BotCard';
@@ -34,7 +34,7 @@ const BotMarketplace = ({ onClose }) => {
             <div className="bot-marketplace">
                 <div className="marketplace-loading">
                     <div className="loading-spinner" />
-                    <p>Bot Pazar Yeri yükleniyor...</p>
+                    <p>{t('botMarket.loading', 'Loading Bot Marketplace...')}</p>
                 </div>
             </div>
         );
@@ -45,10 +45,10 @@ const BotMarketplace = ({ onClose }) => {
             <div className="marketplace-header">
                 <div className="header-content">
                     <h1>🤖 Bot Marketplace</h1>
-                    <p>Servernuzu g{'three'}lendirecek binlerce bot keşfedin</p>
+                    <p>{t('botMarket.subtitle', 'Discover thousands of bots to enhance your server')}</p>
                 </div>
                 {onClose && (
-                    <button aria-label="on Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 )}
@@ -58,9 +58,10 @@ const BotMarketplace = ({ onClose }) => {
                 <div className="search-box">
                     <input
                         type="text"
-                        placeholder="Bot ara..."
+                        placeholder={t('botMarket.searchPlaceholder', 'Search bots...')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                        aria-label={t('common.search', 'Search')}
                     />
                     <span className="search-icon">🔍</span>
                 </div>
@@ -69,7 +70,7 @@ const BotMarketplace = ({ onClose }) => {
                         value={selectedCategory || ''}
                         onChange={(e) => setSelectedCategory(e.target.value || null)}
                     >
-                        <option value="">Tüm Categoryler</option>
+                        <option value="">{t('botMarket.allCategories', 'All Categories')}</option>
                         {categories.map((cat) => (
                             <option key={cat.id} value={cat.slug}>
                                 {cat.icon} {cat.name} ({cat.bot_count})
@@ -77,9 +78,9 @@ const BotMarketplace = ({ onClose }) => {
                         ))}
                     </select>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                        <option value="popular">Popüler</option>
+                        <option value="popular">{t('botMarket.popular', 'Popular')}</option>
                         <option value="new">Yeni</option>
-                        <option value="rated">En İyi Score</option>
+                        <option value="rated">{t('botMarket.topRated', 'Top Rated')}</option>
                     </select>
                 </div>
             </div>
@@ -87,7 +88,7 @@ const BotMarketplace = ({ onClose }) => {
             <div className="marketplace-content">
                 {featuredBots.length > 0 && !searchQuery && !selectedCategory && (
                     <section className="featured-section">
-                        <h2>⭐ Öne Çıkan Botlar</h2>
+                        <h2>⭐ {t('botMarket.featured', 'Featured Bots')}</h2>
                         <div className="featured-grid">
                             {featuredBots.map((bot) => (
                                 <BotCard key={bot.id} bot={bot} onClick={loadBotDetail} />
@@ -98,7 +99,7 @@ const BotMarketplace = ({ onClose }) => {
 
                 {trendingBots.length > 0 && !searchQuery && !selectedCategory && (
                     <section className="trending-section">
-                        <h2>📈 Yükselen Botlar</h2>
+                        <h2>📈 {t('botMarket.trending', 'Trending Bots')}</h2>
                         <div className="trending-grid">
                             {trendingBots.map((bot) => (
                                 <BotCard key={bot.id} bot={bot} onClick={loadBotDetail} />
@@ -112,12 +113,12 @@ const BotMarketplace = ({ onClose }) => {
                         {selectedCategory
                             ? categories.find((c) => c.slug === selectedCategory)?.name || 'Botlar'
                             : searchQuery
-                              ? `"${searchQuery}" for resultlar`
-                              : t('ui.tum_botlar')}
+                                ? `"${searchQuery}" for resultlar`
+                                : t('ui.tum_botlar')}
                     </h2>
                     {bots.length === 0 ? (
                         <div className="no-results">
-                            <p>Bot findunamadı</p>
+                            <p>{t('botMarket.notFound', 'No bots found')}</p>
                         </div>
                     ) : (
                         <>
@@ -129,17 +130,17 @@ const BotMarketplace = ({ onClose }) => {
                             {totalPages > 1 && (
                                 <div className="pagination">
                                     <button
-                                        aria-label="← Önceki"
+                                        aria-label={t('common.previous', '← Previous')}
                                         disabled={page <= 1}
                                         onClick={() => setPage((p) => p - 1)}
                                     >
-                                        ← Önceki
+                                        ← {t('common.previous', 'Previous')}
                                     </button>
                                     <span>
                                         Sayfa {page} / {totalPages}
                                     </span>
                                     <button
-                                        aria-label="Sonraki →"
+                                        aria-label={t('botMarketplace.nextPage', 'Next page')}
                                         disabled={page >= totalPages}
                                         onClick={() => setPage((p) => p + 1)}
                                     >

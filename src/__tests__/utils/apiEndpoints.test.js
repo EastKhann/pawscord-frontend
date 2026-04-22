@@ -40,8 +40,8 @@ describe('apiEndpoints', () => {
     });
 
     // --- AUTH endpoints ---
-    it('AUTH.LOGIN ends with /auth/token/', () => {
-        expect(ENDPOINTS.AUTH.LOGIN).toMatch(/\/auth\/token\/$/);
+    it('AUTH.LOGIN ends with /auth/login/', () => {
+        expect(ENDPOINTS.AUTH.LOGIN).toMatch(/\/auth\/login\/$/);
     });
 
     it('AUTH.REGISTER ends with /auth/register/', () => {

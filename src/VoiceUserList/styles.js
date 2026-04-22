@@ -229,7 +229,7 @@ styleSheet.textContent = `
     }
     
     .voice-channel-drop-target::after {
-        content: '🔀 Buraya bırak';
+        content: '🔀 Drop here';
         position: absolute;
         right: 8px;
         top: 50%;

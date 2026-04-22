@@ -1,4 +1,5 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import './PollsPanel.css';
 import usePolls from '../PollsPanel/usePolls';
@@ -6,6 +7,7 @@ import PollCard from '../PollsPanel/PollCard';
 import CreatePollModal from '../PollsPanel/CreatePollModal';
 
 const PollsPanel = ({ serverId, onClose }) => {
+    const { t } = useTranslation();
     const [error, setError] = useState(null);
     const {
         polls,
@@ -43,13 +45,13 @@ const PollsPanel = ({ serverId, onClose }) => {
                     <h2>📊 Polls</h2>
                     <div className="header-actions">
                         <button
-                            aria-label="+ Yeni Poll"
+                            aria-label={t('polls.newPoll', 'New poll')}
                             className="create-poll-btn"
                             onClick={() => setShowCreateModal(true)}
                         >
                             + Yeni Poll
                         </button>
-                        <button aria-label="on Close" className="close-btn" onClick={onClose}>
+                        <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                             ×
                         </button>
                     </div>
@@ -59,19 +61,19 @@ const PollsPanel = ({ serverId, onClose }) => {
                     {loading ? (
                         <div className="loading-state">
                             <div className="spinner" />
-                            <p>Anketler yükleniyor...</p>
+                            <p>{t('poll.loading', 'Loading polls...')}</p>
                         </div>
                     ) : polls.length === 0 ? (
                         <div className="empty-state">
                             <span className="empty-icon">📊</span>
-                            <h3>Henüz anket yok</h3>
-                            <p>Topluluk etkileşimini artırmak için anket oluşturun!</p>
+                            <h3>{t('poll.noPolls', 'No polls yet')}</h3>
+                            <p>{t('poll.createHint', 'Create a poll to increase community engagement!')}</p>
                             <button
-                                aria-label="Create"
+                                aria-label={t('common.create')}
                                 className="create-first-btn"
                                 onClick={() => setShowCreateModal(true)}
                             >
-                                📊 İlk Polli Oluştur
+                                {t('poll.createFirst', '📊 Create First Poll')}
                             </button>
                         </div>
                     ) : (

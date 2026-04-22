@@ -1,6 +1,7 @@
 import { FaUsers, FaClock } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import styles from './styles';
+import { useTranslation } from 'react-i18next';
 
 const TournamentCard = ({ tournament, currentUser, onJoin, onLeave, onView }) => {
     const isParticipant = tournament.participants?.some((p) => p.username === currentUser);
@@ -17,8 +18,9 @@ const TournamentCard = ({ tournament, currentUser, onJoin, onLeave, onView }) =>
         cursor: isFull ? 'not-allowed' : 'pointer',
     };
 
+    const { t } = useTranslation();
     return (
-        <div aria-label="tournament card" style={styles.tournamentCard}>
+        <div aria-label={t('tournament.card', 'Tournament card')} style={styles.tournamentCard}>
             <div style={styles.cardHeader}>
                 <div style={styles.tournamentName}>{tournament.name}</div>
                 <div style={statusBadgeStyle}>{tournament.status}</div>
@@ -44,7 +46,7 @@ const TournamentCard = ({ tournament, currentUser, onJoin, onLeave, onView }) =>
                 {!isCompleted &&
                     (isParticipant ? (
                         <button onClick={onLeave} style={styles.leaveButton}>
-                            Ayrıl
+                            {t('tournament.leave', 'Leave')}
                         </button>
                     ) : (
                         <button onClick={onJoin} disabled={isFull} style={joinButtonStyle}>

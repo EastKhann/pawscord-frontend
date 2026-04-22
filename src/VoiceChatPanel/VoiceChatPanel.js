@@ -79,9 +79,9 @@ const VoiceFrameMenu = ({ menu, currentUsername, remoteVolumes, setRemoteVolume,
                 transition: 'background 0.1s',
             }}
             onMouseEnter={(e) =>
-                (e.currentTarget.style.background = danger
-                    ? 'rgba(237,66,69,0.15)'
-                    : 'rgba(88,101,242,0.15)')
+            (e.currentTarget.style.background = danger
+                ? 'rgba(237,66,69,0.15)'
+                : 'rgba(88,101,242,0.15)')
             }
             onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
@@ -181,6 +181,7 @@ const VoiceChatPanel = ({
     allUsers = [], // 🔥 YENİ: Tüm kullanıcı listsi
     currentUserProfile, // 🔥 YENİ: Mevcut kullanıcının profilei
 }) => {
+    const { t } = useTranslation();
     const {
         isInVoice,
         isMuted,
@@ -296,10 +297,10 @@ const VoiceChatPanel = ({
     const renderMode = expandedUser
         ? 'fullscreen'
         : isMinimized
-          ? 'minimized'
-          : isMobile
-            ? 'mobile'
-            : 'grid';
+            ? 'minimized'
+            : isMobile
+                ? 'mobile'
+                : 'grid';
 
     useEffect(() => {
         if (!isInVoice) {
@@ -367,7 +368,7 @@ const VoiceChatPanel = ({
     // 🎨 GRID VIEW (Ana Görünüm)
     return (
         <div
-            aria-label="voice frame menu"
+            aria-label={t('aria.voicePanel', 'Voice Panel')}
             style={{
                 display: 'flex',
                 flexDirection: 'column',

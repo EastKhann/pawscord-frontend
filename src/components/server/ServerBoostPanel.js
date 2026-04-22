@@ -35,7 +35,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                         <FaRocket className="icon-primary-mr10" />
                         <h2 style={styles.title}>Sunucu Boost</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -51,7 +51,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                         { key: 'perks', icon: <FaGift className="mr-5" />, label: 'Perks' },
                     ].map((t) => (
                         <button
-                            aria-label="Switch tab"
+                            aria-label={t.label}
                             key={t.key}
                             onClick={() => setActiveTab(t.key)}
                             style={S.el}
@@ -77,7 +77,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                                 </div>
                                 <div style={styles.progressSection}>
                                     <div style={styles.progressHeader}>
-                                        <span>Bir Sonraki Seviyeye İlerleme</span>
+                                        <span>{t('serverBoost.progressToNext', 'Progress to Next Level')}</span>
                                         <span>
                                             {progress.current} / {progress.target}
                                         </span>
@@ -98,7 +98,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                                     )}
                                 </div>
                                 <button
-                                    aria-label="boost Server"
+                                    aria-label={t('serverBoost.boostServer', 'Boost server')}
                                     onClick={boostServer}
                                     style={styles.boostButton}
                                 >
@@ -135,7 +135,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                         <div style={styles.boostsList}>
                             {boosts.length === 0 ? (
                                 <div style={styles.empty}>
-                                    Henüz boost yok. Bu sunucuyu destekleyen ilk kişi siz olun!
+                                    {t('serverBoost.noBoosts', 'No boosts yet. Be the first to support this server!')}
                                 </div>
                             ) : (
                                 boosts.map((boost, index) => (

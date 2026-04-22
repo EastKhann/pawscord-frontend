@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const S = {
     txt: { color: '#fff', fontSize: 16, fontWeight: 700, marginBottom: 12 },
@@ -6,8 +7,9 @@ const S = {
 };
 
 const SettingSection = ({ title, children }) => {
+    const { t } = useTranslation();
     return (
-        <div aria-label="setting section" style={S.mar}>
+        <div aria-label={t('settings.section', 'Setting section')} style={S.mar}>
             <h3 style={S.txt}>{title}</h3>
             {children}
         </div>

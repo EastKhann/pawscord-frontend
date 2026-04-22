@@ -37,7 +37,7 @@ const DeveloperTab = ({ botAccounts: rawBots, oauthApps: rawOAuth, webhooks: raw
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (
-        <div aria-label="developer tab" style={styles.card}>
+        <div aria-label={t('aria.developerTab', 'Developer')} style={styles.card}>
             <h3 style={styles.sectionTitle}>{t('developer.title')}</h3>
 
             {/* OAuth Apps */}

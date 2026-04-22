@@ -76,8 +76,8 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
         progress:
             achievements.length > 0
                 ? Math.round(
-                      (achievements.filter((a) => a.unlocked).length / achievements.length) * 100
-                  )
+                    (achievements.filter((a) => a.unlocked).length / achievements.length) * 100
+                )
                 : 0,
     };
 
@@ -118,7 +118,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
             >
                 <div className="achievements-header">
                     <h2>{t('achievements.title', '🏆 Achievements & Badges')}</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
                 </div>
@@ -172,14 +172,13 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
                 <div className="achievements-filters">
                     <div className="filter-group">
                         <button
-                            aria-label="Action button"
+                            aria-label={t('achievements.filterAll', 'All achievements')}
                             className={filter === 'all' ? 'active' : ''}
-                            onClick={() => setFilter('all')}
                         >
                             {t('achievements.filterAll', 'All ({{count}})', { count: stats.total })}
                         </button>
                         <button
-                            aria-label="Action button"
+                            aria-label={t('achievements.filterUnlocked', 'Unlocked achievements')}
                             className={filter === 'unlocked' ? 'active' : ''}
                             onClick={() => setFilter('unlocked')}
                         >
@@ -188,7 +187,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
                             })}
                         </button>
                         <button
-                            aria-label="Action button"
+                            aria-label={t('achievements.filterLocked', 'Locked achievements')}
                             className={filter === 'locked' ? 'active' : ''}
                             onClick={() => setFilter('locked')}
                         >
@@ -200,28 +199,28 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
 
                     <div className="category-group">
                         <button
-                            aria-label="Action button"
+                            aria-label={t('achievements.categoryAll', 'All categories')}
                             className={category === 'all' ? 'active' : ''}
                             onClick={() => setCategory('all')}
                         >
                             {t('achievements.categoryAll', 'All Categories')}
                         </button>
                         <button
-                            aria-label="Action button"
+                            aria-label={t('achievements.categorySocial', 'Social achievements')}
                             className={category === 'social' ? 'active' : ''}
                             onClick={() => setCategory('social')}
                         >
                             {t('achievements.categorySocial', '👥 Social')}
                         </button>
                         <button
-                            aria-label="Action button"
+                            aria-label={t('achievements.categoryActivity', 'Activity achievements')}
                             className={category === 'activity' ? 'active' : ''}
                             onClick={() => setCategory('activity')}
                         >
                             {t('achievements.categoryActivity', '⚡ Activity')}
                         </button>
                         <button
-                            aria-label="Action button"
+                            aria-label={t('achievements.categorySpecial', 'Special achievements')}
                             className={category === 'special' ? 'active' : ''}
                             onClick={() => setCategory('special')}
                         >

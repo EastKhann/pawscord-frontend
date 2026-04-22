@@ -7,20 +7,20 @@ const ScreeningSettings = ({ questions, onAdd, onUpdate, onRemove }) => {
     return (
         <div className="settings-tab">
             <div className="tab-header">
-                <h4>Üye Tarama Soruları</h4>
+                <h4>{t('screening.title','Member Screening Questions')}</h4>
                 <button className="add-btn" onClick={onAdd}>
                     {t('soru_add')}
                 </button>
             </div>
 
             <p className="tab-description">
-                Yeni üyeler sunucuya katılmadan önce bu soruları yanıtlamalıdır.
+                {t('screening.desc','New members must answer these questions before joining the server.')}
             </p>
 
             {questions.length === 0 ? (
                 <div className="empty-rules">
                     <FaQuestionCircle />
-                    <p>Henüz soru addnmemiş</p>
+                    <p>{t('screening.noQuestions','No questions added yet')}</p>
                 </div>
             ) : (
                 <div className="questions-list">

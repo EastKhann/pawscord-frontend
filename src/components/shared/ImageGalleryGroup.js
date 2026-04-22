@@ -5,6 +5,7 @@
 // =============================================
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 const _s = (o) => o;
 
@@ -33,6 +34,7 @@ const ImageGalleryGroup = React.memo(
         onVisible,
     }) => {
         const [error, setError] = useState(null);
+        const { t } = useTranslation();
         const firstMsg = messages[0];
 
         // Avatar
@@ -133,7 +135,7 @@ const ImageGalleryGroup = React.memo(
             },
         };
         return (
-            <div aria-label="image gallery group" style={S.wrapper}>
+            <div aria-label={t('gallery.imageGroup', 'Image gallery')} style={S.wrapper}>
                 {/* Avatar */}
                 <div style={S.avatarWrap}>
                     {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
@@ -170,7 +172,7 @@ const ImageGalleryGroup = React.memo(
                         </span>
                         <span style={S.timeSpan}>{timeStr}</span>
                         {totalCount > 1 && (
-                            <span style={S.photoCount}>📷 {totalCount} fotoğraf</span>
+                            <span style={S.photoCount}>📷 {totalCount} {t('imageGallery.photos', 'photos')}</span>
                         )}
                     </div>
 
@@ -186,8 +188,8 @@ const ImageGalleryGroup = React.memo(
                                             visibleCount === 1
                                                 ? 'auto'
                                                 : visibleCount === 3 && idx === 0
-                                                  ? '2/1'
-                                                  : '1/1',
+                                                    ? '2/1'
+                                                    : '1/1',
                                         overflow: 'hidden',
                                         position: 'relative',
                                         ...(visibleCount === 3 && idx === 0
@@ -197,8 +199,8 @@ const ImageGalleryGroup = React.memo(
                                             visibleCount === 1
                                                 ? '300px'
                                                 : visibleCount === 3 && idx === 0
-                                                  ? '200px'
-                                                  : '200px',
+                                                    ? '200px'
+                                                    : '200px',
                                         cursor: 'pointer',
                                     })}
                                     role="button"

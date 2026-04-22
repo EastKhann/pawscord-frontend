@@ -34,10 +34,9 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     return (
         <div
             style={styles.overlay}
-            role="button"
-            tabIndex={0}
+            role="presentation"
             onClick={onClose}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            onKeyDown={(e) => e.key === 'Escape' && onClose()}
         >
             <style>{`
                 @keyframes ppOverlayIn { from{opacity:0} to{opacity:1} }
@@ -45,10 +44,11 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
             `}</style>
             <div
                 style={styles.modal}
-                role="button"
-                tabIndex={0}
+                role="dialog"
+                aria-modal="true"
+                aria-label={t('payment.title', 'Ödeme Merkezi')}
                 onClick={(event) => event.stopPropagation()}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+                onKeyDown={(e) => e.stopPropagation()}
             >
                 {/* ── Success animation overlay ── */}
                 {successCoins && (
@@ -87,7 +87,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                         <FaWallet className="text-f0b-24" />
                         <h2 className="m0-fs20">{t('payment.title', 'Ödeme Merkezi')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -122,7 +122,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
                         return (
                             <button
-                                aria-label="Switch tab"
+                                aria-label={tab.label}
                                 key={tab.key}
                                 onClick={() => setActiveTab(tab.key)}
                                 style={tabStyle}
@@ -147,14 +147,14 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             </div>
                             <div style={styles.quickActions}>
                                 <button
-                                    aria-label="Buy Coins"
+                                    aria-label={t('payment.buyCoins')}
                                     onClick={() => setActiveTab('buy')}
                                     style={styles.actionBtn}
                                 >
                                     <FaCreditCard /> {t('payment.buyCoins', 'Coin Satın Al')}
                                 </button>
                                 <button
-                                    aria-label="Transfer Coins"
+                                    aria-label={t('payment.transferCoins')}
                                     onClick={() => setActiveTab('transfer')}
                                     style={styles.actionBtn}
                                 >
@@ -185,9 +185,9 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                         />
                     ) : (
                         <div style={styles.historyView}>
-                            <h3 style={styles.sectionTitle}>İşlem Geçmişi</h3>
+                            <h3 style={styles.sectionTitle}>{t('payment.transactionHistory')}</h3>
                             {transactions.length === 0 ? (
-                                <div style={styles.empty}>Henüz işlem yok</div>
+                                <div style={styles.empty}>{t('payment.noTransactions')}</div>
                             ) : (
                                 <div style={styles.transactions}>
                                     {transactions.map((tx, idx) => {

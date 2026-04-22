@@ -26,7 +26,7 @@ const getRewardIcon = (type) => {
 
 const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Daily Rewards' });
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('dailyRewards.title', 'Daily Rewards') });
     const { rewards, streak, canClaim, loading, claiming, lastClaimed, nextReward, handleClaim } =
         useDailyRewards({ fetchWithAuth, apiBaseUrl });
     const cycleIndex = streak % 7;
@@ -39,7 +39,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         <FaGift style={ICON_STYLES.header} />
                         <h2 className="m0-fs20">{t('dailyRewards.title', 'Günlük Ödüller')}</h2>
                     </div>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -78,7 +78,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                         </div>
                                     </div>
                                     <button
-                                        aria-label="handle Claim"
+                                        aria-label={t('dailyRewards.claimReward', 'Claim Reward')}
                                         onClick={handleClaim}
                                         disabled={claiming}
                                         style={styles.claimBtn}
@@ -97,7 +97,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                     <p>
                                         {t(
                                             'dailyRewards.comeBackTomorrow',
-                                            'Bir sonraki ödül için yarın gel'
+                                            t('dailyRewards.comeTomorrow','Come back tomorrow for the next reward')
                                         )}
                                     </p>
                                     <div style={styles.nextRewardTime}>
@@ -146,7 +146,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                     📅{' '}
                                     {t(
                                         'dailyRewards.loginDaily',
-                                        'Serinizi korumak ve ödül kazanmak için her gün giriş yapın!'
+                                        t('dailyRewards.desc','Log in every day to maintain your streak and earn rewards!')
                                     )}
                                 </p>
                                 <p style={styles.infoText}>

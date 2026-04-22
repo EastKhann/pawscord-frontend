@@ -32,7 +32,7 @@ export const formatTimeRemaining = (endTime) => {
     const days = Math.floor(diff / 86400);
     const hours = Math.floor((diff % 86400) / 3600);
     const minutes = Math.floor((diff % 3600) / 60);
-    if (days > 0) return `${days}g ${hours}s kaldı`;
-    if (hours > 0) return `${hours}s ${minutes}dk kaldı`;
-    return `${minutes} minute kaldı`;
+    if (days > 0) return `${days}d ${hours}h left`;
+    if (hours > 0) return `${hours}h ${minutes}m left`;
+    return `${minutes} min left`;
 };

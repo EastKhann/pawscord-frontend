@@ -11,7 +11,7 @@ describe('useServerStore', () => {
             members: [],
             roles: [],
             serverSettings: {},
-            joinedServerIds: new Set(),
+            joinedServerIds: [],
         });
     });
 
@@ -35,7 +35,7 @@ describe('useServerStore', () => {
 
         it('should track joined IDs', () => {
             useServerStore.getState().addServer({ id: 42, name: 'Tracked' });
-            expect(useServerStore.getState().joinedServerIds.has(42)).toBe(true);
+            expect(useServerStore.getState().joinedServerIds).toContain(42);
         });
     });
 

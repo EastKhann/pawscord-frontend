@@ -23,15 +23,15 @@ const DEFAULT_FORM = {
 };
 
 export const webhookEventOptions = [
-    { id: 'message_create', label: 'Mesaj Gönderildi' },
-    { id: 'message_edit', label: 'Mesaj Düzenlendi' },
+    { id: 'message_create', label: t('bot.eventMessageCreate','Message Sent') },
+    { id: 'message_edit', label: t('bot.eventMessageEdit','Message Edited') },
     { id: 'message_delete', label: 'Mesaj Silindi' },
     { id: 'reaction_add', label: 'Tepki Eklendi' },
-    { id: 'reaction_remove', label: 'Tepki Kaldırıldı' },
-    { id: 'member_join', label: 'Üye Katıldı' },
-    { id: 'member_leave', label: 'Üye Ayrıldı' },
-    { id: 'voice_join', label: 'Ses Kanalına Katıldı' },
-    { id: 'voice_leave', label: 'Ses Kanalından Ayrıldı' },
+    { id: 'reaction_remove', label: t('bot.eventReactionRemove','Reaction Removed') },
+    { id: 'member_join', label: t('bot.eventMemberJoin','Member Joined') },
+    { id: 'member_leave', label: t('bot.eventMemberLeave','Member Left') },
+    { id: 'voice_join', label: t('bot.eventVoiceJoin','Joined Voice Channel') },
+    { id: 'voice_leave', label: t('bot.eventVoiceLeave','Left Voice Channel') },
 ];
 
 export const useBotPortal = (apiBaseUrl) => {
@@ -118,7 +118,7 @@ export const useBotPortal = (apiBaseUrl) => {
     const handleDeleteBot = async (botId) => {
         if (
             !(await confirmDialog(
-                'Bu botu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.'
+                t('bot.deleteConfirm','Are you sure you want to delete this bot? This action cannot be undone.')
             ))
         )
             return;
@@ -140,7 +140,7 @@ export const useBotPortal = (apiBaseUrl) => {
     const handleRegenerateToken = async (botId) => {
         if (
             !(await confirmDialog(
-                'Token yenilenecek. Eski token geçersiz hale gelecek. Devam etmek istiyor musunuz?'
+                t('bot.refreshTokenConfirm','Token will be refreshed. The old token will become invalid. Do you want to continue?')
             ))
         )
             return;

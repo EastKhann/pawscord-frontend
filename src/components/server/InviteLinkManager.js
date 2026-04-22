@@ -28,13 +28,13 @@ const EXPIRE_OPTIONS = [
 ];
 
 const MAX_USES_OPTIONS = [
-    { label: 'Sınırsız', value: 0 },
-    { label: '1 kullanım', value: 1 },
-    { label: '5 kullanım', value: 5 },
-    { label: '10 kullanım', value: 10 },
-    { label: '25 kullanım', value: 25 },
-    { label: '50 kullanım', value: 50 },
-    { label: '100 kullanım', value: 100 },
+    { label: t('invite.unlimited', 'Unlimited'), value: 0 },
+    { label: t('invite.uses', '{{n}} use', { n: 1 }), value: 1 },
+    { label: t('invite.uses', '{{n}} uses', { n: 5 }), value: 5 },
+    { label: t('invite.uses', '{{n}} uses', { n: 10 }), value: 10 },
+    { label: t('invite.uses', '{{n}} uses', { n: 25 }), value: 25 },
+    { label: t('invite.uses', '{{n}} uses', { n: 50 }), value: 50 },
+    { label: t('invite.uses', '{{n}} uses', { n: 100 }), value: 100 },
 ];
 
 const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeInvite }) => {
@@ -77,7 +77,7 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
                     <span style={S.subtitle}>{serverName}</span>
                 </div>
                 <button
-                    aria-label="Create"
+                    aria-label={t('common.create')}
                     type="button"
                     style={S.createBtn}
                     onClick={() => setShowCreate(!showCreate)}
@@ -108,7 +108,7 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
                         </div>
                         <div style={S.createField}>
                             <label style={S.label}>
-                                <FaUsers className="icon-tiny" /> Maks Kullanım
+                                <FaUsers className="icon-tiny" /> {t('invite.maxUses', 'Max Uses')}
                             </label>
                             <select
                                 style={S.select}
@@ -124,7 +124,7 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
                         </div>
                     </div>
                     <button
-                        aria-label="handle Create"
+                        aria-label={t('inviteLinks.createLink', 'Create invite link')}
                         type="button"
                         style={S.generateBtn}
                         onClick={handleCreate}
@@ -139,7 +139,7 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
                 {invites.length === 0 ? (
                     <div style={S.empty}>
                         <FaLink className="icon-gray-24" />
-                        <span>Henüz davet yok</span>
+                        <span>{t('invite.noInvites', 'No invites yet')}</span>
                     </div>
                 ) : (
                     invites.map((invite) => (
@@ -163,33 +163,30 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
                             </div>
                             <div style={S.inviteActions}>
                                 <button
-                                    aria-label="Action button"
-                                    type="button"
-                                    style={S.actionBtn}
-                                    onClick={() => handleCopy(invite)}
-                                    title="Kopyala"
+                                    aria-label={t('inviteLinks.copyLink', 'Copy link')}
+                                title="Kopyala"
                                 >
-                                    {copiedId === invite.id ? (
-                                        <FaCheck className="icon-success" />
-                                    ) : (
-                                        <FaCopy />
-                                    )}
-                                </button>
-                                <button
-                                    aria-label="Action button"
-                                    type="button"
-                                    style={S.txt}
-                                    onClick={() => onRevokeInvite?.(invite.id)}
-                                    title="İptal Et"
-                                >
-                                    <FaTrash />
-                                </button>
-                            </div>
+                                {copiedId === invite.id ? (
+                                    <FaCheck className="icon-success" />
+                                ) : (
+                                    <FaCopy />
+                                )}
+                            </button>
+                            <button
+                                aria-label={t('inviteLinks.revokeLink', 'Revoke invite link')}
+                                type="button"
+                                style={S.txt}
+                                onClick={() => onRevokeInvite?.(invite.id)}
+                                title={t('common.cancel', 'Cancel')}
+                            >
+                                <FaTrash />
+                            </button>
                         </div>
-                    ))
+                        </div>
+            ))
                 )}
-            </div>
         </div>
+        </div >
     );
 };
 

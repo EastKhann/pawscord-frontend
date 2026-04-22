@@ -105,7 +105,7 @@ const SecurityTab = ({
     return (
         <>
             <div style={styles.card}>
-                <h3 style={styles.sectionTitle}>🔒 Two-Factor Authentication (2FA)</h3>
+                <h3 style={styles.sectionTitle}>🔒 {t('security.twoFactorTitle', 'Two-Factor Authentication (2FA)')}</h3>
 
                 {!twoFactorEnabled && !twoFactorData && (
                     <div>
@@ -113,7 +113,7 @@ const SecurityTab = ({
 
                         <button
                             style={styles.button('primary')}
-                            aria-label="enable2FA"
+                            aria-label={t('security.enableTwoFactor', 'Enable 2FA')}
                             onClick={enable2FA}
                             disabled={loading.enable2fa}
                         >
@@ -130,7 +130,7 @@ const SecurityTab = ({
 
                         <div style={styles.qrCode}>
                             {twoFactorData.qr_code ? (
-                                <img src={twoFactorData.qr_code} alt="QR Code" style={_st2} />
+                                <img src={twoFactorData.qr_code} alt={t('alt.qrCode', 'QR Code')} style={_st2} />
                             ) : (
                                 <QRCodeSVG
                                     value={`otpauth://totp/Pawscord:${user.email}?secret=${twoFactorData.secret}&issuer=Pawscord`}
@@ -145,21 +145,21 @@ const SecurityTab = ({
                         </div>
 
                         <div style={_st5}>
-                            <label style={styles.label}>Doğrulama Kodu</label>
+                            <label style={styles.label}>{t('security.verificationCode', 'Verification Code')}</label>
 
                             <input
                                 type="text"
                                 value={verificationCode}
                                 onChange={(e) => setVerificationCode(e.target.value)}
-                                placeholder="6 haneli kod"
+                                placeholder={t('security.sixDigitCode', '6-digit code')}
                                 style={styles.input}
                                 maxLength={6}
-                                aria-label="Doğrulama Kodu"
+                                aria-label={t('security.verificationCode', 'Verification Code')}
                             />
 
                             <button
                                 style={_st1117}
-                                aria-label="verify2FASetup"
+                                aria-label={t('security.verifyAndEnable', 'Verify and enable')}
                                 onClick={verify2FASetup}
                                 disabled={loading.verify2fa || verificationCode.length !== 6}
                             >
@@ -193,7 +193,7 @@ const SecurityTab = ({
 
                         <button
                             style={styles.button('danger')}
-                            aria-label="2FA devre dışı bırak"
+                            aria-label={t('security.disable2FA', 'Disable 2FA')}
                             onClick={disable2FA}
                             disabled={loading.disable2fa}
                         >
@@ -237,7 +237,7 @@ const SecurityTab = ({
                                 }
                                 style={styles.input}
                                 required={hasPassword}
-                                aria-label="Eski Parola"
+                                aria-label={t('security.oldPassword', 'Old Password')}
                             />
                         </div>
                     )}
@@ -254,7 +254,7 @@ const SecurityTab = ({
                             style={styles.input}
                             required
                             minLength={12}
-                            aria-label="Yeni Parola"
+                            aria-label={t('security.newPassword', 'New Password')}
                         />
 
                         <small style={_st11}>{t('security.passwordRequirements')}</small>
@@ -275,7 +275,7 @@ const SecurityTab = ({
                             style={styles.input}
                             required
                             minLength={12}
-                            aria-label="Parolayı Onayla"
+                            aria-label={t('security.confirmPassword', 'Confirm New Password')}
                         />
 
                         {passwordData.confirm_password.length > 0 &&
@@ -289,7 +289,7 @@ const SecurityTab = ({
                     </div>
 
                     <button
-                        aria-label="action-button"
+                        aria-label={t('security.changePassword', 'Change password')}
                         type="submit"
                         style={styles.button('primary')}
                         disabled={
@@ -301,14 +301,14 @@ const SecurityTab = ({
                         {loading.changePassword
                             ? t('common.saving')
                             : hasPassword
-                              ? t('security.changePassword')
-                              : t('security.setPassword')}
+                                ? t('security.changePassword')
+                                : t('security.setPassword')}
                     </button>
                 </form>
             </div>
 
             <div style={styles.card}>
-                <h3 style={styles.sectionTitle}>🖥 Aktif Oturumlar</h3>
+                <h3 style={styles.sectionTitle}>🖥 {t('security.activeSessions', 'Active Sessions')}</h3>
 
                 {sessions.length === 0 && <p style={_st12}>{t('session.noActiveSessions')}</p>}
 
@@ -325,7 +325,7 @@ const SecurityTab = ({
 
                         <button
                             style={styles.button('danger')}
-                            aria-label="action-button"
+                            aria-label={t('session.end', 'End session')}
                             onClick={() => revokeSession(session.id)}
                         >
                             {t('session.end')}
@@ -336,7 +336,7 @@ const SecurityTab = ({
                 {sessions.length > 0 && (
                     <button
                         style={_st1118}
-                        aria-label="Tüm oturumları sonlandır"
+                        aria-label={t('security.endAllSessions', 'End all sessions')}
                         onClick={revokeAllSessions}
                     >
                         🔴 {t('session.endAll')}

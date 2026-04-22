@@ -9,7 +9,7 @@ const S = {
 const FlagCard = ({ flag, styles, onAction }) => {
     const { t } = useTranslation();
     return (
-        <div aria-label="flag card" style={styles.flagCard}>
+        <div aria-label={t('aiModeration.flagCard', 'Flag card')} style={styles.flagCard}>
             <div style={styles.flagHeader}>
                 <div>
                     <span style={styles.flagType(flag.type)}>

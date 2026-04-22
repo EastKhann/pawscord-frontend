@@ -1,12 +1,14 @@
-// frontend/src/CryptoChartModal.js
+﻿// frontend/src/CryptoChartModal.js
 
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import useModalA11y from '../hooks/useModalA11y';
 
 const CryptoChartModal = ({ symbol, onClose }) => {
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Crypto Chart' });
+    const { t } = useTranslation();
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('crypto.chart', 'Crypto Chart') });
     const containerRef = useRef();
 
     // Sembol temizligi (USDT yoksa addyelim, varsa oldugu gibi kalsin)
@@ -48,11 +50,11 @@ const CryptoChartModal = ({ symbol, onClose }) => {
     }, [cleanSymbol]);
 
     return (
-        <div aria-label="crypto chart modal" style={styles.overlay} {...overlayProps}>
+        <div aria-label={t('aria.cryptoChartModal', 'Crypto Chart')} style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3>?? {rawSymbol} Chart</h3>
-                    <button onClick={onClose} style={styles.closeBtn} aria-label="Close">
+                    <button onClick={onClose} style={styles.closeBtn} aria-label={t('common.close')}>
                         <FaTimes />
                     </button>
                 </div>

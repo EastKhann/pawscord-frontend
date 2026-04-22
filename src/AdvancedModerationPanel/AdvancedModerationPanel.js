@@ -9,7 +9,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
     const { t } = useTranslation();
 
     return (
-        <div aria-label="advanced moderation panel" className="advanced-moderation-panel">
+        <div aria-label={t('aria.advancedModerationPanel', 'Advanced Moderation Panel')} className="advanced-moderation-panel">
             <div className="panel-header">
                 <h2>
                     <i className="fas fa-shield-alt"></i>{' '}
@@ -149,7 +149,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
                             <span>
                                 {t(
                                     'moderation.massWarning',
-                                    'Toplu eylemler birden fazla kullanıcıyı etkiler. Dikkatli kullanın!'
+                                    t('advModPanel.bulkWarning','Bulk actions affect multiple users. Use with caution!')
                                 )}
                             </span>
                         </div>
@@ -201,7 +201,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
                                     <span className="input-hint">
                                         {t(
                                             'moderation.thresholdHint',
-                                            'Zaman penceresinde katılan kullanıcı sayısı'
+                                            t('advModPanel.joinRateDesc','Number of users joining in the time window')
                                         )}
                                     </span>
                                 </div>

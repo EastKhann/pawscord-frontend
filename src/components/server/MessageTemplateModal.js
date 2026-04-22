@@ -70,7 +70,7 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
 
     const handleDelete = async (id, e) => {
         e.stopPropagation();
-        if (!(await confirmDialog('Bu şablonu silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('msgTemplate.deleteConfirm', 'Are you sure you want to delete this template?')))) return;
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/templates/${id}/`, { method: 'DELETE' });
             if (res.ok) {
@@ -87,9 +87,9 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
                 {/* HEAD */}
                 <div style={headerStyle}>
                     <h3 className="flex-align-m0">
-                        <FaStickyNote /> Hazır Şablonlar
+                        <FaStickyNote /> {t('msgTemplate.templates', 'Ready Templates')}
                     </h3>
-                    <button aria-label="Close" onClick={onClose} style={closeButtonStyle}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={closeButtonStyle}>
                         <FaTimes />
                     </button>
                 </div>
@@ -126,20 +126,19 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
                                             })
                                         }
                                     />
-                                    Herkese Açık (Global)
+                                    {t('msgTemplate.global', 'Public (Global)')}
                                 </label>
                             )}
                             <div className="flex-10-mt10">
                                 <button
-                                    aria-label="handle Create"
+                                    aria-label={t('msgTemplateModal.createBtn', 'Create template')}
                                     onClick={handleCreate}
                                     style={saveButtonStyle}
                                 >
                                     <FaCheck /> Kaydet
                                 </button>
                                 <button
-                                    aria-label="Action button"
-                                    onClick={() => setCreating(false)}
+                                    aria-label={t('common.cancel', 'Cancel')}
                                     style={cancelButtonStyle}
                                 >
                                     {t('common.cancel')}
@@ -149,17 +148,17 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
                     ) : (
                         <>
                             <button
-                                aria-label="Add"
+                                aria-label={t('common.add')}
                                 onClick={() => setCreating(true)}
                                 style={addButtonStyle}
                             >
-                                <FaPlus /> Yeni Şablon Oluştur
+                                <FaPlus /> {t('msgTemplate.createNew', '+ Create New Template')}
                             </button>
                             <div style={listStyle}>
                                 {loading ? (
                                     <p>{t('common.loading')}</p>
                                 ) : templates.length === 0 ? (
-                                    <p className="opacity-5">Henüz şablon yok.</p>
+                                    <p className="opacity-5">{t('msgTemplate.noTemplates', 'No templates yet.')}</p>
                                 ) : (
                                     templates.map((t) => (
                                         <div
@@ -182,7 +181,7 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
                                                     <span style={badgeStyle}>Global</span>
                                                 )}
                                                 <button
-                                                    aria-label="Delete"
+                                                    aria-label={t('common.delete')}
                                                     onClick={(e) => handleDelete(t.id, e)}
                                                     style={deleteButtonStyle}
                                                 >

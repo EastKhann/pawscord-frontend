@@ -438,7 +438,7 @@ const RoomListModals = ({
                     title={t('contextMenu.deleteServer', 'Sunucuyu Sil')}
                     message={t(
                         'contextMenu.deleteServerConfirm',
-                        '"{{name}}" sunucusunu KALICI OLARAK silmek üzeresiniz!',
+                        t('roomModals.deleteServerConfirm','You are about to PERMANENTLY delete "{{name}}"!', { name }),
                         { name: deleteServerModal.server.name }
                     )}
                     confirmText={t('contextMenu.deleteServer', 'Sunucuyu Sil')}
@@ -471,7 +471,7 @@ const RoomListModals = ({
                     title={t('contextMenu.leaveServer', 'Sunucudan Ayrıl')}
                     message={t(
                         'contextMenu.leaveServerConfirm',
-                        '"{{name}}" sunucusundan ayrılmak istediğinizden emin misiniz?',
+                        t('roomModals.leaveServerConfirm','Are you sure you want to leave "{{name}}"?', { name }),
                         { name: leaveServerModal.server.name }
                     )}
                     confirmText={t('contextMenu.leaveServer', 'Sunucudan Ayrıl')}
@@ -602,7 +602,7 @@ const DMContextMenuPortal = ({
 
     return createPortal(
         <div
-            aria-label="room list modals"
+            aria-label={t('aria.roomContextMenu', 'Room Menu')}
             role="menu"
             tabIndex={-1}
             onClick={(e) => e.stopPropagation()}

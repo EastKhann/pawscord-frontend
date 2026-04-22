@@ -231,7 +231,7 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
                         }
                     >
                         {displayAvatar ? (
-                            <img src={displayAvatar} alt="Bot Avatar" className="img-cover" />
+                            <img src={displayAvatar} alt={t('alt.botAvatar', 'Bot Avatar')} className="img-cover" />
                         ) : (
                             <span className="fs-32">🤖</span>
                         )}
@@ -243,14 +243,14 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
                             {botAvatarPreview
                                 ? '📷 New photo selected (applied on save)'
                                 : isCustomAvatar
-                                  ? '✓ Custom avatar set'
-                                  : '🖼️ Using server icon (default)'}
+                                    ? '✓ Custom avatar set'
+                                    : '🖼️ Using server icon (default)'}
                         </div>
                         <div className={css.flex - 8 - mt8}>
                             {(isCustomAvatar || botAvatarPreview) && (
                                 <button
                                     onClick={handleRemoveAvatar}
-                                    aria-label="Remove bot avatar"
+                                    aria-label={t('systemBot.removeAvatar', 'Remove bot avatar')}
                                     style={S.bg}
                                 >
                                     ✗ Remove Avatar
@@ -335,10 +335,10 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    aria-label="Save system bot settings"
+                    aria-label={t('systemBot.save', 'Save system bot settings')}
                     style={saveBtnStyle}
                 >
-                    {saving ? '⏳ Kaydediliyor…' : '💾 Sistem Bot Ayarlarını Kaydet'}
+                    {saving ? t('systemBot.saving', '⏳ Saving...') : t('systemBot.saveSettings', '💾 Save System Bot Settings')}
                 </button>
             </div>
         </div>

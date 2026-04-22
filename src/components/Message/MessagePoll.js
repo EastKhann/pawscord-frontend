@@ -4,15 +4,16 @@
 import { memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 
 const S = {
-  txt2: {fontSize: '0.75em', color: '#949ba4', marginTop: 5},
-  font: {zIndex: 3, fontWeight: 'bold'},
-  zIndex: {zIndex: 3, textShadow: '0 1px 2px rgba(0,0,0,0.5)'},
-  rel: {position: 'relative', marginBottom: 6},
-  txt: {fontSize: '0.8em', color: '#b5bac1', marginBottom: 8},
-  mar: {marginTop: 0, marginBottom: 10},
+    txt2: { fontSize: '0.75em', color: '#949ba4', marginTop: 5 },
+    font: { zIndex: 3, fontWeight: 'bold' },
+    zIndex: { zIndex: 3, textShadow: '0 1px 2px rgba(0,0,0,0.5)' },
+    rel: { position: 'relative', marginBottom: 6 },
+    txt: { fontSize: '0.8em', color: '#b5bac1', marginBottom: 8 },
+    mar: { marginTop: 0, marginBottom: 10 },
 };
 
 export const MessagePoll = memo(({
@@ -21,6 +22,7 @@ export const MessagePoll = memo(({
     fetchWithAuth,
     absoluteHostUrl
 }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     if (!poll) return null;
 
@@ -50,7 +52,7 @@ export const MessagePoll = memo(({
                 return (
                     <div key={opt.id} style={S.rel}>
                         <button
-                            aria-label="Vote"
+                            aria-label={t('polls.vote', 'Vote for option')}
                             onClick={() => handleVote(opt.id)}
                             style={{
                                 ...styles.pollOption,

@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import logger from '../utils/logger';
+import i18n from '../i18n';
 
 // -- extracted inline style constants --
 const _st1 = { position: 'relative', width: '100%', height: '100%' };
@@ -96,7 +97,7 @@ const VideoPlayer = ({ stream, isMirrored, objectFit = 'cover', muted = false })
     };
 
     return (
-        <div aria-label="video player" style={_st1}>
+        <div aria-label={i18n.t('aria.videoPlayer', { defaultValue: 'Video Player' })} style={_st1}>
             <video
                 ref={videoRef}
                 style={{

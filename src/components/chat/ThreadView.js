@@ -100,7 +100,7 @@ const ThreadView = ({ parentMessage, onClose, apiBaseUrl, token }) => {
             {/* Header */}
             <div style={S.flex2}>
                 <h3 className="text-white-m0">💬 {t('thread.title')}</h3>
-                <button aria-label="Close" onClick={onClose} style={S.bg}>
+                <button aria-label={t('common.close', 'Close')} onClick={onClose} style={S.bg}>
                     <FaTimes />
                 </button>
             </div>

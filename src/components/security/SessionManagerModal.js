@@ -80,7 +80,7 @@ const SessionManagerModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h2 style={styles.title}>?? Active Sessions</h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -124,7 +124,7 @@ const SessionManagerModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                                     </div>
                                     {!session.is_current && (
                                         <button
-                                            aria-label="Action button"
+                                            aria-label={t('sessionManager.revokeSession', 'Revoke session')}
                                             onClick={() => handleRevoke(session.id)}
                                             style={styles.revokeButton}
                                             title={t('ui.oturumu_sonlandir')}

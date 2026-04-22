@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 // frontend/src/components/UserWarningsPanel.js
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
     FaExclamationTriangle,
@@ -36,6 +37,7 @@ const getSeverityColor = (severity) => {
 };
 
 const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => {
+    const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState(null);
     const [showAddWarning, setShowAddWarning] = useState(false);
@@ -84,17 +86,17 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaExclamationTriangle style={styles.headerIcon} />
-                        <h2 style={styles.title}>Kullanıcı Uyarıları</h2>
+                        <h2 style={styles.title}>{t('userWarnings.title', 'User Warnings')}</h2>
                     </div>
                     <div style={styles.headerRight}>
                         <button
-                            aria-label="Toggle visibility"
+                            aria-label={t('userWarnings.addWarningBtn', 'Add warning')}
                             onClick={() => setShowAddWarning(true)}
                             style={styles.addBtn}
                         >
-                            <FaPlus /> Uyardı Ekle
+                            <FaPlus /> {t('userWarnings.addWarning', 'Add Warning')}
                         </button>
-                        <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                        <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                             <FaTimes />
                         </button>
                     </div>
@@ -139,7 +141,7 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                     <FaSearch style={styles.searchIcon} />
                     <input
                         type="text"
-                        placeholder="Kullanıcı adı veya nedene göre ara..."
+                        placeholder={t('moderation.searchWarnings', 'Search by username or reason...')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         style={styles.searchInput}
@@ -148,11 +150,11 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
 
                 <div style={styles.warningsList}>
                     {loading ? (
-                        <div style={styles.loading}>Uyarılar yükleniyor...</div>
+                        <div style={styles.loading}>{t('userWarnings.loading', 'Loading warnings...')}</div>
                     ) : Object.keys(warningsByUser).length === 0 ? (
                         <div style={styles.empty}>
                             <FaExclamationTriangle style={styles.emptyIcon} />
-                            <p>Uyarı bulunamadı</p>
+                            <p>{t('userWarnings.noWarnings', 'No warnings found')}</p>
                         </div>
                     ) : (
                         Object.values(warningsByUser).map(
@@ -182,7 +184,7 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                             </div>
                                             {activeWarnings.length >= 3 && (
                                                 <button
-                                                    aria-label="Ban"
+                                                    aria-label={t('userWarnings.banUser', 'Ban user')}
                                                     onClick={() =>
                                                         banUser(user_id, 'Auto-ban: 3 warnings')
                                                     }
@@ -234,7 +236,7 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                                                     <>
                                                                         <span>•</span>
                                                                         <span className="icon-muted">
-                                                                            SÜRESİ DOLDU
+                                                                            {t('userWarnings.expired', 'EXPIRED')}
                                                                         </span>
                                                                     </>
                                                                 )}
@@ -243,12 +245,12 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                                     </div>
                                                     {warning.is_active && !warning.is_auto && (
                                                         <button
-                                                            aria-label="Uyarıyı kaldır"
+                                                            aria-label={t('common.removeWarning', 'Remove warning')}
                                                             onClick={() =>
                                                                 removeWarning(warning.id)
                                                             }
                                                             style={styles.removeBtn}
-                                                            title="Uyarıyı kaldır"
+                                                            title={t('common.removeWarning', 'Remove warning')}
                                                         >
                                                             <FaTrash />
                                                         </button>

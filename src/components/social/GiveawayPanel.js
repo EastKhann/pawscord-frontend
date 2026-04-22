@@ -1,4 +1,5 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useGiveaways from '../GiveawayPanel/useGiveaways';
 import GiveawayCard from '../GiveawayPanel/GiveawayCard';
@@ -6,6 +7,7 @@ import CreateGiveawayModal from '../GiveawayPanel/CreateGiveawayModal';
 import './GiveawayPanel.css';
 
 const GiveawayPanel = ({ serverId, onClose }) => {
+    const { t } = useTranslation();
     const [error, setError] = useState(null);
     const {
         giveaways,
@@ -38,8 +40,8 @@ const GiveawayPanel = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="giveaway-header">
-                    <h2>🎉 Çekilişler</h2>
-                    <button aria-label="on Close" className="close-btn" onClick={onClose}>
+                    <h2>{t('giveaway.title','🎉 Giveaways')}</h2>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -47,24 +49,24 @@ const GiveawayPanel = ({ serverId, onClose }) => {
                 <div className="giveaway-content">
                     <div className="giveaway-actions">
                         <button
-                            aria-label="Create"
+                            aria-label={t('common.create')}
                             className="create-giveaway-btn"
                             onClick={() => setShowCreateModal(true)}
                         >
-                            + Yeni Çekiliş Oluştur
+                            {t('giveaway.createNew','+ Create New Giveaway')}
                         </button>
                     </div>
 
                     {loading ? (
                         <div className="loading-state">
                             <div className="spinner"></div>
-                            <p>Çekilişler yükleniyor...</p>
+                            <p>{t('giveaway.loading','Loading giveaways...')}</p>
                         </div>
                     ) : giveaways.length === 0 ? (
                         <div className="empty-state">
                             <span className="empty-icon">🎁</span>
-                            <p>Henüz çekiliş yok</p>
-                            <span className="empty-hint">Yeni bir çekiliş oluşturun!</span>
+                            <p>{t('giveaway.noGiveaways','No giveaways yet')}</p>
+                            <span className="empty-hint">{t('giveaway.emptyHint','Create a new giveaway!')}</span>
                         </div>
                     ) : (
                         <div className="giveaways-list">

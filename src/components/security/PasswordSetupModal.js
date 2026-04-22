@@ -148,7 +148,7 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
                                 minLength={8}
                             />
                             <button
-                                aria-label="Action button"
+                                aria-label={t('password.toggleVisibility', 'Toggle password visibility')}
                                 type="button"
                                 className="toggle-visibility"
                                 onClick={() => setShowPassword(!showPassword)}
@@ -192,7 +192,7 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
                                 required
                             />
                             <button
-                                aria-label="Action button"
+                                aria-label={t('password.toggleConfirmVisibility', 'Toggle confirm password visibility')}
                                 type="button"
                                 className="toggle-visibility"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -228,7 +228,7 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
 
                     <div className="button-group">
                         <button
-                            aria-label="Submit"
+                            aria-label={t('common.submit')}
                             type="submit"
                             className="submit-btn"
                             disabled={
@@ -248,7 +248,7 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
                             )}
                         </button>
                         <button
-                            aria-label="handle Skip"
+                            aria-label={t('password.skip', 'Skip password setup')}
                             type="button"
                             className="skip-btn"
                             onClick={handleSkip}

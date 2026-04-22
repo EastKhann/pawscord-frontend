@@ -122,7 +122,7 @@ function InviteCodeScreen({ inviteCode, fetchWithAuth, onClose, apiBaseUrl }) {
             <div style={styles.container}>
                 <div style={styles.card}>
                     <div style={styles.loadingSpinner} />
-                    <p style={styles.loadingText}>Davet bilgileri yükleniyor...</p>
+                    <p style={styles.loadingText}>{t('invite.loading', 'Loading invite information...')}</p>
                 </div>
             </div>
         );
@@ -133,10 +133,10 @@ function InviteCodeScreen({ inviteCode, fetchWithAuth, onClose, apiBaseUrl }) {
             <div style={styles.container}>
                 <div style={styles.card}>
                     <div style={styles.errorIcon}>❌</div>
-                    <h2 style={styles.errorTitle}>Davet Bulunamadı</h2>
+                    <h2 style={styles.errorTitle}>{t('invite.notFound', 'Invite Not Found')}</h2>
                     <p style={styles.errorText}>{error}</p>
-                    <button aria-label="on Close" onClick={onClose} style={styles.closeButton}>
-                        Ana Sayfaya Dön
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
+                        {t('invite.goHome', 'Go to Home')}
                     </button>
                 </div>
             </div>
@@ -176,7 +176,7 @@ function InviteCodeScreen({ inviteCode, fetchWithAuth, onClose, apiBaseUrl }) {
 
                 {/* Join Butonu */}
                 <button
-                    aria-label="handle Accept"
+                    aria-label={t('invite.joinServer', 'Join server')}
                     onClick={handleAccept}
                     disabled={joining}
                     style={{
@@ -188,7 +188,7 @@ function InviteCodeScreen({ inviteCode, fetchWithAuth, onClose, apiBaseUrl }) {
                 </button>
 
                 {/* Go Back */}
-                <button aria-label="on Close" onClick={onClose} style={styles.backButton}>
+                <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.backButton}>
                     ← {t('common.back')}
                 </button>
             </div>

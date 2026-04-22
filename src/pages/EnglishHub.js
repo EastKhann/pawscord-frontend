@@ -99,12 +99,13 @@ function injectCSS(id, css) {
 
 // --- Circular Progress SVG (animated) ----------------------------------------
 const CircleProgress = ({ pct, color, size = 80, stroke = 7, children, glow }) => {
+    const { t } = useTranslation();
     const r = (size - stroke) / 2;
     const circ = 2 * Math.PI * r;
     const dash = (circ * Math.min(pct, 100)) / 100;
     return (
         <div
-            aria-label="circle progress"
+            aria-label={t('aria.circleProgress', 'Progress')}
             style={{ position: 'relative', width: size, height: size }}
         >
             {glow && (
@@ -210,7 +211,7 @@ const useSrsDue = () => {
             .then((data) => {
                 if (data?.words) setDueCount(data.words.length);
             })
-            .catch(() => {});
+            .catch(() => { });
     }, []);
     return dueCount;
 };
@@ -235,7 +236,7 @@ const EnglishHub = () => {
             const xpVal = parseInt(localStorage.getItem('eng_xp') || '0');
             setStats({ quizzes, correct, streak, vocabLearned });
             setXp(xpVal);
-        } catch {}
+        } catch { }
     }, []);
 
     const accuracy =
@@ -288,7 +289,7 @@ const EnglishHub = () => {
             title: t('education.srsSystem', 'Tekrar Sistemi (SRS)'),
             desc: t(
                 'education.srsDesc',
-                'Kelimeleri kalıcı öğrenmek için akıllı tekrar algoritması'
+                t('englishHub.spacedRep', 'Smart spaced repetition algorithm for permanent vocabulary learning')
             ),
             badge:
                 srsDue > 0 ? `${srsDue} ${t('education.reviewsPending', 'tekrar bekliyor')}` : null,

@@ -49,7 +49,7 @@ const DashboardTab = () => {
                 </div>
                 <div className={css.flexGap8}>
                     <button
-                        aria-label="Refresh dashboard"
+                        aria-label={t('admin.refreshDashboard', 'Refresh dashboard')}
                         onClick={() => {
                             fetchDetailedStats();
                             fetchLiveActivity();
@@ -57,14 +57,14 @@ const DashboardTab = () => {
                         }}
                         className={css.actionBtnBluePad}
                     >
-                        <FaSync size={12} /> Refresh
+                        <FaSync size={12} /> {t('crypto.refresh', 'Refresh')}
                     </button>
                     <button
-                        aria-label="Send broadcast"
+                        aria-label={t('admin.sendBroadcast', 'Send broadcast')}
                         onClick={() => setBroadcastModal(true)}
                         className={css.actionBtnGreenPad}
                     >
-                        <FaPaperPlane size={12} /> Broadcast
+                        <FaPaperPlane size={12} /> {t('admin.broadcast', 'Broadcast')}
                     </button>
                 </div>
             </div>
@@ -100,7 +100,7 @@ const DashboardTab = () => {
                     {
                         icon: <FaUsers color="#5865f2" />,
                         value: detailedStats?.users?.total || stats?.totalUsers,
-                        label: 'Toplam Kullanıcı',
+                        label: t('adminDash.totalUsers', 'Total Users'),
                         color: '#5865f2',
                     },
                     {
@@ -126,7 +126,7 @@ const DashboardTab = () => {
                     {
                         icon: <FaShieldAlt color="#5865f2" />,
                         value: detailedStats?.users?.verified || 0,
-                        label: 'Doğrulanmış',
+                        label: t('adminDash.verified', 'Verified'),
                         color: '#5865f2',
                     },
                     {
@@ -268,7 +268,7 @@ const DashboardTab = () => {
                             },
                             {
                                 value: detailedStats?.messages?.pinned || 0,
-                                label: 'Sabitlenmiş',
+                                label: t('adminDash.pinned', 'Pinned'),
                                 color: '#e74c3c',
                             },
                         ].map((item, idx) => {
@@ -351,12 +351,12 @@ const DashboardTab = () => {
                                         activity.type === 'user_join'
                                             ? '#23a559'
                                             : activity.type === 'message'
-                                              ? '#5865f2'
-                                              : activity.type === 'server_create'
-                                                ? '#f0b132'
-                                                : activity.type === 'premium'
-                                                  ? '#ffd700'
-                                                  : '#5865f2',
+                                                ? '#5865f2'
+                                                : activity.type === 'server_create'
+                                                    ? '#f0b132'
+                                                    : activity.type === 'premium'
+                                                        ? '#ffd700'
+                                                        : '#5865f2',
                                 };
                                 return (
                                     <div key={`item-${idx}`} className={css.dashActivityRow}>
@@ -393,10 +393,10 @@ const DashboardTab = () => {
                                         idx === 0
                                             ? '#ffd700'
                                             : idx === 1
-                                              ? '#c0c0c0'
-                                              : idx === 2
-                                                ? '#cd7f32'
-                                                : '#6b7280',
+                                                ? '#c0c0c0'
+                                                : idx === 2
+                                                    ? '#cd7f32'
+                                                    : '#6b7280',
                                 };
                                 return (
                                     <div key={`item-${idx}`} className={css.dashTopServerRow}>
@@ -412,8 +412,8 @@ const DashboardTab = () => {
                             })}
                         {(!detailedStats?.servers?.top_servers ||
                             detailedStats.servers.top_servers.length === 0) && (
-                            <div className={css.emptyState20}>Server verisi yok</div>
-                        )}
+                                <div className={css.emptyState20}>Server verisi yok</div>
+                            )}
                     </div>
                 </div>
             </div>

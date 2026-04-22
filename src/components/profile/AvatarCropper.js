@@ -4,6 +4,7 @@
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import ReactCrop from 'react-image-crop';
 import logger from '../../utils/logger';
@@ -29,6 +30,7 @@ const S = {
 };
 
 const AvatarCropper = ({ onCropComplete, onCancel, imageFile }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [src, setSrc] = useState(null);
@@ -185,8 +187,8 @@ const AvatarCropper = ({ onCropComplete, onCancel, imageFile }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="avatar-cropper-header">
-                    <h2>📸 Profil Fotoğrafını Düzenle</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onCancel}>
+                    <h2>{t('avatarCropper.title', '📸 Edit Profile Photo')}</h2>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onCancel}>
                         ×
                     </button>
                 </div>
@@ -195,8 +197,8 @@ const AvatarCropper = ({ onCropComplete, onCancel, imageFile }) => {
                     {!src && (
                         <div style={S.txt}>
                             <div style={S.mar}>⏳</div>
-                            <p>Fotoğraf yükleniyor...</p>
-                            {!imageFile && <p style={S.txt2}>⚠️ Dosya bulunamadı!</p>}
+                            <p>{t('avatarCropper.loading', 'Loading photo...')}</p>
+                            {!imageFile && <p style={S.txt2}>{t('avatarCropper.fileNotFound', '⚠️ File not found!')}</p>}
                         </div>
                     )}
 
@@ -216,7 +218,7 @@ const AvatarCropper = ({ onCropComplete, onCancel, imageFile }) => {
                                     <img
                                         ref={imgRef}
                                         src={src}
-                                        alt="Crop"
+                                        alt={t('alt.cropPreview', 'Crop Preview')}
                                         onLoad={(e) => onImageLoad(e.currentTarget)}
                                         style={S.size}
                                     />
@@ -236,11 +238,11 @@ const AvatarCropper = ({ onCropComplete, onCancel, imageFile }) => {
 
                 {src && (
                     <div className="avatar-cropper-footer">
-                        <button aria-label="on Cancel" className="btn-secondary" onClick={onCancel}>
+                        <button aria-label={t('common.cancel', 'Cancel')} className="btn-secondary" onClick={onCancel}>
                             Cancel
                         </button>
                         <button
-                            aria-label="handle Crop Complete"
+                            aria-label={t('avatarCropper.cropComplete', 'Crop and save avatar')}
                             className="btn-primary"
                             onClick={handleCropComplete}
                         >

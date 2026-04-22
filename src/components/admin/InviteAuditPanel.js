@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
     FaLink,
@@ -165,7 +165,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
                     }
                 >
-                    <div className="loading">Davet denetim logları yükleniyor...</div>
+                    <div className="loading">{t('admin.loadingInviteLogs', 'Loading invite audit logs...')}</div>
                 </div>
             </div>
         );
@@ -193,18 +193,18 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                             Davet Denetim Logu
                         </h2>
                         <span className="subtitle">
-                            Davet kullanımını ve üye katılımlarını takip edin
+                            {t('inviteAudit.subtitle','Track invite usage and member joins')}
                         </span>
                     </div>
                     <div className="header-actions">
                         <button
-                            aria-label="export Logs"
+                            aria-label={t('admin.exportLogs', 'Export logs')}
                             className="export-btn"
                             onClick={exportLogs}
                         >
-                            <FaDownload /> Dışa Aktar
+                            <FaDownload /> {t('common.export','Export')}
                         </button>
-                        <button aria-label="Close" className="close-btn" onClick={onClose}>
+                        <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                             <FaTimes />
                         </button>
                     </div>
@@ -227,7 +227,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         </div>
                         <div className="stat-content">
                             <span className="stat-value">{stats.total_uses}</span>
-                            <span className="stat-label">Toplam Kullanım</span>
+                            <span className="stat-label">{t('admin.totalUsage', 'Total Usage')}</span>
                         </div>
                     </div>
                     <div className="stat-card">
@@ -245,7 +245,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         </div>
                         <div className="stat-content">
                             <span className="stat-value">{stats.today_joins}</span>
-                            <span className="stat-label">Bugün</span>
+                            <span className="stat-label">{t('common.today', 'Today')}</span>
                         </div>
                     </div>
                     <div className="stat-card top-inviter">
@@ -265,7 +265,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         <FaSearch />
                         <input
                             type="text"
-                            placeholder="Kod, davetci veya kullanıcıya göre ara..."
+                            placeholder={t('admin.searchInvites', 'Search by code, inviter or user...')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -276,20 +276,20 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                             value={filterStatus}
                             onChange={(e) => setFilterStatus(e.target.value)}
                         >
-                            <option value="all">Tüm Durumlar</option>
+                            <option value="all">{t('admin.allStatuses', 'All Statuses')}</option>
                             <option value="success">{t('common.success')}</option>
-                            <option value="expired">Süresi Dolmuş</option>
-                            <option value="revoked">İptal Edildi</option>
-                            <option value="suspicious">Şüpheli</option>
+                            <option value="expired">{t('admin.expired', 'Expired')}</option>
+                            <option value="revoked">{t('admin.revoked', 'Revoked')}</option>
+                            <option value="suspicious">{t('admin.suspicious', 'Suspicious')}</option>
                         </select>
                     </div>
                     <div className="filter-group">
                         <FaCalendar />
                         <select value={dateRange} onChange={(e) => setDateRange(e.target.value)}>
-                            <option value="today">Bugün</option>
+                            <option value="today">{t('common.today', 'Today')}</option>
                             <option value="week">Bu Hafta</option>
                             <option value="month">Bu Ay</option>
-                            <option value="all">Tüm Zaman</option>
+                            <option value="all">{t('admin.allTime', 'All Time')}</option>
                         </select>
                     </div>
                 </div>
@@ -303,8 +303,8 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                                 <th>Davet Kodu</th>
                                 <th>Davetci</th>
                                 <th>Kullanan</th>
-                                <th>Kullanım Tarihi</th>
-                                <th>Kullanım</th>
+                                <th>{t('admin.usageDate', 'Usage Date')}</th>
+                                <th>{t('admin.usage', 'Usage')}</th>
                                 <th>Eylemler</th>
                             </tr>
                         </thead>
@@ -356,7 +356,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                                     </td>
                                     <td>
                                         <button
-                                            aria-label="Detayları görüntüle"
+                                            aria-label={t('common.viewDetails', 'View details')}
                                             className="view-details-btn"
                                             onClick={() => setSelectedLog(log)}
                                         >
@@ -371,7 +371,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                     {filteredLogs.length === 0 && (
                         <div className="empty-state">
                             <FaHistory />
-                            <p>Filtrelerinizle eşleşen davet kaydı bulunamadı</p>
+                            <p>{t('admin.noInviteRecords', 'No invite records match your filters')}</p>
                         </div>
                     )}
                 </div>
@@ -398,9 +398,9 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         >
                             <div className="modal-header">
                                 <h3>
-                                    <FaLink /> Davet Detayları
+                                    <FaLink /> {t('inviteAudit.details','Invite Details')}
                                 </h3>
-                                <button aria-label="Close" onClick={() => setSelectedLog(null)}>
+                                <button aria-label={t('common.close')} onClick={() => setSelectedLog(null)}>
                                     <FaTimes />
                                 </button>
                             </div>
@@ -417,13 +417,13 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                                     </span>
                                 </div>
                                 <div className="detail-row">
-                                    <span className="detail-label">Oluşturan</span>
+                                    <span className="detail-label">{t('admin.createdBy', 'Created By')}</span>
                                     <span className="detail-value">
                                         {selectedLog.inviter.username}
                                     </span>
                                 </div>
                                 <div className="detail-row">
-                                    <span className="detail-label">Oluşturulma Tarihi</span>
+                                    <span className="detail-label">{t('admin.createdAt', 'Created At')}</span>
                                     <span className="detail-value">
                                         {formatDate(selectedLog.invite_created)}
                                     </span>
@@ -437,7 +437,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                                     </div>
                                 )}
                                 <div className="detail-row">
-                                    <span className="detail-label">Toplam Kullanım</span>
+                                    <span className="detail-label">{t('admin.totalUsage', 'Total Usage')}</span>
                                     <span className="detail-value">
                                         {selectedLog.current_uses}
                                         {selectedLog.max_uses && ` / ${selectedLog.max_uses}`}
@@ -445,7 +445,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                                 </div>
                                 {selectedLog.revoke_reason && (
                                     <div className="detail-row warning">
-                                        <span className="detail-label">İptal Nedeni</span>
+                                        <span className="detail-label">{t('admin.cancelReason', 'Cancel Reason')}</span>
                                         <span className="detail-value">
                                             {selectedLog.revoke_reason}
                                         </span>
@@ -453,7 +453,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                                 )}
                                 {selectedLog.flag_reason && (
                                     <div className="detail-row warning">
-                                        <span className="detail-label">İşaret Nedeni</span>
+                                        <span className="detail-label">{t('admin.flagReason', 'Flag Reason')}</span>
                                         <span className="detail-value">
                                             {selectedLog.flag_reason}
                                         </span>

@@ -1,12 +1,14 @@
-// frontend/src/MessageEditForm.js (ENTER TUŞU FİXLENDİ)
+﻿// frontend/src/MessageEditForm.js (ENTER TUŞU FİXLENDİ)
 
 import React, { useState, useEffect, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 
 import { FaSave, FaTimes } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const MessageEditForm = ({ message, onSave, onCancel }) => {
+    const { t } = useTranslation();
     const [content, setContent] = useState(message?.content || '');
 
     const inputRef = useRef(null);
@@ -56,7 +58,7 @@ const MessageEditForm = ({ message, onSave, onCancel }) => {
     };
 
     return (
-        <div aria-label="message edit form" style={styles.formContainer}>
+        <div aria-label={t('aria.messageEditForm', 'Edit Message')} style={styles.formContainer}>
             <div style={styles.inputContainer}>
                 <input
                     ref={inputRef}
@@ -65,7 +67,7 @@ const MessageEditForm = ({ message, onSave, onCancel }) => {
                     onChange={(e) => setContent(e.target.value)}
                     onKeyDown={handleInputKeyDown} // ✨ KRİTİK EKLEME: Enter'ı burada yakalıyoruz
                     style={styles.input}
-                    aria-label="Content"
+                    aria-label={t('message.editContent', 'Content')}
                 />
 
                 <div style={styles.buttonGroup}>
@@ -73,7 +75,7 @@ const MessageEditForm = ({ message, onSave, onCancel }) => {
                         type="button"
                         onClick={onCancel}
                         style={styles.cancelBtn}
-                        title="İptal (ESC)"
+                        title={t('common.cancelEsc', 'Cancel (ESC)')}
                     >
                         <FaTimes />
                     </button>
@@ -90,7 +92,7 @@ const MessageEditForm = ({ message, onSave, onCancel }) => {
             </div>
 
             <div style={styles.footer}>
-                çıkmak for <strong>ESC</strong> • savemek for <strong>ENTER</strong>
+                {t('msgEdit.hint', 'cancel with')} <strong>ESC</strong> • {t('msgEdit.saveHint', 'save with')} <strong>ENTER</strong>
             </div>
         </div>
     );

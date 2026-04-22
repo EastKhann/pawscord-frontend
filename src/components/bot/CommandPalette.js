@@ -133,7 +133,7 @@ const CommandPalette = ({ onClose }) => {
                     <div className="palette-title">
                         <FaKeyboard /> {t('shortcuts.title')}
                     </div>
-                    <button aria-label="Close" className="palette-close" onClick={onClose}>
+                    <button aria-label={t('common.close')} className="palette-close" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -141,21 +141,21 @@ const CommandPalette = ({ onClose }) => {
                 {/* Filter Tabs */}
                 <div className="palette-filters">
                     <button
-                        aria-label="Tümünü göster"
+                        aria-label={t('bot.showAll', 'Show all')}
                         className={filter === 'all' ? 'active' : ''}
                         onClick={() => setFilter('all')}
                     >
                         {t('shortcuts.all')}
                     </button>
                     <button
-                        aria-label="Klavye komutlarını göster"
+                        aria-label={t('bot.showKeyboard', 'Show keyboard commands')}
                         className={filter === 'keyboard' ? 'active' : ''}
                         onClick={() => setFilter('keyboard')}
                     >
                         {t('shortcuts.keyboard')}
                     </button>
                     <button
-                        aria-label="Aksiyon komutlarını göster"
+                        aria-label={t('bot.showActions', 'Show action commands')}
                         className={filter === 'actions' ? 'active' : ''}
                         onClick={() => setFilter('actions')}
                     >

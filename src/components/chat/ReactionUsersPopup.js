@@ -43,7 +43,7 @@ const ReactionUsersPopup = ({ emoji, users = [], count, hasCurrentUser, onToggle
     return (
         <>
             <button
-                aria-label="Action button"
+                aria-label={t('chat.toggleReaction', 'Toggle reaction')}
                 ref={btnRef}
                 onClick={() => onToggle?.(emoji)}
                 onMouseEnter={handleMouseEnter}

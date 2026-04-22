@@ -122,7 +122,7 @@ const CodeBlock = ({ language, value, children }) => {
                 <div className="flex-gap-10">
                     {/* ÇALIŞTIR BUTONU */}
                     <button
-                        aria-label="handle Run"
+                        aria-label={t('codeBlock.runCode', 'Run code')}
                         onClick={handleRun}
                         style={styles.runButton}
                         disabled={isRunning}
@@ -130,7 +130,7 @@ const CodeBlock = ({ language, value, children }) => {
                         {isRunning ? <FaSpinner className="spin" /> : <FaPlay size={10} />}
                         {isRunning ? t('ui.calisiyor') : ' Run'}
                     </button>
-                    <button aria-label="handle Copy" onClick={handleCopy} style={styles.copyButton}>
+                    <button aria-label={t('codeBlock.copyCode', 'Copy code')} onClick={handleCopy} style={styles.copyButton}>
                         {copied ? <FaCheck /> : <FaCopy />}
                     </button>
                 </div>
@@ -151,14 +151,14 @@ const CodeBlock = ({ language, value, children }) => {
             {/* ÇIKTI EKRANI (Varsa göster) */}
             {output && (
                 <div style={styles.outputContainer}>
-                    <div style={styles.outputHeader}>ÇIKTI (TERMINAL):</div>
+                    <div style={styles.outputHeader}>{t('codeBlock.output', 'OUTPUT (TERMINAL):')}</div>
                     <pre style={styles.outputBody}>{output}</pre>
                 </div>
             )}
 
             {shouldCollapse && (
                 <button
-                    aria-label="Daralt"
+                    aria-label={t('codeBlock.collapse', 'Collapse code')}
                     onClick={() => setIsExpanded(!isExpanded)}
                     style={styles.expandButton}
                 >
@@ -168,7 +168,7 @@ const CodeBlock = ({ language, value, children }) => {
                         </>
                     ) : (
                         <>
-                            <FaChevronDown /> Genişlet
+                            <FaChevronDown /> {t('codeBlock.expand', 'Expand')}
                         </>
                     )}
                 </button>

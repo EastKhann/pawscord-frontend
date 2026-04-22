@@ -64,13 +64,13 @@ const MockUserProfileModal = ({
                                 Send Message
                             </button>
                             <button data-testid="add-friend-button">
-                                {isFriend ? 'Friendsınız ✓' : 'Add Friend'}
+                                {isFriend ? 'Friends ✓' : 'Add Friend'}
                             </button>
                         </>
                     )}
                     {isSelf && (
                         <button data-testid="session-manager-button" onClick={() => setShowSessionManager(true)}>
-                            Oturumlarım
+                            My Sessions
                         </button>
                     )}
                 </div>
@@ -218,11 +218,11 @@ describe('UserProfileModal Component', () => {
                 <MockUserProfileModal
                     user={mockUser}
                     currentUser="otherUser"
-                    friendsList={[{ username: 'TestUser' }]}>
+                    friendsList={[{ username: 'TestUser' }]}
                     {...handlers}
                 />
             );
-            expect(screen.getByTestId('add-friend-button')).toHaveTextContent('Friendsınız ✓');
+            expect(screen.getByTestId('add-friend-button')).toHaveTextContent('Friends ✓');
         });
 
         it('should NOT show DM/friend buttons for self', () => {

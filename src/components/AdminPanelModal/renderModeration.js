@@ -19,7 +19,7 @@ const S = {
 const renderModeration = () => {
     const { t } = useTranslation();
     return (
-        <div aria-label="render moderation">
+        <div aria-label={t('admin.moderation', 'Moderation')}>
             <h2 className="white-18-mb16">{t('🛡️_moderasyon_merkezi')}</h2>
 
             {/* Quick Actions */}

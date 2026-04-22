@@ -848,8 +848,10 @@ form .input-group:nth-child(4) {
 }
 
 /* ─── Forgot password link ─── */
-.login-card a[href*='forgot'] {
-    display: inline-block;
+.login-card a[href*='forgot'],
+.login-forgot-link {
+    display: inline-flex;
+    align-items: center;
     color: var(--color-primary);
     font-size: 13px;
     font-weight: 500;
@@ -858,11 +860,17 @@ form .input-group:nth-child(4) {
         color 0.15s ease,
         opacity 0.15s ease;
     margin-top: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid transparent;
 }
 
-.login-card a[href*='forgot']:hover {
+.login-card a[href*='forgot']:hover,
+.login-forgot-link:hover {
     color: #818cf8;
     text-decoration: underline;
+    background: rgba(88, 101, 242, 0.08);
+    border-color: rgba(88, 101, 242, 0.2);
 }
 
 /* ─── Reduce-motion accessibility ─── */

@@ -34,7 +34,7 @@ const EndorsementsTab = ({ endorsements: rawEnd }) => {
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (
-        <div aria-label="endorsements tab" style={styles.card}>
+        <div aria-label={t('aria.endorsementsTab', 'Endorsements')} style={styles.card}>
             <h3 style={styles.sectionTitle}>{t('endorsements.title')}</h3>
 
             {endorsements.length === 0 ? (

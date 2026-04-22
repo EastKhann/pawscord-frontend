@@ -134,6 +134,18 @@ vi.mock('../../components/AdminPanelModal/styles', () => ({
 
 import AdminPanelModal from '../../components/admin/AdminPanelModal';
 
+// Mock react-i18next so t(key, fallback) returns the fallback string
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key, fallback) => (typeof fallback === 'string' ? fallback : key),
+        i18n: { language: 'en', changeLanguage: vi.fn() },
+    }),
+    Trans: ({ children }) => children,
+    I18nextProvider: ({ children }) => children,
+    withTranslation: () => (Component) => Component,
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
+}));
+
 describe('AdminPanelModal Orchestrator', () => {
     const defaultProps = {
         onClose: vi.fn(),
@@ -167,32 +179,32 @@ describe('AdminPanelModal Orchestrator', () => {
 
     it('should render header with title', () => {
         render(<AdminPanelModal {...defaultProps} />);
-        expect(screen.getByText(/Admin Panel/)).toBeInTheDocument();
+        expect(screen.getByText(/Yönetici Paneli/)).toBeInTheDocument();
     });
 
     it('should display online count from realtimeStats', () => {
         render(<AdminPanelModal {...defaultProps} />);
-        expect(screen.getByText(/5 Online/)).toBeInTheDocument();
+        expect(screen.getByText(/5 Çevrimici/)).toBeInTheDocument();
     });
 
     it('should render all 11 sidebar menu items', () => {
         render(<AdminPanelModal {...defaultProps} />);
         expect(screen.getByText('Dashboard')).toBeInTheDocument();
-        expect(screen.getByText('Userlar')).toBeInTheDocument();
-        expect(screen.getByText('Sunucular')).toBeInTheDocument();
-        expect(screen.getByText('Moderasyon')).toBeInTheDocument();
-        expect(screen.getByText('Loglar')).toBeInTheDocument();
-        expect(screen.getByText('Veritabanı')).toBeInTheDocument();
-        expect(screen.getByText('Sistem')).toBeInTheDocument();
+        expect(screen.getByText('Users')).toBeInTheDocument();
+        expect(screen.getByText('Servers')).toBeInTheDocument();
+        expect(screen.getByText('Moderation')).toBeInTheDocument();
+        expect(screen.getByText('Logs')).toBeInTheDocument();
+        expect(screen.getByText('Database')).toBeInTheDocument();
+        expect(screen.getByText('System')).toBeInTheDocument();
         expect(screen.getByText('Security')).toBeInTheDocument();
-        expect(screen.getByText('Duyuru')).toBeInTheDocument();
-        expect(screen.getByText('Aropenlar')).toBeInTheDocument();
-        expect(screen.getByText('Hızlı İşlem')).toBeInTheDocument();
+        expect(screen.getByText('Broadcast')).toBeInTheDocument();
+        expect(screen.getByText('Tools')).toBeInTheDocument();
+        expect(screen.getByText('Quick Actions')).toBeInTheDocument();
     });
 
     it('should switch tabs when sidebar button clicked', () => {
         render(<AdminPanelModal {...defaultProps} />);
-        fireEvent.click(screen.getByText('Userlar'));
+        fireEvent.click(screen.getByText('Users'));
         expect(mockApi.setActiveTab).toHaveBeenCalledWith('users');
     });
 

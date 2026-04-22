@@ -27,7 +27,7 @@ const AppearanceTab = ({
 
     return (
         <>
-            <div aria-label="appearance tab" style={styles.card}>
+            <div aria-label={t('aria.appearanceTab', 'Appearance')} style={styles.card}>
                 <h3 style={styles.sectionTitle}>🎨 Temalar</h3>
 
                 <p style={_st1}>Choose your profile theme and personalize your appearance.</p>

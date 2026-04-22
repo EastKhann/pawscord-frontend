@@ -17,7 +17,7 @@ const S = {
 const renderDatabase = () => {
     const { t } = useTranslation();
     return (
-        <div aria-label="render database">
+        <div aria-label={t('admin.database', 'Database')}>
             <h2 className="white-18-mb16">{t('🗄️_database_yönetimi')}</h2>
 
             {/* DB Stats */}
@@ -76,14 +76,14 @@ const renderDatabase = () => {
                                     backupStatus === 'success'
                                         ? '#23a55920'
                                         : backupStatus === 'error'
-                                          ? '#e74c3c20'
-                                          : '#5865f220',
+                                            ? '#e74c3c20'
+                                            : '#5865f220',
                                 color:
                                     backupStatus === 'success'
                                         ? '#23a559'
                                         : backupStatus === 'error'
-                                          ? '#e74c3c'
-                                          : '#5865f2',
+                                            ? '#e74c3c'
+                                            : '#5865f2',
                             }}
                         >
                             {backupStatus === 'running' &&

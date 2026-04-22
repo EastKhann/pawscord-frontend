@@ -18,19 +18,19 @@ export default function ToastDemo() {
         <div className="toast-demo-container">
             <div className="toast-demo-card">
                 <h1>🎉 Toast Notification Demo</h1>
-                <p>Modern bildirim sistemi - Alert'in yerine kullanılıyor</p>
+                <p>Modern notification system - used instead of Alert</p>
 
                 <div className="toast-demo-grid">
                     {/* Success Toast */}
                     <div className="toast-demo-section">
                         <h3>✅ Success Toast</h3>
-                        <p>Başarılı işlemler için kullanılır</p>
+                        <p>Used for successful operations</p>
                         <button
-                            aria-label="button"
+                            aria-label={t('toastDemo.showSuccess', 'Show success toast')}
                             className="demo-btn success"
                             onClick={() => toast.success('Operation completed successfully!')}
                         >
-                            Success Toast Göster
+                            Show Success Toast
                         </button>
                         <div className="code-example">
                             <code>toast.success('Mesaj');</code>
@@ -40,13 +40,13 @@ export default function ToastDemo() {
                     {/* Error Toast */}
                     <div className="toast-demo-section">
                         <h3>❌ Error Toast</h3>
-                        <p>Hata mesajları için kullanılır</p>
+                        <p>Used for error messages</p>
                         <button
-                            aria-label="button"
+                            aria-label={t('toastDemo.showError', 'Show error toast')}
                             className="demo-btn error"
                             onClick={() => toast.error('An error occurred! Please tekrar deneyin.')}
                         >
-                            Error Toast Göster
+                            Show Error Toast
                         </button>
                         <div className="code-example">
                             <code>toast.error('Error message');</code>
@@ -56,13 +56,13 @@ export default function ToastDemo() {
                     {/* Warning Toast */}
                     <div className="toast-demo-section">
                         <h3>⚠️ Warning Toast</h3>
-                        <p>Uyarı mesajları için kullanılır</p>
+                        <p>Used for warning messages</p>
                         <button
-                            aria-label="button"
+                            aria-label={t('toastDemo.showWarning', 'Show warning toast')}
                             className="demo-btn warning"
                             onClick={() => toast.warning('Warning! This action cannot be undone.')}
                         >
-                            Warning Toast Göster
+                            Show Warning Toast
                         </button>
                         <div className="code-example">
                             <code>toast.warning('Warning');</code>
@@ -72,13 +72,13 @@ export default function ToastDemo() {
                     {/* Info Toast */}
                     <div className="toast-demo-section">
                         <h3>ℹ️ Info Toast</h3>
-                        <p>Bilgi mesajları için kullanılır</p>
+                        <p>Used for info messages</p>
                         <button
-                            aria-label="button"
+                            aria-label={t('toastDemo.showInfo', 'Show info toast')}
                             className="demo-btn info"
                             onClick={() => toast.info('Davet linki panoya copied!')}
                         >
-                            Info Toast Göster
+                            Show Info Toast
                         </button>
                         <div className="code-example">
                             <code>toast.info('Bilgi');</code>
@@ -92,7 +92,7 @@ export default function ToastDemo() {
 
                     <div className="advanced-row">
                         <button
-                            aria-label="button"
+                            aria-label={t('toastDemo.showMultiple', 'Show multiple toasts')}
                             className="demo-btn-large"
                             onClick={() => {
                                 toast.success('1. Toast');
@@ -101,14 +101,14 @@ export default function ToastDemo() {
                                 setTimeout(() => toast.error('4. Toast'), 1500);
                             }}
                         >
-                            Çoklu Toast (4 adet)
+                            Multiple Toasts (4 pieces)
                         </button>
-                        <code>Birden fazla toast mevcut anda gösterilebilir</code>
+                        <code>Multiple toasts can be shown at the same time</code>
                     </div>
 
                     <div className="advanced-row">
                         <button
-                            aria-label="button"
+                            aria-label={t('toastDemo.showLongDuration', 'Show long duration toast')}
                             className="demo-btn-large"
                             onClick={() => toast.success('Bu toast 10 saniye kalacak!', 10000)}
                         >
@@ -119,16 +119,16 @@ export default function ToastDemo() {
 
                     <div className="advanced-row">
                         <button
-                            aria-label="button"
+                            aria-label={t('toastDemo.showLongMessage', 'Show long message toast')}
                             className="demo-btn-large"
                             onClick={() =>
                                 toast.success(
-                                    'Çok uzun bir message buraya yazılabilir. Toast otomatik olarak genişler ve tüm mesajı gösterir. Maksimum genişlik 500px olarak ayarlanmış durumda.',
+                                    'A very long message can be written here. The toast automatically expands and shows the entire message. Maximum width',
                                     5000
                                 )
                             }
                         >
-                            Uzun Mesajlı Toast
+                            Long Message Toast
                         </button>
                         <code>Uzun messagelar otomatik wrap edilir</code>
                     </div>
@@ -136,7 +136,7 @@ export default function ToastDemo() {
 
                 {/* Kullanım Kılavuzu */}
                 <div className="toast-usage-guide">
-                    <h2>📚 Kullanım Kılavuzu</h2>
+                    <h2>📚 Usage Guide</h2>
 
                     <div className="guide-step">
                         <h4>1️⃣ Import Et</h4>
@@ -189,51 +189,51 @@ toast.error('Error: ' + error.message);`}</code>
 
                 {/* Özellikler */}
                 <div className="toast-features">
-                    <h2>✨ Özellikler</h2>
+                    <h2>✨ Features</h2>
                     <ul>
                         <li>
-                            ✅ <strong>Modern Tasarım:</strong> Smooth animasyonlar ve gradient
+                            ✅ <strong>Modern Design:</strong> Smooth animations and gradients
                             renkler
                         </li>
                         <li>
-                            ✅ <strong>4 Farklı Tip:</strong> Success, Error, Warning, Info
+                            ✅ <strong>4 Different Types:</strong> Success, Error, Warning, Info
                         </li>
                         <li>
-                            ✅ <strong>Emoji İkonlar:</strong> Her tip için özel emoji
+                            ✅ <strong>Emoji Icons:</strong> Custom emoji for each type
                         </li>
                         <li>
                             ✅ <strong>Otomatik Kapanma:</strong> Default 3 saniye
                         </li>
                         <li>
-                            ✅ <strong>Manuel Kapatma:</strong> X butonuyla anında kapat
+                            ✅ <strong>Manual Close:</strong> Close instantly with X button
                         </li>
                         <li>
-                            ✅ <strong>Stack Yapı:</strong> Birden fazla toast üst üste
+                            ✅ <strong>Stack Structure:</strong> Multiple toasts stacked
                         </li>
                         <li>
-                            ✅ <strong>Responsive:</strong> Mobilde de mükemmel görünür
+                            ✅ <strong>Responsive:</strong> Looks great on mobile too
                         </li>
                         <li>
-                            ✅ <strong>Kolay Kullanım:</strong> Tek satır kod
+                            ✅ <strong>Easy to Use:</strong> Single line of code
                         </li>
                     </ul>
                 </div>
 
                 {/* Alert vs Toast Karşılaştırması */}
                 <div className="comparison-table">
-                    <h2>📊 Alert vs Toast Karşılaştırması</h2>
+                    <h2>📊 Alert vs Toast Comparison</h2>
                     <table>
                         <thead>
                             <tr>
-                                <th>Özellik</th>
+                                <th>Feature</th>
                                 <th>Alert (Eski)</th>
                                 <th>Toast (Yeni)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Görünüm</td>
-                                <td>❌ Çirkin popup</td>
+                                <td>Appearance</td>
+                                <td>❌ Ugly popup</td>
                                 <td>✅ Modern notification</td>
                             </tr>
                             <tr>
@@ -244,17 +244,17 @@ toast.error('Error: ' + error.message);`}</code>
                             <tr>
                                 <td>Renk</td>
                                 <td>❌ Gri/Beyaz (sistem)</td>
-                                <td>✅ 4 farklı renk tipi</td>
+                                <td>✅ 4 different color types</td>
                             </tr>
                             <tr>
                                 <td>Sayfa Engeli</td>
-                                <td>❌ Sayfayı bloklar</td>
-                                <td>✅ Arka planda çalışmaya devam</td>
+                                <td>❌ Blocks the page</td>
+                                <td>✅ Continue working in background</td>
                             </tr>
                             <tr>
-                                <td>Çoklu Mesaj</td>
+                                <td>Multiple Messages</td>
                                 <td>❌ Tek seferde 1 tane</td>
-                                <td>✅ Aynı anda birden fazla</td>
+                                <td>✅ Multiple at the same time</td>
                             </tr>
                             <tr>
                                 <td>Otomatik Kapanma</td>
@@ -263,8 +263,8 @@ toast.error('Error: ' + error.message);`}</code>
                             </tr>
                             <tr>
                                 <td>Mobil Uyum</td>
-                                <td>❌ Kötü</td>
-                                <td>✅ Mükemmel responsive</td>
+                                <td>❌ Poor</td>
+                                <td>✅ Perfect responsive</td>
                             </tr>
                         </tbody>
                     </table>
@@ -272,24 +272,24 @@ toast.error('Error: ' + error.message);`}</code>
 
                 {/* Live Test Area */}
                 <div className="live-test-area">
-                    <h2>🧪 Canlı Test Alanı</h2>
-                    <p>Kendi mesajını yaz ve test et!</p>
+                    <h2>🧪 Live Test Area</h2>
+                    <p>Write your own message and test it!</p>
                     <div className="test-form">
                         <input
                             type="text"
                             id="customMessage"
-                            placeholder="Type your message here..."
+                            placeholder={t('toastDemo.messagePlaceholder', 'Type your message here...')}
                             defaultValue="Merhaba Pawscord! 🐾"
-                            aria-label="Type your message here..."
+                            aria-label={t('toastDemo.customMessage', 'Custom message input')}
                         />
-                        <select id="customType" aria-label="customType">
+                        <select id="customType" aria-label={t('toastDemo.toastType', 'Toast type')}>
                             <option value="success">{t('common.success')}</option>
                             <option value="error">{t('common.error')}</option>
                             <option value="warning">{t('common.warning')}</option>
                             <option value="info">Info</option>
                         </select>
                         <button
-                            aria-label="button"
+                            aria-label={t('toastDemo.showToast', 'Show toast')}
                             className="demo-btn-test"
                             onClick={() => {
                                 const msg = document.getElementById('customMessage').value;
@@ -297,7 +297,7 @@ toast.error('Error: ' + error.message);`}</code>
                                 toast[type](msg);
                             }}
                         >
-                            Toast Göster 🚀
+                            Show Toast 🚀
                         </button>
                     </div>
                 </div>

@@ -13,7 +13,21 @@ const TEXT_SECONDARY = '#b5bac1';
 const TEXT_MUTED = '#80848e';
 const FONT_FAMILY = "'gg sans', 'Noto Sans', system-ui, -apple-system, sans-serif";
 
-// Legacy aliases
+// Inject unread badge pulse animation
+if (typeof document !== 'undefined') {
+    const _badgeCssId = 'unread-badge-pulse-css';
+    if (!document.getElementById(_badgeCssId)) {
+        const _s = document.createElement('style');
+        _s.id = _badgeCssId;
+        _s.textContent = `@keyframes unreadBadgePulse {
+    0%, 100% { box-shadow: 0 1px 6px rgba(242,63,66,0.45); transform: scale(1); }
+    50% { box-shadow: 0 2px 10px rgba(242,63,66,0.75); transform: scale(1.12); }
+}`;
+        document.head.appendChild(_s);
+    }
+}
+
+
 const GLASS_BG = SURFACE_SECONDARY;
 const GLASS_BORDER = BORDER_SUBTLE;
 
@@ -318,6 +332,8 @@ export const styles = {
         marginLeft: 'auto',
         fontWeight: '700',
         boxShadow: '0 1px 6px rgba(242,63,66,0.45)',
+        animation: 'unreadBadgePulse 2.4s ease-in-out infinite',
+        display: 'inline-block',
     },
 
     // --- MODALLAR ---

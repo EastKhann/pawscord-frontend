@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 
 const PollCard = ({ poll, onVote, onEnd, onDelete }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
   const totalVotes = poll.options.reduce((sum, opt) => sum + (opt.votes || 0), 0);
   const badge = getStatusBadge(poll.status);
 
   return (
-    <div aria-label="poll card" className="poll-card">
+    <div aria-label={t('polls.card', 'Poll card')} className="poll-card">
       <div className="poll-card-header">
         <h3>{poll.question}</h3>
         <span className="status-badge" style={{ background: badge.color }}>{badge.text}</span>
@@ -23,7 +23,7 @@ const PollCard = ({ poll, onVote, onEnd, onDelete }) => {
         </div>
         {poll.status === 'active' && (
           <div className="info-item">
-            <span className="info-label">Kalan Süre:</span>
+            <span className="info-label">{t('poll.timeRemaining', 'Time Remaining:')}</span>
             <span className="info-value time-remaining">{formatTimeRemaining(poll.end_time)}</span>
           </div>
         )}
@@ -55,12 +55,12 @@ const PollCard = ({ poll, onVote, onEnd, onDelete }) => {
       </div>
 
       <div className="poll-meta">
-        {poll.allow_multiple_choices && <span className="meta-badge">✓ Çoklu seçim</span>}
+        {poll.allow_multiple_choices && <span className="meta-badge">✓ {t('poll.multipleChoice', 'Multiple choice')}</span>}
         {poll.anonymous && <span className="meta-badge">🔒 Anonim</span>}
       </div>
 
       <div className="poll-card-footer">
-        {poll.status === 'active' && <button className="end-poll-btn" onClick={() => onEnd(poll.id)}>🏁 Sonlandır</button>}
+        {poll.status === 'active' && <button className="end-poll-btn" onClick={() => onEnd(poll.id)}>{t('poll.endPoll', '🏁 End poll').substring(0, 2)} {t('poll.endPollText', 'End poll')} <andır</button>}
         <button className="delete-poll-btn" onClick={() => onDelete(poll.id)}>🗑️ Delete</button>
       </div>
     </div>
@@ -68,9 +68,9 @@ const PollCard = ({ poll, onVote, onEnd, onDelete }) => {
 };
 
 PollCard.propTypes = {
-    poll: PropTypes.object,
-    onVote: PropTypes.func,
-    onEnd: PropTypes.func,
-    onDelete: PropTypes.func,
+  poll: PropTypes.object,
+  onVote: PropTypes.func,
+  onEnd: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 export default PollCard;

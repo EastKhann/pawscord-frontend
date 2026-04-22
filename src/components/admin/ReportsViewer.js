@@ -64,7 +64,7 @@ const ReportsViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                     <h2 style={styles.title}>
                         <FaExclamationTriangle /> Raporlar ({reports.length})
                     </h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -73,7 +73,7 @@ const ReportsViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                     {loading ? (
                         <div style={styles.loading}>{t('common.loading')}</div>
                     ) : reports.length === 0 ? (
-                        <div style={styles.empty}>Bekleyen rapor yok ✅</div>
+                        <div style={styles.empty}>Bekleyen rapor yok ?</div>
                     ) : (
                         <div style={styles.reportList}>
                             {reports.map((report) => (
@@ -99,14 +99,14 @@ const ReportsViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                                     </div>
                                     <div style={styles.actions}>
                                         <button
-                                            aria-label="Raporu onayla"
+                                            aria-label={t('admin.approveReport')}
                                             onClick={() => handleReport(report.id, 'approve')}
                                             style={styles.approveButton}
                                         >
                                             <FaCheck /> Onayla
                                         </button>
                                         <button
-                                            aria-label="Raporu reddet"
+                                            aria-label={t('admin.rejectReport')}
                                             onClick={() => handleReport(report.id, 'reject')}
                                             style={styles.rejectButton}
                                         >

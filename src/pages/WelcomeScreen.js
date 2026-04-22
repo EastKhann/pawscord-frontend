@@ -141,8 +141,8 @@ const WelcomeScreen = ({
                     <button
                         onClick={onOpenMenu}
                         style={styles.menuButton}
-                        title="Menüyü Aç"
-                        aria-label="Menüyü Aç"
+                        title={t('common.openMenu', 'Open Menu')}
+                        aria-label={t('nav.openMenu', 'Open menu')}
                     >
                         <FaBars size={22} />
                     </button>
@@ -156,7 +156,7 @@ const WelcomeScreen = ({
                             <button
                                 onClick={() => setShowDownload(true)}
                                 style={_st1049}
-                                aria-label="Download app"
+                                aria-label={t('common.downloadApp', 'Download app')}
                             >
                                 <FaDownload size={16} />
                             </button>
@@ -165,7 +165,7 @@ const WelcomeScreen = ({
                         <button
                             onClick={onOpenRightMenu}
                             style={styles.menuButton}
-                            aria-label="Open members panel"
+                            aria-label={t('common.openMembersPanel', 'Open members panel')}
                         >
                             <FaUsers size={22} />
                         </button>
@@ -200,7 +200,7 @@ const WelcomeScreen = ({
                 <div style={styles.heroSection}>
                     <img
                         src="https://media.pawscord.com/assets/logo.png"
-                        alt="Logo"
+                        alt={t('alt.logo', 'Logo')}
                         style={isMobile ? styles.logoMobile : styles.logo}
                         onError={(e) => {
                             e.target.style.display = 'none';
@@ -245,7 +245,7 @@ const WelcomeScreen = ({
                         tabIndex={0}
                         onClick={onSwitchToFriends}
                         onKeyDown={(e) => e.key === 'Enter' && onSwitchToFriends()}
-                        aria-label="Arkadaşlar"
+                        aria-label={t('nav.friends', 'Friends')}
                     >
                         <div
                             style={{
@@ -268,7 +268,7 @@ const WelcomeScreen = ({
                         tabIndex={0}
                         onClick={onOpenDiscovery || onOpenMenu}
                         onKeyDown={(e) => e.key === 'Enter' && (onOpenDiscovery || onOpenMenu)()}
-                        aria-label="Sunucular"
+                        aria-label={t('nav.servers', 'Servers')}
                     >
                         <div
                             style={{
@@ -291,7 +291,7 @@ const WelcomeScreen = ({
                         tabIndex={0}
                         onClick={onSwitchToCinema}
                         onKeyDown={(e) => e.key === 'Enter' && onSwitchToCinema()}
-                        aria-label="Etkinlikler"
+                        aria-label={t('nav.events', 'Events')}
                     >
                         <div
                             style={{
@@ -314,7 +314,7 @@ const WelcomeScreen = ({
                         tabIndex={0}
                         onClick={onSwitchToAI}
                         onKeyDown={(e) => e.key === 'Enter' && onSwitchToAI()}
-                        aria-label="Yapay Zeka Asistanı"
+                        aria-label={t('nav.aiAssistant', 'AI Assistant')}
                     >
                         <div
                             style={{

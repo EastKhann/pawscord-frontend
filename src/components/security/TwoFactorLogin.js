@@ -36,12 +36,12 @@ const TwoFactorLogin = ({ onVerify, onCancel, username }) => {
     return (
         <div className="twofa-login-overlay">
             <div className="twofa-login-content">
-                <button aria-label="Close" className="twofa-login-close" onClick={onCancel}>
+                <button aria-label={t('common.close', 'Close')} className="twofa-login-close" onClick={onCancel}>
                     ×
                 </button>
 
-                <h2>🔐 İki Faktörlü Verification</h2>
-                <p className="twofa-login-subtitle">{username} hesabına giriş yapılıyor</p>
+                <h2>🔐 {t('twoFactor.title', 'Two-Factor Verification')}</h2>
+                <p className="twofa-login-subtitle">{t('twoFactor.signingIn', 'Signing in to {{username}} account', { username })}</p>
 
                 <form onSubmit={handleSubmit}>
                     <div className="twofa-login-input-group">
@@ -62,7 +62,7 @@ const TwoFactorLogin = ({ onVerify, onCancel, username }) => {
                     {error && <div className="twofa-login-error">❌ {error}</div>}
 
                     <button
-                        aria-label="Submit"
+                        aria-label={t('common.submit')}
                         type="submit"
                         className="twofa-login-submit"
                         disabled={loading || code.length < 6}
@@ -71,13 +71,8 @@ const TwoFactorLogin = ({ onVerify, onCancel, username }) => {
                     </button>
 
                     <button
-                        aria-label="Action button"
-                        type="button"
-                        onClick={() => {
-                            setUseBackupCode(!useBackupCode);
-                            setCode('');
-                            setError('');
-                        }}
+                        aria-label={useBackupCode ? t('twoFactor.useAuthenticator', 'Use authenticator code') : t('twoFactor.useBackupCode', 'Use backup code')}
+                        onClick={() => { setUseBackupCode(!useBackupCode); setCode(''); setError(''); }}
                         className="twofa-login-toggle"
                     >
                         {useBackupCode ? '← Authenticator Kodu Kullan' : 'Yedek Kod Kullan →'}
@@ -86,16 +81,16 @@ const TwoFactorLogin = ({ onVerify, onCancel, username }) => {
 
                 <div className="twofa-login-help">
                     <p>
-                        💡 <strong>İpucu:</strong>
+                        💡 <strong>{t('twoFactor.tip', 'Tip:')}</strong>
                     </p>
                     <ul>
-                        <li>Google Authenticator or Authy uygulamasını openın</li>
-                        <li>PAWSCORD için gösterilen 6 haneli kodu girin</li>
-                        <li>Telefonunuza erişemiyorsanız yedek kodlarınızı kullanın</li>
+                        <li>{t('twoFactor.step1', 'Open Google Authenticator or Authy app')}</li>
+                        <li>{t('twoFactor.step2', 'Enter the 6-digit code shown for PAWSCORD')}</li>
+                        <li>{t('twoFactor.step3', 'If you cannot access your phone, use your backup codes')}</li>
                     </ul>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

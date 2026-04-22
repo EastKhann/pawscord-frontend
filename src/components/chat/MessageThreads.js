@@ -86,7 +86,7 @@ const MessageThreads = ({ messageId, onClose, fetchWithAuth, apiBaseUrl }) => {
                     <h3 style={styles.title}>
                         <FaComments /> Start Thread
                     </h3>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -98,7 +98,7 @@ const MessageThreads = ({ messageId, onClose, fetchWithAuth, apiBaseUrl }) => {
                             {subscribed ? '🔔 Subscribed to notifications' : '🔕 Not subscribed'}
                         </span>
                         <button
-                            aria-label="handle Toggle Subscription"
+                            aria-label={subscribed ? t('threads.unsubscribe', 'Unsubscribe from thread') : t('threads.subscribe', 'Subscribe to thread')}
                             onClick={handleToggleSubscription}
                             style={{
                                 padding: '6px 12px',
@@ -133,7 +133,7 @@ const MessageThreads = ({ messageId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         style={styles.textarea}
                     />
                     <button
-                        aria-label="handle Send Thread"
+                        aria-label={t('threads.sendMessage', 'Send thread message')}
                         onClick={handleSendThread}
                         disabled={loading || !threadMessage.trim()}
                         style={styles.sendButton}

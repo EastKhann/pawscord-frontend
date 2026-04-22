@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
 
 // -- dynamic style helpers (pass 2) --
@@ -49,37 +50,46 @@ const _st14 = { fontSize: '32px', fontWeight: '700', color: '#5865f2', marginBot
 const _st15 = { fontSize: '16px', color: '#b5bac1' };
 
 const PremiumTab = ({ premiumStatus }) => {
+    const { t } = useTranslation();
     const styles = profileStyles;
     const [error, setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
+    const activeFeatures = [
+        { icon: '🎨', text: t('premium.customThemes') },
+        { icon: '🎭', text: t('premium.animatedFrames') },
+        { icon: '💬', text: t('premium.advancedMessages') },
+        { icon: '🎵', text: t('premium.customEmojisStickers') },
+        { icon: '🏆', text: t('premium.customBadges') },
+        { icon: '🚀', text: t('premium.prioritySupport') },
+    ];
+
+    const upgradeFeatures = [
+        ...activeFeatures,
+        { icon: '📁', text: t('premium.cloudStorage') },
+        { icon: '🎬', text: t('premium.hdVideo') },
+    ];
+
     return (
-        <div aria-label="premium tab" style={styles.card}>
-            <h3 style={styles.sectionTitle}>💎 Premium Üyelik</h3>
+        <div aria-label={t('aria.premiumTab', 'Premium')} style={styles.card}>
+            <h3 style={styles.sectionTitle}>💎 {t('premium.membership')}</h3>
 
             {premiumStatus?.is_active ? (
                 <div>
                     <div style={_st1}>
-                        <h4 style={_st2}>⭐ Premium Üye</h4>
-                        <p style={_st3}>Premium'unuz aktif! Tüm özel özelliklere erişiminiz var.</p>
+                        <h4 style={_st2}>{t('premium.activeMember')}</h4>
+                        <p style={_st3}>{t('premium.isActiveDesc')}</p>
                         {premiumStatus.expires_at && (
                             <p style={_st4}>
-                                📅 Bitiş:{' '}
-                                {new Date(premiumStatus.expires_at).toLocaleDateString('tr-TR')}
+                                📅 {t('premium.expires')}{' '}
+                                {new Date(premiumStatus.expires_at).toLocaleDateString()}
                             </p>
                         )}
                     </div>
 
-                    <h4 style={_st5}>✨ Premium Özellikler</h4>
+                    <h4 style={_st5}>✨ {t('premium.premiumFeatures')}</h4>
                     <div style={_st6}>
-                        {[
-                            { icon: '🎨', text: 'Özel temalar ve renkler' },
-                            { icon: '🎭', text: 'Hareketli avatar çerçeveleri' },
-                            { icon: '💬', text: 'Gelişmiş mesaj araçları' },
-                            { icon: '🎵', text: 'Özel emojiler ve çıkartmalar' },
-                            { icon: '🏆', text: 'Özel rozetler' },
-                            { icon: '🚀', text: 'Öncelikli destek' },
-                        ].map((feature, idx) => (
+                        {activeFeatures.map((feature, idx) => (
                             <div key={`item-${idx}`} style={_st7}>
                                 <span style={_st8}>{feature.icon}</span>
                                 <span style={_st9}>{feature.text}</span>
@@ -91,26 +101,17 @@ const PremiumTab = ({ premiumStatus }) => {
                 <div>
                     <div style={_st10}>
                         <div style={_st11}>💎</div>
-                        <h4 style={_st12}>Premium'a Yükselt</h4>
-                        <p style={_st13}>Özel özelliklerle deneyimini geliştir</p>
+                        <h4 style={_st12}>{t('premium.upgradeToPremium')}</h4>
+                        <p style={_st13}>{t('premium.upgradeDesc')}</p>
                         <div style={_st14}>
-                            ₺4.99<span style={_st15}>/ay</span>
+                            ₺4.99<span style={_st15}>{t('premium.perMonth')}</span>
                         </div>
-                        <button style={_st1114}>🚀 Satın Al</button>
+                        <button style={_st1114}>🚀 {t('premium.buyNow')}</button>
                     </div>
 
-                    <h4 style={_st5}>✨ Premium ile Aç</h4>
+                    <h4 style={_st5}>✨ {t('premium.unlockWithPremium')}</h4>
                     <div style={_st6}>
-                        {[
-                            { icon: '🎨', text: 'Özel temalar ve renkler' },
-                            { icon: '🎭', text: 'Hareketli avatar çerçeveleri' },
-                            { icon: '💬', text: 'Gelişmiş mesaj araçları' },
-                            { icon: '🎵', text: 'Özel emojiler ve çıkartmalar' },
-                            { icon: '🏆', text: 'Özel rozetler' },
-                            { icon: '🚀', text: 'Öncelikli destek' },
-                            { icon: '📁', text: '100GB Bulut Depolama' },
-                            { icon: '🎬', text: 'HD Video Paylaşımı' },
-                        ].map((feature, idx) => (
+                        {upgradeFeatures.map((feature, idx) => (
                             <div key={`item-${idx}`} style={_st7}>
                                 <span style={_st8}>{feature.icon}</span>
                                 <span style={_st9}>{feature.text}</span>

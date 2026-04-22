@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
 const _s = (o) => o;
 
@@ -20,6 +21,7 @@ const FriendsTab = ({
 }) => {
     const friendRequests = rawFR || [];
     const friends = rawFriends || [];
+    const { t } = useTranslation();
     const styles = profileStyles;
     const [error, setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
@@ -27,9 +29,9 @@ const FriendsTab = ({
     return (
         <>
             <div style={styles.card}>
-                <h3 style={styles.sectionTitle}>📨 Bekleyen Arkadaşlık İstekleri</h3>
+                <h3 style={styles.sectionTitle}>📨 {t('friends.pendingRequests')}</h3>
 
-                {friendRequests.length === 0 && <p style={_st1}>Bekleyen istek yok.</p>}
+                {friendRequests.length === 0 && <p style={_st1}>{t('friends.noPendingRequests')}</p>}
 
                 {friendRequests.map((request) => (
                     <div key={request.id} style={styles.sessionCard}>
@@ -52,17 +54,17 @@ const FriendsTab = ({
                         <div style={_st5}>
                             <button
                                 style={styles.button('primary')}
-                                aria-label="action-button"
+                                aria-label={t('friends.accept')}
                                 onClick={() => respondToFriendRequest(request.id, 'accept')}
                             >
-                                ✅ Kabul Et
+                                ✅ {t('friends.accept')}
                             </button>
                             <button
                                 style={styles.button('danger')}
-                                aria-label="action-button"
+                                aria-label={t('friends.reject')}
                                 onClick={() => respondToFriendRequest(request.id, 'reject')}
                             >
-                                ❌ Reddet
+                                ❌ {t('friends.reject')}
                             </button>
                         </div>
                     </div>
@@ -70,9 +72,9 @@ const FriendsTab = ({
             </div>
 
             <div style={styles.card}>
-                <h3 style={styles.sectionTitle}>👥 Arkadaşlarım ({friends.length})</h3>
+                <h3 style={styles.sectionTitle}>👥 {t('friends.myFriends')} ({friends.length})</h3>
 
-                {friends.length === 0 && <p style={_st1}>Henüz arkadaşınız yok.</p>}
+                {friends.length === 0 && <p style={_st1}>{t('friends.noFriends')}</p>}
 
                 <div style={_st6}>
                     {friends.map((friend) => (
@@ -89,7 +91,7 @@ const FriendsTab = ({
                                 <div style={_st7}>
                                     <p style={_st4}>{friend.username}</p>
                                     <p style={styles.settingRowDesc}>
-                                        {friend.status_message || 'Durum mesajı yok'}
+                                        {friend.status_message || t('friends.noStatus')}
                                     </p>
                                 </div>
                                 <div
@@ -103,10 +105,10 @@ const FriendsTab = ({
                             </div>
                             <button
                                 style={styles.button('danger')}
-                                aria-label="action-button"
+                                aria-label={t('friends.remove')}
                                 onClick={() => removeFriend(friend.friendship_id)}
                             >
-                                🗑️ Kaldır
+                                🗑️ {t('friends.remove')}
                             </button>
                         </div>
                     ))}

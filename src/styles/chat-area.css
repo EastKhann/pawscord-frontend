@@ -156,6 +156,12 @@
     animation: emptyIconFloat 3.5s ease-in-out infinite;
 }
 
+.chat-empty-icon-ring span {
+    font-size: 2.5rem;
+    line-height: 1;
+    user-select: none;
+}
+
 /* Outer ring pulse */
 .chat-empty-icon-ring::before {
     content: '';

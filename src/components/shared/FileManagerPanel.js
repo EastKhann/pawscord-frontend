@@ -87,10 +87,11 @@ const FileManagerPanel = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
                 <FaSearch style={styles.searchIcon} />
                 <input
                     type="text"
-                    placeholder="Dosya ara..."
+                    placeholder={t('fileManager.searchPlaceholder', 'Search files...')}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     style={styles.searchInput}
+                    aria-label={t('common.search', 'Search')}
                 />
             </div>
 
@@ -103,13 +104,7 @@ const FileManagerPanel = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
 
                     return (
                         <button
-                            aria-label="Action button"
-                            key={cat.id}
-                            onClick={() => setFilter(cat.id)}
-                            style={{
-                                ...styles.categoryButton,
-                                ...(filter === cat.id ? styles.categoryButtonActive : {}),
-                            }}
+                            aria-label={t('fileManager.filterBy', 'Filter by {{cat}}', { cat: cat.label })}
                         >
                             <Icon style={styles.categoryIcon} />
                             <span>{cat.label}</span>
@@ -125,7 +120,7 @@ const FileManagerPanel = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
                 ) : filteredFiles.length === 0 ? (
                     <div style={styles.empty}>
                         <FaFolder style={styles.emptyIcon} />
-                        <p>Dosya bulunamadı</p>
+                        <p>{t('fileManager.notFound', 'File not found')}</p>
                     </div>
                 ) : (
                     filteredFiles.map((file) => (

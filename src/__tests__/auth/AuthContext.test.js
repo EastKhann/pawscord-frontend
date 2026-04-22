@@ -90,15 +90,14 @@ describe('AuthContext', () => {
             expect(result.current.isAuthenticated).toBe(true);
             expect(result.current.user).toEqual({ username: 'alice' });
             expect(result.current.token).toBe('access-token-123');
+            // access_token stored via tokenStorage abstraction
             expect(window.localStorage.setItem).toHaveBeenCalledWith(
                 'access_token',
                 'access-token-123'
             );
-            expect(window.localStorage.setItem).toHaveBeenCalledWith(
-                'refresh_token',
-                'refresh-token-456'
-            );
+            // chat_username stored for display purposes
             expect(window.localStorage.setItem).toHaveBeenCalledWith('chat_username', 'alice');
+            // Note: refresh_token is now an httpOnly cookie — not in localStorage
         });
 
         it('should decode JWT to extract username', () => {
@@ -145,9 +144,10 @@ describe('AuthContext', () => {
             expect(result.current.isAuthenticated).toBe(false);
             expect(result.current.user).toBeNull();
             expect(result.current.token).toBeNull();
+            // access_token cleared via tokenStorage
             expect(window.localStorage.removeItem).toHaveBeenCalledWith('access_token');
-            expect(window.localStorage.removeItem).toHaveBeenCalledWith('refresh_token');
             expect(window.localStorage.removeItem).toHaveBeenCalledWith('chat_username');
+            // Note: refresh_token is an httpOnly cookie — cleared by backend on logout
         });
     });
 
@@ -176,14 +176,12 @@ describe('AuthContext', () => {
             });
 
             expect(refreshResult).toBe(true);
+            // access_token stored via tokenStorage abstraction
             expect(window.localStorage.setItem).toHaveBeenCalledWith(
                 'access_token',
                 'new-access-token'
             );
-            expect(window.localStorage.setItem).toHaveBeenCalledWith(
-                'refresh_token',
-                'new-refresh-token'
-            );
+            // Note: refresh_token is returned from server but is an httpOnly cookie — not stored in localStorage
         });
 
         it('should logout if no refresh_token stored', async () => {

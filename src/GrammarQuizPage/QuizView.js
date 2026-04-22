@@ -147,7 +147,7 @@ const QuizView = ({
             <div style={styles.container}>
                 <div style={styles.topBar}>
                     <button
-                        aria-label="Testi sıfırla"
+                        aria-label={t('quiz.resetQuiz', 'Reset quiz')}
                         onClick={resetQuiz}
                         style={styles.smallBackBtn}
                     >
@@ -254,7 +254,7 @@ const QuizView = ({
                                 type="text"
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
-                                placeholder="Cevabınızı buraya yazın..."
+                                placeholder={t('quiz.answerPlaceholder', 'Write your answer here...')}
                                 style={{
                                     ...styles.textInput,
                                     borderColor: isAnswered
@@ -264,7 +264,7 @@ const QuizView = ({
                                         : '#5865f2',
                                 }}
                                 disabled={isAnswered}
-                                aria-label="Metin Girişi"
+                                aria-label={t('quiz.textInput', 'Text Input')}
                             />
                         )}
                     </div>
@@ -275,7 +275,7 @@ const QuizView = ({
                         {!isAnswered ? (
                             <div style={styles.actionButtonGroup}>
                                 <button
-                                    aria-label="Biliyorum olarak işaretle"
+                                    aria-label={t('quiz.markAsKnown', 'Mark as known')}
                                     onClick={handleMarkKnown}
                                     style={styles.knownBtn}
                                     title="Bunu biliyorum, tekrar sorma"
@@ -284,7 +284,7 @@ const QuizView = ({
                                 </button>
 
                                 <button
-                                    aria-label="Kontrol et"
+                                    aria-label={t('quiz.check', 'Check')}
                                     onClick={handleCheck}
                                     style={styles.checkBtn}
                                     disabled={
@@ -388,7 +388,7 @@ const QuizView = ({
 
                                 <div>
                                     <button
-                                        aria-label="Sonraki"
+                                        aria-label={t('quiz.next', 'Next')}
                                         onClick={handleNext}
                                         style={
                                             isCorrect ? styles.nextBtnCorrect : styles.nextBtnWrong
@@ -400,7 +400,7 @@ const QuizView = ({
                                     </button>
 
                                     <button
-                                        aria-label="Aslında biliyordum"
+                                        aria-label={t('quiz.iKnewIt', 'I actually knew it')}
                                         onClick={handleMarkKnown}
                                         style={styles.feedbackKnownBtn}
                                     >

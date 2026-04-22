@@ -12,7 +12,7 @@ describe('useServerStore — Advanced', () => {
             members: [],
             roles: [],
             serverSettings: {},
-            joinedServerIds: new Set(),
+            joinedServerIds: [],
         });
     });
 
@@ -241,8 +241,8 @@ describe('useServerStore — Advanced', () => {
             useServerStore.getState().addServer({ id: 1, name: 'A' });
             useServerStore.getState().addServer({ id: 2, name: 'B' });
             const ids = useServerStore.getState().joinedServerIds;
-            expect(ids.has(1)).toBe(true);
-            expect(ids.has(2)).toBe(true);
+            expect(ids.includes(1)).toBe(true);
+            expect(ids.includes(2)).toBe(true);
         });
 
         it('should remove from joinedServerIds when server removed', () => {
@@ -250,8 +250,8 @@ describe('useServerStore — Advanced', () => {
             useServerStore.getState().addServer({ id: 2, name: 'B' });
             useServerStore.getState().removeServer(1);
             const ids = useServerStore.getState().joinedServerIds;
-            expect(ids.has(1)).toBe(false);
-            expect(ids.has(2)).toBe(true);
+            expect(ids.includes(1)).toBe(false);
+            expect(ids.includes(2)).toBe(true);
         });
     });
 

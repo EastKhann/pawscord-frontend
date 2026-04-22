@@ -143,19 +143,19 @@ const renderUsers = () => {
                                             user.status === 'online'
                                                 ? '#23a559'
                                                 : user.status === 'idle'
-                                                  ? '#f0b132'
-                                                  : user.status === 'dnd'
-                                                    ? '#e74c3c'
-                                                    : '#6b7280'
+                                                    ? '#f0b132'
+                                                    : user.status === 'dnd'
+                                                        ? '#e74c3c'
+                                                        : '#6b7280'
                                         )}
                                     >
                                         {user.status === 'online'
                                             ? '🟢'
                                             : user.status === 'idle'
-                                              ? '🌙'
-                                              : user.status === 'dnd'
-                                                ? '⛔'
-                                                : '⚫'}
+                                                ? '🌙'
+                                                : user.status === 'dnd'
+                                                    ? '⛔'
+                                                    : '⚫'}
                                     </span>
                                 </td>
                                 <td style={styles.td}>
@@ -255,7 +255,7 @@ const renderUsers = () => {
                     onClick={() => setCurrentPage((p) => p + 1)}
                     style={nextPageBtnStyle}
                 >
-                    Sonraki ▶
+                    {t('admin.panel.nextPage')}
                 </button>
             </div>
         </div>

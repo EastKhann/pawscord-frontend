@@ -2,15 +2,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import i18n from '../i18n';
 
 const ReplyPreview = ({ message, onCancel }) => {
     if (!message) return null;
 
     return (
-        <div aria-label="reply preview" style={styles.container}>
+        <div aria-label={i18n.t('aria.replyPreview', { defaultValue: 'Reply Preview' })} style={styles.container}>
             <div style={styles.content}>
                 <span style={styles.replyingTo}>
-                    Replynıyor: <strong>@{message.username}</strong>
+                    {t('replyPreview.replyingTo','Replying to')} <strong>@{message.username}</strong>
                 </span>
                 <p style={styles.messageText}>{message.content}</p>
             </div>

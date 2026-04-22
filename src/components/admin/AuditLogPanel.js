@@ -105,7 +105,7 @@ const AuditLogPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         <FaHistory size={20} color="#5865f2" />
                         <h2 style={styles.title}>{t('auditLog.title')}</h2>
                     </div>
-                    <button aria-label="on Close" onClick={onClose} style={styles.closeButton}>
+                    <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes size={20} />
                     </button>
                 </div>
@@ -145,7 +145,7 @@ const AuditLogPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         <option value="90days">{t('auditLog.last90Days')}</option>
                     </select>
                     <button
-                        aria-label="export Logs"
+                        aria-label={t('admin.exportLogs', 'Export logs')}
                         onClick={exportLogs}
                         style={styles.exportButton}
                     >

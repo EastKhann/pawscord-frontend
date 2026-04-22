@@ -1,7 +1,7 @@
-﻿// frontend/src/VoiceChatPanel/ProfileCardGrid.js
-// 🎨 Profile card grid — shown when no active streams (voice-only users)
+// frontend/src/VoiceChatPanel/ProfileCardGrid.js
+// ?? Profile card grid � shown when no active streams (voice-only users)
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { getDeterministicAvatarFallback } from './avatarUtils';
 import ConnectionQualityIndicator from '../VoiceUserList/ConnectionQualityIndicator';
@@ -29,8 +29,6 @@ const ProfileCardGrid = React.memo(
         isMobile,
     }) => {
         const { cols } = getGridLayout(combinedUsers.length, isMobile);
-        const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
         const { t } = useTranslation();
 
         return (
@@ -78,7 +76,7 @@ const ProfileCardGrid = React.memo(
                             }}
                             role="button"
                             tabIndex={0}
-                            aria-label={`${user.username} profil kartı`}
+                            aria-label={`${user.username} ${t('profileCard.ariaLabel','profile card')}`}
                             onClick={() =>
                                 setContextMenu({
                                     user,
@@ -237,14 +235,14 @@ const ProfileCardGrid = React.memo(
                                                 }}
                                             />
                                         </span>{' '}
-                                        {t('voice.talking', 'Konuşuyor')}
+                                        {t('voice.talking', 'Konusuyor')}
                                     </>
                                 )}
                                 {!isSpeaking && user.isMuted && (
                                     <>{t('voice.muted', 'Susturuldu')}</>
                                 )}
                                 {!isSpeaking && user.isDeafened && (
-                                    <>{t('voice.headphonesOff', 'Kulaklık Kapalı')}</>
+                                    <>{t('voice.headphonesOff', 'Kulaklik Kapali')}</>
                                 )}
                                 {!isSpeaking && !user.isMuted && !user.isDeafened && (
                                     <>{t('voice.active', 'Aktif')}</>

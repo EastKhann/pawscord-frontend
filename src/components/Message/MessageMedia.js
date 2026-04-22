@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import styles from './messageMediaStyles';
 import { LazyVideo, LazyMount, FileAttachment, VoiceMessage } from './MediaComponents';
 import { GalleryGrid } from './GalleryGrid';
+import i18n from '../../i18n';
 
 export { LazyVideo, LazyMount, FileAttachment, VoiceMessage };
 
@@ -42,7 +43,7 @@ export const MessageMedia = memo(
             return (
                 <img
                     src={finalImageUrl}
-                    alt="attachment"
+                    alt={i18n.t('alt.attachment', { defaultValue: 'Attachment' })}
                     style={styles.messageImage}
                     onClick={() => onImageClick(finalImageUrl)}
                     loading="lazy"

@@ -1,5 +1,5 @@
 /* eslint-disable no-duplicate-imports */
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
     FaSmile,
@@ -51,8 +51,6 @@ const MessageToolbar = ({
     absoluteHostUrl,
 }) => {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     return (
         <div style={styles.messageActions}>
             {showReactionPicker && (
@@ -64,42 +62,42 @@ const MessageToolbar = ({
                 </Suspense>
             )}
             <button
-                aria-label="Tepki Ekle"
+                aria-label={t('messageMenu.addReaction', 'Add Reaction')}
                 onClick={() => setShowReactionPicker(true)}
                 style={styles.actionButton}
-                title="Tepki Ekle"
+                title={t('messageMenu.addReaction', 'Add Reaction')}
             >
                 <FaSmile />
             </button>
             <button
-                aria-label="Yanıtla"
+                aria-label={t('common.reply', 'Reply')}
                 onClick={() => onSetReply(msg)}
                 style={styles.actionButton}
-                title="Yanıtla"
+                title={t('common.reply', 'Reply')}
             >
                 <FaReply />
             </button>
             <button
-                aria-label="Alıntıla"
+                aria-label={t('common.quote', 'Quote')}
                 onClick={onQuote}
                 style={styles.actionButton}
-                title="Alıntıla"
+                title={t('common.quote', 'Quote')}
             >
                 <FaQuoteLeft />
             </button>
             <button
-                aria-label="Seç"
+                aria-label={t('common.select', 'Select')}
                 onClick={() => onToggleSelection(msg.id)}
                 style={styles.actionButton}
-                title="Seç"
+                title={t('common.select', 'Select')}
             >
                 <FaCheck />
             </button>
             <button
-                aria-label="İlet"
+                aria-label={t('common.forward', 'Forward')}
                 onClick={() => onStartForward(msg)}
                 style={styles.actionButton}
-                title="İlet"
+                title={t('common.forward', 'Forward')}
             >
                 <FaShareSquare />
             </button>
@@ -126,25 +124,25 @@ const MessageToolbar = ({
             </Suspense>
 
             <button
-                aria-label="Hatırlatıcı Ayarla"
+                aria-label={t('common.remind', 'Set Reminder')}
                 onClick={() => setShowReminderModal(true)}
                 style={styles.actionButton}
-                title="Hatırlatıcı Ayarla"
+                title={t('common.remind', 'Set Reminder')}
             >
                 <FaBell />
             </button>
             <button
-                aria-label="Konu Başlat"
+                aria-label={t('messageMenu.startThread', 'Start Thread')}
                 onClick={() => setShowThreadModal(true)}
                 style={styles.actionButton}
-                title="Konu Başlat"
+                title={t('messageMenu.startThread', 'Start Thread')}
             >
                 <FaComments />
             </button>
 
             {!isMyMessage && (
                 <button
-                    aria-label="Bildir"
+                    aria-label={t('common.report', 'Report')}
                     onClick={async () => {
                         const reason = prompt('Bildirme sebebi:');
                         if (reason) {
@@ -156,7 +154,7 @@ const MessageToolbar = ({
                         }
                     }}
                     style={styles.actionButton}
-                    title="Bildir"
+                    title={t('common.report', 'Report')}
                 >
                     <FaExclamationTriangle />
                 </button>
@@ -164,7 +162,7 @@ const MessageToolbar = ({
 
             {isMyMessage && msg.content && (
                 <button
-                    aria-label="Düzenle"
+                    aria-label={t('common.edit', 'Edit')}
                     onClick={() => onStartEdit(msg)}
                     style={styles.actionButton}
                     title={t('common.edit')}
@@ -175,7 +173,7 @@ const MessageToolbar = ({
 
             {(isMyMessage || isAdmin || currentPermissions.can_delete_messages) && (
                 <button
-                    aria-label="Sil"
+                    aria-label={t('common.delete', 'Delete')}
                     onClick={() => onDelete(msg.id)}
                     style={styles.actionButton}
                     title="Sil"
@@ -186,10 +184,10 @@ const MessageToolbar = ({
 
             {isAdmin && msg.room && (
                 <button
-                    aria-label="Sabitle"
+                    aria-label={t('common.pin', 'Pin')}
                     onClick={() => onTogglePin(msg.id)}
                     style={styles.actionButton}
-                    title="Sabitle"
+                    title={t('common.pin', 'Pin')}
                 >
                     <FaThumbtack />
                 </button>

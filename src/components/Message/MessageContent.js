@@ -28,7 +28,7 @@ export const MessageContent = memo(({
     // Kod snippet'i varsa
     if (snippetData && snippetData.type !== 'game_xox') {
         return (
-            <div aria-label="message content" style={styles.snippetContainer}>
+            <div aria-label={t('message.content', 'Message content')} style={styles.snippetContainer}>
                 <div style={styles.snippetHeader}>
                     <span>💻 {snippetData.title || 'Code Snippet'}</span>
                     <span style={styles.langBadge}>{snippetData.language}</span>

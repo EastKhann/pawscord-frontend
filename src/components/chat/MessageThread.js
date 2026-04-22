@@ -78,7 +78,7 @@ const MessageThread = ({
                 <div className="thread-title">
                     <FaComments /> Thread
                 </div>
-                <button aria-label="Close" className="thread-close" onClick={onClose}>
+                <button aria-label={t('common.close', 'Close')} className="thread-close" onClick={onClose}>
                     <FaTimes />
                 </button>
             </div>
@@ -114,8 +114,8 @@ const MessageThread = ({
                 ) : (
                     <div className="thread-empty">
                         <FaComments size={48} />
-                        <p>Henüz cevap yok</p>
-                        <small>İlk cevabı sen yaz!</small>
+                        <p>{t('msgThread.noReplies', 'No replies yet')}</p>
+                        <small>{t('msgThread.beFirst', 'Be the first to reply!')}</small>
                     </div>
                 )}
             </div>
@@ -124,18 +124,18 @@ const MessageThread = ({
             <form className="thread-input" onSubmit={handleSendReply}>
                 <input
                     type="text"
-                    placeholder="Thread'e cevap yaz..."
+                    placeholder={t('msgThread.replyPlaceholder', "Thread'e cevap yaz...")}
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     disabled={sending}
                 />
-                <button aria-label="Send" type="submit" disabled={!replyText.trim() || sending}>
+                <button aria-label={t('common.send')} type="submit" disabled={!replyText.trim() || sending}>
                     {sending ? '...' : <FaPaperPlane />}
                 </button>
             </form>
 
             {/* Reply Count Badge */}
-            {replies.length > 0 && <div className="thread-count-badge">{replies.length} cevap</div>}
+            {replies.length > 0 && <div className="thread-count-badge">{replies.length} {t('msgThread.replies', 'cevap')}</div>}
         </div>
     );
 };

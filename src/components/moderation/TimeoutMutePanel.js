@@ -117,7 +117,7 @@ const TimeoutMutePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, userId, usernam
                     <div style={styles.presets}>
                         {presetDurations.map((preset) => (
                             <button
-                                aria-label="Action button"
+                                aria-label={preset.label}
                                 key={preset.value}
                                 onClick={() => setDuration(preset.value)}
                                 style={{
@@ -132,12 +132,12 @@ const TimeoutMutePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, userId, usernam
                     </div>
 
                     <div style={styles.field}>
-                        <label style={styles.label}>Özel Duration (minute)</label>
+                        <label style={styles.label}>{t('timeoutPanel.customDuration', 'Custom Duration (minutes)')}</label>
                         <input
                             type="number"
                             value={duration}
                             onChange={(e) => setDuration(e.target.value)}
-                            placeholder="60"
+                            placeholder={t('timeoutMute.duration', '60')}
                             style={styles.input}
                             min="1"
                         />
@@ -148,23 +148,23 @@ const TimeoutMutePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, userId, usernam
                         <textarea
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder="Spam, kural ihlali, vb."
+                            placeholder={t('timeoutMute.reason', 'Spam, rule violation, etc.')}
                             style={styles.textarea}
                             rows={3}
                         />
                     </div>
 
                     <div style={styles.info}>
-                        ⏰ Kullanıcı <strong>{duration} dakika</strong> boyunca mesaj gönderemeyecek
+                        {t('timeoutPanel.willBeTimeout', '⏰ User will not be able to send messages for')} <strong>{duration} {t('common.minutes', 'minutes')}</strong>
                     </div>
                 </div>
 
                 <div style={styles.footer}>
-                    <button aria-label="remove Mute" onClick={removeMute} style={styles.unmuteBtn}>
+                    <button aria-label={t('timeoutMute.removeMute', 'Remove mute')} onClick={removeMute} style={styles.unmuteBtn}>
                         <FaVolumeUp /> Unmute
                     </button>
                     <button
-                        aria-label="apply Mute"
+                        aria-label={t('timeoutMute.applyMute', 'Apply mute')}
                         onClick={applyMute}
                         disabled={processing}
                         style={styles.muteBtn}

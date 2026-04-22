@@ -1,5 +1,5 @@
-﻿// frontend/src/RoomList/QuickAccessButtons.js
-import React, { useState } from 'react';
+// frontend/src/RoomList/QuickAccessButtons.js
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
@@ -18,47 +18,47 @@ const buttonDefs = [
     {
         key: 'payment',
         gradient: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)',
-        emoji: '💰',
+        emoji: '??',
     },
     {
         key: 'store',
         gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        emoji: '🛒',
+        emoji: '??',
     },
     {
         key: 'daily',
         gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-        emoji: '🎁',
+        emoji: '??',
     },
     {
         key: 'api',
         gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-        emoji: '📊',
+        emoji: '??',
     },
     {
         key: 'export',
         gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-        emoji: '📥',
+        emoji: '??',
     },
     {
         key: 'announce',
         gradient: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
-        emoji: '📢',
+        emoji: '??',
     },
     {
         key: 'games',
         gradient: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)',
-        emoji: '🎮',
+        emoji: '??',
     },
     {
         key: 'projects',
         gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
-        emoji: '📂',
+        emoji: '??',
     },
     {
         key: 'avatar',
         gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        emoji: '🎨',
+        emoji: '??',
     },
 ];
 
@@ -88,8 +88,6 @@ const hoverOut = (e) => {
 
 const QuickAccessButtons = ({ handlers }) => {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const handlerMap = {
         payment: handlers.onOpenPaymentPanel,
         store: handlers.onOpenStoreModal,

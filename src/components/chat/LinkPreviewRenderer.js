@@ -94,7 +94,7 @@ const LinkPreviewRenderer = ({ url, onRemove }) => {
     return (
         <div style={styles.container}>
             {onRemove && (
-                <button aria-label="Close" onClick={onRemove} style={styles.removeButton}>
+                <button aria-label={t('common.close', 'Close')} onClick={onRemove} style={styles.removeButton}>
                     <FaTimes />
                 </button>
             )}
@@ -105,7 +105,7 @@ const LinkPreviewRenderer = ({ url, onRemove }) => {
                         <div style={styles.videoThumbnail}>
                             <img
                                 src={getVideoThumbnail(url)}
-                                alt="Video thumbnail"
+                                alt={t('alt.videoThumbnail', 'Video Thumbnail')}
                                 style={styles.videoImage}
                             />
                             <div style={styles.playOverlay}>

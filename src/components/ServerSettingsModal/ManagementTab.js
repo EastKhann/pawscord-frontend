@@ -420,12 +420,12 @@ const ManagementTab = memo(
                     : '#4e5058',
             opacity:
                 isSavingDefaultChannel ||
-                defaultChannelSlug === (server.metadata?.default_channel_slug || '')
+                    defaultChannelSlug === (server.metadata?.default_channel_slug || '')
                     ? 0.5
                     : 1,
             cursor:
                 isSavingDefaultChannel ||
-                defaultChannelSlug === (server.metadata?.default_channel_slug || '')
+                    defaultChannelSlug === (server.metadata?.default_channel_slug || '')
                     ? 'not-allowed'
                     : 'pointer',
         };
@@ -496,12 +496,12 @@ const ManagementTab = memo(
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
                                     placeholder={t('server_adı')}
-                                    aria-label="Server Name"
+                                    aria-label={t('serverSettings.serverName', 'Server name')}
                                 />
 
                                 <button
                                     onClick={handleRenameServer}
-                                    aria-label="Save server name"
+                                    aria-label={t('serverSettings.saveServerName', 'Save server name')}
                                     disabled={isRenamingServer || serverName.trim() === server.name}
                                     style={saveNameBtnStyle}
                                 >
@@ -533,12 +533,12 @@ const ManagementTab = memo(
                                     style={S.bg2}
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
-                                    aria-label="textarea"
+                                    aria-label={t('serverSettings.serverDescription', 'Server description')}
                                 />
 
                                 <button
                                     onClick={handleSaveDescription}
-                                    aria-label="Save server description"
+                                    aria-label={t('serverSettings.saveDescription', 'Save server description')}
                                     disabled={
                                         isSavingDescription ||
                                         serverDescription === (server.description || '')
@@ -570,10 +570,10 @@ const ManagementTab = memo(
 
                             <button
                                 onClick={handleIconUpload}
-                                aria-label="Upload server icon"
+                                aria-label={t('serverSettings.uploadIcon', 'Upload server icon')}
                                 style={styles.actionBtn}
                             >
-                                <FaImage /> İkonu Değiştir
+                                <FaImage /> {t('managementTab.changeIcon', 'Change Icon')}
                             </button>
                         </div>
 
@@ -630,7 +630,7 @@ const ManagementTab = memo(
                                     value={defaultChannelSlug}
                                     onChange={handleDefaultChannelChange}
                                     style={S.bg3}
-                                    aria-label="select"
+                                    aria-label={t('serverSettings.defaultChannelSelect', 'Select default channel')}
                                 >
                                     <option value="">{t('otomatik_i̇lk_metin_kanalı')}</option>
 
@@ -651,11 +651,11 @@ const ManagementTab = memo(
 
                                 <button
                                     onClick={handleSaveDefaultChannel}
-                                    aria-label="Save default channel"
+                                    aria-label={t('serverSettings.saveDefaultChannel', 'Save default channel')}
                                     disabled={
                                         isSavingDefaultChannel ||
                                         defaultChannelSlug ===
-                                            (server.metadata?.default_channel_slug || '')
+                                        (server.metadata?.default_channel_slug || '')
                                     }
                                     style={saveChannelBtnStyle}
                                 >
@@ -680,7 +680,7 @@ const ManagementTab = memo(
 
                                 <div style={styles.settingDesc}>
                                     {t(
-                                        'bu_işlem_geri alınamaz_tüm_kanallar_messagelar_ve_settings_kalı'
+                                        t('managementTab.deleteConfirmKey', 'this_action_cannot_be_undone')
                                     )}
                                 </div>
 
@@ -697,13 +697,13 @@ const ManagementTab = memo(
                                             onChange={handleDeleteConfirmationChange}
                                             placeholder={server.name}
                                             style={styles.confirmInput}
-                                            aria-label="text"
+                                            aria-label={t('serverSettings.deleteConfirmInput', 'Type server name to confirm deletion')}
                                         />
 
                                         <div className={css.flexGap10Mt10}>
                                             <button
                                                 onClick={handleDeleteServer}
-                                                aria-label="Confirm delete server"
+                                                aria-label={t('serverSettings.confirmDelete', 'Confirm delete server')}
                                                 disabled={deleteConfirmation !== server.name}
                                                 style={deleteDangerBtnStyle}
                                             >
@@ -712,7 +712,7 @@ const ManagementTab = memo(
 
                                             <button
                                                 onClick={handleCancelDelete}
-                                                aria-label="Cancel server deletion"
+                                                aria-label={t('serverSettings.cancelDelete', 'Cancel server deletion')}
                                                 style={styles.cancelBtn}
                                             >
                                                 {t('common.cancel')}
@@ -725,7 +725,7 @@ const ManagementTab = memo(
                             {!showDeleteModal && (
                                 <button
                                     onClick={handleShowDeleteModal}
-                                    aria-label="Open delete server dialog"
+                                    aria-label={t('serverSettings.openDeleteDialog', 'Open delete server dialog')}
                                     style={styles.dangerBtn}
                                 >
                                     <FaTrash />

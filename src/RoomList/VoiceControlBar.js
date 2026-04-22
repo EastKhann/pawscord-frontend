@@ -1,5 +1,5 @@
-﻿// frontend/src/RoomList/VoiceControlBar.js
-import React, { useState } from 'react';
+// frontend/src/RoomList/VoiceControlBar.js
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
@@ -57,8 +57,6 @@ const VoiceControlBar = ({
     getDeterministicAvatar,
 }) => {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     if (!isInVoice && !isConnecting) return null;
 
     const ctrlBtn = (active, activeColor = '#23a559', inactiveColor = '#111214') => ({
@@ -105,7 +103,7 @@ const VoiceControlBar = ({
                             fontSize: '8px',
                         }}
                     >
-                        {isMuted ? '🔇' : '🎤'}
+                        {isMuted ? '??' : '??'}
                     </div>
                 </div>
                 <div style={_st5}>

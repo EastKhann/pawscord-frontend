@@ -1,4 +1,4 @@
-﻿// frontend/src/components/WebhookManager.js
+// frontend/src/components/WebhookManager.js
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes, FaPlus, FaTrash, FaCopy } from 'react-icons/fa';
@@ -86,8 +86,8 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div style={styles.header}>
-                    <h2 style={styles.title}>🔗 Webhook Yönetimi</h2>
-                    <button aria-label="Close" onClick={onClose} style={styles.closeButton}>
+                    <h2 style={styles.title}>?? Webhook Y�netimi</h2>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
                 </div>
@@ -95,7 +95,7 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                 <div style={styles.content}>
                     {!showCreate && (
                         <button
-                            aria-label="Create"
+                            aria-label={t('common.create')}
                             onClick={() => setShowCreate(true)}
                             style={styles.createButton}
                         >
@@ -116,7 +116,7 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                             />
                             <input
                                 type="url"
-                                placeholder="Webhook URL"
+                                placeholder={t('webhookManager.webhookUrl', 'Webhook URL')}
                                 value={newWebhook.url}
                                 onChange={(e) =>
                                     setNewWebhook({ ...newWebhook, url: e.target.value })
@@ -125,14 +125,14 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                             />
                             <div className="flex-gap-10">
                                 <button
-                                    aria-label="handle Create"
+                                    aria-label={t('webhooks.create', 'Create webhook')}
                                     onClick={handleCreate}
                                     style={styles.submitButton}
                                 >
-                                    Oluştur
+                                    Olustur
                                 </button>
                                 <button
-                                    aria-label="Create"
+                                    aria-label={t('common.create')}
                                     onClick={() => setShowCreate(false)}
                                     style={styles.cancelButton}
                                 >
@@ -145,7 +145,7 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                     {loading ? (
                         <div style={styles.loading}>{t('common.loading')}</div>
                     ) : webhooks.length === 0 ? (
-                        <div style={styles.empty}>Henüz webhook oluşturulmadı</div>
+                        <div style={styles.empty}>Hen�z webhook olusturulmadi</div>
                     ) : (
                         <div style={styles.webhookList}>
                             {webhooks.map((webhook) => (
@@ -155,7 +155,7 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                                         <div style={styles.webhookUrl}>{webhook.url}</div>
                                     </div>
                                     <button
-                                        aria-label="Delete"
+                                        aria-label={t('common.delete')}
                                         onClick={() => handleDelete(webhook.id)}
                                         style={styles.deleteButton}
                                     >

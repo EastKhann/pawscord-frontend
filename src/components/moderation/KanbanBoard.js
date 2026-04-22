@@ -282,7 +282,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                     <h3
                                                         onClick={() => handleRenameColumn(col)}
                                                         style={S.txt}
-                                                        title="Yeniden adlandırmak için tıkla"
+                                                        title={t('common.clickToRename', 'Click to rename')}
                                                     >
                                                         {col.title}{' '}
                                                         <span style={S.txt2}>
@@ -290,7 +290,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                         </span>
                                                     </h3>
                                                     <button
-                                                        aria-label="Delete"
+                                                        aria-label={t('common.delete')}
                                                         onClick={() => handleDeleteColumn(col.id)}
                                                         style={S.bg}
                                                     >
@@ -366,7 +366,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                                                     (e.key ===
                                                                                         'Enter' ||
                                                                                         e.key ===
-                                                                                            ' ') &&
+                                                                                        ' ') &&
                                                                                     e.currentTarget.click()
                                                                                 }
                                                                             >
@@ -374,7 +374,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                                                 {card.labels &&
                                                                                     card.labels
                                                                                         .length >
-                                                                                        0 && (
+                                                                                    0 && (
                                                                                         <div className="flex-wrap-5-mb5">
                                                                                             {card.labels.map(
                                                                                                 (
@@ -406,49 +406,49 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                                                         card
                                                                                             .checklist
                                                                                             .length >
-                                                                                            0) ||
+                                                                                        0) ||
                                                                                     card.due_date) && (
-                                                                                    <div
-                                                                                        style={
-                                                                                            S.flex6
-                                                                                        }
-                                                                                    >
-                                                                                        {card.description && (
-                                                                                            <span>
-                                                                                                📝
-                                                                                            </span>
-                                                                                        )}
-                                                                                        {card.checklist &&
-                                                                                            card
-                                                                                                .checklist
-                                                                                                .length >
-                                                                                                0 && (
+                                                                                        <div
+                                                                                            style={
+                                                                                                S.flex6
+                                                                                            }
+                                                                                        >
+                                                                                            {card.description && (
                                                                                                 <span>
-                                                                                                    ☑️{' '}
-                                                                                                    {
-                                                                                                        card.checklist.filter(
-                                                                                                            (
-                                                                                                                i
-                                                                                                            ) =>
-                                                                                                                i.done
-                                                                                                        )
-                                                                                                            .length
-                                                                                                    }
-                                                                                                    /
-                                                                                                    {
-                                                                                                        card
-                                                                                                            .checklist
-                                                                                                            .length
-                                                                                                    }
+                                                                                                    📝
                                                                                                 </span>
                                                                                             )}
-                                                                                        {card.due_date && (
-                                                                                            <span>
-                                                                                                📅
-                                                                                            </span>
-                                                                                        )}
-                                                                                    </div>
-                                                                                )}
+                                                                                            {card.checklist &&
+                                                                                                card
+                                                                                                    .checklist
+                                                                                                    .length >
+                                                                                                0 && (
+                                                                                                    <span>
+                                                                                                        ☑️{' '}
+                                                                                                        {
+                                                                                                            card.checklist.filter(
+                                                                                                                (
+                                                                                                                    i
+                                                                                                                ) =>
+                                                                                                                    i.done
+                                                                                                            )
+                                                                                                                .length
+                                                                                                        }
+                                                                                                        /
+                                                                                                        {
+                                                                                                            card
+                                                                                                                .checklist
+                                                                                                                .length
+                                                                                                        }
+                                                                                                    </span>
+                                                                                                )}
+                                                                                            {card.due_date && (
+                                                                                                <span>
+                                                                                                    📅
+                                                                                                </span>
+                                                                                            )}
+                                                                                        </div>
+                                                                                    )}
                                                                             </div>
                                                                         )}
                                                                     </Draggable>
@@ -465,7 +465,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                         {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                                                         <textarea
                                                             autoFocus
-                                                            placeholder="Bir başlık girin..."
+                                                            placeholder={t('moderation.cardTitlePlaceholder', 'Enter a title...')}
                                                             value={newCardContent}
                                                             onChange={(e) =>
                                                                 setNewCardContent(e.target.value)
@@ -483,7 +483,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                         />
                                                         <div className="flex-5-mt5">
                                                             <button
-                                                                aria-label="Ekle"
+                                                                aria-label={t('kanban.addCardConfirm', 'Add card')}
                                                                 onClick={() =>
                                                                     handleAddCard(col.id)
                                                                 }
@@ -492,7 +492,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                                 Ekle
                                                             </button>
                                                             <button
-                                                                aria-label="Action button"
+                                                                aria-label={t('kanban.cancelAddCard', 'Cancel')}
                                                                 onClick={() => setAddingToCol(null)}
                                                                 style={S.bg4}
                                                             >
@@ -502,7 +502,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                     </div>
                                                 ) : (
                                                     <button
-                                                        aria-label="Action button"
+                                                        aria-label={t('kanban.addCard', 'Add card')}
                                                         onClick={() => {
                                                             setAddingToCol(col.id);
                                                             setNewCardContent('');
@@ -538,11 +538,11 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                             {/* New Column Button */}
                             <div style={S.size}>
                                 <button
-                                    aria-label="handle Create Column"
+                                    aria-label={t('kanban.createColumn', 'Create column')}
                                     onClick={handleCreateColumn}
                                     style={S.flex7}
                                 >
-                                    <FaPlus /> Başka bir liste ekle
+                                    <FaPlus /> {t('kanban.addList', 'Add another list')}
                                 </button>
                             </div>
                         </div>

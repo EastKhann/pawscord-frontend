@@ -21,31 +21,31 @@ const S = {
 };
 
 export const COMMANDS = [
-    { name: 'zar-at', description: '1-100 arasında zar at', icon: <FaTable /> },
-    { name: 'yazitura', description: 'Yazı tura at', icon: <FaUndo /> },
-    { name: 'tkm', description: 'Taş Kağıt Makas oyna (@kullanici)', icon: <FaRegSmile /> },
-    { name: 'xox', description: 'XOX oyunu başlat', icon: <FaTable /> },
-    { name: 'sec', description: 'Seçeneklerden birini seç (/sec a b c)', icon: <FaTerminal /> },
-    { name: 'cuzdan', description: 'Coin bakiyeni gör', icon: <FaUserShield /> },
+    { name: 'zar-at', description: t('slash.rollDiceDesc', 'Roll dice between 1-100'), icon: <FaTable /> },
+    { name: 'yazitura', description: t('slash.coinFlipDesc', 'Flip a coin'), icon: <FaUndo /> },
+    { name: 'tkm', description: t('slash.rpsDesc', 'Play Rock Paper Scissors (@user)'), icon: <FaRegSmile /> },
+    { name: 'xox', description: t('slash.tttDesc', 'Start Tic-Tac-Toe game'), icon: <FaTable /> },
+    { name: 'sec', description: t('slash.chooseDesc', 'Choose from options (/choose a b c)'), icon: <FaTerminal /> },
+    { name: 'cuzdan', description: t('slash.walletDesc', 'View your coin balance'), icon: <FaUserShield /> },
     {
         name: 'transfer',
-        description: 'Coin gönder (/transfer @kullanici miktar)',
+        description: t('slash.transferDesc', 'Send coins (/transfer @user amount)'),
         icon: <FaUserShield />,
     },
-    { name: 'kanban', description: 'Kanban panosunu aç', icon: <FaTable /> },
-    { name: 'kod', description: 'Python kodu çalıştır', icon: <FaCode /> },
-    { name: 'imagegelismis', description: 'Yapay Zeka ile görsel çiz', icon: <FaRegSmile /> },
-    { name: 'temizle', description: 'Mesajları sil (Admin)', icon: <FaBroom />, adminOnly: true },
-    { name: 'yardim', description: 'Komut listesini gör', icon: <FaTerminal /> },
-    { name: 'tema', description: 'Tema Mağazasını aç', icon: <FaTable /> },
+    { name: 'kanban', description: t('slash.kanbanDesc', 'Open Kanban board'), icon: <FaTable /> },
+    { name: 'kod', description: t('slash.runCodeDesc', 'Run Python code'), icon: <FaCode /> },
+    { name: 'imagegelismis', description: t('slash.aiImageDesc', 'Generate image with AI'), icon: <FaRegSmile /> },
+    { name: 'temizle', description: t('slash.clearDesc', 'Delete messages (Admin)'), icon: <FaBroom />, adminOnly: true },
+    { name: 'yardim', description: t('slash.helpDesc', 'View command list'), icon: <FaTerminal /> },
+    { name: 'tema', description: t('slash.themeDesc', 'Open Theme Store'), icon: <FaTable /> },
     {
         name: 'duyuru',
         description: 'Sabit Duyuru Yap (/duyuru message)',
         icon: <FaBroom />,
         adminOnly: true,
     },
-    { name: 'sablon', description: 'Hazır Şablonlar', icon: <FaStickyNote /> },
-    { name: 'shrug', description: '¯\\_(ツ)_/¯ gönder', icon: <FaRegSmile /> },
+    { name: 'sablon', description: t('slash.templatesDesc', 'Ready-made Templates'), icon: <FaStickyNote /> },
+    { name: 'shrug', description: t('slash.shrugDesc', 'Send ¯\\_(ツ)_/¯'), icon: <FaRegSmile /> },
 ];
 
 const SlashCommandList = ({ query, onSelect, activeIndex }) => {
@@ -64,7 +64,7 @@ const SlashCommandList = ({ query, onSelect, activeIndex }) => {
     if (filteredCommands.length === 0) return null;
 
     return (
-        <div aria-label="slash command list" style={styles.container}>
+        <div aria-label={t('chat.slashCommandList', 'Slash commands')} style={styles.container}>
             <div style={styles.header}>
                 <FaTerminal className="mr-6" />
                 KOMUTLAR

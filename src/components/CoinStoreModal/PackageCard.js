@@ -106,8 +106,8 @@ const hoverShadow = (isPopular, enter) =>
             ? '0 12px 48px rgba(88, 101, 242, 0.4), inset 0 0 80px rgba(88, 101, 242, 0.15)'
             : '0 8px 32px rgba(88, 101, 242, 0.3), inset 0 0 60px rgba(88, 101, 242, 0.1)'
         : enter
-          ? '0 8px 32px rgba(255, 215, 0, 0.2)'
-          : '0 4px 20px rgba(0, 0, 0, 0.3)';
+            ? '0 8px 32px rgba(255, 215, 0, 0.2)'
+            : '0 4px 20px rgba(0, 0, 0, 0.3)';
 
 const hoverBorder = (isPopular, enter) =>
     isPopular
@@ -196,7 +196,7 @@ const PackageCard = ({ pkg, loading, selectedPackage, onPurchase }) => {
 
     return (
         <div
-            aria-label="package card"
+            aria-label={t('coinStore.packageCard', 'Package card')}
             style={card(isPopular)}
             onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-8px)';
@@ -212,7 +212,7 @@ const PackageCard = ({ pkg, loading, selectedPackage, onPurchase }) => {
             {isPopular && <div style={S.abs} />}
             {isPopular && (
                 <div style={S.flex}>
-                    <FaStar className="fs-12" /> EN POPÜLER
+                    <FaStar className="fs-12" /> {t('store.mostPopular', 'MOST POPULAR')}
                 </div>
             )}
 

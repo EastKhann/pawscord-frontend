@@ -84,8 +84,8 @@ const PasskeyTab = () => {
             <div className="tab-content">
                 <h3>{t('🔑_passkey_security_anahtarları')}</h3>
                 <div className="info-banner" style={S.bg}>
-                    ⚠️ Tarayıcınız WebAuthn / Passkey desteklemiyor. Chrome, Firefox, Safari or Edge
-                    kullanın.
+                    {t('passkey.noSupport','⚠️ Your browser does not support WebAuthn / Passkey. Use Chrome, Firefox, Safari or Edge')}
+                    {t('passkey.noSupportCont','to use this feature.')}
                 </div>
             </div>
         );
@@ -95,8 +95,8 @@ const PasskeyTab = () => {
         <div className="tab-content">
             <h3>{t('🔑_passkey_security_anahtarları')}</h3>
             <p>
-                Biyometrik kimlik doğrulama (Touch ID, Windows Hello) or fiziksel güvenlik
-                anahtarları (YubiKey) with oturum openın. Passwordye gerek kalmaz.
+                {t('passkey.biometricDesc','Biometric authentication (Touch ID, Windows Hello) or physical security')}
+                {t('passkey.biometricDesc2','keys (YubiKey) to sign in. No password needed.')}
             </p>
 
             {/* ── Registered credentials list ── */}
@@ -105,7 +105,7 @@ const PasskeyTab = () => {
                     {t('loading…')}
                 </div>
             ) : credentials.length === 0 ? (
-                <div style={S.txt2}>Henüz kayıtlı güvenlik anahtarı yok.</div>
+                <div style={S.txt2}>{t('webauthn.noKeys','No security keys registered yet.')}</div>
             ) : (
                 <ul className="passkey-list" style={S.pad}>
                     {credentials.map((cred) => (
@@ -122,7 +122,7 @@ const PasskeyTab = () => {
                                 )}
                                 {cred.last_used && (
                                     <div style={S.txt4}>
-                                        Son kullanım:{' '}
+                                        {t('apiKeys.lastUsed','Last used:')}{' '}
                                         {new Date(cred.last_used).toLocaleDateString('tr-TR')}
                                     </div>
                                 )}
@@ -187,7 +187,7 @@ const PasskeyTab = () => {
 
             <div style={S.txt5}>
                 💡 <strong>{t('i̇pucu')}</strong> Passkey desteği Chrome 108+, Safari 16+, Firefox
-                119+ ve Edge 108+ with çalır. Fiziksel YubiKey for USB or NFC bağlantısı gereklidir.
+                {t('passkey.compatibility','Works with Chrome 119+ and Edge 108+. Physical YubiKey requires USB or NFC connection.')}
             </div>
         </div>
     );

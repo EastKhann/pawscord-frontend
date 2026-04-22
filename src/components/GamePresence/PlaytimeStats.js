@@ -43,7 +43,7 @@ export const PlaytimeStats = ({ username }) => {
         );
 
     return (
-        <div aria-label="playtime stats" className="playtime-stats">
+        <div aria-label={t('gamePresence.playtimeStats', 'Playtime statistics')} className="playtime-stats">
             <div className="ps-header">
                 <h3>🎮 Game Activity</h3>
                 <span className="ps-total">{stats.total_playtime} total</span>

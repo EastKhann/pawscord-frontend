@@ -30,7 +30,7 @@ const KeybindsTab = () => {
         { keys: 'Ctrl + U', descKey: 'underline' },
     ];
     return (
-        <div aria-label="keybinds tab">
+        <div aria-label={t('settings.keybindsTab', 'Key bindings tab')}>
             <SettingSection title={t('settings.tabs.keybinds.keyboardShortcuts')}>
                 {SHORTCUTS.map((s) => (
                     <div key={s.keys} style={S.flex}>

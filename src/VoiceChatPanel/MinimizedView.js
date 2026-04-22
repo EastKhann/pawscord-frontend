@@ -1,7 +1,7 @@
-﻿// frontend/src/VoiceChatPanel/MinimizedView.js
-// 🎨 Kk Ada - Minimized Voice Panel (Discord Tarzı)
+// frontend/src/VoiceChatPanel/MinimizedView.js
+// ?? Kk Ada - Minimized Voice Panel (Discord Tarzi)
 
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Draggable from 'react-draggable';
@@ -28,8 +28,6 @@ const MinimizedView = React.memo(
         toggleScreenShare,
         leaveVoice,
     }) => {
-        const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
         const nodeRef = useRef(null);
         const { t } = useTranslation();
 
@@ -44,10 +42,10 @@ const MinimizedView = React.memo(
                     {/* MINI HEADER */}
                     <div className="mini-drag-handle">
                         <div />
-                        <span>🎤 {roomName}</span>
-                        <div>👥 {userCount}</div>
+                        <span>?? {roomName}</span>
+                        <div>?? {userCount}</div>
                         <button
-                            aria-label="on Toggle Minimize"
+                            aria-label={t('common.minimize', 'Minimize')}
                             onClick={onToggleMinimize}
                             onMouseEnter={(e) =>
                                 (e.target.style.background = 'rgba(255, 255, 255, 0.2)')
@@ -56,7 +54,7 @@ const MinimizedView = React.memo(
                                 (e.target.style.background = 'rgba(255, 255, 255, 0.1)')
                             }
                         >
-                            ⬆️ {t('voice.expand', 'Aç')}
+                            ?? {t('voice.expand', 'A�')}
                         </button>
                     </div>
 
@@ -148,14 +146,14 @@ const MinimizedView = React.memo(
                                     </div>
                                     <div>
                                         {user.isMuted
-                                            ? `🔇 ${t('voice.muted', 'Susturuldu')}`
+                                            ? `?? ${t('voice.muted', 'Susturuldu')}`
                                             : user.isTalking
-                                              ? `🔊 ${t('voice.talking', 'Konuşuyor')}`
-                                              : `🎙️ ${t('voice.active', 'Aktif')}`}
+                                              ? `?? ${t('voice.talking', 'Konusuyor')}`
+                                              : `??? ${t('voice.active', 'Aktif')}`}
                                     </div>
                                 </div>
-                                {user.isCameraOn && <span>📹</span>}
-                                {user.isScreenSharing && <span>🖥️</span>}
+                                {user.isCameraOn && <span>??</span>}
+                                {user.isScreenSharing && <span>???</span>}
                             </div>
                         ))}
                         {userCount > 3 && (
@@ -168,19 +166,19 @@ const MinimizedView = React.memo(
                     {/* MINI CONTROLS */}
                     <div>
                         <MiniButton
-                            icon={isMuted ? '🔇' : '🎤'}
+                            icon={isMuted ? '??' : '??'}
                             active={!isMuted}
                             onClick={toggleMute}
                             title={isMuted ? t('voice.unmute') : t('voice.mute')}
                         />
                         <MiniButton
-                            icon={isCameraOn ? '📹' : '📷'}
+                            icon={isCameraOn ? '??' : '??'}
                             active={isCameraOn}
                             onClick={toggleCamera}
                             title={isCameraOn ? t('voice.stopCamera') : t('voice.camera')}
                         />
                         <MiniButton
-                            icon="🖥️"
+                            icon="???"
                             active={isScreenSharing}
                             onClick={toggleScreenShare}
                             title={
@@ -190,7 +188,7 @@ const MinimizedView = React.memo(
                             }
                         />
                         <MiniButton
-                            icon="❌"
+                            icon="?"
                             danger
                             onClick={leaveVoice}
                             title={t('voice.leave')}

@@ -92,7 +92,7 @@ const SupportButton = ({ onClick }) => {
             </div>
             <div style={_st3}>
                 <div style={_st4}>{t('support.title')}</div>
-                <div style={_st5sub}>☕ Buy Me a Coffee</div>
+                <div style={_st5sub}>☕ {t('support.buyCoffee', 'Buy Me a Coffee')}</div>
             </div>
             <div style={_badge}>♥</div>
         </div>

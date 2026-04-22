@@ -35,7 +35,7 @@ const ServerDetailModal = ({ selectedServer, setSelectedServer }) => {
         label: 'Server Detail',
     });
     return (
-        <div aria-label="server detail modal" className={css.fixedOverlay85} {...overlayProps}>
+        <div aria-label={t('admin.serverDetailModal', 'Server detail')} className={css.fixedOverlay85} {...overlayProps}>
             <div style={S.bg} {...dialogProps}>
                 <div className="flex-between-mb20">
                     <h3 className="white-m0">🏠 {selectedServer.name}</h3>

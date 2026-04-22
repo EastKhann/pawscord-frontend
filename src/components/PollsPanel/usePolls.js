@@ -141,7 +141,7 @@ const usePolls = (serverId) => {
     };
 
     const endPoll = async (pollId) => {
-        if (!(await confirmDialog('Bu anketi sonlandırmak istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('poll.endConfirm','Are you sure you want to end this poll?')))) return;
         try {
             const r = await fetch(`${apiBaseUrl}/polls/${pollId}/end/`, {
                 method: 'POST',
@@ -158,7 +158,7 @@ const usePolls = (serverId) => {
     };
 
     const deletePoll = async (pollId) => {
-        if (!(await confirmDialog('Bu anketi silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('poll.deleteConfirm','Are you sure you want to delete this poll?')))) return;
         try {
             const r = await fetch(`${apiBaseUrl}/polls/${pollId}/delete/`, {
                 method: 'DELETE',

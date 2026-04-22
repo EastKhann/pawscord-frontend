@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import './CustomCommandsPanel.css';
 import useCustomCommands from '../CustomCommandsPanel/useCustomCommands';
 import CommandForm from '../CustomCommandsPanel/CommandForm';
+import { useTranslation } from 'react-i18next';
 
 const CustomCommandsPanel = ({ serverId, onClose }) => {
+    const { t } = useTranslation();
     const [error, setError] = useState(null);
     const {
         commands,
@@ -31,7 +33,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
                 <div className="custom-commands-panel">
                     <div className="loading-state">
                         <div className="spinner"></div>
-                        <p>Komutlar yükleniyor...</p>
+                        <p>{t('customCmds.loading', 'Loading commands...')}</p>
                     </div>
                 </div>
             </div>
@@ -54,7 +56,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
             >
                 <div className="commands-header">
                     <h2>⚡ Custom Commands</h2>
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
@@ -79,14 +81,14 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
 
                     <div className="action-buttons">
                         <button
-                            aria-label="➕ New Command"
+                            aria-label={t('customCmds.newCommand', 'New command')}
                             className="create-btn"
                             onClick={() => setCreating(true)}
                         >
                             ➕ New Command
                         </button>
                         <button
-                            aria-label="export Commands"
+                            aria-label={t('customCmds.exportCommands', 'Export commands')}
                             className="export-btn"
                             onClick={exportCommands}
                         >
@@ -117,79 +119,79 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
                     <div className="commands-list">
                         {commands.length > 0
                             ? commands.map((cmd) => (
-                                  <div
-                                      key={cmd.id}
-                                      className={`command-card ${!cmd.enabled ? 'disabled' : ''}`}
-                                  >
-                                      <div className="command-header">
-                                          <div className="command-info">
-                                              <h4>{cmd.name}</h4>
-                                              {cmd.description && <p>{cmd.description}</p>}
-                                          </div>
-                                          <label className="toggle-switch">
-                                              <input
-                                                  type="checkbox"
-                                                  checked={cmd.enabled}
-                                                  onChange={(e) =>
-                                                      toggleCommand(cmd.id, e.target.checked)
-                                                  }
-                                              />
-                                              <span className="slider"></span>
-                                          </label>
-                                      </div>
-                                      <div className="command-response">
-                                          <strong>Response:</strong> {cmd.response}
-                                      </div>
-                                      <div className="command-meta">
-                                          <span className="meta-item">🎯 {cmd.trigger_type}</span>
-                                          <span className="meta-item">👥 {cmd.permissions}</span>
-                                          {cmd.cooldown > 0 && (
-                                              <span className="meta-item">⏱️ {cmd.cooldown}s</span>
-                                          )}
-                                          <span className="meta-item">
-                                              📊 {cmd.use_count || 0} uses
-                                          </span>
-                                      </div>
-                                      <div className="command-actions">
-                                          <button
-                                              aria-label="Edit command"
-                                              className="edit-btn"
-                                              onClick={() => {
-                                                  setEditingCommand(cmd);
-                                                  setNewCommand({
-                                                      name: cmd.name,
-                                                      description: cmd.description,
-                                                      response: cmd.response,
-                                                      trigger_type: cmd.trigger_type,
-                                                      enabled: cmd.enabled,
-                                                      cooldown: cmd.cooldown,
-                                                      permissions: cmd.permissions,
-                                                      delete_trigger: cmd.delete_trigger,
-                                                      embed: cmd.embed,
-                                                      embed_color: cmd.embed_color,
-                                                  });
-                                                  setCreating(true);
-                                              }}
-                                          >
-                                              ✏️
-                                          </button>
-                                          <button
-                                              aria-label="Delete command"
-                                              className="delete-btn"
-                                              onClick={() => deleteCommand(cmd.id)}
-                                          >
-                                              🗑️
-                                          </button>
-                                      </div>
-                                  </div>
-                              ))
+                                <div
+                                    key={cmd.id}
+                                    className={`command-card ${!cmd.enabled ? 'disabled' : ''}`}
+                                >
+                                    <div className="command-header">
+                                        <div className="command-info">
+                                            <h4>{cmd.name}</h4>
+                                            {cmd.description && <p>{cmd.description}</p>}
+                                        </div>
+                                        <label className="toggle-switch">
+                                            <input
+                                                type="checkbox"
+                                                checked={cmd.enabled}
+                                                onChange={(e) =>
+                                                    toggleCommand(cmd.id, e.target.checked)
+                                                }
+                                            />
+                                            <span className="slider"></span>
+                                        </label>
+                                    </div>
+                                    <div className="command-response">
+                                        <strong>Response:</strong> {cmd.response}
+                                    </div>
+                                    <div className="command-meta">
+                                        <span className="meta-item">🎯 {cmd.trigger_type}</span>
+                                        <span className="meta-item">👥 {cmd.permissions}</span>
+                                        {cmd.cooldown > 0 && (
+                                            <span className="meta-item">⏱️ {cmd.cooldown}s</span>
+                                        )}
+                                        <span className="meta-item">
+                                            📊 {cmd.use_count || 0} uses
+                                        </span>
+                                    </div>
+                                    <div className="command-actions">
+                                        <button
+                                            aria-label={t('customCmds.editCommand', 'Edit command')}
+                                            className="edit-btn"
+                                            onClick={() => {
+                                                setEditingCommand(cmd);
+                                                setNewCommand({
+                                                    name: cmd.name,
+                                                    description: cmd.description,
+                                                    response: cmd.response,
+                                                    trigger_type: cmd.trigger_type,
+                                                    enabled: cmd.enabled,
+                                                    cooldown: cmd.cooldown,
+                                                    permissions: cmd.permissions,
+                                                    delete_trigger: cmd.delete_trigger,
+                                                    embed: cmd.embed,
+                                                    embed_color: cmd.embed_color,
+                                                });
+                                                setCreating(true);
+                                            }}
+                                        >
+                                            ✏️
+                                        </button>
+                                        <button
+                                            aria-label={t('customCmds.deleteCommand', 'Delete command')}
+                                            className="delete-btn"
+                                            onClick={() => deleteCommand(cmd.id)}
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
                             : !creating && (
-                                  <div className="empty-state">
-                                      <div className="empty-icon">⚡</div>
-                                      <h3>Henüz özel komut yok</h3>
-                                      <p>Sunucunuz için özel komutlar oluşturun</p>
-                                  </div>
-                              )}
+                                <div className="empty-state">
+                                    <div className="empty-icon">⚡</div>
+                                    <h3>{t('customCmds.noCommands', 'No custom commands yet')}</h3>
+                                    <p>{t('customCmds.hint', 'Create custom commands for your server')}</p>
+                                </div>
+                            )}
                     </div>
                 </div>
             </div>

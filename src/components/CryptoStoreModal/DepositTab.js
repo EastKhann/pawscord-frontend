@@ -181,7 +181,7 @@ const DepositTab = ({
                         }}
                         placeholder={t(
                             'store.deposit.txidPlaceholder',
-                            "İşlem ID'nizi buraya yapıştırın"
+                            t('depositTab.txIdPlaceholder','Paste your transaction ID here')
                         )}
                         style={S.bg5}
                         disabled={loading}

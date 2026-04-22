@@ -1,6 +1,26 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key, fallback) => {
+            const TR = {
+                'premiumStore.title': 'Premium Magaza',
+                'premium.premium': 'Premium',
+                'premium.store': 'Magaza',
+                'premium.serverBoost': 'Server Boost',
+                'premium.buyCoins': 'Buy Coins',
+            };
+            return TR[key] || (typeof fallback === 'string' ? fallback : key);
+        },
+        i18n: { language: 'tr', changeLanguage: vi.fn() },
+    }),
+    Trans: ({ children }) => children,
+    I18nextProvider: ({ children }) => children,
+    withTranslation: () => (Component) => Component,
+    initReactI18next: { type: '3rdParty', init: vi.fn() },
+}));
+
 // Mock sub-components
 vi.mock('../../components/PremiumStoreModal/PremiumTab', () => ({
     default: (props) => (

@@ -43,7 +43,7 @@ const DeleteConfirmModal = ({ deleteConfirm, handleServerDelete, setDeleteConfir
         label: 'Delete Confirmation',
     });
     return (
-        <div aria-label="delete confirm modal" style={S.flex} {...overlayProps}>
+        <div aria-label={t('admin.deleteConfirmModal', 'Delete confirmation')} style={S.flex} {...overlayProps}>
             <div className={css.modalCard420} {...dialogProps}>
                 <h3 className={css.dangerH3}>{t('delete_confirmation')}</h3>
                 <p className={css.mutedText}>

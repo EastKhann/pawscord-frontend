@@ -87,7 +87,7 @@ export default function useWebhooks(serverId) {
     };
 
     const deleteWebhook = async (webhookId) => {
-        if (!(await confirmDialog('Bu webhook’u silmek istediğinizden emin misiniz?'))) return;
+        if (!(await confirmDialog(t('webhooks.deleteConfirm', 'Are you sure you want to delete this webhook?')))) return;
         try {
             const res = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/delete/`, {
                 method: 'DELETE',
@@ -117,7 +117,7 @@ export default function useWebhooks(serverId) {
     const regenerateToken = async (webhookId) => {
         if (
             !(await confirmDialog(
-                'Webhook token’ını yenilemek istediğinizden emin misiniz? Eski token geçersiz hale gelecek.'
+                t('webhooks.renewConfirm', 'Are you sure you want to renew the webhook token? The old token will become invalid.')
             ))
         )
             return;

@@ -3,8 +3,9 @@
 // frontend/src/VoiceChatPanel/UserVideoCard/UserOverlay.js
 // 🎨 Bottom info overlay with talking indicator, connection quality, username, status icons
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import i18n from '../../i18n';
 const _s = (o) => o;
 
 // -- extracted inline style constants --
@@ -55,10 +56,8 @@ const _st7 = { fontSize: '16px' };
  * connection quality indicator, and status icons.
  */
 const UserOverlay = ({ user, isActive, connectionQuality }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     return (
-        <div aria-label="user overlay" style={_st1}>
+        <div aria-label={i18n.t('aria.userOverlay', { defaultValue: 'User Status' })} style={_st1}>
             {/* 🔥 Talking Indicator Waves */}
             {user.isTalking && (
                 <div style={_st2}>

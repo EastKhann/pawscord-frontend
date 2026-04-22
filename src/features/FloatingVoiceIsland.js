@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
+import { useTranslation } from 'react-i18next';
 
 // -- dynamic style helpers (pass 2) --
 // -- extracted inline style constants --
@@ -30,6 +31,7 @@ const FloatingVoiceIsland = ({
     const nodeRef = useRef(null);
 
     // Enhanced state management
+    const { t } = useTranslation();
     const [isInteracting, setIsInteracting] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -184,7 +186,7 @@ const FloatingVoiceIsland = ({
                 disabled={false}
                 bounds="parent"
             >
-                <div aria-label="floating voice island" ref={nodeRef} className={animationClass}>
+                <div aria-label={t('aria.floatingVoiceIsland', 'Voice Island')} ref={nodeRef} className={animationClass}>
                     {isMinimized ? (
                         // 🎯 MINIMIZED STATE - Compact Bar
                         <div
@@ -232,7 +234,7 @@ const FloatingVoiceIsland = ({
                                 <div style={styles.headerContent}>
                                     <div style={styles.headerLeft}>
                                         <span style={styles.voiceIcon}>🎤</span>
-                                        <h3 style={styles.panelHeader}>SES SOHBETİ</h3>
+                                        <h3 style={styles.panelHeader}>{t('voiceIsland.title','VOICE CHAT')}</h3>
                                     </div>
                                     <div style={styles.headerRight}>
                                         {/* 🛠️ Custom Header Actions */}
@@ -256,7 +258,7 @@ const FloatingVoiceIsland = ({
                                             onTouchStart={handleStopPropagation}
                                             style={styles.minimizeButton}
                                             className="voice-btn-modern"
-                                            title="Küçült"
+                                            title={t('common.minimize', 'Minimize')}
                                         >
                                             ➖
                                         </button>

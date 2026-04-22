@@ -48,28 +48,28 @@ const DatabaseTab = () => {
                     <h3 className={css.cardTitleSm}>{t('admin.panel.dbOperations')}</h3>
                     <div className={css.grid2col10Mt14}>
                         <button
-                            aria-label="Backup database"
+                            aria-label={t('admin.backupDatabase', 'Backup database')}
                             onClick={handleBackup}
                             className={css.actionBtnBluePad12}
                         >
-                            <FaCloudUploadAlt /> Backup
+                            <FaCloudUploadAlt /> {t('admin.backup', 'Backup')}
                         </button>
                         <button
-                            aria-label="Restore database"
+                            aria-label={t('admin.restoreDatabase', 'Restore database')}
                             className={css.actionBtnGreenPad12}
                             onClick={() => toast.info(t('common.comingSoon'))}
                         >
-                            <FaCloudDownloadAlt /> Restore
+                            <FaCloudDownloadAlt /> {t('admin.restore', 'Restore')}
                         </button>
                         <button
-                            aria-label="Clear cache"
+                            aria-label={t('admin.clearCache', 'Clear cache')}
                             onClick={handleClearCache}
                             className={css.actionBtnOrangePad12}
                         >
-                            <FaBroom /> Cache Clear
+                            <FaBroom /> {t('admin.cacheClr', 'Cache Clear')}
                         </button>
                         <button
-                            aria-label="Delete old logs"
+                            aria-label={t('admin.deleteOldLogs', 'Delete old logs')}
                             className={css.actionBtnRedPad12}
                             onClick={handleDeleteOldLogs}
                         >
@@ -86,14 +86,14 @@ const DatabaseTab = () => {
                                     backupStatus === 'success'
                                         ? '#23a55920'
                                         : backupStatus === 'error'
-                                          ? '#e74c3c20'
-                                          : '#5865f220',
+                                            ? '#e74c3c20'
+                                            : '#5865f220',
                                 color:
                                     backupStatus === 'success'
                                         ? '#23a559'
                                         : backupStatus === 'error'
-                                          ? '#e74c3c'
-                                          : '#5865f2',
+                                            ? '#e74c3c'
+                                            : '#5865f2',
                             }}
                         >
                             {backupStatus === 'running' && '⏳ Yedekleme devam ediyor...'}

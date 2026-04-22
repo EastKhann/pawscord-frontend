@@ -21,7 +21,7 @@ import logger from '../../utils/logger';
 export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
     const { t } = useTranslation();
 
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Etkinlik Oluştur' });
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('event.createTitle', 'Create Event') });
 
     const [formData, setFormData] = useState({
         name: '',
@@ -117,9 +117,9 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
         <div className="event-modal-overlay" {...overlayProps}>
             <div className="event-modal" {...dialogProps}>
                 <div className="em-header">
-                    <h2>📅 Etkinlik Oluştur</h2>
+                    <h2>{t('event.createTitle2', '📅 Create Event')}</h2>
 
-                    <button aria-label="Close" className="em-close" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="em-close" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -135,7 +135,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
                             placeholder={t('oyun_gecesi')}
                             maxLength={100}
                             required
-                            aria-label="Name"
+                            aria-label={t('createEvent.nameInput', 'Event name')}
                         />
                     </div>
 
@@ -207,7 +207,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
                             value={formData.external_location}
                             onChange={(e) => handleChange('external_location', e.target.value)}
                             placeholder={t('https_or_adres')}
-                            aria-label="External Location"
+                            aria-label={t('createEvent.locationInput', 'External location')}
                         />
                     </div>
 
@@ -237,7 +237,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
 
                                 <option value="weekly">{t('her_week')}</option>
 
-                                <option value="biweekly">İki weekda bir</option>
+                                <option value="biweekly">{t('event.biweekly', 'Every two weeks')}</option>
 
                                 <option value="monthly">{t('her_month')}</option>
                             </select>
@@ -250,7 +250,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
                         </button>
 
                         <button type="submit" className="em-submit" disabled={isLoading}>
-                            {isLoading ? 'Oluşturuluyor...' : 'Etkinlik Oluştur'}
+                            {isLoading ? t('common.creating', 'Creating...') : t('event.create', 'Create Event')}
                         </button>
                     </div>
                 </form>

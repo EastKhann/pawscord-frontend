@@ -5,11 +5,10 @@
  */
 
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 import './ErrorBoundary.css';
 
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import logger from '../../utils/logger';
 import * as Sentry from '@sentry/react';
 
@@ -124,7 +123,7 @@ class ErrorBoundary extends React.Component {
             if (this.state.errorCount > 3) {
                 return (
                     <div
-                        aria-label="use error handler"
+                        aria-label={t('errors.boundary', 'Error boundary')}
                         className="error-boundary critical"
                         role="alert"
                         aria-live="assertive"

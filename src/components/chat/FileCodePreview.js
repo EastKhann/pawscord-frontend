@@ -187,7 +187,7 @@ const FileCodePreview = ({ fileUrl, fileName, fileSize, onDownload }) => {
                 </div>
                 <div style={styles.headerActions}>
                     <button
-                        aria-label="handle Copy"
+                        aria-label={t('filePreview.copy', 'Copy code')}
                         onClick={handleCopy}
                         style={styles.headerBtn}
                         title={copied ? 'Copied!' : 'Kodu Copy'}
@@ -196,83 +196,86 @@ const FileCodePreview = ({ fileUrl, fileName, fileSize, onDownload }) => {
                     </button>
                     {hasMore && (
                         <button
-                            aria-label="Action button"
-                            onClick={() => setExpanded(!expanded)}
-                            style={styles.headerBtn}
-                            title={expanded ? 'Daralt' : t('ui.allnu_goster')}
+                            aria-label={expanded ? t('filePreview.collapse', 'Collapse') : t('filePreview.expand', 'Expand')}
+                    style={styles.headerBtn}
+                    title={expanded ? 'Daralt' : t('ui.allnu_goster')}
                         >
-                            <FaExpand />
-                        </button>
+                    <FaExpand />
+                </button>
                     )}
-                    <a
-                        href={fileUrl}
-                        download={fileName}
-                        style={styles.headerBtn}
-                        title="İndir"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <FaDownload />
-                    </a>
-                </div>
-            </div>
-
-            {/* Code Content */}
-            <div style={styles.codeArea}>
-                {loading ? (
-                    <div style={styles.loadingArea}>
-                        <div style={styles.loadingLine} />
-                        <div style={loadingLineStyles.primary} />
-                        <div style={loadingLineStyles.secondary} />
-                        <div style={loadingLineStyles.tertiary} />
-                    </div>
-                ) : (
-                    <table style={styles.codeTable}>
-                        <tbody>
-                            {displayLines.map((line, i) => (
-                                <tr key={`item-${i}`} style={styles.codeLine}>
-                                    <td style={styles.lineNumber}>{i + 1}</td>
-                                    <td style={styles.lineContent}>
-                                        {line.length > MAX_LINE_LENGTH && !expanded
-                                            ? line.substring(0, MAX_LINE_LENGTH) + '…'
-                                            : line || ' '}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
-
-            {/* Footer - "X more lines" */}
-            {hasMore && !expanded && (
-                <div
-                    style={styles.footer}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => setExpanded(true)}
-                    onKeyDown={(e) =>
-                        (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
-                    }
+                <a
+                    href={fileUrl}
+                    download={fileName}
+                    style={styles.headerBtn}
+                    title={t('common.download', 'Download')}
+                    onClick={(e) => e.stopPropagation()}
                 >
-                    <span style={styles.footerText}>
-                        {totalLines - MAX_PREVIEW_LINES} satır daha...
-                    </span>
-                </div>
-            )}
-            {expanded && hasMore && (
-                <div
-                    style={styles.footer}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => setExpanded(false)}
-                    onKeyDown={(e) =>
-                        (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
-                    }
-                >
-                    <span style={styles.footerText}>Daralt</span>
-                </div>
-            )}
+                    <FaDownload />
+                </a>
+            </div>
         </div>
+
+            {/* Code Content */ }
+    <div style={styles.codeArea}>
+        {loading ? (
+            <div style={styles.loadingArea}>
+                <div style={styles.loadingLine} />
+                <div style={loadingLineStyles.primary} />
+                <div style={loadingLineStyles.secondary} />
+                <div style={loadingLineStyles.tertiary} />
+            </div>
+        ) : (
+            <table style={styles.codeTable}>
+                <tbody>
+                    {displayLines.map((line, i) => (
+                        <tr key={`item-${i}`} style={styles.codeLine}>
+                            <td style={styles.lineNumber}>{i + 1}</td>
+                            <td style={styles.lineContent}>
+                                {line.length > MAX_LINE_LENGTH && !expanded
+                                    ? line.substring(0, MAX_LINE_LENGTH) + '…'
+                                    : line || ' '}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        )}
+    </div>
+
+    {/* Footer - "X more lines" */ }
+    {
+        hasMore && !expanded && (
+            <div
+                style={styles.footer}
+                role="button"
+                tabIndex={0}
+                onClick={() => setExpanded(true)}
+                onKeyDown={(e) =>
+                    (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
+                }
+            >
+                <span style={styles.footerText}>
+                    {totalLines - MAX_PREVIEW_LINES} {t('filePreview.moreLines', 'more lines...')}
+                </span>
+            </div>
+        )
+    }
+    {
+        expanded && hasMore && (
+            <div
+                style={styles.footer}
+                role="button"
+                tabIndex={0}
+                onClick={() => setExpanded(false)}
+                onKeyDown={(e) =>
+                    (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
+                }
+            >
+                <span style={styles.footerText}>Daralt</span>
+            </div>
+        )
+    }
+        </div >
     );
 };
 

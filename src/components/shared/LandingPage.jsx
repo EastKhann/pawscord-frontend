@@ -62,12 +62,12 @@ export default function LandingPage() {
                                     className="waitlist-input"
                                 />
                                 <button
-                                    aria-label="button"
+                                    aria-label={t('landing.joinWaitlist', 'Join waitlist')}
                                     type="submit"
                                     disabled={loading}
                                     className="waitlist-btn"
                                 >
-                                    {loading ? t('landing.joining') : t('landing.joinWaitlist')}
+                                    {loading ? t('landing.joining', 'Joining...') : t('landing.joinWaitlist', 'Join Waitlist')}
                                 </button>
                             </form>
                         ) : (
@@ -86,17 +86,17 @@ export default function LandingPage() {
                     <div className="hero-image">
                         <img
                             src="/static/images/hero-screenshot.png"
-                            alt="Pawscord Interface"
+                            alt={t('alt.pawscordInterface', 'Pawscord Interface')}
                             onError={(e) => {
                                 e.target.style.display = 'none';
                             }}
                         />
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* Features Grid */}
-            <section className="features">
+            < section className="features" >
                 <div className="container">
                     <h2 className="section-title">{t('landing.whyPawscord')}</h2>
 
@@ -138,40 +138,40 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* Screenshots */}
-            <section className="screenshots">
+            < section className="screenshots" >
                 <div className="container">
                     <h2 className="section-title">{t('landing.seeInAction')}</h2>
                     <div className="screenshots-grid">
                         <img
                             src="/static/images/screenshot-chat.png"
-                            alt="Chat Interface"
+                            alt={t('alt.chatInterface', 'Chat Interface')}
                             onError={(e) => {
                                 e.target.style.display = 'none';
                             }}
                         />
                         <img
                             src="/static/images/screenshot-voice.png"
-                            alt="Voice Channels"
+                            alt={t('alt.voiceChannels', 'Voice Channels')}
                             onError={(e) => {
                                 e.target.style.display = 'none';
                             }}
                         />
                         <img
                             src="/static/images/screenshot-mobile.png"
-                            alt="Mobile App"
+                            alt={t('alt.mobileApp', 'Mobile App')}
                             onError={(e) => {
                                 e.target.style.display = 'none';
                             }}
                         />
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* Social Proof */}
-            <section className="social-proof">
+            < section className="social-proof" >
                 <div className="container">
                     <div className="stats">
                         <div className="stat">
@@ -192,10 +192,10 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* CTA Section */}
-            <section className="cta">
+            < section className="cta" >
                 <div className="container">
                     <h2>{t('landing.readyToJoin')}</h2>
                     <p>{t('landing.firstUsers')}</p>
@@ -210,7 +210,7 @@ export default function LandingPage() {
                                 className="waitlist-input"
                             />
                             <button
-                                aria-label="button"
+                                aria-label={t('landing.getEarlyAccess', 'Get early access')}
                                 type="submit"
                                 disabled={loading}
                                 className="waitlist-btn"
@@ -220,10 +220,10 @@ export default function LandingPage() {
                         </form>
                     )}
                 </div>
-            </section>
+            </section >
 
             {/* Footer */}
-            <footer className="footer">
+            < footer className="footer" >
                 <div className="container">
                     <div className="footer-links">
                         <a
@@ -240,6 +240,6 @@ export default function LandingPage() {
                     <p className="copyright">{t('landing.copyright')}</p>
                 </div>
             </footer>
-        </div>
+        </div >
     );
 }

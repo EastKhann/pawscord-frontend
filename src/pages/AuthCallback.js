@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+﻿import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
@@ -66,7 +66,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
             if (errorParam) {
                 logger.error('🔐 [AuthCallback] Error param:', errorParam);
                 setStatus('error');
-                setError('Google girişi başarısız. Lütfen tekrar deneyin.');
+                setError(t('auth.googleFailed','Google login failed. Please try again.'));
                 timerRefs.current.push(
                     setTimeout(() => {
                         try {
@@ -111,7 +111,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 } catch (err) {
                     logger.error('🔐 [AuthCallback] Direct token error:', err);
                     setStatus('error');
-                    setError('Token işleme hatası.');
+                    setError(t('auth.tokenError','Token processing error.'));
                     timerRefs.current.push(
                         setTimeout(() => {
                             try {
@@ -132,7 +132,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
                     window.location.hash
                 );
                 setStatus('error');
-                setError('Yetkilendirme bilgisi bulunamadı.');
+                setError(t('auth.authNotFound','Authorization information not found.'));
                 timerRefs.current.push(
                     setTimeout(() => {
                         try {
@@ -210,29 +210,29 @@ const AuthCallback = ({ apiBaseUrl }) => {
     }, [navigate, login, apiBaseUrl]);
 
     return (
-        <div aria-label="auth callback" className="auth-callback-container">
+        <div aria-label={t('aria.authCallback', 'Authentication')} className="auth-callback-container">
             <div className="auth-callback-card">
                 {status === 'processing' && (
                     <>
                         <div className="auth-spinner"></div>
-                        <h2>İşleniyor...</h2>
-                        <p>Google hesabınız doğrulanoıyor</p>
+                        <h2>{t('auth.processing', 'Processing...')}</h2>
+                        <p>{t('auth.verifyingGoogle', 'Verifying your Google account')}</p>
                     </>
                 )}
 
                 {status === 'exchanging' && (
                     <>
                         <div className="auth-spinner"></div>
-                        <h2>Giriş yapılıyor...</h2>
-                        <p>Güvenli bağlantı kuruluyor</p>
+                        <h2>{t('auth.loggingIn', 'Signing in...')}</h2>
+                        <p>{t('auth.secureConnection', 'Establishing secure connection')}</p>
                     </>
                 )}
 
                 {status === 'success' && (
                     <>
                         <div className="auth-success-icon">✓</div>
-                        <h2>Giriş Başarılı!</h2>
-                        <p>Yönlendiriliyor...</p>
+                        <h2>{t('auth.loginSuccess', 'Sign In Successful!')}</h2>
+                        <p>{t('auth.redirecting', 'Redirecting...')}</p>
                     </>
                 )}
 
@@ -241,7 +241,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
                         <div className="auth-error-icon">✕</div>
                         <h2>{t('common.error')}</h2>
                         <p>{error}</p>
-                        <p className="auth-redirect-text">Ana sayfaya yönlendiriliyor...</p>
+                        <p className="auth-redirect-text">{t('auth.redirectingHome', 'Redirecting to home page...')}</p>
                     </>
                 )}
             </div>

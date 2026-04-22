@@ -17,6 +17,8 @@ describe('useWindowWidth', () => {
 
     beforeEach(() => {
         originalInnerWidth = window.innerWidth;
+        // Make requestAnimationFrame synchronous so resize updates are immediate
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => { cb(0); return 0; });
     });
 
     afterEach(() => {

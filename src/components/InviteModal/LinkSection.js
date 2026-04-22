@@ -35,7 +35,7 @@ const LinkSection = ({
     };
 
     return (
-        <div aria-label="link section" style={st.linkSection}>
+        <div aria-label={t('inviteModal.linkSection', 'Invite link section')} style={st.linkSection}>
             <div style={st.linkLabel}>{t('veya_bi̇r_sunucu_davet_li̇nki̇_gönder')}</div>
 
             <div style={st.linkBox}>
@@ -56,7 +56,7 @@ const LinkSection = ({
                                 readOnly
                                 style={st.linkInput}
                                 onClick={(e) => e.target.select()}
-                                aria-label="Invite Link"
+                                aria-label={t('inviteModal.inviteLink', 'Invite link')}
                             />
                         </div>
 

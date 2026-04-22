@@ -43,7 +43,7 @@ const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers, isDeaf
     return (
         <>
             {/* Ses oynatıcıları - gizli (sadece arka planda çalışır) */}
-            <div aria-label="voice audio controller" style={_st1}>
+            <div aria-label={t('aria.voiceAudioController', 'Voice Audio')} style={_st1}>
                 {Object.entries(remoteStreams).map(([username, stream]) => (
                     <AudioPlayer
                         key={`${username}-${stream.id}-${stream.getAudioTracks().length}`}

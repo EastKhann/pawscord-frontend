@@ -41,7 +41,7 @@ const VerifyEmailPage = ({ apiBaseUrl }) => {
             }
         } catch (error) {
             setStatus('error');
-            setMessage('Bağlantı hatası oluştu');
+            setMessage(t('common.connectionError','A connection error occurred'));
         }
     };
 

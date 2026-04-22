@@ -85,7 +85,7 @@ const VoiceUserItem = ({
         if (!activityMeta) return null;
         return (
             <span
-                aria-label="get activity meta"
+                aria-label={t('aria.activityBadge', 'Activity')}
                 style={{
                     flexShrink: 0,
                     display: 'inline-flex',

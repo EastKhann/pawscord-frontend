@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/CustomStatusModal.js
 
@@ -35,7 +35,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
             label: t('ui.ozel_2'),
             icon: '✨',
             color: '#5865F2',
-            placeholder: 'Özel durumunu yaz...',
+            placeholder: t('customStatusModal.customPlaceholder', 'Write your custom status...'),
         },
 
         {
@@ -67,7 +67,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
             label: t('ui.yayinda'),
             icon: '📡',
             color: '#9146FF',
-            placeholder: 'Yayın başlığı...',
+            placeholder: t('customStatusModal.streamPlaceholder', 'Stream title...'),
         },
 
         {
@@ -75,7 +75,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
             label: t('ui.yarisiyor'),
             icon: '',
             color: '#f0b232',
-            placeholder: 'Hangi yarışma?',
+            placeholder: t('customStatusModal.competitionPlaceholder', 'Which competition?'),
         },
 
         {
@@ -83,7 +83,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
             label: t('ui.calisiyor_2'),
             icon: '💼',
             color: '#80848e',
-            placeholder: 'Ne üzerinde çalıyorsun?',
+            placeholder: t('customStatusModal.workingPlaceholder', 'What are you working on?'),
         },
 
         {
@@ -252,9 +252,9 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                 {/* Header */}
 
                 <div style={styles.header}>
-                    <h3 style={styles.title}>Durum Ayarla</h3>
+                    <h3 style={styles.title}>{t('status.setStatus', 'Set Status')}</h3>
 
-                    <button aria-label="Close" onClick={onClose} style={styles.closeBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeBtn}>
                         <FaTimes />
                     </button>
                 </div>
@@ -284,23 +284,16 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                                 ...styles.typeBtn,
                                 ...(statusType === type.key
                                     ? {
-                                          backgroundColor: `${type.color}20`,
-                                          borderColor: type.color,
-                                          color: type.color,
-                                      }
+                                        backgroundColor: `${type.color}20`,
+                                        borderColor: type.color,
+                                        color: type.color,
+                                    }
                                     : {}),
                             };
 
                             return (
                                 <button
-                                    aria-label="Action button"
-                                    key={type.key}
-                                    onClick={() => {
-                                        setStatusType(type.key);
-
-                                        setEmoji(type.icon);
-                                    }}
-                                    style={typeBtnStyle}
+                                    aria-label={t('status.selectType', 'Select status type {{type}}', { type: type.label })}
                                 >
                                     <span>{type.icon}</span>
 
@@ -322,7 +315,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                         onChange={(e) => setEmoji(e.target.value.slice(-2))}
                         style={styles.emojiInput}
                         maxLength={4}
-                        aria-label="Emoji"
+                        aria-label={t('customStatus.emojiInput', 'Status emoji')}
                     />
                 </div>
 
@@ -338,7 +331,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                         placeholder={selectedType.placeholder}
                         style={styles.textInput}
                         maxLength={100}
-                        aria-label="Text"
+                        aria-label={t('customStatus.textInput', 'Status text')}
                     />
 
                     <span style={styles.charCount}>{text.length}/100</span>
@@ -358,10 +351,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
 
                             return (
                                 <button
-                                    aria-label="Action button"
-                                    key={opt.label}
-                                    onClick={() => setExpiresIn(opt.value)}
-                                    style={expiryBtnStyle}
+                                    aria-label={t('status.expiry', 'Clear after {{when}}', { when: opt.label })}
                                 >
                                     {opt.label}
                                 </button>
@@ -375,28 +365,28 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                 <div style={styles.actions}>
                     {currentStatus && (
                         <button
-                            aria-label="handle Clear"
+                            aria-label={t('status.clearStatus', 'Clear status')}
                             onClick={handleClear}
                             style={styles.clearBtn}
                             disabled={loading}
                         >
-                            Statusu Clear
+                            {t('status.clearStatus', 'Clear Status')}
                         </button>
                     )}
 
                     <div className="flex-1" />
 
-                    <button aria-label="on Close" onClick={onClose} style={styles.cancelBtn}>
+                    <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.cancelBtn}>
                         {t('common.cancel')}
                     </button>
 
                     <button
-                        aria-label="handle Save"
+                        aria-label={t('common.save', 'Save')}
                         onClick={handleSave}
                         style={styles.saveBtn}
                         disabled={loading || !text.trim()}
                     >
-                        {loading ? '...' : 'Save'}
+                        {loading ? '...' : t('common.save', 'Save')}
                     </button>
                 </div>
             </div>

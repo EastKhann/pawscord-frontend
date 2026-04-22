@@ -9,6 +9,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 import logger from '../utils/logger';
+import i18n from '../i18n';
 
 // -- extracted inline style constants --
 const _st1 = {
@@ -178,8 +179,8 @@ export class ErrorBoundary extends React.Component {
 
             // Default fallback UI
             return (
-                <div aria-label="use error handler" style={_st1}>
-                    <h2 style={_st2}>⚠️ Bir Error Oluştu</h2>
+                <div aria-label={i18n.t('aria.errorBoundary', { defaultValue: 'Error' })} style={_st1}>
+                    <h2 style={_st2}>⚠️ An Error Occurred</h2>
                     <p style={_st3}>Sorry, something went wrong.</p>
                     {import.meta.env.MODE === 'development' && (
                         <details style={_st4}>

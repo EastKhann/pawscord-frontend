@@ -107,7 +107,7 @@ const PinnedMessages = ({
                     <input
                         style={styles.searchInput}
                         type="text"
-                        placeholder="Sabitlenmiş mesajlarda ara..."
+                        placeholder={t('pins.searchPinned', 'Search pinned messages...')}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -154,9 +154,9 @@ const PinnedMessages = ({
                                                 <button
                                                     style={styles.unpinBtn}
                                                     onClick={() => handleUnpin(msg.id)}
-                                                    title="Sabitlemeyi kaldır"
+                                                    title={t('message.unpin', 'Remove pin')}
                                                 >
-                                                    ? Kaldır
+                                                    ? {t('pinnedMsgs.unpin','Unpin')}
                                                 </button>
                                             )}
                                         </div>

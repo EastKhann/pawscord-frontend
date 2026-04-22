@@ -311,14 +311,14 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
                     <h2>Otomatik Moderasyon</h2>
 
-                    <button aria-label="Close" className="close-btn" onClick={onClose}>
+                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
                 </div>
 
                 <div className="panel-actions">
                     <button
-                        aria-label="handle Show Create Rule"
+                        aria-label={t('autoMod.createRule', 'Create new rule')}
                         className="btn-create"
                         onClick={handleShowCreateRule}
                     >
@@ -340,7 +340,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
                                 <h3>Kural Yok</h3>
 
-                                <p>Otomatik moderasyon kuralları oluşturun</p>
+                                <p>{t('autoMod.subtitle', 'Create automatic moderation rules')}</p>
                             </div>
                         ) : (
                             rules.map((rule) => (
@@ -359,8 +359,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
                                         <div className="rule-actions">
                                             <button
-                                                aria-label="Action button"
-                                                className="action-btn toggle"
+                                                aria-label={rule.enabled ? t('common.disable', 'Disable') : t('common.enable', 'Enable')}
                                                 onClick={() => toggleRule(rule.id, !rule.enabled)}
                                                 title={
                                                     rule.enabled
@@ -372,8 +371,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                                             </button>
 
                                             <button
-                                                aria-label="Action button"
-                                                className="action-btn edit"
+                                                aria-label={t('common.edit', 'Edit')}
                                                 onClick={() => setEditingRule(rule)}
                                                 title={t('common.edit')}
                                             >
@@ -381,8 +379,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                                             </button>
 
                                             <button
-                                                aria-label="Action button"
-                                                className="action-btn delete"
+                                                aria-label={t('common.delete', 'Delete')}
                                                 onClick={() => deleteRule(rule.id)}
                                                 title={t('common.delete')}
                                             >
@@ -421,7 +418,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
                                         {rule.threshold && (
                                             <div className="detail-item">
-                                                <span className="label">Eşik:</span>
+                                                <span className="label">{t('autoMod.threshold', 'Threshold:')}</span>
 
                                                 <span className="value">{rule.threshold}</span>
                                             </div>
@@ -436,17 +433,17 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                 {showCreateRule && (
                     <div className="rule-editor-modal">
                         <div className="rule-editor">
-                            <h3>Yeni Kural Oluştur</h3>
+                            <h3>{t('autoMod.createRule', 'Create New Rule')}</h3>
 
                             <div className="form-group">
-                                <label>Kural Adı</label>
+                                <label>{t('autoMod.ruleName', 'Rule Name')}</label>
 
                                 <input
                                     type="text"
                                     value={newRule.name}
                                     onChange={handleNameChange}
                                     placeholder={t('ui.orn_spam_blockme')}
-                                    aria-label="Name"
+                                    aria-label={t('autoMod.ruleName', 'Rule name')}
                                 />
                             </div>
 
@@ -457,13 +454,13 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                                     <select
                                         value={newRule.type}
                                         onChange={handleTypeChange}
-                                        aria-label="select"
+                                        aria-label={t('autoMod.ruleType', 'Rule type')}
                                     >
                                         <option value="spam">Spam</option>
 
-                                        <option value="profanity">Küfür</option>
+                                        <option value="profanity">{t('autoMod.profanity', 'Profanity')}</option>
 
-                                        <option value="caps">Büyük Harf</option>
+                                        <option value="caps">{t('autoMod.caps', 'Caps Lock')}</option>
 
                                         <option value="links">Link</option>
 
@@ -477,7 +474,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                                     <select
                                         value={newRule.action}
                                         onChange={handleActionChange}
-                                        aria-label="select"
+                                        aria-label={t('autoMod.ruleAction', 'Rule action')}
                                     >
                                         <option value="warn">Uyar</option>
 
@@ -495,9 +492,9 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
                                 <input
                                     type="text"
-                                    placeholder="Kelime girin ve Enter'a basın"
+                                    placeholder={t('common.keyword', 'Enter keyword and press Enter')}
                                     onKeyDown={handleKeywordKeyPress}
-                                    aria-label="Kelime girin ve Enter'a basın"
+                                    aria-label={t('common.keyword', 'Enter keyword and press Enter')}
                                 />
 
                                 <div className="keywords-list">
@@ -506,7 +503,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                                             {kw}
 
                                             <button
-                                                aria-label="Delete"
+                                                aria-label={t('common.delete')}
                                                 onClick={() => removeKeyword(kw)}
                                             >
                                                 ×
@@ -518,46 +515,42 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Eşik</label>
+                                    <label>{t('autoMod.thresholdLabel', 'Threshold')}</label>
 
                                     <input
                                         type="number"
                                         value={newRule.threshold}
                                         onChange={handleThresholdChange}
                                         min="1"
-                                        aria-label="number"
+                                        aria-label={t('autoMod.thresholdLabel', 'Threshold')}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Duration (saniye)</label>
-
+                                    <label>{t('autoMod.duration', 'Duration (seconds)')}</label>
                                     <input
                                         type="number"
                                         value={newRule.duration}
                                         onChange={handleDurationChange}
                                         min="1"
-                                        aria-label="number"
+                                        aria-label={t('autoMod.duration', 'Duration in seconds')}
                                     />
+                                    <button
+                                        aria-label={t('common.cancel', 'Cancel')}
+                                        className="btn-cancel"
+                                        onClick={handleHideCreateRule}
+                                    >
+                                        Cancel
+                                    </button>
+
+                                    <button
+                                        aria-label={t('autoMod.createRule', 'Create rule')}
+                                        className="btn-save"
+                                        onClick={createRule}
+                                    >
+                                        Create
+                                    </button>
                                 </div>
-                            </div>
-
-                            <div className="modal-actions">
-                                <button
-                                    aria-label="handle Hide Create Rule"
-                                    className="btn-cancel"
-                                    onClick={handleHideCreateRule}
-                                >
-                                    Cancel
-                                </button>
-
-                                <button
-                                    aria-label="create Rule"
-                                    className="btn-save"
-                                    onClick={createRule}
-                                >
-                                    Create
-                                </button>
                             </div>
                         </div>
                     </div>

@@ -46,10 +46,10 @@ const CustomStatusTab = ({
                 </label>
                 <div role="radiogroup" aria-labelledby="status-selector-label" style={_st2}>
                     {[
-                        { value: 'online', icon: '🟢', label: 'Çevrimiçi', color: '#23a559' },
-                        { value: 'idle', icon: '🟡', label: 'Boşta', color: '#f0b232' },
-                        { value: 'dnd', icon: '🔴', label: 'Rahatsız Etme', color: '#f23f42' },
-                        { value: 'invisible', icon: '⚫', label: 'Görünmez', color: '#80848e' },
+                        { value: 'online', icon: '🟢', label: t('status.online', 'Online'), color: '#23a559' },
+                        { value: 'idle', icon: '🟡', label: t('status.idle', 'Idle'), color: '#f0b232' },
+                        { value: 'dnd', icon: '🔴', label: t('status.dnd', 'Do Not Disturb'), color: '#f23f42' },
+                        { value: 'invisible', icon: '⚫', label: t('status.invisible', 'Invisible'), color: '#80848e' },
                     ].map((status) => (
                         <button
                             key={status.value}
@@ -83,7 +83,7 @@ const CustomStatusTab = ({
 
             <div style={styles.inputGroup}>
                 <label htmlFor="custom-status-text" style={styles.label}>
-                    Özel Mesaj
+                    {t('status.customMessage', 'Custom Message')}
                 </label>
                 <input
                     id="custom-status-text"
@@ -93,7 +93,7 @@ const CustomStatusTab = ({
                     placeholder={t('status.placeholder')}
                     style={styles.input}
                     maxLength={128}
-                    aria-label="Custom Status"
+                    aria-label={t('aria.customStatusInput', 'Custom Status')}
                 />
                 <p style={_st5}>
                     {t('status.characterCount', {
@@ -103,7 +103,7 @@ const CustomStatusTab = ({
                 </p>
             </div>
 
-            <button style={_st1109} aria-label="updateCustomStatus" onClick={updateCustomStatus}>
+            <button style={_st1109} aria-label={t('aria.saveStatus', 'Save Status')} onClick={updateCustomStatus}>
                 {t('status.save')}
             </button>
         </div>

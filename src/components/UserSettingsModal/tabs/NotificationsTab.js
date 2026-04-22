@@ -45,7 +45,7 @@ const NotificationsTab = () => {
     }, []);
 
     return (
-        <div aria-label="notifications tab">
+        <div aria-label={t('settings.notificationsTab', 'Notifications tab')}>
             <SettingSection title={t('settings.tabs.notifications.notificationSettings')}>
                 <ToggleSwitch
                     label={t('settings.tabs.notifications.desktopNotifications')}

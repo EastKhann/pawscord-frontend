@@ -11,7 +11,7 @@ const PendingFilesPreview = ({ pendingFiles, setPendingFiles, removePendingFile 
     if (pendingFiles.length === 0) return null;
 
     return (
-        <div aria-label="pending files preview" style={styles.pendingFilesContainer}>
+        <div aria-label={t('messageInput.pendingFiles', 'Pending files')} style={styles.pendingFilesContainer}>
             <div style={styles.pendingFilesHeader}>
                 <span>📎 {pendingFiles.length} dosya bekliyor</span>
                 <button
@@ -19,7 +19,7 @@ const PendingFilesPreview = ({ pendingFiles, setPendingFiles, removePendingFile 
                     style={styles.clearAllButton}
                     title={t('allnü_temizle')}
                 >
-                    Hepsini Kaldır
+                    {t('pendingFiles.removeAll', 'Remove All')}
                 </button>
             </div>
             <div style={styles.pendingFilesList}>

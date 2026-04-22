@@ -14,7 +14,7 @@ const PrivacyTab = () => {
     const [readReceipts, setReadReceipts] = useState(true);
 
     return (
-        <div aria-label="privacy tab">
+        <div aria-label={t('settings.privacyTab', 'Privacy tab')}>
             <SettingSection title={t('settings.tabs.privacy.dmAndFriend')}>
                 <ToggleSwitch
                     label={t('settings.tabs.privacy.dmFromServer')}

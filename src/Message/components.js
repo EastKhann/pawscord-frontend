@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import styles from './styles';
 import logger from '../utils/logger';
 const _s = (o) => o;
@@ -20,6 +21,7 @@ const _st4 = { maxHeight: '200px', overflowY: 'auto' };
 
 // 1. Lazy Loading Video (Performance Optimized)
 export const LazyVideo = memo(({ src, style }) => {
+    const { t } = useTranslation();
     const videoRef = useRef(null);
     const [shouldLoad, setShouldLoad] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -50,17 +52,17 @@ export const LazyVideo = memo(({ src, style }) => {
     }, []);
 
     return (
-        <div aria-label="edit history" ref={videoRef} style={containerStyle}>
+        <div aria-label={t('aria.videoMessage', 'Video Message')} ref={videoRef} style={containerStyle}>
             {shouldLoad ? (
                 <video controls preload="metadata" src={src} style={style}>
                     <track kind="captions" src="" default />
                     Your browser does not support video playback.
                     <a href={src} download>
-                        İndir
+                        {t('msgComponents.download','Download')}
                     </a>
                 </video>
             ) : (
-                <span style={_st1}>Video yükleniyor...</span>
+                <span style={_st1}>{t('media.videoLoading', 'Loading video...')}</span>
             )}
         </div>
     );

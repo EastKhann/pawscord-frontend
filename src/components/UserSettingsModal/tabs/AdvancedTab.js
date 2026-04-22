@@ -27,7 +27,7 @@ const AdvancedTab = () => {
     );
 
     return (
-        <div aria-label="advanced tab">
+        <div aria-label={t('settings.advancedTab', 'Advanced tab')}>
             <SettingSection title={t('settings.tabs.advanced.devMode')}>
                 <p className={ut.mutedMb8}>{t('settings.tabs.advanced.devModeDesc')}</p>
                 <ToggleSwitch

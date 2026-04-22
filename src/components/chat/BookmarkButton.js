@@ -49,13 +49,8 @@ export const BookmarkButton = memo(
 
         return (
             <button
-                aria-label="handle Toggle"
-                onClick={handleToggle}
-                disabled={loading}
+                aria-label={bookmarked ? t('bookmark.remove', 'Remove bookmark') : t('bookmark.add', 'Add bookmark')}
                 style={{
-                    background: 'none',
-                    border: 'none',
-                    color: bookmarked ? '#f0b232' : '#b5bac1',
                     cursor: loading ? 'wait' : 'pointer',
                     fontSize: '1em',
                     padding: '5px',
@@ -66,7 +61,7 @@ export const BookmarkButton = memo(
                 title={bookmarked ? t('ui.bookmark_kaldir') : 'Bookmark add'}
             >
                 {bookmarked ? <FaBookmark /> : <FaRegBookmark />}
-            </button>
+            </button >
         );
     }
 );
@@ -115,13 +110,8 @@ export const StarButton = memo(
 
         return (
             <button
-                aria-label="handle Toggle"
-                onClick={handleToggle}
-                disabled={loading}
+                aria-label={starred ? t('bookmark.removeStar', 'Remove star') : t('bookmark.addStar', 'Star message')}
                 style={{
-                    background: 'none',
-                    border: 'none',
-                    color: starred ? '#ffd700' : '#b5bac1',
                     cursor: loading ? 'wait' : 'pointer',
                     fontSize: '1em',
                     padding: '5px',
@@ -132,7 +122,7 @@ export const StarButton = memo(
                 title={starred ? t('ui.star_kaldir') : 'Star add'}
             >
                 {starred ? <FaStar /> : <FaRegStar />}
-            </button>
+            </button >
         );
     }
 );
@@ -181,13 +171,8 @@ export const ReadLaterButton = memo(
 
         return (
             <button
-                aria-label="handle Toggle"
-                onClick={handleToggle}
-                disabled={loading}
+                aria-label={readLater ? t('bookmark.removeReadLater', 'Remove from read later') : t('bookmark.addReadLater', 'Read later')}
                 style={{
-                    background: 'none',
-                    border: 'none',
-                    color: readLater ? '#3ba55d' : '#b5bac1',
                     cursor: loading ? 'wait' : 'pointer',
                     fontSize: '1em',
                     padding: '5px',
@@ -198,7 +183,7 @@ export const ReadLaterButton = memo(
                 title={readLater ? t('ui.sonra_oku_listsinden_cikar') : 'Sonra oku listesine ekle'}
             >
                 <FaClock />
-            </button>
+            </button >
         );
     }
 );
