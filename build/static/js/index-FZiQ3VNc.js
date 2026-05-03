@@ -1,2 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./web-DkLA9cYt.js","./electron-BjkxN1At.js","../css/electron-B9WL9Jhb.css"])))=>i.map(i=>d[i]);
-var t=Object.defineProperty;var p=(e,r)=>t(e,"name",{value:r,configurable:!0});import{bS as o,aj as i}from"./electron-BjkxN1At.js";const m=o("App",{web:p(()=>i(()=>import("./web-DkLA9cYt.js"),__vite__mapDeps([0,1,2]),import.meta.url).then(e=>new e.AppWeb),"web")});export{m as App};

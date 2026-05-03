@@ -168,6 +168,39 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // 🔄 Electron OAuth polling fallback — polls backend every 2s for tokens
+    const startOAuthPolling = (sessionId, oauthBaseUrl) => {
+        const maxAttempts = 90; // 3 minutes max
+        let attempts = 0;
+        const interval = setInterval(async () => {
+            attempts++;
+            if (attempts > maxAttempts) {
+                clearInterval(interval);
+                setIsGoogleLoading(false);
+                return;
+            }
+            try {
+                const res = await fetch(`${oauthBaseUrl}/auth/poll-oauth/?session=${sessionId}`);
+                if (res.status === 200) {
+                    clearInterval(interval);
+                    const data = await res.json();
+                    if (data.access && data.refresh) {
+                        const decoded = jwtDecode(data.access);
+                        localStorage.removeItem('chat_username');
+                        localStorage.setItem('access_token', data.access);
+                        localStorage.removeItem('refresh_token');
+                        localStorage.setItem('chat_username', decoded.username);
+                        window.electron?.focusWindow?.();
+                        setTimeout(() => window.location.reload(), 300);
+                    }
+                }
+                // 202 = still pending, keep polling
+            } catch (_) {
+                // network error — keep polling
+            }
+        }, 2000);
+    };
+
     // ✅ 3. AKILLI GOOGLE GİRİŞ BUTONU
     const handleGoogleLogin = async () => {
         setIsGoogleLoading(true);
@@ -245,7 +278,17 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 const source = isElectron ? 'electron' : 'web';
                 // 🔥 FIX: Electron for api.pawscord.com kullan (www subdomain /api route'u yok)
                 const oauthBaseUrl = isElectron ? 'https://api.pawscord.com/api' : API_BASE_URL;
-                const redirectUrl = `${oauthBaseUrl}/auth/google/start/?source=${source}`;
+
+                // 🔄 ELECTRON: Generate session_id for polling fallback (deep-link unreliable in dev)
+                let redirectUrl = `${oauthBaseUrl}/auth/google/start/?source=${source}`;
+                if (isElectron) {
+                    const sessionId = crypto.randomUUID
+                        ? crypto.randomUUID()
+                        : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                            (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
+                    redirectUrl += `&session_id=${sessionId}`;
+                    startOAuthPolling(sessionId, oauthBaseUrl);
+                }
 
                 // 🔥 ELECTRON İÇİN: contextBridge API ile tarayıcıda aç
                 if (isElectron && window.electron?.startGoogleLogin) {
