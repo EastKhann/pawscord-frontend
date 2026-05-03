@@ -62,6 +62,9 @@ contextBridge.exposeInMainWorld('electron', {
     focusWindow: () => {
         ipcRenderer.send('focus-window');
     },
+    minimizeWindow: () => {
+        ipcRenderer.send('minimize-window');
+    },
     startDownload: (url) => {
         ipcRenderer.send('start-download', url);
     }

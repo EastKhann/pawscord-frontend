@@ -102,13 +102,13 @@ const ProfileHeader = ({
 };
 
 ProfileHeader.propTypes = {
-    formData: PropTypes.array,
-    premiumStatus: PropTypes.array,
+    formData: PropTypes.object,
+    premiumStatus: PropTypes.object,
     badges: PropTypes.array,
-    userStats: PropTypes.array,
-    customStatus: PropTypes.array,
+    userStats: PropTypes.object,
+    customStatus: PropTypes.object,
     friends: PropTypes.array,
     onClose: PropTypes.func,
-    styles: PropTypes.array,
+    styles: PropTypes.object,
 };
 export default ProfileHeader;

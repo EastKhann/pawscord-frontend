@@ -130,38 +130,41 @@ export const FileAttachment = memo(({ fileUrl, fileName, fileSize }) => {
 FileAttachment.displayName = 'FileAttachment';
 
 export const VoiceMessage = memo(
-    ({ fileUrl, fileName, duration, transcription, isTranscribing, onTranscribe }) => (
-        <Suspense fallback={<div style={styles.loadingMedia}>🎵 Loading audio...</div>}>
-            <div>
-                <VoiceMessagePlayer
-                    audioUrl={fileUrl}
-                    duration={duration || 0}
-                    onDownload={() => {
-                        const a = document.createElement('a');
-                        a.href = fileUrl;
-                        a.download = fileName || `voice-${Date.now()}.webm`;
-                        a.click();
-                    }}
-                />
-                {transcription && (
-                    <div style={styles.voiceTranscription}>
-                        <div style={styles.transcriptionIcon}>💬</div>
-                        <div style={styles.transcriptionText}>{transcription}</div>
-                    </div>
-                )}
-                {!transcription && !isTranscribing && (
-                    <button
-                        aria-label="Transcribe"
-                        onClick={onTranscribe}
-                        style={styles.transcribeButton}
-                    >
-                        📝 Convert to text
-                    </button>
-                )}
-                {isTranscribing && <div style={styles.transcribingLoader}>⏳ Converting...</div>}
-            </div>
-        </Suspense>
-    )
+    ({ fileUrl, fileName, duration, transcription, isTranscribing, onTranscribe }) => {
+        const { t } = useTranslation();
+        return (
+            <Suspense fallback={<div style={styles.loadingMedia}>🎵 Loading audio...</div>}>
+                <div>
+                    <VoiceMessagePlayer
+                        audioUrl={fileUrl}
+                        duration={duration || 0}
+                        onDownload={() => {
+                            const a = document.createElement('a');
+                            a.href = fileUrl;
+                            a.download = fileName || `voice-${Date.now()}.webm`;
+                            a.click();
+                        }}
+                    />
+                    {transcription && (
+                        <div style={styles.voiceTranscription}>
+                            <div style={styles.transcriptionIcon}>💬</div>
+                            <div style={styles.transcriptionText}>{transcription}</div>
+                        </div>
+                    )}
+                    {!transcription && !isTranscribing && (
+                        <button
+                            aria-label={t('message.transcribe', 'Transcribe')}
+                            onClick={onTranscribe}
+                            style={styles.transcribeButton}
+                        >
+                            {t('message.convertToText', '📝 Convert to text')}
+                        </button>
+                    )}
+                    {isTranscribing && <div style={styles.transcribingLoader}>{t('message.converting', '⏳ Converting...')}</div>}
+                </div>
+            </Suspense>
+        );
+    }
 );
 VoiceMessage.displayName = 'VoiceMessage';
 

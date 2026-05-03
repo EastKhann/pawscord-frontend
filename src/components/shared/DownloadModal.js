@@ -60,6 +60,8 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
         navigator.clipboard.writeText(CHECKSUMS[platform]).then(() => {
             setCopiedChecksum(platform);
             setTimeout(() => setCopiedChecksum(null), 2000);
+        }).catch(() => {
+            // clipboard API unavailable (e.g. non-secure context); fail silently
         });
     };
 

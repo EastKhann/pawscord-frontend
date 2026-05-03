@@ -165,11 +165,25 @@ ipcMain.on('focus-window', () => {
 // their trusted browser with saved passwords/sessions.
 ipcMain.on('start-google-login', (event, authUrl) => {
     console.log('🔵 [Electron] Opening system browser for Google Auth:', authUrl.substring(0, 80));
+    // Minimize main window so the browser comes to the foreground cleanly
+    if (mainWindow && !mainWindow.isMinimized()) {
+        mainWindow.minimize();
+    }
     // shell.openExternal opens the URL in the OS default browser (Chrome, Edge, Firefox…)
     shell.openExternal(authUrl).catch((err) => {
         console.error('❌ [Electron] shell.openExternal failed:', err);
+        // Restore window if the browser failed to open
+        if (mainWindow) {
+            mainWindow.restore();
+            mainWindow.focus();
+        }
     });
     // Tokens will return via pawscord:// deep link → second-instance / open-url handler below
+});
+
+// Minimize window on request (e.g. while waiting for OAuth)
+ipcMain.on('minimize-window', () => {
+    if (mainWindow && !mainWindow.isMinimized()) mainWindow.minimize();
 });
 
 // 🔗 DEEP LINK PROTOCOL HANDLER

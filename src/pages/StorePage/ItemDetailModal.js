@@ -67,7 +67,7 @@ ItemDetailModal.propTypes = {
     }),
     isOwned: PropTypes.bool,
     onClose: PropTypes.func.isRequired,
-    onBuy: PropTypes.func.isRequired,
+    onPurchase: PropTypes.func.isRequired,
     userCoins: PropTypes.number,
 };
 export default ItemDetailModal;

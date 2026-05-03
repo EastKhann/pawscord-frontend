@@ -53,7 +53,7 @@ const VoiceRecordingUI = ({
                 style={styles.recordingContainer}
                 className="rec-container-glow"
                 role="status"
-                aria-label={`Ses kaydediliyor: ${formatTime(recordingTime)}`}
+                aria-label={t('ui.ses_kaydi_aktif', { time: formatTime(recordingTime) })}
             >
                 {/* Cancel gesture indicator — trash icon on the left */}
                 <div
@@ -169,15 +169,15 @@ const VoiceRecordingUI = ({
 VoiceRecordingUI.propTypes = {
     isRecording: PropTypes.bool,
     isRecordingLocked: PropTypes.bool,
-    recordingTime: PropTypes.bool,
-    slideProgress: PropTypes.array,
+    recordingTime: PropTypes.number,
+    slideProgress: PropTypes.number,
     cancelProgress: PropTypes.number,
-    micButtonRef: PropTypes.func,
+    micButtonRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     handleMicMouseDown: PropTypes.func,
     handleMicTouchStart: PropTypes.func,
-    stopRecording: PropTypes.object,
+    stopRecording: PropTypes.func,
     cancelRecording: PropTypes.func,
-    formatTime: PropTypes.string,
+    formatTime: PropTypes.func,
     handleSubmit: PropTypes.func,
     disabled: PropTypes.bool,
     hasContent: PropTypes.bool,

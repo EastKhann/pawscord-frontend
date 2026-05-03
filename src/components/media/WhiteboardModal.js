@@ -31,8 +31,9 @@ const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
 
     // WebSocket Bağlantısı
     useEffect(() => {
+        if (!token) return; // wait until auth context provides a token
         const url = `${wsProtocol}://${apiHost}/ws/whiteboard/${roomSlug}/`;
-        ws.current = new WebSocket(url, token ? [`token-${token}`] : []);
+        ws.current = new WebSocket(url, [`token-${token}`]);
 
         ws.current.onmessage = (event) => {
             const {
@@ -65,7 +66,7 @@ const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
         };
 
         return () => ws.current.close();
-    }, [roomSlug, wsProtocol, apiHost]);
+    }, [roomSlug, wsProtocol, apiHost, token]);
 
     // Canvas Sizelandırma
     useEffect(() => {

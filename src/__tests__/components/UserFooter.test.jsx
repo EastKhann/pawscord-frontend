@@ -48,7 +48,7 @@ describe('UserFooter', () => {
 
     it('calls onProfileClick when user panel is clicked', () => {
         render(<UserFooter {...defaultProps} />);
-        const panel = screen.getByTestId('profile-panel-trigger');
+        const panel = screen.getByTestId('profile-panel-btn');
         fireEvent.click(panel);
         expect(defaultProps.onProfileClick).toHaveBeenCalledTimes(1);
     });

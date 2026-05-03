@@ -25,6 +25,8 @@ const SupportModal = ({ isOpen, onClose }) => {
         navigator.clipboard.writeText(text).then(() => {
             setCopiedAddress(type);
             setTimeout(() => setCopiedAddress(null), 2000);
+        }).catch(() => {
+            // clipboard API unavailable; fail silently
         });
     };
 

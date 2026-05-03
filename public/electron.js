@@ -64,11 +64,12 @@ function handleDeepLink(url) {
 
       if (accessToken && refreshToken) {
         if (mainWindow && !mainWindow.isDestroyed()) {
-          // Token'ları renderer process'e gönder
+          // Token'ları renderer process'e gönder — iki ayrı event (her ikisini de dinleyenler için)
           mainWindow.webContents.send('oauth-tokens', {
             access: accessToken,
             refresh: refreshToken
           });
+          mainWindow.webContents.send('deep-link-auth', url);
 
           // Pencereyi öne getir
           if (mainWindow.isMinimized()) mainWindow.restore();
@@ -581,9 +582,9 @@ ipcMain.on('start-download', (event, url) => {
   }
 });
 
-// ✅ GOOGLE LOGIN HANDLER (Electron için - in-app OAuth popup)
+// ✅ GOOGLE LOGIN HANDLER — system browser OAuth (no in-app popup)
 ipcMain.on('start-google-login', (event, authUrl) => {
-  console.log('🔵 [Google] Opening in-app OAuth popup:', authUrl);
+  console.log('🔵 [Google] Opening system browser for OAuth:', authUrl.substring(0, 80));
 
   // Validate URL is our trusted backend — prevent open-redirect abuse
   try {
@@ -598,77 +599,29 @@ ipcMain.on('start-google-login', (event, authUrl) => {
     return;
   }
 
-  const authWindow = new BrowserWindow({
-    width: 520,
-    height: 680,
-    parent: mainWindow,
-    modal: true,
-    title: 'Pawscord — Google ile Giriş',
-    autoHideMenuBar: true,
-    resizable: false,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      sandbox: true,
-      // Ana pencereyle aynı session → Google oturumu açıksa tekrar giriş istenmez
-      partition: 'persist:pawscord',
-    },
-  });
-
-  // Menüyü gizle
-  authWindow.setMenuBarVisibility(false);
-
-  authWindow.loadURL(authUrl);
-
-  // pawscord:// deep link'i yakalamak için yardımcı
-  function interceptDeepLink(navUrl) {
-    if (!navUrl || !navUrl.startsWith('pawscord://auth')) return false;
-    console.log('✅ [Google] OAuth deep link yakalandı, popup kapatılıyor:', navUrl.substring(0, 60) + '...');
-    // Popup kapatılmadan önce token'ları işle
-    handleDeepLink(navUrl);
-    // Kısa delay → handleDeepLink mainWindow.webContents.send yapabilmeli
-    setTimeout(() => {
-      if (!authWindow.isDestroyed()) authWindow.close();
-    }, 200);
-    return true;
+  // Minimize the Electron window so the browser comes to the foreground cleanly
+  if (mainWindow && !mainWindow.isMinimized()) {
+    mainWindow.minimize();
   }
 
-  // JavaScript navigasyonları (window.location.href = 'pawscord://...')
-  authWindow.webContents.on('will-navigate', (e, navUrl) => {
-    console.log('🔗 [OAuth Popup] will-navigate:', navUrl.substring(0, 80));
-    if (interceptDeepLink(navUrl)) {
-      e.preventDefault();
-    }
-  });
-
-  // HTTP-level redirect'ler
-  authWindow.webContents.on('will-redirect', (e, navUrl) => {
-    console.log('🔗 [OAuth Popup] will-redirect:', navUrl.substring(0, 80));
-    if (interceptDeepLink(navUrl)) {
-      e.preventDefault();
-    }
-  });
-
-  // Yükleme hatası — kapalı hata değil (abort -3 normaldir)
-  authWindow.webContents.on('did-fail-load', (e, code, desc, url) => {
-    if (code === -3) return; // aborted (normal)
-    // pawscord:// navigate denemesi ERR_UNKNOWN_URL_SCHEME olarak gelebilir
-    if (url && url.startsWith('pawscord://auth')) {
-      interceptDeepLink(url);
-      return;
-    }
-    console.error('❌ [OAuth Popup] Load failed:', code, desc, url);
-  });
-
-  // Kullanıcı popup'ı kapattı → loading durumunu temizle
-  authWindow.on('closed', () => {
-    console.log('🔵 [Google] OAuth popup kapatıldı');
+  // Open URL in the OS default browser (Chrome, Edge, Firefox…)
+  // Google blocks OAuth inside Electron webview — system browser is required
+  shell.openExternal(authUrl).catch((err) => {
+    console.error('❌ [Google] shell.openExternal failed:', err);
+    // Restore window if browser failed to open
     if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.webContents.send('google-auth-cancelled');
+      mainWindow.restore();
+      mainWindow.focus();
     }
   });
 
-  console.log('✅ [Google] In-app OAuth popup açıldı');
+  // Tokens return via pawscord:// deep link → second-instance / open-url handler
+  console.log('✅ [Google] Waiting for deep-link callback (pawscord://auth?...)');
+});
+
+// Window controls
+ipcMain.on('minimize-window', () => {
+  if (mainWindow && !mainWindow.isMinimized()) mainWindow.minimize();
 });
 
 // � SECURITY: HTTP/2 enabled, certificate validation enforced

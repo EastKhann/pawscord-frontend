@@ -23,14 +23,32 @@ contextBridge.exposeInMainWorld('electron', {
     onDeepLinkAuth: (callback) => {
         ipcRenderer.on('deep-link-auth', (event, url) => callback(url));
     },
+    // Alias used by LoginPage to receive deep-link tokens as a {access, refresh} object
+    onOAuthTokens: (callback) => {
+        ipcRenderer.on('deep-link-auth', (event, url) => {
+            try {
+                const urlObj = new URL(url);
+                const access = urlObj.searchParams.get('access');
+                const refresh = urlObj.searchParams.get('refresh');
+                if (access && refresh) callback({ access, refresh });
+            } catch (_) {
+                // malformed deep-link — ignore
+            }
+        });
+    },
 
     // 📐 Window events
     onWindowResized: (callback) => {
         ipcRenderer.on('window-resized', (event, size) => callback(size));
     },
 
-    // 🔗 Start Google Login
+    // 🪟 Window controls
+    focusWindow: () => ipcRenderer.send('focus-window'),
+    minimizeWindow: () => ipcRenderer.send('minimize-window'),
+
+    // 🔗 Start Google Login — opens system browser and minimizes Electron window
     startGoogleLogin: (authUrl) => {
         ipcRenderer.send('start-google-login', authUrl);
     }
 });
+

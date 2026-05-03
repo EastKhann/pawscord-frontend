@@ -11,7 +11,7 @@ const ToggleItem = ({ label, desc, checked, onChange }) => (
             <div className="setting-desc">{desc}</div>
         </div>
         <label className="toggle-switch">
-            <input type="checkbox" checked={checked} onChange={onChange} aria-label="Toggle" />
+            <input type="checkbox" checked={checked} onChange={onChange} aria-label={label} />
             <span className="slider" />
         </label>
     </div>
