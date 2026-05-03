@@ -1,4 +1,3 @@
-import logger from '../utils/logger';
 // ⚡ OPTIMIZATION: Remove console logs in production
 // This file is for development reference only
 

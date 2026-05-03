@@ -32,6 +32,17 @@
   WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "DisplayIcon" "$INSTDIR\Pawscord.exe"
   WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "Publisher" "Eastkhan"
   WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "URLInfoAbout" "https://pawscord.app"
+
+  ; Register pawscord:// deep link protocol handler
+  WriteRegStr SHCTX "Software\Classes\pawscord" "" "URL:Pawscord Protocol"
+  WriteRegStr SHCTX "Software\Classes\pawscord" "URL Protocol" ""
+  WriteRegStr SHCTX "Software\Classes\pawscord\DefaultIcon" "" "$INSTDIR\Pawscord.exe,1"
+  WriteRegStr SHCTX "Software\Classes\pawscord\shell\open\command" "" '"$INSTDIR\Pawscord.exe" "%1"'
+!macroend
+
+!macro customUnInstall
+  ; Remove pawscord:// protocol handler from registry
+  DeleteRegKey SHCTX "Software\Classes\pawscord"
 !macroend
 
 !macro customUnInit

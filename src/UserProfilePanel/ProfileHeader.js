@@ -43,7 +43,7 @@ const ProfileHeader = ({
                         onError={(e) => {
                             if (!e.target.dataset.errorHandled) {
                                 e.target.dataset.errorHandled = 'true';
-                                logger.error('? [Avatar Load Error]', e.target.src);
+                                logger.warn('? [Avatar Load Error]', e.target.src);
                                 e.target.src =
                                     'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"%3E%3Crect fill="%235865f2" width="120" height="120" rx="60"/%3E%3Ctext x="60" y="60" font-size="50" text-anchor="middle" dy=".35em" fill="white" font-family="Arial"%3E??%3C/text%3E%3C/svg%3E';
                             }

@@ -67,6 +67,8 @@ const getDomain = (url) => {
 };
 
 const LinkPreview = ({ data }) => {
+    const { t } = useTranslation();
+
     if (!data || !data.url) return null;
 
     const youtubeEmbedUrl = getYouTubeEmbedUrl(data.url);
@@ -75,7 +77,6 @@ const LinkPreview = ({ data }) => {
 
     // 1. YOUTUBE GÖSTERİMİ - Discord tarzı
     if (youtubeEmbedUrl) {
-    const { t } = useTranslation();
         return (
             <div aria-label={t('aria.youtubeEmbed', 'YouTube Video')} style={styles.embedContainer}>
                 <div style={_st1030} />

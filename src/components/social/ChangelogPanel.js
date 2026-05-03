@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import './ChangelogPanel.css';
 import { FaNewspaper, FaFilter, FaBug, FaStar, FaWrench, FaCalendar } from 'react-icons/fa';
 import logger from '../../utils/logger';
 
 function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
+    const { t } = useTranslation();
     const [changes, setChanges] = useState([]);
     const [selectedModel, setSelectedModel] = useState('all');
     const [selectedType, setSelectedType] = useState('all');
@@ -81,7 +83,7 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
                         onChange={(e) => setSelectedModel(e.target.value)}
                         className="filter-select"
                     >
-                        <option value="all">{t('changelog.allModels','All Models')}</option>
+                        <option value="all">{t('changelog.allModels', 'All Models')}</option>
                         {models.map((model) => (
                             <option key={model} value={model}>
                                 {model}
@@ -97,7 +99,7 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
                         onChange={(e) => setSelectedType(e.target.value)}
                         className="filter-select"
                     >
-                        <option value="all">{t('changelog.allTypes','All Types')}</option>
+                        <option value="all">{t('changelog.allTypes', 'All Types')}</option>
                         <option value="new">New Features</option>
                         <option value="fix">Bug Fixes</option>
                         <option value="improvement">Improvements</option>
@@ -107,11 +109,11 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
 
             <div className="changelog-timeline">
                 {loading ? (
-                    <div className="loading">{t('changelog.loading','Loading changelog...')}</div>
+                    <div className="loading">{t('changelog.loading', 'Loading changelog...')}</div>
                 ) : Object.keys(groupedByDate).length === 0 ? (
                     <div className="empty-changelog">
                         <FaNewspaper className="empty-icon" />
-                        <p>{t('changelog.notFound','Changelog not found')}</p>
+                        <p>{t('changelog.notFound', 'Changelog not found')}</p>
                     </div>
                 ) : (
                     Object.entries(groupedByDate).map(([date, dateChanges]) => (

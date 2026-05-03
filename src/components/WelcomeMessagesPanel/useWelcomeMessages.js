@@ -25,11 +25,11 @@ const DEFAULT_CONFIG = {
 };
 
 export const VARIABLES = [
-    { code: '{user}', desc: t('welcomeMsg.codeUser','Username') },
-    { code: '{user_mention}', desc: t('welcomeMsg.codeUserMention','User Mention') },
-    { code: '{server}', desc: t('welcomeMsg.codeServer','Server Name') },
-    { code: '{member_count}', desc: t('welcomeMsg.codeMemberCount','Member Count') },
-    { code: '{user_id}', desc: t('welcomeMsg.codeUserId','User ID') },
+    { code: '{user}', desc: 'Username' },
+    { code: '{user_mention}', desc: 'User Mention' },
+    { code: '{server}', desc: 'Server Name' },
+    { code: '{member_count}', desc: 'Member Count' },
+    { code: '{user_id}', desc: 'User ID' },
 ];
 
 const useWelcomeMessages = (serverId) => {

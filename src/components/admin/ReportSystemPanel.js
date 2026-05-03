@@ -62,7 +62,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaFlag style={styles.headerIcon} />
-                        <h2 style={styles.title}>Rapor Sistemi</h2>
+                        <h2 style={styles.title}>{t('reportSystem.title', 'Rapor Sistemi')}</h2>
                     </div>
                     <button aria-label={t('common.close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
@@ -73,7 +73,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                     <div style={styles.statCard}>
                         <FaFlag style={S.txt} />
                         <div style={styles.statValue}>{stats.pending}</div>
-                        <div style={styles.statLabel}>Bekliyor</div>
+                        <div style={styles.statLabel}>{t('common.pending', 'Bekliyor')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaCheck style={S.txt2} />
@@ -83,12 +83,12 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                     <div style={styles.statCard}>
                         <FaTimes style={S.txt3} />
                         <div style={styles.statValue}>{stats.dismissed}</div>
-                        <div style={styles.statLabel}>Reddedildi</div>
+                        <div style={styles.statLabel}>{t('common.rejected', 'Reddedildi')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaEye style={S.txt4} />
                         <div style={styles.statValue}>{stats.total}</div>
-                        <div style={styles.statLabel}>Toplam Rapor</div>
+                        <div style={styles.statLabel}>{t('reportSystem.totalReports', 'Toplam Rapor')}</div>
                     </div>
                 </div>
 
@@ -101,16 +101,16 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                             style={styles.filterSelect}
                         >
                             <option value="all">{t('admin.allReports', 'All Reports')}</option>
-                            <option value="pending">Bekliyor</option>
+                            <option value="pending">{t('common.pending', 'Bekliyor')}</option>
                             <option value="resolved">{t('admin.resolved', 'Resolved')}</option>
-                            <option value="dismissed">Reddedildi</option>
+                            <option value="dismissed">{t('common.rejected', 'Reddedildi')}</option>
                         </select>
                         <select
                             value={typeFilter}
                             onChange={(e) => setTypeFilter(e.target.value)}
                             style={styles.filterSelect}
                         >
-                            <option value="all">{t('common.allTypes','All Types')}</option>
+                            <option value="all">{t('common.allTypes', 'All Types')}</option>
                             <option value="message">Mesajlar</option>
                             <option value="user">{t('admin.users', 'Users')}</option>
                             <option value="server">Sunucu</option>
@@ -173,7 +173,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                         <div style={styles.reportedUser}>
                                             <FaUser />
                                             <span>
-                                                {t('reportSystem.reportedUser','Reported User')}: {report.reported_username}
+                                                {t('reportSystem.reportedUser', 'Reported User')}: {report.reported_username}
                                             </span>
                                         </div>
                                     )}

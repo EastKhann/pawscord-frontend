@@ -66,7 +66,7 @@ export const QuickReactionsPanel = ({ onClose }) => {
 
         <div className="feature-panel quick-reactions">
 
-            <div className="panel-header"><h3>{'🎯'} {t('dataPanels.quickReact','Quick Reactions')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
+            <div className="panel-header"><h3>{'🎯'} {t('dataPanels.quickReact', 'Quick Reactions')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
 
             <div className="panel-content">
 
@@ -119,11 +119,11 @@ export const MessageStatsPanel = ({ onClose }) => {
 
         <div className="feature-panel message-stats">
 
-            <div className="panel-header"><h3>{'📊'} {t('dataPanels.msgStats','Message Statistics')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
+            <div className="panel-header"><h3>{'📊'} {t('dataPanels.msgStats', 'Message Statistics')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
 
             <div className="panel-content">
 
-                {loading ? <div className="loading">{t("common.loading")}</div>{t('stats')}<>
+                {loading ? <div className="loading">{t("common.loading")}</div> : <>
 
                     <div className="stats-grid">
 
@@ -137,7 +137,7 @@ export const MessageStatsPanel = ({ onClose }) => {
 
                     </div>
 
-                    <div className="stat-info"><p>{'📈'} {t('dataPanels.dailyAvg','Daily average:')} <strong>{stats.avg_daily}</strong> {t('common.messages','messages')}</p></div>
+                    <div className="stat-info"><p>{'📈'} {t('dataPanels.dailyAvg', 'Daily average:')} <strong>{stats.avg_daily}</strong> {t('common.messages', 'messages')}</p></div>
 
                     {stats.top_rooms?.length > 0 && (
 
@@ -255,11 +255,11 @@ export const ServerInsightsPanel = ({ serverId, onClose }) => {
 
         <div className="feature-panel server-insights">
 
-            <div className="panel-header"><h3>{'📈'} {t('dataPanels.serverStats','Server Statistics')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
+            <div className="panel-header"><h3>{'📈'} {t('dataPanels.serverStats', 'Server Statistics')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
 
             <div className="panel-content">
 
-                {loading ? <div className="loading">{t("common.loading")}</div>{t('insights')}<>
+                {loading ? <div className="loading">{t("common.loading")}</div> : <>
 
                     <div className="stats-grid">
 
@@ -277,7 +277,7 @@ export const ServerInsightsPanel = ({ serverId, onClose }) => {
 
                         <span className={insights.growth_rate >= 0 ? 'positive' : 'negative'}>
 
-                            {insights.growth_rate >= 0 ? '📈' : '📉'} {insights.growth_rate}% {t('dataPanels.growth','growth')}
+                            {insights.growth_rate >= 0 ? '📈' : '📉'} {insights.growth_rate}% {t('dataPanels.growth', 'growth')}
 
                         </span>
 
@@ -285,7 +285,7 @@ export const ServerInsightsPanel = ({ serverId, onClose }) => {
 
                     {insights.top_members?.length > 0 && (
 
-                        <div className="top-list"><h4>{'🏆'} {t('advAnalytics.mostActiveMembers','Most Active Members')}</h4>
+                        <div className="top-list"><h4>{'🏆'} {t('advAnalytics.mostActiveMembers', 'Most Active Members')}</h4>
 
                             {insights.top_members.slice(0, 5).map((m, i) => (
 
@@ -338,7 +338,7 @@ export const ActivityFeedPanel = ({ onClose }) => {
 
         <div className="feature-panel activity-feed">
 
-            <div className="panel-header"><h3>{'📰'} {t('dataPanels.activityFeed','Activity Feed')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
+            <div className="panel-header"><h3>{'📰'} {t('dataPanels.activityFeed', 'Activity Feed')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
 
             <div className="panel-content">
 

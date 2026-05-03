@@ -220,91 +220,92 @@ const EnhancedPollsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) =>
                                     {options.length > 2 && (
                                         <button
                                             aria-label={t('polls.removeOption', 'Remove option')}
-                                    style={styles.removeButton}
-                                    title={t('common.remove', 'Remove')}
+                                            style={styles.removeButton}
+                                            title={t('common.remove', 'Remove')}
                                         >
-                                    <FaTrash />
-                                </button>
-                            )}
-                        </div>
+                                            <FaTrash />
+                                        </button>
+                                    )}
+                                </div>
                             ))}
-                    </div>
-                </div>
-
-                <div style={styles.section}>
-                    <label style={styles.label}>{t('polls.duration', 'Duration')}</label>
-
-                    <div style={styles.durationGrid}>
-                        {durationOptions.map((opt) => (
-                            <button
-                                aria-label={t('polls.selectDuration', opt.label)}
-                                onClick={() => setDuration(opt.value)}
-                                style={getDurationButtonStyle(opt.value)}
-                            >
-                                {opt.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                <div style={styles.section}>
-                    <label style={styles.label}>
-                        <FaCalendar className="mr-6" />
-
-                        {t('polls.scheduleOptional', 'Schedule (Optional)')}
-                    </label>
-
-                    <input
-                        type="datetime-local"
-                        value={scheduledFor}
-                        onChange={(e) => setScheduledFor(e.target.value)}
-                        style={styles.input}
-                        min={new Date().toISOString().slice(0, 16)}
-                    />
-
-                    {scheduledFor && (
-                        <div style={styles.hint}>
-                            Poll will be posted on {new Date(scheduledFor).toLocaleString()}
                         </div>
-                    )}
-                </div>
+                    </div>
 
-                <div style={styles.checkboxes}>
-                    <label style={styles.checkbox}>
+                    <div style={styles.section}>
+                        <label style={styles.label}>{t('polls.duration', 'Duration')}</label>
+
+                        <div style={styles.durationGrid}>
+                            {durationOptions.map((opt) => (
+                                <button
+                                    key={opt.value}
+                                    aria-label={t('polls.selectDuration', opt.label)}
+                                    onClick={() => setDuration(opt.value)}
+                                    style={getDurationButtonStyle(opt.value)}
+                                >
+                                    {opt.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div style={styles.section}>
+                        <label style={styles.label}>
+                            <FaCalendar className="mr-6" />
+
+                            {t('polls.scheduleOptional', 'Schedule (Optional)')}
+                        </label>
+
                         <input
-                            type="checkbox"
-                            checked={allowMultiple}
-                            onChange={(e) => setAllowMultiple(e.target.checked)}
+                            type="datetime-local"
+                            value={scheduledFor}
+                            onChange={(e) => setScheduledFor(e.target.value)}
+                            style={styles.input}
+                            min={new Date().toISOString().slice(0, 16)}
                         />
 
-                        <span style={styles.checkboxLabel}>
-                            {t('polls.allowMultiple', 'Çoklu seçime izin ver')}
-                        </span>
-                    </label>
-                    <label style={styles.checkbox}>
-                        <input
-                            type="checkbox"
-                            checked={anonymous}
-                            onChange={(e) => setAnonymous(e.target.checked)}
-                        />
+                        {scheduledFor && (
+                            <div style={styles.hint}>
+                                Poll will be posted on {new Date(scheduledFor).toLocaleString()}
+                            </div>
+                        )}
+                    </div>
 
-                        <span style={styles.checkboxLabel}>
-                            {t('polls.anonymousVoting', 'Anonim oylama')}
-                        </span>
-                    </label>
+                    <div style={styles.checkboxes}>
+                        <label style={styles.checkbox}>
+                            <input
+                                type="checkbox"
+                                checked={allowMultiple}
+                                onChange={(e) => setAllowMultiple(e.target.checked)}
+                            />
+
+                            <span style={styles.checkboxLabel}>
+                                {t('polls.allowMultiple', 'Çoklu seçime izin ver')}
+                            </span>
+                        </label>
+                        <label style={styles.checkbox}>
+                            <input
+                                type="checkbox"
+                                checked={anonymous}
+                                onChange={(e) => setAnonymous(e.target.checked)}
+                            />
+
+                            <span style={styles.checkboxLabel}>
+                                {t('polls.anonymousVoting', 'Anonim oylama')}
+                            </span>
+                        </label>
+                    </div>
+
+                    <button
+                        aria-label={t('polls.createPollBtn', 'Create poll')}
+                        onClick={createPoll}
+                        style={styles.createButton}
+                    >
+                        {scheduledFor
+                            ? t('polls.schedulePoll', 'Anketi Zamanla')
+                            : t('polls.createPoll', 'Anket Oluştur')}
+                    </button>
                 </div>
-
-                <button
-                    aria-label={t('polls.createPollBtn', 'Create poll')}
-                    onClick={createPoll}
-                    style={styles.createButton}
-                >
-                    {scheduledFor
-                        ? t('polls.schedulePoll', 'Anketi Zamanla')
-                        : t('polls.createPoll', 'Anket Oluştur')}
-                </button>
             </div>
-        </div>
         </div >
     );
 };

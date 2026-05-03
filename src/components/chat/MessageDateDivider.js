@@ -46,6 +46,7 @@ const formatDateLabel = (dateStr) => {
  * @param {string} props.date - ISO date string for the divider
  */
 const MessageDateDivider = ({ date }) => {
+    const { t } = useTranslation();
     return (
         <div aria-label={t('chat.dateDivider', 'Date separator')} className="chat-date-divider">
             <div className="chat-date-divider-line" />

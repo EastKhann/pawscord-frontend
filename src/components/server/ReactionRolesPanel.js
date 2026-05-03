@@ -317,6 +317,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                                 <div className="emoji-picker">
                                     {commonEmojis.map((emoji) => (
                                         <button
+                                            key={emoji}
                                             aria-label={t('reactionRoles.selectEmoji', emoji)}
                                             className="emoji-option"
                                             onClick={() => {

@@ -137,7 +137,7 @@ const UserFooter = ({
                 role="button"
                 tabIndex={0}
                 aria-label={t('profile.openPanel', 'Open profile panel')}
-                data-testid="profile-panel-trigger"
+                data-testid="profile-panel-btn"
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onProfileClick()}
             >
                 <div className="pos-relative">

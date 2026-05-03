@@ -74,7 +74,7 @@ const QUALITY_LABELS_BASE = [
     {
         q: 0,
         key: 'srs.dontKnow',
-        fallback: t('srs.dontKnow','I have no idea'),
+        fallback: 'I have no idea',
         emoji: '😞',
         color: '#f23f42',
         bg: 'rgba(242,63,66,0.12)',
@@ -98,7 +98,7 @@ const QUALITY_LABELS_BASE = [
     {
         q: 3,
         key: 'srs.remembered',
-        fallback: t('srs.remembered','Remembered'),
+        fallback: 'Remembered',
         emoji: '🙂',
         color: '#5865f2',
         bg: 'rgba(88,101,242,0.12)',
@@ -114,7 +114,7 @@ const QUALITY_LABELS_BASE = [
     {
         q: 5,
         key: 'srs.veryEasy',
-        fallback: t('srs.tooEasy','Too easy!'),
+        fallback: 'Too easy!',
         emoji: '🔥',
         color: '#e779c1',
         bg: 'rgba(231,121,193,0.12)',
@@ -173,7 +173,7 @@ function SrsReviewPage() {
             try {
                 const xp = parseInt(localStorage.getItem('eng_xp') || '0') + (isGood ? 8 : 3);
                 localStorage.setItem('eng_xp', String(xp));
-            } catch {}
+            } catch { }
 
             // Send review to backend
             try {
@@ -243,7 +243,7 @@ function SrsReviewPage() {
                     <Link to="/eng-learn" style={S.backLink}>
                         <FaArrowLeft />
                     </Link>
-                    <span style={S.topTitle}>{t('srs.title','SRS Review')}</span>
+                    <span style={S.topTitle}>{t('srs.title', 'SRS Review')}</span>
                 </div>
                 <div style={S.center}>
                     <div style={_st1034}>
@@ -269,9 +269,9 @@ function SrsReviewPage() {
                                     <span>
                                         {sessionStats.reviewed > 0
                                             ? Math.round(
-                                                  (sessionStats.correct / sessionStats.reviewed) *
-                                                      100
-                                              )
+                                                (sessionStats.correct / sessionStats.reviewed) *
+                                                100
+                                            )
                                             : 0}
                                         %
                                     </span>
@@ -285,9 +285,9 @@ function SrsReviewPage() {
                             {done
                                 ? t('srs.greatJob', 'Harika iş çıkardın! 🎉')
                                 : t(
-                                      'srs.addNewWords',
-                                      t('srs.addWords','Add new words to use the SRS system.')
-                                  )}
+                                    'srs.addNewWords',
+                                    t('srs.addWords', 'Add new words to use the SRS system.')
+                                )}
                         </p>
                         <div>
                             <Link to="/eng-learn" style={S.primaryBtn}>
@@ -311,8 +311,8 @@ function SrsReviewPage() {
                     flashAnim === 'correct'
                         ? 'srs-correct 0.5s ease'
                         : flashAnim === 'wrong'
-                          ? 'srs-wrong 0.5s ease'
-                          : 'none',
+                            ? 'srs-wrong 0.5s ease'
+                            : 'none',
             }}
         >
             {/* Top Bar */}
@@ -320,7 +320,7 @@ function SrsReviewPage() {
                 <Link to="/eng-learn" style={S.backLink}>
                     <FaArrowLeft />
                 </Link>
-                <span style={S.topTitle}>{t('srs.title','SRS Review')}</span>
+                <span style={S.topTitle}>{t('srs.title', 'SRS Review')}</span>
                 <div style={S.topBadges}>
                     {sessionStats.streak >= 2 && (
                         <span style={S.streakBadge}>

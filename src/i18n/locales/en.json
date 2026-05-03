@@ -1452,7 +1452,22 @@
     "refreshSignals": "Refresh signals",
     "openFullPanel": "Open Crypto Signals panel in new tab",
     "fullPanel": "Full Panel",
-    "amountPlaceholder": "0"
+    "amountPlaceholder": "0",
+    "status": "Status",
+    "link": "Link",
+    "entry": "Entry",
+    "current": "Current",
+    "trades": "Trades",
+    "targetROE": "Target ROE",
+    "xMultiplier": "X Mult",
+    "days": "Days",
+    "alignment": "Alignment",
+    "advantagePct": "Advantage%",
+    "blPrice": "BL Price",
+    "posDirection": "Pos. Direction",
+    "yourBalance": "Balance",
+    "youOwn": "You Own",
+    "amount": "Amount"
   },
   "crypto.equipFailed": "Item equip failed",
   "crypto.txIdRequired": "Please enter transaction ID",
@@ -1665,8 +1680,8 @@
     "vocabulary": "Vocabulary",
     "accuracy": "Accuracy",
     "day": "Day",
-    "hubSubtitle": "Hub Subtitle",
-    "hubTitle": "Hub Title",
+    "hubSubtitle": "Vocabulary, grammar, speaking — all in one place",
+    "hubTitle": "English Learning Center",
     "moduleCount": "Module Count",
     "modules": "Modules",
     "quizLabel": "Quiz Label",
@@ -1718,7 +1733,9 @@
     "returnHome": "Return to home",
     "refreshPage": "Refresh page",
     "tryAgain": "Try again",
-    "boundary": "Error boundary"
+    "boundary": "Error boundary",
+    "pageNotFound": "This page could not be found.",
+    "goHome": "Go Home"
   },
   "event_adı": "Event Adi",
   "event_hakkında_detaillar": "Event Hakkinda Detaillar",
@@ -1795,7 +1812,8 @@
     "miniGames": "Mini Games",
     "noGamesYet": "No games played yet!",
     "startGame": "Start Game",
-    "makeMoveButton": "Make a move"
+    "makeMoveButton": "Make a move",
+    "hangman": "Hangman"
   },
   "gdpr.completed": "Completed",
   "gdpr.download": "Download",
@@ -3657,6 +3675,7 @@
         "currentSession": "● Current session",
         "endAllSessions": "End All Other Sessions",
         "endSession": "End Session",
+        "hoursAgo": "2 hours ago",
         "sessionsDesc": "Devices logged into your account."
       },
       "keybinds": {
@@ -3897,7 +3916,10 @@
       "badges": "Badges",
       "boosters": "Boosters",
       "cosmetics": "Cosmetics",
-      "special": "Special"
+      "special": "Special",
+      "themes": "Themes",
+      "accessories": "Accessories",
+      "stickers": "Stickers"
     },
     "claimFailed": "Reward could not be claimed.",
     "coinStore": "Coin Store",
@@ -4923,7 +4945,15 @@
     "loading": "Loading Voice Settings...",
     "noiseSuppTitle": "Noise Suppression",
     "noiseSuppDesc": "Reduce background noise",
-    "startRecording": "Hold to record"
+    "startRecording": "Hold to record",
+    "inputDevice": "Input Device",
+    "outputDevice": "Output Device",
+    "videoDevice": "Video Device",
+    "audioProcessing": "Audio Processing",
+    "camera": "Camera",
+    "microphone": "Microphone",
+    "liveChat": "Chat",
+    "voiceChatLabel": "Voice Chat"
   },
   "voice.keyBind": "Key: {{key}}",
   "voiceControl": {
@@ -5125,6 +5155,11 @@
   "api_servers": "Api Servers",
   "apiusagepanel": {
     "title": "Title"
+  },
+  "apiUsage": {
+    "title": "API Usage Analytics",
+    "rateLimitStatus": "Rate Limit Status",
+    "recentActivity": "Recent Activity"
   },
   "ara": "Ara",
   "attack_duration": "Attack Duration",
@@ -6361,7 +6396,8 @@
     "title": "📺 Watch Together",
     "subtitle": "Watch videos together with friends!",
     "newParty": "New Watch Party",
-    "createParty": "🎬 Create Watch Party"
+    "createParty": "🎬 Create Watch Party",
+    "supportedPlatforms": "Supported platforms:"
   },
   "srs": {
     "dontKnow": "I have no idea",
@@ -6397,7 +6433,11 @@
     "letterInput": "Enter a letter",
     "guessLetter": "Guess letter",
     "cellPosition": "Cell {{idx}}",
-    "guessNumber_input": "Your number guess"
+    "guessNumber_input": "Your number guess",
+    "guessActionBtn": "Guess!",
+    "guessLetterBtn": "Guess Letter",
+    "remainingGuesses": "Remaining guesses:",
+    "lastHint": "Last hint:"
   },
   "screenShare": {
     "stop": "Stop screen share",
@@ -6508,7 +6548,19 @@
     "overview": "Overview",
     "privacyPolicy": "🔒 Privacy Policy",
     "members": "members",
-    "add": "Add"
+    "add": "Add",
+    "features": "Features",
+    "links": "Links",
+    "developer": "Developer",
+    "commands": "Commands",
+    "reviews": "Reviews",
+    "addToServer": "Add to Server",
+    "verified": "✓ Verified",
+    "noCommands": "No commands available",
+    "servers": "server(s)",
+    "comments": "review(s)",
+    "website": "🌐 Website",
+    "supportServer": "💬 Support Server"
   },
   "highlights": {
     "keywordInput": "New keyword",
@@ -6639,7 +6691,15 @@
   },
   "inviteAudit": {
     "subtitle": "Track invite usage and member joins",
-    "details": "Invite Details"
+    "details": "Invite Details",
+    "code": "Invite Code",
+    "inviter": "Inviter",
+    "usedBy": "Used By",
+    "lastUsed": "Last Used By",
+    "totalInvites": "Total Invites",
+    "inviteCount": "{{count}} invite(s)",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month"
   },
   "massActions": {
     "usersAffected": "users will be affected!",
@@ -6816,7 +6876,9 @@
     "loadingInvite": "Loading invitation..."
   },
   "reportSystem": {
-    "reportedUser": "Reported User"
+    "reportedUser": "Reported User",
+    "title": "Report System",
+    "totalReports": "Total Reports"
   },
   "adminUser": {
     "unban": "Unban",

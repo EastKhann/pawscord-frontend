@@ -28,7 +28,7 @@ const useProfileData = ({ user }) => {
             const response = await authGet('/api/user/badges/');
             setBadges(response.data || []);
         } catch (err) {
-            logger.error('Badges fetch failed:', err);
+            logger.warn('Badges fetch failed:', err);
             setBadges([]);
         }
     };
@@ -38,7 +38,7 @@ const useProfileData = ({ user }) => {
             const response = await authGet('/api/user/achievements/');
             setAchievements(response.data || []);
         } catch (err) {
-            logger.error('Achievements fetch failed:', err);
+            logger.warn('Achievements fetch failed:', err);
             setAchievements([]);
         }
     };
@@ -53,7 +53,7 @@ const useProfileData = ({ user }) => {
             const response = await authGet('/api/premium/status/');
             setPremiumStatus(response.data);
         } catch (err) {
-            logger.error('Premium status fetch failed:', err);
+            logger.warn('Premium status fetch failed:', err);
         }
     };
 
@@ -62,7 +62,7 @@ const useProfileData = ({ user }) => {
             const response = await authGet('/api/store/balance/');
             setStoreBalance(response.data?.balance || 0);
         } catch (err) {
-            logger.error('Store balance fetch failed:', err);
+            logger.warn('Store balance fetch failed:', err);
         }
     };
 
@@ -71,7 +71,7 @@ const useProfileData = ({ user }) => {
             const response = await authGet(`/activity/${user.username}/`);
             setUserActivity(response.data || []);
         } catch (err) {
-            logger.error('User activity fetch failed:', err);
+            logger.warn('User activity fetch failed:', err);
             setUserActivity([]);
         }
     };
@@ -81,7 +81,7 @@ const useProfileData = ({ user }) => {
             const response = await authGet('/api/drafts/list/');
             setDrafts(response.data || []);
         } catch (err) {
-            logger.error('Drafts fetch failed:', err);
+            logger.warn('Drafts fetch failed:', err);
             setDrafts([]);
         }
     };

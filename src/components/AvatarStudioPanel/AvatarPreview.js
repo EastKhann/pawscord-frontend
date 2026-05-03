@@ -1,4 +1,5 @@
 ﻿import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const AvatarPreview = ({ avatar, parts, mini = false }) => {
     const size = mini ? 80 : 200;

@@ -31,7 +31,7 @@ const useProfileAdvanced = ({ user }) => {
             const data = response.data?.endorsements || response.data || [];
             setEndorsements(Array.isArray(data) ? data : []);
         } catch (err) {
-            logger.error('Endorsements fetch failed:', err);
+            logger.warn('Endorsements fetch failed:', err);
             setEndorsements([]);
         }
     };
@@ -72,7 +72,7 @@ const useProfileAdvanced = ({ user }) => {
             const response = await authGet(`/api/users/${user.username}/nicknames/history/`);
             setNicknameHistory(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
-            logger.error('Nickname history fetch failed:', err);
+            logger.warn('Nickname history fetch failed:', err);
             setNicknameHistory([]);
         }
     };
@@ -91,7 +91,7 @@ const useProfileAdvanced = ({ user }) => {
             const response = await authGet('/oauth/apps/list/');
             setOauthApps(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
-            logger.error('OAuth apps fetch failed:', err);
+            logger.warn('OAuth apps fetch failed:', err);
             setOauthApps([]);
         }
     };

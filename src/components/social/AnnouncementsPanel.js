@@ -357,9 +357,11 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                         <select
                                             value={newAnnouncement.repeat}
                                             onChange={handleRepeatChange}
-                                            aria-label={t('announcements.repeatSelect', 'Repeat schedule')}Bir kez</option>
-                                            <option value="daily">{t('common.daily','Daily')}</option>
-                                            <option value="weekly">{t('common.weekly','Weekly')}</option>
+                                            aria-label={t('announcements.repeatSelect', 'Repeat schedule')}
+                                        >
+                                            <option value="once">{t('common.once', 'Once')}</option>
+                                            <option value="daily">{t('common.daily', 'Daily')}</option>
+                                            <option value="weekly">{t('common.weekly', 'Weekly')}</option>
                                             <option value="monthly">Monthly</option>
                                         </select>
                                     </div>
@@ -372,7 +374,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                             onChange={handleEmbedToggle}
                                             aria-label={t('announcements.sendAsEmbed', 'Send as embed')}
                                         />
-                                        <span>{t('announcements.sendAsEmbed','Send as embed')}</span>
+                                        <span>{t('announcements.sendAsEmbed', 'Send as embed')}</span>
                                     </label>
                                 </div>
                             </div>
@@ -389,14 +391,14 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                     className="submit-btn"
                                     onClick={createAnnouncement}
                                 >
-                                    {t('announcements.send','📢 Create')}
+                                    {t('announcements.send', '📢 Create')}
                                 </button>
                             </div>
                         </div>
-        </div>
-    )
-}
-            </div> 
+                    </div>
+                )
+                }
+            </div>
         </div >
     );
 };

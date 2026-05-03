@@ -203,28 +203,28 @@ export const Hangman = ({ onGameEnd, customWord }) => {
 // ==================== TRIVIA ====================
 const TRIVIA_QUESTIONS = [
     {
-        question: t('miniGames.q1', 'What does "typeof null" return in JavaScript?'),
+        question: 'What does "typeof null" return in JavaScript?',
         options: ["null", "undefined", "object", "string"],
         correct: 2
     },
     {
-        question: t('miniGames.q2', 'In which year was the first version of React released?'),
+        question: 'In which year was the first version of React released?',
         options: ["2011", "2013", "2015", "2017"],
         correct: 1
     },
     {
-        question: t('ui.http_protokolunde_404_kodu_ne_anlama_gel'),
-        options: [t('ui.server_errorsi'), "Not found", "Yetki Yok", "Redirect"],
+        question: 'HTTP 404 status code means?',
+        options: ['Server Error', "Not found", "Yetki Yok", "Redirect"],
         correct: 1
     },
     {
-        question: t('miniGames.q3', 'Who is the creator of Python?'),
+        question: 'Who is the creator of Python?',
         options: ["Guido van Rossum", "James Gosling", "Bjarne Stroustrup", "Dennis Ritchie"],
         correct: 0
     },
     {
         question: "Git'te 'HEAD' ne anlama gelir?",
-        options: [t('ui.ilk_commit'), "Son commit", "Current branch reference", "Uzak repo"],
+        options: ['First commit', "Son commit", "Current branch reference", "Uzak repo"],
         correct: 2
     },
     {
@@ -299,7 +299,7 @@ export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
         return (
             <div className="trivia-game">
                 <div className="trivia-result">
-                    <h3>{score >= 3 ? '🎉 Tebrikler!' : t('ui.olmadi')</h3>
+                    <h3>{score >= 3 ? '🎉 Tebrikler!' : t('ui.olmadi')}</h3>
                     <div className="final-score">
                         <span className="score-value">{score}</span>
                         <span className="score-total">/ {shuffledQuestions.length}</span>
@@ -354,6 +354,7 @@ export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
 
 // ==================== GAME LAUNCHER ====================
 const MiniGames = ({ onClose }) => {
+    const { t } = useTranslation();
     const [selectedGame, setSelectedGame] = useState(null);
 
     const games = [

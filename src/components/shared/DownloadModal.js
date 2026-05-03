@@ -45,12 +45,12 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
     const handleDownload = (platform) => {
         setDownloadStarted(platform);
         if (platform === 'windows') {
-            window.location.href = 'https://media.pawscord.com/builds/Pawscord-Setup.exe';
+            window.location.href = 'https://media.pawscord.com/releases/latest/Pawscord-Setup.exe';
         } else if (platform === 'android') {
             if (isNativeApp) {
-                window.open('https://media.pawscord.com/builds/Pawscord.apk', '_system');
+                window.open('https://media.pawscord.com/releases/latest/app-release.apk', '_system');
             } else {
-                window.location.href = 'https://media.pawscord.com/builds/Pawscord.apk';
+                window.location.href = 'https://media.pawscord.com/releases/latest/app-release.apk';
             }
         }
         setTimeout(() => setDownloadStarted(null), 3000);
@@ -88,7 +88,7 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                     </div>
                     <div style={styles.statDivider} />
                     <div style={styles.statItem}>
-                        <span style={styles.statNumber}>v1.1</span>
+                        <span style={styles.statNumber}>v1.1.245</span>
                         <span style={styles.statLabel}>{t('download.version', 'Sürüm')}</span>
                     </div>
                     <div style={styles.statDivider} />
@@ -124,8 +124,8 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                             <FaWindows size={40} color="#00a8fc" />
                         </div>
                         <h3 style={styles.platformName}>Windows</h3>
-                        <span style={styles.versionBadge}>v1.1 • Windows 10/11 (64-bit)</span>
-                        <span style={styles.fileSize}>~85 MB • EXE</span>
+                        <span style={styles.versionBadge}>v1.1.245 • Windows 10/11 (64-bit)</span>
+                        <span style={styles.fileSize}>~740 MB • EXE</span>
                         <button
                             aria-label={t('download.downloadWindows')}
                             onClick={() => handleDownload('windows')}
@@ -181,8 +181,8 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                             <FaAndroid size={40} color="#3ddc84" />
                         </div>
                         <h3 style={styles.platformName}>Android</h3>
-                        <span style={styles.versionBadge}>v1.1 • {t('download.apkFile')}</span>
-                        <span style={styles.fileSize}>~25 MB • APK</span>
+                        <span style={styles.versionBadge}>v1.1.245 • {t('download.apkFile')}</span>
+                        <span style={styles.fileSize}>~26 MB • APK</span>
                         <button
                             aria-label={t('download.downloadAndroid')}
                             onClick={() => handleDownload('android')}

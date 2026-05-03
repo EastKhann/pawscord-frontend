@@ -46,7 +46,7 @@ const DevicesTab = () => {
             browser: 'Chrome Mobile 144',
             ip: '88.238.xx.xxx',
             location: 'Istanbul',
-            lastActive: '2 hours ago',
+            lastActive: t('settings.tabs.devices.hoursAgo', '2 hours ago'),
             current: false,
         },
     ]);

@@ -93,47 +93,48 @@ const MessageReactions = ({
             {/* Mevcut Reactions */}
             {groupedReactions.map((reactionGroup, index) => (
                 <button
+                    key={index}
                     aria-label={reactionGroup.emoji ? `${t('msgReactions.react', 'React with')} ${reactionGroup.emoji}` : t('msgReactions.react', 'React')}
-            style={{
-                ...styles.reactionButton,
-                ...(reactionGroup.hasCurrentUser ? styles.reactionButtonActive : {}),
-            }}
-            title={getTooltipText(reactionGroup)}
+                    style={{
+                        ...styles.reactionButton,
+                        ...(reactionGroup.hasCurrentUser ? styles.reactionButtonActive : {}),
+                    }}
+                    title={getTooltipText(reactionGroup)}
                 >
-            <span style={styles.emoji}>{reactionGroup.emoji}</span>
-            <span style={styles.count}>{reactionGroup.count}</span>
-        </button>
-    ))
-}
-
-{/* Add Reaction Button */ }
-<button
-    aria-label={t('msgReactions.addReaction', 'Add reaction')}
-    onClick={() => setShowPicker(!showPicker)}
-    style={styles.addButton}
-    title="Tepki ekle"
->
-    <FaPlus className="fs-10" />
-</button>
-
-{/* Quick Emoji Picker */ }
-{
-    showPicker && (
-        <div style={styles.quickPicker}>
-            {QUICK_REACTIONS.map((emoji, index) => (
-                <button
-                    aria-label={emoji}
-                    key={`item-${index}`}
-                    onClick={() => handleReactionClick(emoji)}
-                    style={styles.quickEmoji}
-                    title={emoji}
-                >
-                    {emoji}
+                    <span style={styles.emoji}>{reactionGroup.emoji}</span>
+                    <span style={styles.count}>{reactionGroup.count}</span>
                 </button>
-            ))}
-        </div>
-    )
-}
+            ))
+            }
+
+            {/* Add Reaction Button */}
+            <button
+                aria-label={t('msgReactions.addReaction', 'Add reaction')}
+                onClick={() => setShowPicker(!showPicker)}
+                style={styles.addButton}
+                title="Tepki ekle"
+            >
+                <FaPlus className="fs-10" />
+            </button>
+
+            {/* Quick Emoji Picker */}
+            {
+                showPicker && (
+                    <div style={styles.quickPicker}>
+                        {QUICK_REACTIONS.map((emoji, index) => (
+                            <button
+                                aria-label={emoji}
+                                key={`item-${index}`}
+                                onClick={() => handleReactionClick(emoji)}
+                                style={styles.quickEmoji}
+                                title={emoji}
+                            >
+                                {emoji}
+                            </button>
+                        ))}
+                    </div>
+                )
+            }
         </div >
     );
 };

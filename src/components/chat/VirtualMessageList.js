@@ -25,6 +25,7 @@ const overflowStyle = (style) => ({ ...style, overflow: 'hidden' });
 // Memoized Row
 const Row = memo(
     ({ index, style, data, isScrolling }) => {
+        const { t } = useTranslation();
         const [isLoading, setIsLoading] = useState(false);
         const [error, setError] = useState(null);
         const { messages, renderMessage, setItemSize, getItemSize } = data;

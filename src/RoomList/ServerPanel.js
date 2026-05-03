@@ -296,6 +296,7 @@ const CategorySection = React.memo(
         handleKickUserFromChannel,
         onViewUserProfile,
     }) => {
+        const { t } = useTranslation();
         const isCollapsed = collapsedCategories[cat.id];
         const isEditingThisCat = editingItemId === `cat-${cat.id}`;
 
@@ -558,6 +559,7 @@ const ChannelItem = React.memo(
         handleKickUserFromChannel,
         onViewUserProfile,
     }) => {
+        const { t } = useTranslation();
         const isActive = currentVoiceRoom === room.slug;
         const unread = safeUnreadCounts[`room-${room.slug}`] || 0;
         const isVoice = room.channel_type === 'voice';

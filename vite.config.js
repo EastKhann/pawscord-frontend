@@ -265,7 +265,12 @@ export default defineConfig({
             // the already-working main chunk instead of separate JS files.
             // UI libraries - Toastify, color picker
             // NOTE: renamed from 'main' to 'app-vendor' to bust CDN cache for old wrong-cached main-BNr3Bg49.js
-            if (id.includes('react-toastify') || id.includes('react-color')) {
+            // 🔥 FIX (v1.1.239): prop-types MUST ship with react-color (its consumer) in the
+            // same chunk. Previously Rollup hoisted prop-types into 'main', and 'app-vendor'
+            // imported PropTypes from 'main' while 'main' also depended on 'app-vendor' →
+            // circular dep → "Cannot access 'C' before initialization" TDZ crash on boot.
+            if (id.includes('react-toastify') || id.includes('react-color') ||
+              id.includes('prop-types')) {
               return 'app-vendor';
             }
 

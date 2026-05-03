@@ -8,6 +8,7 @@ import logger from '../../utils/logger';
 import { API_BASE_URL } from '../../utils/apiEndpoints';
 
 const ServerBoost = ({ serverId, onClose }) => {
+    const { t } = useTranslation();
     const [boostData, setBoostData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [boostHistory, setBoostHistory] = useState([]);

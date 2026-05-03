@@ -48,6 +48,7 @@ export const LanguageSelector = ({ compact = false }) => {
                 <div className="language-dropdown">
                     {languages.map((lang) => (
                         <button
+                            key={lang.native_name}
                             aria-label={t('language.selectLang', 'Select {{lang}}', { lang: lang.native_name })}
                         >
                             <span className="lang-flag">{lang.flag}</span>
@@ -144,6 +145,7 @@ export const InlineLanguageSwitcher = () => {
         <div className="inline-language-switcher">
             {languages.slice(0, 4).map((lang) => (
                 <button
+                    key={lang.native_name}
                     aria-label={t('language.selectLang', 'Select {{lang}}', { lang: lang.native_name })}
                 >
                     {lang.flag}

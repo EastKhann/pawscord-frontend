@@ -59,8 +59,6 @@ const QuizResult = ({ score, totalQuestions, resetQuiz, isLoading = false, error
     const canvasRef = useRef(null);
     const cleanupRef = useRef(null);
 
-    if (isLoading) return <div>{t('common.loading')}</div>;
-    if (error) return <div role="alert">{error}</div>;
     const successRate = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 100;
     const stars = successRate === 100 ? 3 : successRate >= 60 ? 2 : successRate >= 30 ? 1 : 0;
     let message = t('quiz.prettyGood', 'Oldukça iyi! Devam et.');
@@ -78,7 +76,6 @@ const QuizResult = ({ score, totalQuestions, resetQuiz, isLoading = false, error
 
     const xpEarned = score * 10 + (successRate === 100 ? 50 : 0);
     const passed = successRate >= 60;
-
     useEffect(() => {
         if (!passed || !canvasRef.current) return;
         cleanupRef.current = launchConfetti(canvasRef.current);
@@ -102,6 +99,9 @@ const QuizResult = ({ score, totalQuestions, resetQuiz, isLoading = false, error
             }
         }
     }, [successRate, t]);
+
+    if (isLoading) return <div>{t('common.loading')}</div>;
+    if (error) return <div role="alert">{error}</div>;
 
     return (
         <div style={styles.scrollWrapper}>

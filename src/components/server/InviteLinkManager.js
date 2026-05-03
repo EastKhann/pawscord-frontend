@@ -28,13 +28,13 @@ const EXPIRE_OPTIONS = [
 ];
 
 const MAX_USES_OPTIONS = [
-    { label: t('invite.unlimited', 'Unlimited'), value: 0 },
-    { label: t('invite.uses', '{{n}} use', { n: 1 }), value: 1 },
-    { label: t('invite.uses', '{{n}} uses', { n: 5 }), value: 5 },
-    { label: t('invite.uses', '{{n}} uses', { n: 10 }), value: 10 },
-    { label: t('invite.uses', '{{n}} uses', { n: 25 }), value: 25 },
-    { label: t('invite.uses', '{{n}} uses', { n: 50 }), value: 50 },
-    { label: t('invite.uses', '{{n}} uses', { n: 100 }), value: 100 },
+    { label: 'Unlimited', value: 0 },
+    { label: '1 use', value: 1 },
+    { label: '5 uses', value: 5 },
+    { label: '10 uses', value: 10 },
+    { label: '25 uses', value: 25 },
+    { label: '50 uses', value: 50 },
+    { label: '100 uses', value: 100 },
 ];
 
 const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeInvite }) => {
@@ -164,28 +164,28 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
                             <div style={S.inviteActions}>
                                 <button
                                     aria-label={t('inviteLinks.copyLink', 'Copy link')}
-                                title="Kopyala"
+                                    title="Kopyala"
                                 >
-                                {copiedId === invite.id ? (
-                                    <FaCheck className="icon-success" />
-                                ) : (
-                                    <FaCopy />
-                                )}
-                            </button>
-                            <button
-                                aria-label={t('inviteLinks.revokeLink', 'Revoke invite link')}
-                                type="button"
-                                style={S.txt}
-                                onClick={() => onRevokeInvite?.(invite.id)}
-                                title={t('common.cancel', 'Cancel')}
-                            >
-                                <FaTrash />
-                            </button>
+                                    {copiedId === invite.id ? (
+                                        <FaCheck className="icon-success" />
+                                    ) : (
+                                        <FaCopy />
+                                    )}
+                                </button>
+                                <button
+                                    aria-label={t('inviteLinks.revokeLink', 'Revoke invite link')}
+                                    type="button"
+                                    style={S.txt}
+                                    onClick={() => onRevokeInvite?.(invite.id)}
+                                    title={t('common.cancel', 'Cancel')}
+                                >
+                                    <FaTrash />
+                                </button>
+                            </div>
                         </div>
-                        </div>
-            ))
+                    ))
                 )}
-        </div>
+            </div>
         </div >
     );
 };

@@ -27,12 +27,12 @@ const useProfileSecurity = () => {
             const enabledMethods = response.data?.enabled || [];
             setTwoFactorEnabled(
                 enabledMethods.includes('totp') ||
-                    response.data?.totp_enabled ||
-                    response.data?.is_enabled ||
-                    false
+                response.data?.totp_enabled ||
+                response.data?.is_enabled ||
+                false
             );
         } catch (err) {
-            logger.error('2FA status check failed:', err);
+            logger.warn('2FA status check failed:', err);
         }
     };
 
@@ -70,7 +70,7 @@ const useProfileSecurity = () => {
     };
 
     const disable2FA = async () => {
-        if (!(await confirmDialog(t('security.disable2FAConfirm','Are you sure you want to disable 2FA?')))) return;
+        if (!(await confirmDialog(t('security.disable2FAConfirm', 'Are you sure you want to disable 2FA?')))) return;
         try {
             setLoading((l) => ({ ...l, disable2fa: true }));
             await authPost('/api/security/2fa/disable/');
@@ -88,7 +88,7 @@ const useProfileSecurity = () => {
             const response = await authGet('/api/users/password_status/');
             setHasPassword(response.data?.has_password ?? true);
         } catch (err) {
-            logger.error('Password status check failed:', err);
+            logger.warn('Password status check failed:', err);
             setHasPassword(true);
         }
     };
@@ -136,7 +136,7 @@ const useProfileSecurity = () => {
             const response = await authGet('/auth/check-verification/');
             setEmailVerified(response.data?.is_verified || false);
         } catch (err) {
-            logger.error('Email verification check failed:', err);
+            logger.warn('Email verification check failed:', err);
         }
     };
 
@@ -157,7 +157,7 @@ const useProfileSecurity = () => {
             const response = await authGet('/api/security/sessions/');
             setSessions(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
-            logger.error('Sessions fetch failed:', err);
+            logger.warn('Sessions fetch failed:', err);
             setSessions([]);
         }
     };
@@ -173,7 +173,7 @@ const useProfileSecurity = () => {
     };
 
     const revokeAllSessions = async () => {
-        if (!(await confirmDialog('Are you sure you want to end all active sessions?'))) return;
+        if (!(await confirmDialog(t('security.revokeAllConfirm', 'T\u00fcm aktif oturumlar\u0131 sonland\u0131rmak istedi\u011finize emin misiniz?')))) return;
         try {
             await authPost('/api/security/sessions/revoke-all/');
             toast.success(t('profile.allSessionsEnded'));

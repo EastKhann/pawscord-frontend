@@ -137,7 +137,7 @@ const LiveStreamPanel = ({
                                                     })
                                                 }
                                             />
-                                            <FaVideo size={14} /> <span>Kamera</span>
+                                            <FaVideo size={14} /> <span>{t('voice.camera', 'Kamera')}</span>
                                         </label>
                                         <label style={styles.settingLabel}>
                                             <input
@@ -150,7 +150,7 @@ const LiveStreamPanel = ({
                                                     })
                                                 }
                                             />
-                                            <FaMicrophone size={14} /> <span>Mikrofon</span>
+                                            <FaMicrophone size={14} /> <span>{t('voice.microphone', 'Mikrofon')}</span>
                                         </label>
                                         <label style={styles.settingLabel}>
                                             <input
@@ -219,7 +219,7 @@ const LiveStreamPanel = ({
 
                         <div style={styles.chatSection}>
                             <div style={styles.sectionHeader}>
-                                <FaComments size={16} /> <span>Sohbet</span>
+                                <FaComments size={16} /> <span>{t('voice.liveChat', 'Sohbet')}</span>
                             </div>
                             <div style={styles.chatMessages}>
                                 {chatMessages.map((msg, idx) => (

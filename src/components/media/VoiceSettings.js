@@ -212,114 +212,114 @@ const VoiceSettings = ({ userId, onClose }) => {
                 <div className="settings-content">
                     {/* Input Device */}
                     <div className="setting-section">
-                        <h3><FaMicrophone /> Input Device</h3>
+                        <h3><FaMicrophone /> {t('voice.inputDevice', 'Input Device')}</h3>
 
                         <div className="form-group">
                             <label>Mikrofon</label>
-                            <select value={selectedInput} onChange={(e) => setSelectedInput(e.target.value)}
+                            <select value={selectedInput} onChange={(e) => setSelectedInput(e.target.value)}>
                                 <option value="">Default</option>
-                            {devices.input.map(device => (
-                                <option key={device.deviceId} value={device.deviceId}>
-                                    {device.label || `Microphone ${device.deviceId.slice(0, 8)}`}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                                {devices.input.map(device => (
+                                    <option key={device.deviceId} value={device.deviceId}>
+                                        {device.label || `Microphone ${device.deviceId.slice(0, 8)}`}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                    <div className="form-group">
-                        <label>Input Volume: {inputVolume}%</label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="200"
-                            value={inputVolume}
-                            onChange={(e) => setInputVolume(Number(e.target.value))}
-                            className="volume-slider"
-                        />
-                    </div>
+                        <div className="form-group">
+                            <label>Input Volume: {inputVolume}%</label>
+                            <input
+                                type="range"
+                                min="0"
+                                max="200"
+                                value={inputVolume}
+                                onChange={(e) => setInputVolume(Number(e.target.value))}
+                                className="volume-slider"
+                            />
+                        </div>
 
-                    <div className="mic-test">
-                        <button
-                            aria-label={testing ? t('voiceSettings.stopMicTest', 'Stop microphone test') : t('voiceSettings.testMic', 'Test microphone')}
-                            onClick={testing ? stopTesting : testMicrophone}
-                            className={`btn-test ${testing ? 'active' : ''}`}>
-                            {testing ? 'Testi Durdur' : 'Mikrofonu Test Et'}
-                        </button>
-                        <div className="level-meter">
-                            <div className="level-fill" style={{ width: `${inputLevel}%` }} />
+                        <div className="mic-test">
+                            <button
+                                aria-label={testing ? t('voiceSettings.stopMicTest', 'Stop microphone test') : t('voiceSettings.testMic', 'Test microphone')}
+                                onClick={testing ? stopTesting : testMicrophone}
+                                className={`btn-test ${testing ? 'active' : ''}`}>
+                                {testing ? 'Testi Durdur' : 'Mikrofonu Test Et'}
+                            </button>
+                            <div className="level-meter">
+                                <div className="level-fill" style={{ width: `${inputLevel}%` }} />
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Output Device */}
-                <div className="setting-section">
-                    <h3><FaHeadphones /> Output Device</h3>
+                    {/* Output Device */}
+                    <div className="setting-section">
+                        <h3><FaHeadphones /> {t('voice.outputDevice', 'Output Device')}</h3>
 
-                    <div className="form-group">
-                        <label>Speakers/Headphones</label>
-                        <select value={selectedOutput} onChange={(e) => setSelectedOutput(e.target.value)}
+                        <div className="form-group">
+                            <label>Speakers/Headphones</label>
+                            <select value={selectedOutput} onChange={(e) => setSelectedOutput(e.target.value)}>
                                 <option value="">Default</option>
-                        {devices.output.map(device => (
-                            <option key={device.deviceId} value={device.deviceId}>
-                                {device.label || `Speaker ${device.deviceId.slice(0, 8)}`}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                                {devices.output.map(device => (
+                                    <option key={device.deviceId} value={device.deviceId}>
+                                        {device.label || `Speaker ${device.deviceId.slice(0, 8)}`}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                <div className="form-group">
-                    <label>Output Volume: {outputVolume}%</label>
-                    <input
-                        type="range"
-                        min="0"
-                        max="200"
-                        value={outputVolume}
-                        onChange={(e) => setOutputVolume(Number(e.target.value))}
-                        className="volume-slider"
-                    />
-                </div>
-            </div>
+                        <div className="form-group">
+                            <label>Output Volume: {outputVolume}%</label>
+                            <input
+                                type="range"
+                                min="0"
+                                max="200"
+                                value={outputVolume}
+                                onChange={(e) => setOutputVolume(Number(e.target.value))}
+                                className="volume-slider"
+                            />
+                        </div>
+                    </div>
 
-            {/* Video Device */}
-            <div className="setting-section">
-                <h3><FaVideo /> Video Device</h3>
+                    {/* Video Device */}
+                    <div className="setting-section">
+                        <h3><FaVideo /> {t('voice.videoDevice', 'Video Device')}</h3>
 
-                <div className="form-group">
-                    <label>Kamera</label>
-                    <select value={selectedVideo} onChange={(e) => setSelectedVideo(e.target.value)}
+                        <div className="form-group">
+                            <label>Kamera</label>
+                            <select value={selectedVideo} onChange={(e) => setSelectedVideo(e.target.value)}>
                                 <option value="">Kamera Yok</option>
-                    {devices.video.map(device => (
-                        <option key={device.deviceId} value={device.deviceId}>
-                            {device.label || `Camera ${device.deviceId.slice(0, 8)}`}
-                        </option>
-                    ))}
-                </select>
-            </div>
+                                {devices.video.map(device => (
+                                    <option key={device.deviceId} value={device.deviceId}>
+                                        {device.label || `Camera ${device.deviceId.slice(0, 8)}`}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-            <div className="video-settings-grid">
-                <div className="form-group">
-                    <label>Video Kalitesi</label>
-                    <select value={videoQuality} onChange={(e) => setVideoQuality(e.target.value)}
+                        <div className="video-settings-grid">
+                            <div className="form-group">
+                                <label>Video Kalitesi</label>
+                                <select value={videoQuality} onChange={(e) => setVideoQuality(e.target.value)}>
                                     <option value="480p">480p</option>
-                    <option value="720p">720p (HD)</option>
-                    <option value="1080p">1080p (Full HD)</option>
-                </select>
-            </div>
+                                    <option value="720p">720p (HD)</option>
+                                    <option value="1080p">1080p (Full HD)</option>
+                                </select>
+                            </div>
 
-            <div className="form-group">
-                <label>{t('voice.frameRate', 'Frame Rate')}</label>
-                <select value={frameRate} onChange={(e) => setFrameRate(Number(e.target.value))}
+                            <div className="form-group">
+                                <label>{t('voice.frameRate', 'Frame Rate')}</label>
+                                <select value={frameRate} onChange={(e) => setFrameRate(Number(e.target.value))}>
                                     <option value={15}>15 FPS</option>
-                <option value={30}>30 FPS</option>
-                <option value={60}>60 FPS</option>
-            </select>
-        </div>
+                                    <option value={30}>30 FPS</option>
+                                    <option value={60}>60 FPS</option>
+                                </select>
+                            </div>
                         </div >
                     </div >
 
-    {/* Audio Processing */ }
-    < div className = "setting-section" >
-                        <h3><FaCog /> Audio Processing</h3>
+                    {/* Audio Processing */}
+                    < div className="setting-section" >
+                        <h3><FaCog /> {t('voice.audioProcessing', 'Audio Processing')}</h3>
 
                         <div className="toggle-group">
                             <div className="toggle-item">
@@ -394,30 +394,30 @@ const VoiceSettings = ({ userId, onClose }) => {
                         </div>
                     </div >
 
-    {/* Warning */ }
-{
-    devices.input.length === 0 && (
-        <div className="warning-box">
-            <FaExclamationTriangle />
-            <div>
-                <h4>{t('voice.noMicTitle', '🎤 Microphone Not Found')}</h4>
-                <p>{t('voice.noMicDesc', 'Connect a microphone to use audio features')}</p>
-            </div>
-        </div>
-    )
-}
+                    {/* Warning */}
+                    {
+                        devices.input.length === 0 && (
+                            <div className="warning-box">
+                                <FaExclamationTriangle />
+                                <div>
+                                    <h4>{t('voice.noMicTitle', '🎤 Microphone Not Found')}</h4>
+                                    <p>{t('voice.noMicDesc', 'Connect a microphone to use audio features')}</p>
+                                </div>
+                            </div>
+                        )
+                    }
                 </div >
 
-    <div className="settings-actions">
-        <button
-            aria-label={t('voiceSettings.resetDefaults', 'Reset to defaults')} onClick={resetToDefaults} className="btn-reset">
-            {t('voice.resetToDefault', 'Reset to Default')}
-        </button>
-        <button
-            aria-label={t('voiceSettings.saveSettings', 'Save settings')} onClick={updateSettings} className="btn-save">
-            {t('voice.saveSettings', 'Save Settings')}
-        </button>
-    </div>
+                <div className="settings-actions">
+                    <button
+                        aria-label={t('voiceSettings.resetDefaults', 'Reset to defaults')} onClick={resetToDefaults} className="btn-reset">
+                        {t('voice.resetToDefault', 'Reset to Default')}
+                    </button>
+                    <button
+                        aria-label={t('voiceSettings.saveSettings', 'Save settings')} onClick={updateSettings} className="btn-save">
+                        {t('voice.saveSettings', 'Save Settings')}
+                    </button>
+                </div>
             </div >
         </div >
     );

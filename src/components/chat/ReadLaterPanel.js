@@ -202,6 +202,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                     <div className="tag-filter-list">
                         {tags.map((tag) => (
                             <button
+                                key={tag.id}
                                 aria-label={t('readLater.filterByTag', tag.name)}
                                 className={`tag-filter-button ${selectedTags.includes(tag.id) ? 'active' : ''}`}
                                 style={{ borderColor: tag.color }}
@@ -350,6 +351,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
                                 <div className="color-picker">
                                     {tagColors.map((color) => (
                                         <button
+                                            key={color}
                                             aria-label={t('readLater.selectColor', color)}
                                             className={`color - option ${newTagColor === color ? 'selected' : ''}`}
                                             style={{ backgroundColor: color }}

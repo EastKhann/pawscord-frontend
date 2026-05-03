@@ -206,6 +206,7 @@ const WatchPartyEnhanced = ({
                     <div style={styles.quickReactions}>
                         {QUICK_EMOJIS.map((emoji) => (
                             <button
+                                key={emoji}
                                 aria-label={t('watchParty.sendReaction', 'Send reaction')}
                                 onClick={() => sendReaction(emoji)}
                                 style={styles.reactionButton}

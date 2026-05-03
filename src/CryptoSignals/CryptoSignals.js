@@ -238,7 +238,7 @@ const CryptoSignals = () => {
                             key: 'winrate_mode',
                             icon: <FaTrophy />,
                             label: isMobile
-                                ? t('cryptoSignals.winRate','Win Rate')
+                                ? t('cryptoSignals.winRate', 'Win Rate')
                                 : `🏆 ${t('crypto.winrateSort', 'Kazanma Oranı Sıralaması')}`,
                             color: '#23a559',
                         },
@@ -262,62 +262,62 @@ const CryptoSignals = () => {
                 <div style={S.statsBar}>
                     {(stats.isBL
                         ? [
-                              { num: stats.total, label: t('crypto.signal', 'Signal') },
-                              { num: stats.uniqueCoins, label: t('crypto.coin', 'Coin') },
-                              {
-                                  num: stats.profits,
-                                  label: t('crypto.inAdvantage', 'In Advantage'),
-                                  color: '#23a559',
-                              },
-                              {
-                                  num: stats.losses,
-                                  label: t('crypto.disadvantage', 'Disadvantage'),
-                                  color: '#da373c',
-                              },
-                              {
-                                  num: `${stats.avgPnl >= 0 ? '+' : ''}${stats.avgPnl.toFixed(2)}%`,
-                                  label: t('crypto.avgAdvantage', 'Avg Advantage'),
-                                  color: stats.avgPnl >= 0 ? '#23a559' : '#da373c',
-                              },
-                              {
-                                  num: `${stats.avgWr.toFixed(1)}%`,
-                                  label: t('crypto.avgWR', 'Avg WR'),
-                                  color: stats.avgWr >= 50 ? '#23a559' : '#f0b232',
-                              },
-                              {
-                                  num: `${(stats.avgBl || 0).toFixed(2)}%`,
-                                  label: t('crypto.avgBL', 'Avg BL%'),
-                                  color: '#e74c3c',
-                              },
-                          ]
+                            { num: stats.total, label: t('crypto.signal', 'Signal') },
+                            { num: stats.uniqueCoins, label: t('crypto.coin', 'Coin') },
+                            {
+                                num: stats.profits,
+                                label: t('crypto.inAdvantage', 'In Advantage'),
+                                color: '#23a559',
+                            },
+                            {
+                                num: stats.losses,
+                                label: t('crypto.disadvantage', 'Disadvantage'),
+                                color: '#da373c',
+                            },
+                            {
+                                num: `${stats.avgPnl >= 0 ? '+' : ''}${stats.avgPnl.toFixed(2)}%`,
+                                label: t('crypto.avgAdvantage', 'Avg Advantage'),
+                                color: stats.avgPnl >= 0 ? '#23a559' : '#da373c',
+                            },
+                            {
+                                num: `${stats.avgWr.toFixed(1)}%`,
+                                label: t('crypto.avgWR', 'Avg WR'),
+                                color: stats.avgWr >= 50 ? '#23a559' : '#f0b232',
+                            },
+                            {
+                                num: `${(stats.avgBl || 0).toFixed(2)}%`,
+                                label: t('crypto.avgBL', 'Avg BL%'),
+                                color: '#e74c3c',
+                            },
+                        ]
                         : [
-                              { num: stats.total, label: t('crypto.strategy', 'Strategy') },
-                              { num: stats.uniqueCoins, label: t('crypto.coin', 'Coin') },
-                              {
-                                  num: isPositionsTab ? stats.uyumluSignal : stats.profits,
-                                  label: isPositionsTab
-                                      ? `✅ ${t('crypto.aligned', 'Aligned')}`
-                                      : t('crypto.inProfit', 'In Profit'),
-                                  color: '#23a559',
-                              },
-                              {
-                                  num: isPositionsTab ? stats.tersSignal : stats.losses,
-                                  label: isPositionsTab
-                                      ? `⚠️ ${t('crypto.counterSignals', 'Counter Signals')}`
-                                      : t('crypto.inLoss', 'In Loss'),
-                                  color: '#da373c',
-                              },
-                              {
-                                  num: `${stats.avgPnl >= 0 ? '+' : ''}${stats.avgPnl.toFixed(2)}%`,
-                                  label: t('crypto.avgPNL', 'Avg PNL'),
-                                  color: stats.avgPnl >= 0 ? '#23a559' : '#da373c',
-                              },
-                              {
-                                  num: `${stats.avgWr.toFixed(1)}%`,
-                                  label: t('crypto.avgWR', 'Avg WR'),
-                                  color: stats.avgWr >= 50 ? '#23a559' : '#f0b232',
-                              },
-                          ]
+                            { num: stats.total, label: t('crypto.strategy', 'Strategy') },
+                            { num: stats.uniqueCoins, label: t('crypto.coin', 'Coin') },
+                            {
+                                num: isPositionsTab ? stats.uyumluSignal : stats.profits,
+                                label: isPositionsTab
+                                    ? `✅ ${t('crypto.aligned', 'Aligned')}`
+                                    : t('crypto.inProfit', 'In Profit'),
+                                color: '#23a559',
+                            },
+                            {
+                                num: isPositionsTab ? stats.tersSignal : stats.losses,
+                                label: isPositionsTab
+                                    ? `⚠️ ${t('crypto.counterSignals', 'Counter Signals')}`
+                                    : t('crypto.inLoss', 'In Loss'),
+                                color: '#da373c',
+                            },
+                            {
+                                num: `${stats.avgPnl >= 0 ? '+' : ''}${stats.avgPnl.toFixed(2)}%`,
+                                label: t('crypto.avgPNL', 'Avg PNL'),
+                                color: stats.avgPnl >= 0 ? '#23a559' : '#da373c',
+                            },
+                            {
+                                num: `${stats.avgWr.toFixed(1)}%`,
+                                label: t('crypto.avgWR', 'Avg WR'),
+                                color: stats.avgWr >= 50 ? '#23a559' : '#f0b232',
+                            },
+                        ]
                     ).map(({ num, label, color }) => (
                         <div key={label} style={S.statCard}>
                             <span style={{ ...S.statNum, ...(color ? { color } : {}) }}>{num}</span>
@@ -340,11 +340,11 @@ const CryptoSignals = () => {
                                 ...S.tabBtn,
                                 ...(isActive
                                     ? {
-                                          backgroundColor: cfg.color,
-                                          borderColor: cfg.color,
-                                          color: '#fff',
-                                          boxShadow: `0 4px 14px ${cfg.color}44`,
-                                      }
+                                        backgroundColor: cfg.color,
+                                        borderColor: cfg.color,
+                                        color: '#fff',
+                                        boxShadow: `0 4px 14px ${cfg.color}44`,
+                                    }
                                     : {}),
                             }}
                         >
@@ -494,12 +494,12 @@ const CryptoSignals = () => {
                                             {sc === 'YON_UYUYOR'
                                                 ? '✅'
                                                 : sc === 'TERS_SINYAL'
-                                                  ? '🔴'
-                                                  : sc === 'YON_AYNI_BL_DOLMADI'
-                                                    ? '🟡'
-                                                    : sc === 'BL_YOK'
-                                                      ? '⚪'
-                                                      : '⚠️'}
+                                                    ? '🔴'
+                                                    : sc === 'YON_AYNI_BL_DOLMADI'
+                                                        ? '🟡'
+                                                        : sc === 'BL_YOK'
+                                                            ? '⚪'
+                                                            : '⚠️'}
                                         </span>
                                     )}
                                     {blAvt != null && (
@@ -533,21 +533,21 @@ const CryptoSignals = () => {
                         const goodRows = isBLData
                             ? rows.filter((r) => parseFloat(r.avantaj_pct || 0) > 0)
                             : isPositionsTab
-                              ? rows.filter((r) => r.ters_sinyal !== true)
-                              : rows.filter((r) => parsePnl(r.pnl_percent) > 0);
+                                ? rows.filter((r) => r.ters_sinyal !== true)
+                                : rows.filter((r) => parsePnl(r.pnl_percent) > 0);
                         const badRows = isBLData
                             ? rows.filter((r) => parseFloat(r.avantaj_pct || 0) < 0)
                             : isPositionsTab
-                              ? rows.filter((r) => r.ters_sinyal === true)
-                              : rows.filter((r) => parsePnl(r.pnl_percent) < 0);
+                                ? rows.filter((r) => r.ters_sinyal === true)
+                                : rows.filter((r) => parsePnl(r.pnl_percent) < 0);
                         const avgPnl = isBLData
                             ? rows.length
                                 ? rows.reduce((s, r) => s + parseFloat(r.avantaj_pct || 0), 0) /
-                                  rows.length
+                                rows.length
                                 : 0
                             : rows.length
-                              ? rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length
-                              : 0;
+                                ? rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length
+                                : 0;
                         // Use reduce instead of Math.max(...spread) to avoid call stack issues with large arrays
                         const bestWr = rows.reduce(
                             (m, r) =>
@@ -669,8 +669,8 @@ const CryptoSignals = () => {
                                                                 firstRow.days_ago > 30
                                                                     ? '#da373c'
                                                                     : firstRow.days_ago > 14
-                                                                      ? '#f0b232'
-                                                                      : '#23a559',
+                                                                        ? '#f0b232'
+                                                                        : '#23a559',
                                                             fontWeight: 600,
                                                         }}
                                                     >
@@ -733,7 +733,7 @@ const CryptoSignals = () => {
                                             <SortHeader field="trades">
                                                 {t('crypto.trades', 'Trades')}
                                             </SortHeader>
-                                            <SortHeader field="balance">Balance</SortHeader>
+                                            <SortHeader field="balance">{t('crypto.balance', 'Bakiye')}</SortHeader>
                                             {isPositionsTab && (
                                                 <th style={S.th}>
                                                     {t('crypto.posDirection', 'Pos. Direction')}
@@ -744,8 +744,8 @@ const CryptoSignals = () => {
                                                     {t('crypto.alignment', 'Alignment')}
                                                 </th>
                                             )}
-                                            {isPositionsTab && <th style={S.th}>Status</th>}
-                                            <th style={S.th}>Link</th>
+                                            {isPositionsTab && <th style={S.th}>{t('crypto.status', 'Durum')}</th>}
+                                            <th style={S.th}>{t('crypto.link', 'Bağlantı')}</th>
                                         </>
                                     ) : (
                                         <>
@@ -759,8 +759,8 @@ const CryptoSignals = () => {
                                                     {t('crypto.alignment', 'Alignment')}
                                                 </th>
                                             )}
-                                            {isPositionsTab && <th style={S.th}>Status</th>}
-                                            <th style={S.th}>Entry</th>
+                                            {isPositionsTab && <th style={S.th}>{t('crypto.status', 'Durum')}</th>}
+                                            <th style={S.th}>{t('crypto.entry', 'Giriş')}</th>
                                             <th style={S.th}>{t('crypto.current', 'Current')}</th>
                                             <SortHeader field="pnl">PNL%</SortHeader>
                                             <SortHeader field="win_rate">WR%</SortHeader>
@@ -776,8 +776,8 @@ const CryptoSignals = () => {
                                             <th style={S.th}>
                                                 {t('crypto.targetROE', 'Target ROE')}
                                             </th>
-                                            <th style={S.th}>Status</th>
-                                            <th style={S.th}>Link</th>
+                                            <th style={S.th}>{t('crypto.status', 'Durum')}</th>
+                                            <th style={S.th}>{t('crypto.link', 'Bağlantı')}</th>
                                         </>
                                     )}
                                 </tr>
@@ -792,15 +792,15 @@ const CryptoSignals = () => {
                                                         ? 19
                                                         : 16
                                                     : isPositionsTab
-                                                      ? 17
-                                                      : 14
+                                                        ? 17
+                                                        : 14
                                             }
                                         >
                                             {searchQuery
                                                 ? t('crypto.noResults', {
-                                                      query: searchQuery,
-                                                      defaultValue: `No results for "${searchQuery}"`,
-                                                  })
+                                                    query: searchQuery,
+                                                    defaultValue: `No results for "${searchQuery}"`,
+                                                })
                                                 : t('crypto.noDataInTab', 'No data in this tab')}
                                         </td>
                                     </tr>
@@ -824,8 +824,8 @@ const CryptoSignals = () => {
                                                     transition: 'background-color 0.15s',
                                                 }}
                                                 onMouseEnter={(e) =>
-                                                    (e.currentTarget.style.backgroundColor =
-                                                        'rgba(88,101,242,0.06)')
+                                                (e.currentTarget.style.backgroundColor =
+                                                    'rgba(88,101,242,0.06)')
                                                 }
                                                 onMouseLeave={(e) =>
                                                     (e.currentTarget.style.backgroundColor = rowBg)
@@ -896,8 +896,8 @@ const CryptoSignals = () => {
                                                                     item.bl_days > 5
                                                                         ? '#da373c'
                                                                         : item.bl_days > 2
-                                                                          ? '#f0b232'
-                                                                          : '#23a559',
+                                                                            ? '#f0b232'
+                                                                            : '#23a559',
                                                                 fontWeight: 600,
                                                             }}
                                                         >
@@ -997,63 +997,63 @@ const CryptoSignals = () => {
                                                                                 coinName
                                                                             ]?.status_code ===
                                                                                 'YON_UYUYOR' ||
-                                                                            (!positionCoinStatus[
-                                                                                coinName
-                                                                            ]?.status_code &&
-                                                                                !item.ters_sinyal &&
-                                                                                item.yon_uyumu?.includes(
-                                                                                    '✅'
-                                                                                ))
+                                                                                (!positionCoinStatus[
+                                                                                    coinName
+                                                                                ]?.status_code &&
+                                                                                    !item.ters_sinyal &&
+                                                                                    item.yon_uyumu?.includes(
+                                                                                        '✅'
+                                                                                    ))
                                                                                 ? '#23a559'
                                                                                 : positionCoinStatus[
-                                                                                        coinName
-                                                                                    ]
-                                                                                        ?.status_code ===
-                                                                                        'YON_AYNI_BL_DOLMADI' ||
+                                                                                    coinName
+                                                                                ]
+                                                                                    ?.status_code ===
+                                                                                    'YON_AYNI_BL_DOLMADI' ||
                                                                                     positionCoinStatus[
                                                                                         coinName
                                                                                     ]
                                                                                         ?.status_code ===
-                                                                                        'BL_YOK'
-                                                                                  ? '#f0b232'
-                                                                                  : '#da373c',
+                                                                                    'BL_YOK'
+                                                                                    ? '#f0b232'
+                                                                                    : '#da373c',
                                                                     }}
                                                                 >
                                                                     {positionCoinStatus[coinName]
                                                                         ?.status_code ===
-                                                                    'YON_UYUYOR'
+                                                                        'YON_UYUYOR'
                                                                         ? 'Sleeping'
                                                                         : positionCoinStatus[
+                                                                            coinName
+                                                                        ]?.status_code ===
+                                                                            'TERS_SINYAL'
+                                                                            ? 'Counter Signals'
+                                                                            : positionCoinStatus[
                                                                                 coinName
                                                                             ]?.status_code ===
-                                                                            'TERS_SINYAL'
-                                                                          ? 'Counter Signals'
-                                                                          : positionCoinStatus[
-                                                                                  coinName
-                                                                              ]?.status_code ===
-                                                                              'YON_AYNI_BL_DOLMADI'
-                                                                            ? 'Not filled'
-                                                                            : positionCoinStatus[
+                                                                                'YON_AYNI_BL_DOLMADI'
+                                                                                ? 'Not filled'
+                                                                                : positionCoinStatus[
                                                                                     coinName
                                                                                 ]?.status_code ===
-                                                                                'TERS_SINYAL_BL_YOK'
-                                                                              ? 'Counter (No BL)'
-                                                                              : positionCoinStatus[
-                                                                                      coinName
-                                                                                  ]?.status_code ===
-                                                                                  'BL_YOK'
-                                                                                ? 'No BL'
-                                                                                : item.ters_sinyal
-                                                                                  ? 'Counter Signals'
-                                                                                  : item.yon_uyumu?.includes(
-                                                                                          '✅'
-                                                                                      )
-                                                                                    ? 'Sleeping'
-                                                                                    : item.yon_uyumu?.includes(
-                                                                                            '⚠️'
-                                                                                        )
-                                                                                      ? 'Counter Signals'
-                                                                                      : '-'}
+                                                                                    'TERS_SINYAL_BL_YOK'
+                                                                                    ? 'Counter (No BL)'
+                                                                                    : positionCoinStatus[
+                                                                                        coinName
+                                                                                    ]?.status_code ===
+                                                                                        'BL_YOK'
+                                                                                        ? 'No BL'
+                                                                                        : item.ters_sinyal
+                                                                                            ? 'Counter Signals'
+                                                                                            : item.yon_uyumu?.includes(
+                                                                                                '✅'
+                                                                                            )
+                                                                                                ? 'Sleeping'
+                                                                                                : item.yon_uyumu?.includes(
+                                                                                                    '⚠️'
+                                                                                                )
+                                                                                                    ? 'Counter Signals'
+                                                                                                    : '-'}
                                                                 </span>
                                                             </td>
                                                         )}
@@ -1109,52 +1109,52 @@ const CryptoSignals = () => {
                                                                                 coinName
                                                                             ]?.status_code ===
                                                                                 'YON_UYUYOR' ||
-                                                                            (!positionCoinStatus[
-                                                                                coinName
-                                                                            ]?.status_code &&
-                                                                                !item.ters_sinyal)
+                                                                                (!positionCoinStatus[
+                                                                                    coinName
+                                                                                ]?.status_code &&
+                                                                                    !item.ters_sinyal)
                                                                                 ? '#23a559'
                                                                                 : positionCoinStatus[
-                                                                                        coinName
-                                                                                    ]
-                                                                                        ?.status_code ===
-                                                                                        'YON_AYNI_BL_DOLMADI' ||
+                                                                                    coinName
+                                                                                ]
+                                                                                    ?.status_code ===
+                                                                                    'YON_AYNI_BL_DOLMADI' ||
                                                                                     positionCoinStatus[
                                                                                         coinName
                                                                                     ]
                                                                                         ?.status_code ===
-                                                                                        'BL_YOK'
-                                                                                  ? '#f0b232'
-                                                                                  : '#da373c',
+                                                                                    'BL_YOK'
+                                                                                    ? '#f0b232'
+                                                                                    : '#da373c',
                                                                     }}
                                                                 >
                                                                     {positionCoinStatus[coinName]
                                                                         ?.status_code ===
-                                                                    'YON_UYUYOR'
+                                                                        'YON_UYUYOR'
                                                                         ? 'Sleeping'
                                                                         : positionCoinStatus[
+                                                                            coinName
+                                                                        ]?.status_code ===
+                                                                            'TERS_SINYAL'
+                                                                            ? 'Counter Signals'
+                                                                            : positionCoinStatus[
                                                                                 coinName
                                                                             ]?.status_code ===
-                                                                            'TERS_SINYAL'
-                                                                          ? 'Counter Signals'
-                                                                          : positionCoinStatus[
-                                                                                  coinName
-                                                                              ]?.status_code ===
-                                                                              'YON_AYNI_BL_DOLMADI'
-                                                                            ? 'Not filled'
-                                                                            : positionCoinStatus[
+                                                                                'YON_AYNI_BL_DOLMADI'
+                                                                                ? 'Not filled'
+                                                                                : positionCoinStatus[
                                                                                     coinName
                                                                                 ]?.status_code ===
-                                                                                'TERS_SINYAL_BL_YOK'
-                                                                              ? 'Counter (No BL)'
-                                                                              : positionCoinStatus[
-                                                                                      coinName
-                                                                                  ]?.status_code ===
-                                                                                  'BL_YOK'
-                                                                                ? 'No BL'
-                                                                                : item.ters_sinyal
-                                                                                  ? 'Counter Signals'
-                                                                                  : 'Sleeping'}
+                                                                                    'TERS_SINYAL_BL_YOK'
+                                                                                    ? 'Counter (No BL)'
+                                                                                    : positionCoinStatus[
+                                                                                        coinName
+                                                                                    ]?.status_code ===
+                                                                                        'BL_YOK'
+                                                                                        ? 'No BL'
+                                                                                        : item.ters_sinyal
+                                                                                            ? 'Counter Signals'
+                                                                                            : 'Sleeping'}
                                                                 </span>
                                                             </td>
                                                         )}
@@ -1192,10 +1192,10 @@ const CryptoSignals = () => {
                                                                     item.days_ago == null
                                                                         ? '#949ba4'
                                                                         : item.days_ago > 30
-                                                                          ? '#da373c'
-                                                                          : item.days_ago > 14
-                                                                            ? '#f0b232'
-                                                                            : '#23a559',
+                                                                            ? '#da373c'
+                                                                            : item.days_ago > 14
+                                                                                ? '#f0b232'
+                                                                                : '#23a559',
                                                                 fontWeight: 600,
                                                                 fontSize: '0.85em',
                                                             }}

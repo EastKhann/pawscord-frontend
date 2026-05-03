@@ -51,7 +51,7 @@ const PollCard = ({ poll, onVote, onEnd, onDelete }) => {
               <div className="option-bar"><div className="option-bar-fill" style={{ width: `${pct}%` }} /></div>
             </div>
           );
-        })}>
+        })}
       </div>
 
       <div className="poll-meta">
@@ -60,7 +60,7 @@ const PollCard = ({ poll, onVote, onEnd, onDelete }) => {
       </div>
 
       <div className="poll-card-footer">
-        {poll.status === 'active' && <button className="end-poll-btn" onClick={() => onEnd(poll.id)}>{t('poll.endPoll', '🏁 End poll').substring(0, 2)} {t('poll.endPollText', 'End poll')} <andır</button>}
+        {poll.status === 'active' && <button className="end-poll-btn" onClick={() => onEnd(poll.id)}>{t('poll.endPoll', '🏁 End poll')}</button>}
         <button className="delete-poll-btn" onClick={() => onDelete(poll.id)}>🗑️ Delete</button>
       </div>
     </div>

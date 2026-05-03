@@ -42,6 +42,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                 @keyframes ppOverlayIn { from{opacity:0} to{opacity:1} }
                 @keyframes ppModalIn { from{opacity:0;transform:scale(0.94) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
             `}</style>
+            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
             <div
                 style={styles.modal}
                 role="dialog"

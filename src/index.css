@@ -708,6 +708,18 @@ input,
     border-radius: 3px;
 }
 
+/* Override inline outline:none on interactive elements — ensures keyboard nav is always visible */
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #5865f2 !important;
+    outline-offset: 2px !important;
+    border-radius: 3px !important;
+}
+
 :focus:not(:focus-visible) {
     outline: none;
 }

@@ -196,7 +196,7 @@ const FloatingVoiceIsland = ({
                         >
                             <div className="drag-handle-modern" style={styles.minimizedDragHandle}>
                                 <span style={styles.minimizedIcon}>🎤</span>
-                                <span style={styles.minimizedText}>Ses Sohbeti</span>
+                                <span style={styles.minimizedText}>{t('voice.voiceChatLabel', 'Ses Sohbeti')}</span>
                                 <button
                                     onClick={handleMinimize}
                                     onMouseDown={handleStopPropagation}
@@ -234,7 +234,7 @@ const FloatingVoiceIsland = ({
                                 <div style={styles.headerContent}>
                                     <div style={styles.headerLeft}>
                                         <span style={styles.voiceIcon}>🎤</span>
-                                        <h3 style={styles.panelHeader}>{t('voiceIsland.title','VOICE CHAT')}</h3>
+                                        <h3 style={styles.panelHeader}>{t('voiceIsland.title', 'VOICE CHAT')}</h3>
                                     </div>
                                     <div style={styles.headerRight}>
                                         {/* 🛠️ Custom Header Actions */}

@@ -376,6 +376,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                     <div className="language-selector">
                         {languages.map((lang) => (
                             <button
+                                key={lang.id}
                                 aria-label={t('codeRunner.selectLang', 'Select {{lang}}', { lang: lang.name })}
                                 onClick={() => setLanguage(lang.id)}
                                 title={lang.name}

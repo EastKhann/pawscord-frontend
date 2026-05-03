@@ -12,8 +12,8 @@ import { useTranslation } from 'react-i18next';
 
 const TIME_RANGES = [
     { value: '24h', label: '24 Saat' },
-    { value: '7d', label: t('common.last7days', '7 Days') },
-    { value: '30d', label: t('common.last30days', '30 Days') },
+    { value: '7d', label: '7 Days' },
+    { value: '30d', label: '30 Days' },
     { value: '90d', label: '90 Days' },
 ];
 

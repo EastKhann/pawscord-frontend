@@ -581,16 +581,94 @@ ipcMain.on('start-download', (event, url) => {
   }
 });
 
-// ✅ GOOGLE LOGIN HANDLER (Electron için - Chrome'da aç)
+// ✅ GOOGLE LOGIN HANDLER (Electron için - in-app OAuth popup)
 ipcMain.on('start-google-login', (event, authUrl) => {
-  console.log('🔵 [Google] Opening Google login in Chrome:', authUrl);
+  console.log('🔵 [Google] Opening in-app OAuth popup:', authUrl);
 
-  // ⚡ YENİ ÇÖZÜM: Direkt Chrome'da aç!
-  // Deep link (pawscord://) Windows tarafından yakalanıp uygulamaya döner
-  shell.openExternal(authUrl);
+  // Validate URL is our trusted backend — prevent open-redirect abuse
+  try {
+    const parsed = new URL(authUrl);
+    const allowedHosts = ['api.pawscord.com', 'www.pawscord.com', 'localhost', '127.0.0.1'];
+    if (!allowedHosts.includes(parsed.hostname) && !parsed.hostname.endsWith('.pawscord.com')) {
+      console.error('❌ [Google] Untrusted OAuth URL blocked:', authUrl);
+      return;
+    }
+  } catch (e) {
+    console.error('❌ [Google] Invalid OAuth URL:', e);
+    return;
+  }
 
-  console.log('✅ [Google] Google login Chrome\'da açıldı. Deep link bekliyor...');
-  console.log('💡 [Google] Giriş yaptıktan sonra pawscord:// deep link uygulamaya dönecek');
+  const authWindow = new BrowserWindow({
+    width: 520,
+    height: 680,
+    parent: mainWindow,
+    modal: true,
+    title: 'Pawscord — Google ile Giriş',
+    autoHideMenuBar: true,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
+      // Ana pencereyle aynı session → Google oturumu açıksa tekrar giriş istenmez
+      partition: 'persist:pawscord',
+    },
+  });
+
+  // Menüyü gizle
+  authWindow.setMenuBarVisibility(false);
+
+  authWindow.loadURL(authUrl);
+
+  // pawscord:// deep link'i yakalamak için yardımcı
+  function interceptDeepLink(navUrl) {
+    if (!navUrl || !navUrl.startsWith('pawscord://auth')) return false;
+    console.log('✅ [Google] OAuth deep link yakalandı, popup kapatılıyor:', navUrl.substring(0, 60) + '...');
+    // Popup kapatılmadan önce token'ları işle
+    handleDeepLink(navUrl);
+    // Kısa delay → handleDeepLink mainWindow.webContents.send yapabilmeli
+    setTimeout(() => {
+      if (!authWindow.isDestroyed()) authWindow.close();
+    }, 200);
+    return true;
+  }
+
+  // JavaScript navigasyonları (window.location.href = 'pawscord://...')
+  authWindow.webContents.on('will-navigate', (e, navUrl) => {
+    console.log('🔗 [OAuth Popup] will-navigate:', navUrl.substring(0, 80));
+    if (interceptDeepLink(navUrl)) {
+      e.preventDefault();
+    }
+  });
+
+  // HTTP-level redirect'ler
+  authWindow.webContents.on('will-redirect', (e, navUrl) => {
+    console.log('🔗 [OAuth Popup] will-redirect:', navUrl.substring(0, 80));
+    if (interceptDeepLink(navUrl)) {
+      e.preventDefault();
+    }
+  });
+
+  // Yükleme hatası — kapalı hata değil (abort -3 normaldir)
+  authWindow.webContents.on('did-fail-load', (e, code, desc, url) => {
+    if (code === -3) return; // aborted (normal)
+    // pawscord:// navigate denemesi ERR_UNKNOWN_URL_SCHEME olarak gelebilir
+    if (url && url.startsWith('pawscord://auth')) {
+      interceptDeepLink(url);
+      return;
+    }
+    console.error('❌ [OAuth Popup] Load failed:', code, desc, url);
+  });
+
+  // Kullanıcı popup'ı kapattı → loading durumunu temizle
+  authWindow.on('closed', () => {
+    console.log('🔵 [Google] OAuth popup kapatıldı');
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('google-auth-cancelled');
+    }
+  });
+
+  console.log('✅ [Google] In-app OAuth popup açıldı');
 });
 
 // � SECURITY: HTTP/2 enabled, certificate validation enforced

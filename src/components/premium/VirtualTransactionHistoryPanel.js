@@ -257,21 +257,21 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                     {totalPages > 1 && (
                         <div className="pagination">
                             <button
-          aria-label={t('common.previousPage', 'Previous page')}
-                                onClick={() => setCurrentPage(p => p - 1)}
-                                Previous
+                                aria-label={t('common.previousPage', 'Previous page')}
+                                onClick={() => setCurrentPage(p => p - 1)}>
+                                {t('common.previous', 'Previous')}
                             </button>
                             <span className="page-info">
                                 Page {currentPage} of {totalPages}
                             </span>
                             <button
-          aria-label={t('common.nextPage', 'Next page')}
-                                onClick={() => setCurrentPage(p => p + 1)}
-                                Next
+                                aria-label={t('common.nextPage', 'Next page')}
+                                onClick={() => setCurrentPage(p => p + 1)}>
+                                {t('common.next', 'Next')}
                             </button>
-            </div>
+                        </div>
                     )}
-        </div>
+                </div>
             </div >
         </div >
     );

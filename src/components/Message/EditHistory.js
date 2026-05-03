@@ -43,7 +43,7 @@ export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAu
     }, [showHistory, messageId, messageEditHistoryUrl, fetchWithAuth]);
 
     return (
-        <div aria-label={t('message.editHistory', 'Edit history')} style={S.rel}>ref={historyRef}>
+        <div aria-label={t('message.editHistory', 'Edit history')} style={S.rel} ref={historyRef}>
             <span
                 onClick={(e) => { e.stopPropagation(); setShowHistory(!showHistory); }}
                 style={styles.editedLabel}>

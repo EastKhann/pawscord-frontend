@@ -529,6 +529,7 @@ const RoomList = ({
                             <button
                                 onClick={onOpenAdminPanel}
                                 aria-label={t('admin.adminPanel', 'Yönetici Paneli')}
+                                data-testid="admin-panel-btn"
                                 style={_st2}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = 'translateY(-2px)';

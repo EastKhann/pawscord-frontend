@@ -175,16 +175,16 @@ const ClipsSystem = ({ serverId, onClose }) => {
 
         <div className="clips-tabs">
           <button
-          aria-label={t('clips.myClips', 'My clips')}
+            aria-label={t('clips.myClips', 'My clips')}
             className={`tab-btn ${activeTab === 'my-clips' ? 'active' : ''}`}
-            onClick={() => setActiveTab('my-clips')}
-            📁 My Clips
+            onClick={() => setActiveTab('my-clips')}>
+            {t('clips.myClipsLabel', '📁 My Clips')}
           </button>
           <button
-          aria-label={t('clips.serverClips', 'Server clips')}
+            aria-label={t('clips.serverClips', 'Server clips')}
             className={`tab-btn ${activeTab === 'server-clips' ? 'active' : ''}`}
-            onClick={() => setActiveTab('server-clips')}
-            🎭 Server Clips
+            onClick={() => setActiveTab('server-clips')}>
+            {t('clips.serverClipsLabel', '🎥 Server Clips')}
           </button>
         </div>
 
@@ -202,7 +202,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
               />
             </div>
             <button
-          aria-label={t('clips.startRecording', 'Start recording')}
+              aria-label={t('clips.startRecording', 'Start recording')}
               className={`record-btn ${recording ? 'recording' : ''}`}
               onClick={recording ? null : startClip}
               disabled={recording || !clipName.trim()}>
@@ -212,12 +212,12 @@ const ClipsSystem = ({ serverId, onClose }) => {
 
           {/* Clips Grid */}
           {loading ? (
-            <div className="loading-spinner">{t('clips.loading','Loading clips...')}</div>
+            <div className="loading-spinner">{t('clips.loading', 'Loading clips...')}</div>
           ) : clips.length === 0 ? (
             <div className="empty-state">
               <div className="empty-icon">🎬</div>
-              <h3>{t('clips.noClips','No Clips Yet')}</h3>
-              <p>{t('clips.recordFirst','Record your first clip during voice chat')}</p>
+              <h3>{t('clips.noClips', 'No Clips Yet')}</h3>
+              <p>{t('clips.recordFirst', 'Record your first clip during voice chat')}</p>
             </div>
           ) : (
             <div className="clips-grid">
@@ -226,7 +226,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
                   <div className="clip-thumbnail">
                     <div className="clip-duration">{clip.duration || '0:30'}</div>
                     <button
-          aria-label={t('clips.playClip', 'Play clip')}
+                      aria-label={t('clips.playClip', 'Play clip')}
                       className={`play-clip-btn ${playingClip === clip.id ? 'playing' : ''}`}
                       onClick={() => playClip(clip)}>
                       {playingClip === clip.id ? '⏸️' : '▶️'}
@@ -247,7 +247,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
                   <div className="clip-actions">
                     {activeTab === 'my-clips' && (
                       <button
-          aria-label={t('clips.shareClip', 'Share clip')}
+                        aria-label={t('clips.shareClip', 'Share clip')}
                         className="share-clip-btn"
                         onClick={() => shareClip(clip.id)}
                         title={t('common.shareToServer', 'Share to server')}
@@ -256,7 +256,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
                       </button>
                     )}
                     <button
-          aria-label={t('clips.downloadClip', 'Download clip')}
+                      aria-label={t('clips.downloadClip', 'Download clip')}
                       className="download-clip-btn"
                       onClick={() => window.open(clip.url, '_blank', 'noopener,noreferrer')}
                       title={t('common.download', 'Download')}
@@ -265,19 +265,19 @@ const ClipsSystem = ({ serverId, onClose }) => {
                     </button>
                     {activeTab === 'my-clips' && (
                       <button
-          aria-label={t('clips.deleteClip', 'Delete clip')}
+                        aria-label={t('clips.deleteClip', 'Delete clip')}
                         className="delete-clip-btn"
                         onClick={() => deleteClip(clip.id)}
-                        title={t("common.delete")}
-                        🗑️
+                        title={t("common.delete")}>
+                        {'🗑️'}
                       </button>
                     )}
                   </div>
                 </div>
               ))}
             </div>
-  )
-}
+          )
+          }
         </div >
       </div >
     </div >

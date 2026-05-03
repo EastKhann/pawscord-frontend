@@ -124,7 +124,7 @@ const UserProfileModal = ({
     );
 
     const modalContent = (
-        <div {...overlayProps}>
+        <div {...overlayProps} style={styles.overlay}>
             {/* Inject entrance animation CSS */}
             <style>{`
                 @keyframes profileModalEnter {
@@ -132,13 +132,14 @@ const UserProfileModal = ({
                     to   { opacity: 1; transform: scale(1) translateY(0); }
                 }
             `}</style>
-            <div {...dialogProps}>
+            <div {...dialogProps} style={styles.modal}>
                 {/* --- PREMIUM BANNER --- */}
-                <div>
+                <div style={styles.banner}>
                     {/* Radial glow top-right */}
-                    <div />
+                    <div style={styles.bannerGlow} aria-hidden="true" />
                     {/* Noise/wave overlay */}
                     <div
+                        aria-hidden="true"
                         style={{
                             position: 'absolute',
                             top: 0,
@@ -152,11 +153,12 @@ const UserProfileModal = ({
                             backgroundSize: 'cover',
                             zIndex: 1,
                             borderRadius: '20px 20px 0 0',
+                            pointerEvents: 'none',
                         }}
                     />
 
                     {/* Avatar */}
-                    <div>
+                    <div style={styles.avatarWrap}>
                         <div
                             onMouseEnter={handleAvatarEnter}
                             onMouseLeave={handleAvatarLeave}
@@ -167,11 +169,13 @@ const UserProfileModal = ({
                             onKeyDown={(e) =>
                                 (e.key === 'Enter' || e.key === ' ') && handleAvatarClick()
                             }
+                            style={styles.avatarBox}
                         >
                             <img
                                 src={avatarSrc}
                                 key={avatarUrl}
                                 alt={`${user.username} avatar`}
+                                style={styles.avatarImg}
                                 onError={(e) => {
                                     e.target.src = getDeterministicAvatar(user.username);
                                 }}
@@ -179,6 +183,7 @@ const UserProfileModal = ({
                         </div>
                         {/* Online status dot */}
                         <div
+                            aria-hidden="true"
                             style={{
                                 position: 'absolute',
                                 bottom: '3px',
@@ -187,8 +192,8 @@ const UserProfileModal = ({
                                 height: '18px',
                                 borderRadius: '50%',
                                 backgroundColor: user.is_online ? '#23a559' : '#80848e',
-                                border: '3px solid #0b0e1b',
-                                zIndex: 1001,
+                                border: '3px solid #1e1f23',
+                                zIndex: 6,
                                 boxShadow: user.is_online ? '0 0 8px rgba(35,165,89,0.6)' : 'none',
                             }}
                         />
@@ -196,27 +201,57 @@ const UserProfileModal = ({
 
                     {/* Close button */}
                     <button
+                        type="button"
                         onClick={handleClose}
                         onMouseEnter={handleCloseBtnEnter}
                         onMouseLeave={handleCloseBtnLeave}
-                        aria-label={t('common.close')}
+                        aria-label={t('common.close', 'Close')}
+                        style={styles.closeButton}
                     >
-                        ?
+                        ✕
                     </button>
                 </div>
 
                 {/* --- USER INFO --- */}
-                <div>
+                <div style={styles.headerSection}>
                     {/* Username row */}
-                    <div>
-                        <h2>{user.username}</h2>
-                        {user.is_premium && <span title="Premium">⭐ PREMIUM</span>}
-                        {user.is_verified && <span title={t('common.verified', 'Verified')}>✓ DOĞRULANMIŞ</span>}
+                    <div style={styles.usernameRow}>
+                        <h2 style={styles.username}>{user.username}</h2>
+                        {user.is_premium && (
+                            <span
+                                title="Premium"
+                                style={{
+                                    fontSize: '11px',
+                                    fontWeight: 700,
+                                    color: '#1a1c1f',
+                                    background: 'linear-gradient(135deg, #ffd700, #f0b232)',
+                                    padding: '2px 8px',
+                                    borderRadius: '999px',
+                                }}
+                            >
+                                ★ PREMIUM
+                            </span>
+                        )}
+                        {user.is_verified && (
+                            <span
+                                title={t('common.verified', 'Verified')}
+                                style={{
+                                    fontSize: '11px',
+                                    fontWeight: 700,
+                                    color: '#fff',
+                                    background: 'rgba(35,165,89,0.85)',
+                                    padding: '2px 8px',
+                                    borderRadius: '999px',
+                                }}
+                            >
+                                ✓ {t('common.verified', 'Verified')}
+                            </span>
+                        )}
                         <span
                             style={{
                                 marginLeft: 'auto',
                                 fontSize: '11px',
-                                fontWeight: '600',
+                                fontWeight: 600,
                                 color: user.is_online ? '#23a559' : '#72767d',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -224,6 +259,7 @@ const UserProfileModal = ({
                             }}
                         >
                             <span
+                                aria-hidden="true"
                                 style={{
                                     width: '7px',
                                     height: '7px',
@@ -235,21 +271,24 @@ const UserProfileModal = ({
                                         : 'none',
                                 }}
                             />
-                            {user.is_online ? t('status.online', 'Online') : t('common.offline', 'Offline')}
+                            {user.is_online
+                                ? t('status.online', 'Online')
+                                : t('common.offline', 'Offline')}
                         </span>
                     </div>
 
                     {/* Action buttons */}
-                    <div>
+                    <div style={styles.actionsRow}>
                         {!isFriend && !isSelf && (
                             <button
+                                type="button"
                                 onClick={handleAddFriend}
                                 style={{
                                     ...styles.actionButton,
                                     backgroundColor:
                                         requestStatus === 'success'
-                                            ? 'rgba(35,165,89,0.15)'
-                                            : 'rgba(88,101,242,0.15)',
+                                            ? 'rgba(35,165,89,0.18)'
+                                            : 'rgba(88,101,242,0.18)',
                                     flex: 1,
                                     minWidth: '100px',
                                     cursor:
@@ -260,48 +299,77 @@ const UserProfileModal = ({
                                 disabled={requestStatus !== 'idle'}
                                 aria-label={
                                     requestStatus === 'success'
-                                        ? t('common.friendRequestSent')
-                                        : t('common.addFriend')
+                                        ? t('common.friendRequestSent', 'Friend request sent')
+                                        : t('common.addFriend', 'Add friend')
                                 }
                             >
                                 {requestStatus === 'loading' ? (
-                                    '?'
+                                    <span aria-hidden="true">…</span>
                                 ) : requestStatus === 'success' ? (
                                     <FaCheck />
                                 ) : (
                                     <FaUserPlus />
                                 )}
-                                {requestStatus === 'success' ? t('friends.sent', 'Sent') : t('friends.addFriend', 'Add Friend')}
-                            </button>
-                        )}
-                        {!isSelf && (
-                            <button onClick={handleStartDM} aria-label={t('common.sendMessage')}>
-                                ?? Mesaj
+                                {requestStatus === 'success'
+                                    ? t('friends.sent', 'Sent')
+                                    : t('friends.addFriend', 'Add Friend')}
                             </button>
                         )}
                         {!isSelf && (
                             <button
+                                type="button"
+                                onClick={handleStartDM}
+                                aria-label={t('common.sendMessage', 'Send message')}
+                                style={{ ...styles.messageButton, flex: 1, minWidth: '110px' }}
+                            >
+                                <FaStickyNote style={{ display: 'none' }} />
+                                {t('common.sendMessage', 'Message')}
+                            </button>
+                        )}
+                        {!isSelf && (
+                            <button
+                                type="button"
                                 onClick={handleSendMoney}
                                 title={t('premium.sendCoins', 'Send Coins')}
-                                aria-label={t('common.sendCoins')}
+                                aria-label={t('common.sendCoins', 'Send coins')}
+                                style={{
+                                    ...styles.actionButton,
+                                    backgroundColor: 'rgba(255, 215, 0, 0.12)',
+                                    color: '#ffd700',
+                                    width: '40px',
+                                    padding: '8px',
+                                }}
                             >
                                 <FaCoins />
                             </button>
                         )}
                         {isSelf && (
                             <button
+                                type="button"
                                 onClick={handleOpenSessionManager}
                                 title={t('security.manageSessions', 'Manage Active Sessions')}
-                                aria-label={t('common.manageSessions')}
+                                aria-label={t('common.manageSessions', 'Manage sessions')}
+                                style={{
+                                    ...styles.actionButton,
+                                    backgroundColor: 'rgba(88,101,242,0.18)',
+                                    flex: 1,
+                                }}
                             >
-                                <FaDesktop /> Oturumlar
+                                <FaDesktop /> {t('security.sessions', 'Sessions')}
                             </button>
                         )}
                         {!isSelf && (
                             <button
+                                type="button"
                                 onClick={handleOpenNotes}
-                                title={t('common.userNote', 'User Note')}
-                                aria-label={t('common.userNotes')}
+                                title={t('common.userNote', 'User note')}
+                                aria-label={t('common.userNotes', 'User notes')}
+                                style={{
+                                    ...styles.actionButton,
+                                    backgroundColor: 'rgba(255,255,255,0.06)',
+                                    width: '40px',
+                                    padding: '8px',
+                                }}
                             >
                                 <FaStickyNote />
                             </button>
@@ -310,7 +378,7 @@ const UserProfileModal = ({
                 </div>
 
                 {/* Content area */}
-                <div>
+                <div style={styles.content}>
                     {/* FRIEND CODE */}
                     {user.friend_code && (
                         <div
@@ -334,7 +402,7 @@ const UserProfileModal = ({
 
                     {user.status_message && (
                         <div style={styles.section}>
-                            <h4 style={styles.sectionTitle}>Durum</h4>
+                            <h4 style={styles.sectionTitle}>{t('profile.status', 'Status')}</h4>
                             <p style={styles.statusText}>{user.status_message}</p>
                         </div>
                     )}
@@ -342,26 +410,42 @@ const UserProfileModal = ({
                     {/* Tabs */}
                     <div style={styles.tabsContainer}>
                         <button
+                            type="button"
                             onClick={handleTabProfile}
-                            aria-label={t('profile.profile')}
+                            aria-label={t('profile.profile', 'Profile')}
                             aria-current={activeTab === 'profile' ? 'page' : undefined}
+                            style={{
+                                ...styles.tabButton,
+                                ...(activeTab === 'profile' ? styles.activeTab : null),
+                            }}
                         >
-                            👤 Profil
+                            <FaUserPlus style={{ display: 'none' }} />
+                            {t('profile.profile', 'Profile')}
                         </button>
                         <button
+                            type="button"
                             onClick={handleTabActivity}
-                            aria-label={t('profile.activity')}
+                            aria-label={t('profile.activity', 'Activity')}
                             aria-current={activeTab === 'activity' ? 'page' : undefined}
+                            style={{
+                                ...styles.tabButton,
+                                ...(activeTab === 'activity' ? styles.activeTab : null),
+                            }}
                         >
-                            <FaClock /> Aktivite
+                            <FaClock /> {t('profile.activity', 'Activity')}
                         </button>
                         {!isSelf && (
                             <button
+                                type="button"
                                 onClick={handleTabNotes}
-                                aria-label={t('common.notes')}
+                                aria-label={t('common.notes', 'Notes')}
                                 aria-current={activeTab === 'notes' ? 'page' : undefined}
+                                style={{
+                                    ...styles.tabButton,
+                                    ...(activeTab === 'notes' ? styles.activeTab : null),
+                                }}
                             >
-                                <FaStickyNote /> Not
+                                <FaStickyNote /> {t('common.notes', 'Notes')}
                             </button>
                         )}
                     </div>
@@ -455,12 +539,12 @@ const UserProfileModal = ({
                                             <div style={styles.presenceDetails}>
                                                 <span style={styles.presenceStatusText}>
                                                     {entry.status === 'online'
-                                                        ? '?? Online'
+                                                        ? t('status.online', 'Online')
                                                         : entry.status === 'idle'
-                                                            ? '?? Idle'
+                                                            ? t('status.idle', 'Idle')
                                                             : entry.status === 'dnd'
-                                                                ? '?? Do Not Disturb'
-                                                                : '? Offline'}
+                                                                ? t('status.dnd', 'Do Not Disturb')
+                                                                : t('status.offline', 'Offline')}
                                                 </span>
                                                 <span style={styles.presenceTime}>
                                                     {new Date(entry.timestamp).toLocaleString(
@@ -483,9 +567,9 @@ const UserProfileModal = ({
                 </div>
             </div>
 
-            {/* ?? Notes Tab - Inline */}
+            {/* Notes Tab - Inline */}
             {activeTab === 'notes' && !isSelf && (
-                <div>
+                <div style={styles.inlineNotesWrap}>
                     <UserNotesModal
                         targetUser={user.username}
                         apiBaseUrl={apiBaseUrl ? apiBaseUrl.replace(/\/api\/?$/, '') + '/api' : ''}
@@ -496,7 +580,7 @@ const UserProfileModal = ({
                 </div>
             )}
 
-            {/* ?? Notes Modal (from button) */}
+            {/* Notes Modal (from button) */}
             {showNotes && (
                 <UserNotesModal
                     targetUser={user.username}

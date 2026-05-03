@@ -71,7 +71,7 @@ export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, ab
                 onLoad={idx === 0 ? onContentLoad : undefined}
               />
             );
-          })}>
+          })}
         </div>
       )}
       {imageItems.length > 0 && (

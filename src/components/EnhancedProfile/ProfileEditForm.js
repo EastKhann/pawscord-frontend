@@ -1,21 +1,9 @@
 import React from 'react';
-
-
 import PropTypes from 'prop-types';
-
-
-import {
-
-
 import { useTranslation } from 'react-i18next';
-
-
-FaTwitter, FaGithub, FaInstagram, FaYoutube, FaTwitch,
-
-
+import {
+    FaTwitter, FaGithub, FaInstagram, FaYoutube, FaTwitch,
     FaGlobe, FaTimes, FaSave
-
-
 } from 'react-icons/fa';
 
 

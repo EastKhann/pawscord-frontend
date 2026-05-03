@@ -11,7 +11,7 @@ const CreatePollModal = ({ newPoll, setNewPoll, channels, onCreate, onClose, add
   return (<div className="create-modal-overlay" {...overlayProps}>
     <div className="create-modal" {...dialogProps}>
       <div className="modal-header">
-        <h3>{t('poll.createNew','Create New Poll')}</h3>
+        <h3>{t('poll.createNew', 'Create New Poll')}</h3>
         <button className="close-btn" onClick={onClose}>×</button>
       </div>
 
@@ -24,14 +24,14 @@ const CreatePollModal = ({ newPoll, setNewPoll, channels, onCreate, onClose, add
         <div className="form-row">
           <div className="form-group">
             <label>{t('channel')}</label>
-            <select value={newPoll.channel_id} onChange={(e) => setNewPoll({ ...newPoll, channel_id: e.target.value })}
-              <option value="">{t('giveaway.selectChannel','Select Channel')}</option>
+            <select value={newPoll.channel_id} onChange={(e) => setNewPoll({ ...newPoll, channel_id: e.target.value })}>
+              <option value="">{t('giveaway.selectChannel', 'Select Channel')}</option>
               {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
             </select>
           </div>
           <div className="form-group">
-            <label>{t('common.duration','Duration')}</label>
-            <select value={newPoll.duration} onChange={(e) => setNewPoll({ ...newPoll, duration: parseInt(e.target.value) })}
+            <label>{t('common.duration', 'Duration')}</label>
+            <select value={newPoll.duration} onChange={(e) => setNewPoll({ ...newPoll, duration: parseInt(e.target.value) })}>
               {DURATION_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </select>
           </div>
@@ -47,30 +47,30 @@ const CreatePollModal = ({ newPoll, setNewPoll, channels, onCreate, onClose, add
               </div>
             ))}
           </div>
-          <button className="add-option-btn" onClick={addOption}>{t('poll.addOption','+ Add Option')}</button>
+          <button className="add-option-btn" onClick={addOption}>{t('poll.addOption', '+ Add Option')}</button>
         </div>
 
         <div className="poll-settings">
-          <h4>{t('poll.settings','Poll Settings')}</h4>
+          <h4>{t('poll.settings', 'Poll Settings')}</h4>
           <div className="setting-item">
             <label className="checkbox-label">
               <input type="checkbox" checked={newPoll.allow_multiple_choices} onChange={(e) => setNewPoll({ ...newPoll, allow_multiple_choices: e.target.checked })} />
-              <span>{t('poll.allowMulti','Allow multiple selections')}</span>
+              <span>{t('poll.allowMulti', 'Allow multiple selections')}</span>
             </label>
-            <p className="setting-hint">{t('poll.multiHint','Users can select multiple options')}</p>
+            <p className="setting-hint">{t('poll.multiHint', 'Users can select multiple options')}</p>
           </div>
           <div className="setting-item">
             <label className="checkbox-label">
               <input type="checkbox" checked={newPoll.anonymous} onChange={(e) => setNewPoll({ ...newPoll, anonymous: e.target.checked })} />
               <span>{t('anonim_oylama')}</span>
             </label>
-            <p className="setting-hint">{t('poll.anonymousHint','Who voted will not be shown')}</p>
+            <p className="setting-hint">{t('poll.anonymousHint', 'Who voted will not be shown')}</p>
           </div>
         </div>
       </div>
 
       <div className="modal-footer">
-        <button className="cancel-btn" onClick={onClose}>{t('common.cancel','Cancel')}</button>
+        <button className="cancel-btn" onClick={onClose}>{t('common.cancel', 'Cancel')}</button>
         <button className="submit-btn" onClick={onCreate}>📊 Create Poll</button>
       </div>
     </div >

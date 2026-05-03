@@ -537,8 +537,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                     <textarea
                                         placeholder={t('stage.descriptionPlaceholder', 'Describe your stage event...')}
                                         rows={3}
-                                        aria-label={t('stage.descriptionPlaceholder', 'Describe your stage event...')}>
-                                    ></textarea>
+                                        aria-label={t('stage.descriptionPlaceholder', 'Describe your stage event...')}></textarea>
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group">

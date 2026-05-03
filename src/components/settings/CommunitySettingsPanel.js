@@ -106,6 +106,7 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
                 <div className="tabs">
                     {TABS.map(({ key, label, Icon }) => (
                         <button
+                            key={key}
                             aria-label={label}
                             className={`tab ${state.activeTab === key ? 'active' : ''}`}
                             onClick={() => state.setActiveTab(key)}

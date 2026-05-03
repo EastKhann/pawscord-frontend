@@ -205,33 +205,33 @@ const MediaRecorder = ({
                             <button
                                 aria-label={t('mediaRec.cancelRecording', 'Cancel recording')}>
                             </button>
+                        </div>
                     </div>
                 </div>
-                </div>
-    ) : (
-        /* Preview & Send */
-        <div className="recorder-preview">
-            {type === 'audio' ? (
-                <audio src={previewUrl} controls className="preview-audio" />
             ) : (
-                <video src={previewUrl} controls className="preview-video">
-                    <track kind="captions" />
-                </video>
-            )}
+                /* Preview & Send */
+                <div className="recorder-preview">
+                    {type === 'audio' ? (
+                        <audio src={previewUrl} controls className="preview-audio" />
+                    ) : (
+                        <video src={previewUrl} controls className="preview-video">
+                            <track kind="captions" />
+                        </video>
+                    )}
 
-            <div className="preview-info">
-                <span>Duration: {formatDuration(duration)}</span>
-                <span>Size: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB</span>
-            </div>
+                    <div className="preview-info">
+                        <span>Duration: {formatDuration(duration)}</span>
+                        <span>Size: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB</span>
+                    </div>
 
-            <div className="preview-actions">
-                <button
-                    aria-label={t('mediaRec.deleteRecording', 'Delete recording')}>
+                    <div className="preview-actions">
+                        <button
+                            aria-label={t('mediaRec.deleteRecording', 'Delete recording')}>
                         </button>
-            <button aria-label={t('mediaRec.sendRecording', 'Send recording')} onClick={handleSend} className="btn-send">
-                <FaPaperPlane /> Send
-            </button>
-        </div>
+                        <button aria-label={t('mediaRec.sendRecording', 'Send recording')} onClick={handleSend} className="btn-send">
+                            <FaPaperPlane /> Send
+                        </button>
+                    </div>
                 </div >
             )}
         </div >
@@ -239,6 +239,7 @@ const MediaRecorder = ({
 };
 
 export const VoiceMessageButton = ({ onRecord }) => {
+    const { t } = useTranslation();
     const [isHolding, setIsHolding] = useState(false);
     const holdTimerRef = useRef(null);
 

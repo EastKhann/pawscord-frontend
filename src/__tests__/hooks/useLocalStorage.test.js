@@ -5,11 +5,11 @@ import { renderHook, act } from '@testing-library/react';
 import { useLocalStorage } from '../../hooks/useCustomHooks';
 
 // Override the global vi.fn() localStorage mock with a real store for these tests
-const _store: Record<string, string> = {};
+const _store = {};
 const realLocalStorageMock = {
-    getItem: (key: string) => _store[key] ?? null,
-    setItem: (key: string, value: string) => { _store[key] = value; },
-    removeItem: (key: string) => { delete _store[key]; },
+    getItem: (key) => _store[key] ?? null,
+    setItem: (key, value) => { _store[key] = value; },
+    removeItem: (key) => { delete _store[key]; },
     clear: () => { Object.keys(_store).forEach((k) => delete _store[k]); },
 };
 Object.defineProperty(window, 'localStorage', { value: realLocalStorageMock, writable: true, configurable: true });

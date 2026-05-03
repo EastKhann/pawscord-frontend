@@ -82,7 +82,7 @@ java -version
 
 echo.
 echo Gradle build başlıyor (bu 5-10 dakika sürebilir)...
-call gradlew clean assembleRelease
+call gradlew clean assembleRelease bundleRelease
 
 if errorlevel 1 (
     echo.
@@ -129,6 +129,13 @@ if exist "android\app\build\outputs\apk\release\app-release.apk" (
     for %%A in ("..\builds\Pawscord.apk") do echo    Boyut: %%~zA bytes
 )
 
+REM AAB
+if exist "android\app\build\outputs\bundle\release\app-release.aab" (
+    copy /Y "android\app\build\outputs\bundle\release\app-release.aab" "..\builds\Pawscord.aab"
+    echo ✅ AAB: ..\builds\Pawscord.aab
+    for %%A in ("..\builds\Pawscord.aab") do echo    Boyut: %%~zA bytes
+)
+
 REM EXE
 for %%F in ("dist\Pawscord Setup*.exe") do (
     if exist "%%F" (
@@ -163,6 +170,9 @@ echo.
 if exist "..\builds\Pawscord.apk" (
     echo    📱 APK: builds\Pawscord.apk
 )
+if exist "..\builds\Pawscord.aab" (
+    echo    📦 AAB: builds\Pawscord.aab
+)
 if exist "..\builds\Pawscord-Setup.exe" (
     echo    💻 EXE: builds\Pawscord-Setup.exe
 )
@@ -182,6 +192,10 @@ if not exist "..\builds\Pawscord.apk" (
     echo    3. Build ^> Build APK
     echo.
 )
+
+echo Klasörler açılıyor...
+if exist "..\builds" start "" explorer "..\builds"
+for %%F in ("dist\Pawscord Setup*.exe") do if exist "%%F" start "" explorer "dist"
 
 pause
 

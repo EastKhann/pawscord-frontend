@@ -7,7 +7,7 @@ import './WelcomeMessagesPanel.css';
 import { useTranslation } from 'react-i18next';
 
 const STAT_ITEMS = [
-    { icon: '👋', key: 'total_welcomes', label: t('welcomeMessages.totalWelcomes', 'Total Welcomes') },
+    { icon: '👋', key: 'total_welcomes', label: 'Total Welcomes' },
     { icon: '😢', key: 'total_goodbyes', label: 'Toplam Veda' },
     { icon: '📅', key: 'welcomes_today', label: 'Today Joinan' },
 ];

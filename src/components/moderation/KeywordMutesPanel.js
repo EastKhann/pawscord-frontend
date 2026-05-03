@@ -1,4 +1,4 @@
-// frontend/src/components/KeywordMutesPanel.js
+﻿// frontend/src/components/KeywordMutesPanel.js
 
 import { useState, useEffect } from 'react';
 
@@ -18,7 +18,7 @@ import logger from '../../utils/logger';
 
 
 
- * 🎉  Keyword Mutes Panel
+ * Keyword Mutes Panel
 
 
 
@@ -198,7 +198,7 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
                 <div style={styles.footer}>
                     <div style={styles.hint}>
-                        {t('keywordMutes.tip', '💡 Tip: Messages containing these words will not be shown to you')}
+                        {t('keywordMutes.tip', 'ðŸ’¡ Tip: Messages containing these words will not be shown to you')}
                     </div>
                 </div>
             </div>

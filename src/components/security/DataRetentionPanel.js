@@ -146,6 +146,7 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                 <div style={styles.presetButtons}>
                                     {retentionPresets.map((preset) => (
                                         <button
+                                            key={preset.label}
                                             aria-label={preset.label}
                                             onClick={() =>
                                                 setNewPolicy({

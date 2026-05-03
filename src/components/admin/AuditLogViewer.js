@@ -119,7 +119,7 @@ const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                     {loading ? (
                         <div style={styles.loading}>{t('common.loading')}</div>
                     ) : logs.length === 0 ? (
-                        <div style={styles.empty}>Kayit bulunamadi</div>
+                        <div style={styles.empty}>{t('admin.logs.noLogs', 'Kayıt bulunamadı')}</div>
                     ) : (
                         <div style={styles.logList}>
                             {logs.map((log, idx) => (

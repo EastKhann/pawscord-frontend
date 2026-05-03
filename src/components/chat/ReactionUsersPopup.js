@@ -74,7 +74,7 @@ const ReactionUsersPopup = ({ emoji, users = [], count, hasCurrentUser, onToggle
                                     {isMe && <span style={S.youBadge}>{t('reaction.you')}</span>}
                                 </div>
                             );
-                        })}>
+                        })}
                         {remaining > 0 && (
                             <div style={S.moreText}>{t('reaction.andMore', { count: remaining })}</div>
                         )}

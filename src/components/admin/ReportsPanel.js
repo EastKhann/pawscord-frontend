@@ -63,10 +63,10 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                     reports.map((r) =>
                         r.id === reportId
                             ? {
-                                  ...r,
-                                  status: action === 'dismiss' ? 'dismissed' : 'resolved',
-                                  resolution: action,
-                              }
+                                ...r,
+                                status: action === 'dismiss' ? 'dismissed' : 'resolved',
+                                resolution: action,
+                            }
                             : r
                     )
                 );
@@ -108,7 +108,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
     const getStatusBadge = (status) => {
         const badges = {
             pending: { label: 'Bekliyor', className: 'status-pending' },
-            resolved: { label: t('reports.resolved','Resolved'), className: 'status-resolved' },
+            resolved: { label: t('reports.resolved', 'Resolved'), className: 'status-resolved' },
             dismissed: { label: 'Reddedildi', className: 'status-dismissed' },
         };
         return badges[status] || { label: status, className: '' };
@@ -176,11 +176,11 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                 <div className="reports-stats">
                     <div className="stat-item">
                         <span className="stat-value">{stats.total}</span>
-                        <span className="stat-label">Toplam</span>
+                        <span className="stat-label">{t('total', 'Toplam')}</span>
                     </div>
                     <div className="stat-item pending">
                         <span className="stat-value">{stats.pending}</span>
-                        <span className="stat-label">Bekliyor</span>
+                        <span className="stat-label">{t('common.pending', 'Bekliyor')}</span>
                     </div>
                     <div className="stat-item resolved">
                         <span className="stat-value">{stats.resolved}</span>
@@ -188,7 +188,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                     </div>
                     <div className="stat-item dismissed">
                         <span className="stat-value">{stats.dismissed}</span>
-                        <span className="stat-label">Reddedildi</span>
+                        <span className="stat-label">{t('common.rejected', 'Reddedildi')}</span>
                     </div>
                 </div>
 
@@ -199,7 +199,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                         className={filter === 'all' ? 'active' : ''}
                         onClick={() => setFilter('all')}
                     >
-                        {t('common.all','All')} ({stats.total})
+                        {t('common.all', 'All')} ({stats.total})
                     </button>
                     <button
                         aria-label={t('admin.pendingReports')}
@@ -233,7 +233,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                     ) : filteredReports.length === 0 ? (
                         <div className="empty-state">
                             <div className="empty-icon">🎉</div>
-                            <h3>Rapor yok</h3>
+                            <h3>{t('admin.noReports', 'Rapor yok')}</h3>
                             <p>{t('admin.noReportsFilter', 'No reports found for this filter')}</p>
                         </div>
                     ) : (
@@ -334,7 +334,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                                     }
                                                     title={t('common.deleteMessage', 'Delete Message')}
                                                 >
-                                                    {t('reports.deleteMsg','🗑️ Delete Message')}
+                                                    {t('reports.deleteMsg', '🗑️ Delete Message')}
                                                 </button>
                                                 <button
                                                     aria-label={t('admin.rejectReport')}

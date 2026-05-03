@@ -4,8 +4,9 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { FaUser, FaLock, FaEnvelope, FaPaw, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaUser, FaLock, FaEnvelope, FaPaw, FaEye, FaEyeSlash, FaDownload } from 'react-icons/fa';
 import { Capacitor } from '@capacitor/core';
+import DownloadModal from '../components/shared/DownloadModal';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import toast from '../utils/toast';
 import { useRecaptcha } from '../utils/recaptcha';
@@ -22,7 +23,9 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [showDownloadModal, setShowDownloadModal] = useState(false);
     const { getToken: getRecaptchaToken } = useRecaptcha();
+    const isNativeApp = Capacitor.isNativePlatform();
 
     // ✅ 0. GOOGLE AUTH INITIALIZE (Mobile for gerekli)
     useEffect(() => {
@@ -41,101 +44,83 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
 
     // ✅ 1. ELECTRON DEEP LINK DİNLEYİCİSİ (EXE'ye Dönüş)
     useEffect(() => {
-        if (isElectron && window.require) {
-            const { ipcRenderer } = window.require('electron');
+        if (!isElectron || !window.electron) return;
 
-            // NEW: Handle auth success event from Electron main process
-            const handleAuthSuccess = (event, data) => {
-                try {
-                    const { access, refresh } = data;
-
-                    if (access && refresh) {
-                        const decoded = jwtDecode(access);
-
-                        localStorage.removeItem('chat_username');
-                        localStorage.setItem('access_token', access);
-                        localStorage.removeItem('refresh_token');
-                        localStorage.setItem('chat_username', decoded.username);
-
-                        setTimeout(() => window.location.reload(), 500);
-                    }
-                } catch (e) {
-                    logger.error('❌ [Electron] OAuth token error:', e);
-                    setAuthError(t('auth.tokenError'));
+        const handleAuthSuccess = (tokens) => {
+            try {
+                const { access, refresh } = tokens;
+                if (access && refresh) {
+                    const decoded = jwtDecode(access);
+                    localStorage.removeItem('chat_username');
+                    localStorage.setItem('access_token', access);
+                    localStorage.removeItem('refresh_token');
+                    localStorage.setItem('chat_username', decoded.username);
+                    setTimeout(() => window.location.reload(), 500);
                 }
-            };
+            } catch (e) {
+                logger.error('❌ [Electron] OAuth token error:', e);
+                setAuthError(t('auth.tokenError'));
+            }
+        };
 
-            const handleDeepLink = (event, url) => {
+        const handleAuthError = (error) => {
+            logger.error('❌ [Electron] Google auth error:', error);
+            setAuthError(t('auth.googleFailed'));
+        };
+
+        const handleDeepLink = (url) => {
+            try {
+                const urlObj = new URL(url);
+                const params = new URLSearchParams(urlObj.search);
+                const accessToken = params.get('access');
+                const refreshToken = params.get('refresh');
+
+                if (accessToken && refreshToken) {
+                    const decoded = jwtDecode(accessToken);
+                    localStorage.removeItem('chat_username');
+                    localStorage.setItem('access_token', accessToken);
+                    localStorage.removeItem('refresh_token');
+                    localStorage.setItem('chat_username', decoded.username);
+                    window.electron.focusWindow?.();
+                    setTimeout(() => window.location.reload(), 300);
+                }
+            } catch (e) {
+                logger.error('Deep link error:', e);
                 try {
-                    const urlObj = new URL(url);
-                    const params = new URLSearchParams(urlObj.search);
-                    const accessToken = params.get('access');
-                    const refreshToken = params.get('refresh');
-
-                    if (accessToken && refreshToken) {
-                        // 🔥 FIX: Decode token and save username for Electron too
-                        const decoded = jwtDecode(accessToken);
-
-                        // Clear old user data first
-                        localStorage.removeItem('chat_username');
-
-                        localStorage.setItem('access_token', accessToken);
-                        localStorage.removeItem('refresh_token');
-                        localStorage.setItem('chat_username', decoded.username);
-
-                        // Bring the Electron window to front and reload
-                        if (window.require) {
-                            const { ipcRenderer } = window.require('electron');
-                            ipcRenderer.send('focus-window');
-                        }
-                        setTimeout(() => window.location.reload(), 300);
-                    }
-                } catch (e) {
-                    logger.error('Deep link error:', e);
-                    try {
-                        if (url.includes('access=') && url.includes('refresh=')) {
-                            const parts = url.split('access=');
-                            if (parts.length > 1) {
-                                const access = parts[1].split('&')[0];
-                                const refreshParts = url.split('refresh=');
-                                if (refreshParts.length > 1) {
-                                    const _refresh = refreshParts[1]; // stored for potential future use
-
-                                    // 🔥 FIX: Decode and save username here too
-                                    const decoded = jwtDecode(access);
-                                    localStorage.removeItem('chat_username');
-                                    localStorage.setItem('access_token', access);
-                                    localStorage.removeItem('refresh_token');
-                                    localStorage.setItem('chat_username', decoded.username);
-                                    window.location.reload();
-                                } else {
-                                    setAuthError(t('auth.inputError'));
-                                }
-                            } else {
-                                setAuthError(t('auth.inputError'));
-                            }
+                    if (url.includes('access=') && url.includes('refresh=')) {
+                        const parts = url.split('access=');
+                        if (parts.length > 1) {
+                            const access = parts[1].split('&')[0];
+                            const decoded = jwtDecode(access);
+                            localStorage.removeItem('chat_username');
+                            localStorage.setItem('access_token', access);
+                            localStorage.removeItem('refresh_token');
+                            localStorage.setItem('chat_username', decoded.username);
+                            window.location.reload();
                         } else {
                             setAuthError(t('auth.inputError'));
                         }
-                    } catch (parseError) {
-                        logger.error('Manual parsing error:', parseError);
-                        setAuthError(t('auth.loginFailed'));
+                    } else {
+                        setAuthError(t('auth.inputError'));
                     }
+                } catch (parseError) {
+                    logger.error('Manual parsing error:', parseError);
+                    setAuthError(t('auth.loginFailed'));
                 }
-            };
+            }
+        };
 
-            // Register all listners
-            ipcRenderer.on('google-auth-success', handleAuthSuccess);
-            ipcRenderer.on('google-auth-error', handleAuthError);
-            ipcRenderer.on('deep-link-auth', handleDeepLink);
-            ipcRenderer.on('oauth-tokens', handleOAuthTokens);
+        // Register via contextBridge (preload.js) — replaces broken window.require approach
+        window.electron.onGoogleAuthSuccess(handleAuthSuccess);
+        window.electron.onGoogleAuthError(handleAuthError);
+        window.electron.onDeepLinkAuth(handleDeepLink);
+        window.electron.onOAuthTokens(handleAuthSuccess);
 
-            return () => {
-                ipcRenderer.removeListener('google-auth-success', handleAuthSuccess);
-                ipcRenderer.removeListener('google-auth-error', handleAuthError);
-                ipcRenderer.removeListener('deep-link-auth', handleDeepLink);
-                ipcRenderer.removeListener('oauth-tokens', handleOAuthTokens);
-            };
+        // Kullanıcı OAuth popup'ı kapattıysa loading state'i temizle
+        if (window.electron.onGoogleAuthCancelled) {
+            window.electron.onGoogleAuthCancelled(() => {
+                setIsGoogleLoading(false);
+            });
         }
     }, [setAuthError, t]);
 
@@ -262,10 +247,9 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 const oauthBaseUrl = isElectron ? 'https://api.pawscord.com/api' : API_BASE_URL;
                 const redirectUrl = `${oauthBaseUrl}/auth/google/start/?source=${source}`;
 
-                // 🔥 ELECTRON İÇİN: Popup window open (IPC kullan)
-                if (isElectron && window.require) {
-                    const { ipcRenderer } = window.require('electron');
-                    ipcRenderer.send('start-google-login', redirectUrl);
+                // 🔥 ELECTRON İÇİN: contextBridge API ile tarayıcıda aç
+                if (isElectron && window.electron?.startGoogleLogin) {
+                    window.electron.startGoogleLogin(redirectUrl);
                 } else {
                     // WEB for: Normal redirect
                     window.location.href = redirectUrl;
@@ -314,6 +298,38 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
     return (
         <div className="login-container">
             <div className="background-animate"></div>
+
+            {showDownloadModal && (
+                <DownloadModal onClose={() => setShowDownloadModal(false)} />
+            )}
+
+            {!isNativeApp && (
+                <button
+                    onClick={() => setShowDownloadModal(true)}
+                    style={{
+                        position: 'fixed',
+                        top: '16px',
+                        right: '16px',
+                        background: 'linear-gradient(135deg, #5865f2, #7c3aed)',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '8px 16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        cursor: 'pointer',
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        zIndex: 100,
+                        boxShadow: '0 4px 12px rgba(88,101,242,0.4)',
+                    }}
+                    aria-label={t('common.download', 'İndir')}
+                >
+                    <FaDownload size={13} />
+                    {t('common.download', 'İndir')}
+                </button>
+            )}
 
             <div className="login-card">
                 <div className="logo-header">

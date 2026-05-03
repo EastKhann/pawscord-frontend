@@ -322,8 +322,8 @@ const ReminderItem = ({ reminder, now, onRemove, isPast = false }) => {
                 className="remove-btn"
                 onClick={() => onRemove(reminder.id)}
                 title={t('delete')}
-                ✕
-        </button>
+                aria-label={t('delete')}>&#x2715;
+            </button>
         </div >
     );
 };

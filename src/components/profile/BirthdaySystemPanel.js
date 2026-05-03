@@ -307,13 +307,13 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
 
                             <div className="upcoming-section">
                                 <h3>📅 {t('birthday.upcomingBirthdays')}</h3>
-                                {upcomingBirthdays.length === 0 ? (
+                                {upcomingBirthdays2.length === 0 ? (
                                     <div className="empty-state-small">
                                         <p>{t('birthday.noUpcoming')}</p>
                                     </div>
                                 ) : (
                                     <div className="upcoming-list">
-                                        {upcomingBirthdays.map((bd) => (
+                                        {upcomingBirthdays2.map((bd) => (
                                             <div key={bd.user_id} className="upcoming-card">
                                                 <div className="upcoming-avatar">
                                                     {bd.user_avatar ? (

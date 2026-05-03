@@ -29,10 +29,10 @@ const STATUSES = [
 
     {
         key: 'dnd',
-        label: t('status.dnd', 'Do Not Disturb'),
+        label: 'Do Not Disturb',
         icon: FaMinusCircle,
         color: '#f23f42',
-        desc: t('status.dndDesc', 'You will not receive notifications'),
+        desc: 'You will not receive notifications',
     },
 
     {
@@ -40,7 +40,7 @@ const STATUSES = [
         label: 'Invisible',
         icon: FaEyeSlash,
         color: '#80848e',
-        desc: t('status.invisibleDesc', 'You will appear offline'),
+        desc: 'You will appear offline',
     },
 ];
 

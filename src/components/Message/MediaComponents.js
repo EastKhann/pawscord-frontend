@@ -151,7 +151,7 @@ export const VoiceMessage = memo(
                 )}
                 {!transcription && !isTranscribing && (
                     <button
-                        aria-label={t('common.transcribe', 'Transcribe')}
+                        aria-label="Transcribe"
                         onClick={onTranscribe}
                         style={styles.transcribeButton}
                     >

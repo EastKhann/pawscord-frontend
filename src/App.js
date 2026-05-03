@@ -122,6 +122,8 @@ const _st1004 = {
     flexDirection: 'column',
     height: '100%',
     overflow: 'hidden',
+    position: 'relative',
+    zIndex: 100,
 };
 const _st1005 = {
     height: '52px',
@@ -624,10 +626,10 @@ const AppContent = () => {
             const { ipcRenderer } = window.require('electron');
             ipcRenderer.send(
                 'start-download',
-                `${ABSOLUTE_HOST_URL}/media/build/Pawscord-Setup.exe`
+                'https://media.pawscord.com/releases/latest/Pawscord-Setup.exe'
             );
         } else {
-            window.open(`${ABSOLUTE_HOST_URL}/media/build/Pawscord-Setup.exe`, '_blank', 'noopener,noreferrer');
+            window.open('https://media.pawscord.com/releases/latest/Pawscord-Setup.exe', '_blank', 'noopener,noreferrer');
         }
     };
 

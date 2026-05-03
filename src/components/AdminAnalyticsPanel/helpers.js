@@ -14,20 +14,22 @@ export const formatNumber = (num) => {
     if (num === undefined || num === null) return '0';
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
     if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-    const { t } = useTranslation();
     return num.toLocaleString();
 };
 
-export const StatCard = ({ icon, label, value, color, subtitle }) => (
-    <div aria-label={t('admin.statsCard', 'Statistics card')} style={{ ...styles.statCard, borderTop: `3px solid ${color}` }}>
-        <div style={getStatIconStyle(color)}>{icon}</div>
-        <div style={styles.statContent}>
-            <div style={styles.statLabel}>{label}</div>
-            <div style={styles.statValue}>{value}</div>
-            {subtitle && <div style={styles.statSubtitle}>{subtitle}</div>}
+export const StatCard = ({ icon, label, value, color, subtitle }) => {
+    const { t } = useTranslation();
+    return (
+        <div aria-label={t('admin.statsCard', 'Statistics card')} style={{ ...styles.statCard, borderTop: `3px solid ${color}` }}>
+            <div style={getStatIconStyle(color)}>{icon}</div>
+            <div style={styles.statContent}>
+                <div style={styles.statLabel}>{label}</div>
+                <div style={styles.statValue}>{value}</div>
+                {subtitle && <div style={styles.statSubtitle}>{subtitle}</div>}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export const GrowthCard = ({ label, value, isPositive, suffix = '%', icon }) => (
     <div

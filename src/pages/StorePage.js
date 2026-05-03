@@ -67,7 +67,7 @@ const S = {
     headerRight: {
         display: 'flex',
         alignItems: 'center',
-        gap: '10px',
+        gap: '8px',
         flexWrap: 'wrap',
     },
     // Category tabs
@@ -97,7 +97,7 @@ const S = {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
         gap: '20px',
-        padding: '28px',
+        padding: '24px',
     },
     // Empty / loading
     emptyWrap: {
@@ -116,7 +116,7 @@ const S = {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '80px 20px',
-        gap: '10px',
+        gap: '8px',
         color: '#949ba4',
         fontSize: '15px',
     },
@@ -208,14 +208,14 @@ const S = {
         color: '#FFD700',
         display: 'flex',
         alignItems: 'center',
-        gap: '5px',
+        gap: '4px',
     },
     buyBtn: {
         background: 'linear-gradient(135deg, #5865F2 0%, #4752C4 100%)',
         border: 'none',
         color: '#fff',
         borderRadius: '8px',
-        padding: '7px 14px',
+        padding: '8px 16px',
         fontSize: '12px',
         fontWeight: 700,
         cursor: 'pointer',
@@ -290,7 +290,7 @@ const StorePage = () => {
                                 if (!active) e.currentTarget.style.color = '#949ba4';
                             }}
                         >
-                            {cat.icon && <span style={{ marginRight: '6px' }}>{cat.icon}</span>}
+                            {cat.icon && <span style={{ marginRight: '8px' }}>{cat.icon}</span>}
                             {cat.name}
                         </button>
                     );
@@ -317,7 +317,7 @@ const StorePage = () => {
                         return (
                             <div
                                 key={item.id}
-                                role="listitem"
+                                role="button"
                                 tabIndex={0}
                                 onClick={() => s.setSelectedItem(item)}
                                 style={S.card(rarityColor)}

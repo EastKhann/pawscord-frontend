@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     FaUserShield,
@@ -21,34 +21,35 @@ const S = {
 };
 
 export const COMMANDS = [
-    { name: 'zar-at', description: t('slash.rollDiceDesc', 'Roll dice between 1-100'), icon: <FaTable /> },
-    { name: 'yazitura', description: t('slash.coinFlipDesc', 'Flip a coin'), icon: <FaUndo /> },
-    { name: 'tkm', description: t('slash.rpsDesc', 'Play Rock Paper Scissors (@user)'), icon: <FaRegSmile /> },
-    { name: 'xox', description: t('slash.tttDesc', 'Start Tic-Tac-Toe game'), icon: <FaTable /> },
-    { name: 'sec', description: t('slash.chooseDesc', 'Choose from options (/choose a b c)'), icon: <FaTerminal /> },
-    { name: 'cuzdan', description: t('slash.walletDesc', 'View your coin balance'), icon: <FaUserShield /> },
+    { name: 'zar-at', description: 'Roll dice between 1-100', icon: <FaTable /> },
+    { name: 'yazitura', description: 'Flip a coin', icon: <FaUndo /> },
+    { name: 'tkm', description: 'Play Rock Paper Scissors (@user)', icon: <FaRegSmile /> },
+    { name: 'xox', description: 'Start Tic-Tac-Toe game', icon: <FaTable /> },
+    { name: 'sec', description: 'Choose from options (/choose a b c)', icon: <FaTerminal /> },
+    { name: 'cuzdan', description: 'View your coin balance', icon: <FaUserShield /> },
     {
         name: 'transfer',
-        description: t('slash.transferDesc', 'Send coins (/transfer @user amount)'),
+        description: 'Send coins (/transfer @user amount)',
         icon: <FaUserShield />,
     },
-    { name: 'kanban', description: t('slash.kanbanDesc', 'Open Kanban board'), icon: <FaTable /> },
-    { name: 'kod', description: t('slash.runCodeDesc', 'Run Python code'), icon: <FaCode /> },
-    { name: 'imagegelismis', description: t('slash.aiImageDesc', 'Generate image with AI'), icon: <FaRegSmile /> },
-    { name: 'temizle', description: t('slash.clearDesc', 'Delete messages (Admin)'), icon: <FaBroom />, adminOnly: true },
-    { name: 'yardim', description: t('slash.helpDesc', 'View command list'), icon: <FaTerminal /> },
-    { name: 'tema', description: t('slash.themeDesc', 'Open Theme Store'), icon: <FaTable /> },
+    { name: 'kanban', description: 'Open Kanban board', icon: <FaTable /> },
+    { name: 'kod', description: 'Run Python code', icon: <FaCode /> },
+    { name: 'imagegelismis', description: 'Generate image with AI', icon: <FaRegSmile /> },
+    { name: 'temizle', description: 'Delete messages (Admin)', icon: <FaBroom />, adminOnly: true },
+    { name: 'yardim', description: 'View command list', icon: <FaTerminal /> },
+    { name: 'tema', description: 'Open Theme Store', icon: <FaTable /> },
     {
         name: 'duyuru',
         description: 'Sabit Duyuru Yap (/duyuru message)',
         icon: <FaBroom />,
         adminOnly: true,
     },
-    { name: 'sablon', description: t('slash.templatesDesc', 'Ready-made Templates'), icon: <FaStickyNote /> },
-    { name: 'shrug', description: t('slash.shrugDesc', 'Send ¯\\_(ツ)_/¯'), icon: <FaRegSmile /> },
+    { name: 'sablon', description: 'Ready-made Templates', icon: <FaStickyNote /> },
+    { name: 'shrug', description: 'Send �\\_(?)_/�', icon: <FaRegSmile /> },
 ];
 
 const SlashCommandList = ({ query, onSelect, activeIndex }) => {
+    const { t } = useTranslation();
     const [filteredCommands, setFilteredCommands] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -107,7 +108,7 @@ const SlashCommandList = ({ query, onSelect, activeIndex }) => {
 const styles = {
     container: {
         position: 'absolute',
-        bottom: '100%', // Inputun üstünde
+        bottom: '100%', // Inputun �st�nde
         left: 0,
         width: '300px',
         maxHeight: '300px',

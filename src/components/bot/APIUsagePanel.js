@@ -48,7 +48,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaChartLine className="icon-primary-24" />
-                        <h2 className="m0-fs20">API Kullanim Analitigi</h2>
+                        <h2 className="m0-fs20">{t('apiUsage.title', 'API Kullanım Analitiği')}</h2>
                     </div>
                     <div style={styles.headerRight}>
                         <select
@@ -121,7 +121,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             </div>
 
                             <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>Istek Siniri Durumu</h3>
+                                <h3 style={styles.sectionTitle}>{t('apiUsage.rateLimitStatus', 'İstek Sınırı Durumu')}</h3>
                                 <div>
                                     <div style={styles.rateLimitInfo}>
                                         <div style={styles.rateLimitText}>
@@ -209,7 +209,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             </div>
 
                             <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>Son Aktiviteler</h3>
+                                <h3 style={styles.sectionTitle}>{t('apiUsage.recentActivity', 'Son Aktiviteler')}</h3>
                                 <div style={styles.timeline}>
                                     {timeline.length === 0 ? (
                                         <div style={styles.empty}>Son aktivite yok</div>

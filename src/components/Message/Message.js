@@ -87,55 +87,55 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
         {msg.reply_to && (
           <div style={styles.replyContainer} role="button" tabIndex={0} onClick={handleReplyClick} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
             <div style={styles.replyLine} />
-            <span style={S.mar}@{msg.reply_to.username}</span>
+            <span style={S.mar}>@{msg.reply_to.username}</span>
             <span style={S.font}>{msg.reply_to.content ? msg.reply_to.content.substring(0, 50) + '...' : 'Bir file'}</span>
           </div>
         )}
 
-      {!isGrouped && <MessageHeader msg={msg} isAdmin={isAdmin} isAIMessage={isAIMessage} onViewProfile={onViewProfile} messageEditHistoryUrl={messageEditHistoryUrl} fetchWithAuth={fetchWithAuth} />}
+        {!isGrouped && <MessageHeader msg={msg} isAdmin={isAdmin} isAIMessage={isAIMessage} onViewProfile={onViewProfile} messageEditHistoryUrl={messageEditHistoryUrl} fetchWithAuth={fetchWithAuth} />}
 
-      {isHovered && !msg.temp_id && !isSelectionMode && (
-        <MessageActions msg={msg} isMyMessage={isMyMessage} isAdmin={isAdmin} currentPermissions={currentPermissions}
-          showReactionPicker={showReactionPicker} setShowReactionPicker={setShowReactionPicker}
-          onToggleReaction={onToggleReaction} onSetReply={onSetReply} onStartEdit={onStartEdit} onDelete={onDelete}
-          onTogglePin={onTogglePin} onStartForward={onStartForward} onToggleSelection={onToggleSelection}
-          onQuote={handleQuoteMessage} onShowReminderModal={handleShowReminder}
-          onShowThreadModal={handleShowThread} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
-      )}
+        {isHovered && !msg.temp_id && !isSelectionMode && (
+          <MessageActions msg={msg} isMyMessage={isMyMessage} isAdmin={isAdmin} currentPermissions={currentPermissions}
+            showReactionPicker={showReactionPicker} setShowReactionPicker={setShowReactionPicker}
+            onToggleReaction={onToggleReaction} onSetReply={onSetReply} onStartEdit={onStartEdit} onDelete={onDelete}
+            onTogglePin={onTogglePin} onStartForward={onStartForward} onToggleSelection={onToggleSelection}
+            onQuote={handleQuoteMessage} onShowReminderModal={handleShowReminder}
+            onShowThreadModal={handleShowThread} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
+        )}
 
-      {showReminderModal && <Suspense fallback={null}><ReminderModal messageId={msg.id} messageContent={displayContent} onClose={handleCloseReminder} fetchWithAuth={fetchWithAuth} apiBaseUrl={absoluteHostUrl} /></Suspense>}
-      {showThreadModal && <Suspense fallback={null}><MessageThreads messageId={msg.id} onClose={handleCloseThread} fetchWithAuth={fetchWithAuth} apiBaseUrl={absoluteHostUrl} /></Suspense>}
+        {showReminderModal && <Suspense fallback={null}><ReminderModal messageId={msg.id} messageContent={displayContent} onClose={handleCloseReminder} fetchWithAuth={fetchWithAuth} apiBaseUrl={absoluteHostUrl} /></Suspense>}
+        {showThreadModal && <Suspense fallback={null}><MessageThreads messageId={msg.id} onClose={handleCloseThread} fetchWithAuth={fetchWithAuth} apiBaseUrl={absoluteHostUrl} /></Suspense>}
 
-      <MessageContextMenu msg={msg} contextMenu={contextMenu} displayContent={displayContent} isMyMessage={isMyMessage}
-        onSetReply={onSetReply} onStartEdit={onStartEdit} onDelete={onDelete} onTogglePin={onTogglePin}
-        onStartForward={onStartForward} onShowReactionPicker={handleShowReactionPicker}
-        onShowThreadModal={handleShowThread} onShowReminderModal={handleShowReminder}
-        onClose={handleCloseContextMenu} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
+        <MessageContextMenu msg={msg} contextMenu={contextMenu} displayContent={displayContent} isMyMessage={isMyMessage}
+          onSetReply={onSetReply} onStartEdit={onStartEdit} onDelete={onDelete} onTogglePin={onTogglePin}
+          onStartForward={onStartForward} onShowReactionPicker={handleShowReactionPicker}
+          onShowThreadModal={handleShowThread} onShowReminderModal={handleShowReminder}
+          onClose={handleCloseContextMenu} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
 
-      {msg.snippet_data?.type === 'game_xox' ? (
-        <Suspense fallback={<div style={S.txt}>🎮 Loading game...</div>}>
-          <TicTacToe gameData={msg.snippet_data} currentUser={currentUser}
-            onMove={handleTicTacToeMove} />
-        </Suspense>
-      ) : (
-        <MessageContent displayContent={displayContent} isMessageEncrypted={isMessageEncrypted} snippetData={msg.snippet_data} />
-      )}
+        {msg.snippet_data?.type === 'game_xox' ? (
+          <Suspense fallback={<div style={S.txt}>🎮 Loading game...</div>}>
+            <TicTacToe gameData={msg.snippet_data} currentUser={currentUser}
+              onMove={handleTicTacToeMove} />
+          </Suspense>
+        ) : (
+          <MessageContent displayContent={displayContent} isMessageEncrypted={isMessageEncrypted} snippetData={msg.snippet_data} />
+        )}
 
-      {signalCoin && <button
-        aria-label={t('message.showChart', 'Show price chart')} onClick={handleShowChart} style={styles.chartBtn}><FaChartLine /> {signalCoin} Chart</button>}
-      {msg.link_preview_data && <LazyMount minHeight={80}><Suspense fallback={null}><LinkPreview data={msg.link_preview_data} /></Suspense></LazyMount>}
-      <MessagePoll poll={msg.poll} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
-      <MessageMedia msg={msg} finalImageUrl={finalImageUrl} finalFileUrl={finalFileUrl} onImageClick={onImageClick} onContentLoad={onContentLoad}
-        transcription={localTranscription} isTranscribing={localIsTranscribing} onTranscribe={handleTranscribe}
-        galleryGroup={msg._galleryGroup} absoluteHostUrl={absoluteHostUrl} />
+        {signalCoin && <button
+          aria-label={t('message.showChart', 'Show price chart')} onClick={handleShowChart} style={styles.chartBtn}><FaChartLine /> {signalCoin} Chart</button>}
+        {msg.link_preview_data && <LazyMount minHeight={80}><Suspense fallback={null}><LinkPreview data={msg.link_preview_data} /></Suspense></LazyMount>}
+        <MessagePoll poll={msg.poll} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
+        <MessageMedia msg={msg} finalImageUrl={finalImageUrl} finalFileUrl={finalFileUrl} onImageClick={onImageClick} onContentLoad={onContentLoad}
+          transcription={localTranscription} isTranscribing={localIsTranscribing} onTranscribe={handleTranscribe}
+          galleryGroup={msg._galleryGroup} absoluteHostUrl={absoluteHostUrl} />
 
-      {(msg.reactions?.length > 0 || (isMyMessage && !msg.temp_id)) && (
-        <div style={styles.footerRow}>
-          <MessageReactions reactions={msg.reactions} currentUser={currentUser} onToggleReaction={onToggleReaction} messageId={msg.id} />
-          {isMyMessage && !msg.temp_id && <ReadReceipt status={msg.read_by?.length > 0 ? 'read' : msg.id ? 'delivered' : 'sent'} readBy={msg.read_by || []} />}
-        </div>
-      )}
-    </div>
+        {(msg.reactions?.length > 0 || (isMyMessage && !msg.temp_id)) && (
+          <div style={styles.footerRow}>
+            <MessageReactions reactions={msg.reactions} currentUser={currentUser} onToggleReaction={onToggleReaction} messageId={msg.id} />
+            {isMyMessage && !msg.temp_id && <ReadReceipt status={msg.read_by?.length > 0 ? 'read' : msg.id ? 'delivered' : 'sent'} readBy={msg.read_by || []} />}
+          </div>
+        )}
+      </div>
     </div >
   );
 };

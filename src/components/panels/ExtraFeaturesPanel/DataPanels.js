@@ -209,7 +209,7 @@ export const ServerAnalyticsPanel = memo(({ serverId, onClose }) => {
         <div className="feature-panel server-analytics">
             <div className="panel-header"><h3>{'📈'} {t('dataPanels.serverAnalytics', 'Server Analytics')}</h3><button onClick={onClose} className="close-btn">✕</button></div>
             <div className="panel-content">
-                {loading ? <div className="loading">{t("common.loading")}</div>{t('analytics')}<>
+                {loading ? <div className="loading">{t("common.loading")}</div> : <>
                     <div className="analytics-grid">
                         <div className="stat-card"><span className="value">{analytics.total_members}</span><span className="label">{t('toplam_member')}</span></div>
                         <div className="stat-card"><span className="value">{analytics.new_members_week}</span><span className="label">{t('bu_hafta_yeni')}</span></div>
@@ -220,7 +220,7 @@ export const ServerAnalyticsPanel = memo(({ serverId, onClose }) => {
                         <h4>{t('en_active_odalar')}</h4>
                         {analytics.active_rooms?.map((room, i) => (<div key={`item-${i}`} className="room-stat"><span>{room.room__name}</span><span>{room.count} message</span></div>))}
                     </div>
-                </>)}
+                </>}
             </div>
         </div>
     );

@@ -370,24 +370,18 @@ export const prefetchUserAvatars = async (users) => {
                         return;
                     }
 
-                    // Fetch with cache-busting to avoid stale CORS errors
-                    const cacheBuster = `?_=${Date.now()}`;
-                    const fetchUrl = url.includes('?')
-                        ? `${url}&_=${Date.now()}`
-                        : `${url}${cacheBuster}`;
-                    const response = await fetch(fetchUrl, {
-                        mode: 'cors',
-                        cache: 'no-cache',
+                    // Use native Image preloading — no CORS headers required for <img> src.
+                    // Cross-origin fetch with mode:'cors' would fail on R2 without CORS policy.
+                    await new Promise((resolve) => {
+                        const img = new Image();
+                        img.onload = resolve;
+                        img.onerror = resolve; // resolve on error too — don't block batch
+                        img.src = url;
                     });
-                    if (!response.ok) return;
-
-                    const blob = await response.blob();
-                    const dataUrl = await imageCache.blobToDataUrl(blob);
-
-                    await imageCache.set(url, dataUrl);
-                    inMemoryAvatarCache.set(url, dataUrl);
+                    // Mark as preloaded (not a data URL, just browser HTTP-cache entry)
+                    inMemoryAvatarCache.set(url, url);
                 } catch (err) {
-                    // Swithnt fail for prefetch
+                    // don't fail for prefetch
                 }
             })
         );

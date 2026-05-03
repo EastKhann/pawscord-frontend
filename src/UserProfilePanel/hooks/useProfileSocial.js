@@ -17,7 +17,7 @@ const useProfileSocial = () => {
             const response = await authGet('/blocks/list/');
             setBlockedUsers(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
-            logger.error('Blocked users fetch failed:', err);
+            logger.warn('Blocked users fetch failed:', err);
             setBlockedUsers([]);
         }
     };
@@ -38,7 +38,7 @@ const useProfileSocial = () => {
             setFriendRequests(response.data?.pending || []);
             setFriends(response.data?.friends || []);
         } catch (err) {
-            logger.error('Friend requests fetch failed:', err);
+            logger.warn('Friend requests fetch failed:', err);
             setFriendRequests([]);
             setFriends([]);
         }

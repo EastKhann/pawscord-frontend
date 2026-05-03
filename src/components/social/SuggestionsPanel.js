@@ -210,7 +210,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                             type="checkbox"
                                             checked={config.enabled}
                                             onChange={handleEnabledChange}
-                                            aria-label={t('suggestions.enableToggle', 'Enable suggestions')}>
+                                            aria-label={t('suggestions.enableToggle', 'Enable suggestions')} />
                                     </label>
                                 </div>
 
@@ -259,7 +259,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                                 type="checkbox"
                                                 checked={config.auto_approve}
                                                 onChange={handleAutoApproveChange}
-                                                aria-label={t('suggestions.autoApprove', 'Auto approve')}>
+                                                aria-label={t('suggestions.autoApprove', 'Auto approve')} />
                                         </label>
                                     </div>
                                 </div>

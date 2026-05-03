@@ -4,7 +4,6 @@
 
 export {
     default as tokens,
-    tokens,
     colors,
     spacing,
     borderRadius,

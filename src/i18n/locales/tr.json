@@ -622,6 +622,11 @@
   "api_reactions_add": "API tepki ekle",
   "api_servers": "API sunucular",
   "apiusagepanel.title": "API Kullanımı",
+  "apiUsage": {
+    "title": "API Kullanım Analitiği",
+    "rateLimitStatus": "İstek Sınırı Durumu",
+    "recentActivity": "Son Aktiviteler"
+  },
   "ara": "Ara",
   "archive": {
     "deleteFailed": "Kanal silinemedi",
@@ -1571,7 +1576,22 @@
     "refreshSignals": "Sinyalleri yenile",
     "openFullPanel": "Kripto Sinyalleri panelini yeni sekmede aç",
     "fullPanel": "Tam Panel",
-    "amountPlaceholder": "0"
+    "amountPlaceholder": "0",
+    "status": "Durum",
+    "link": "Bağlantı",
+    "entry": "Giriş",
+    "current": "Güncel",
+    "trades": "İşlemler",
+    "targetROE": "Hedef ROE",
+    "xMultiplier": "X Çarpan",
+    "days": "Gün",
+    "alignment": "Hizalama",
+    "advantagePct": "Avantaj%",
+    "blPrice": "BL Fiyatı",
+    "posDirection": "Pozisyon Yönü",
+    "yourBalance": "Bakiye",
+    "youOwn": "Sahip Olunan",
+    "amount": "Miktar"
   },
   "crypto.equipFailed": "Eşya donatılamadı",
   "crypto.txIdRequired": "Lütfen işlem ID girin",
@@ -1878,7 +1898,9 @@
     "returnHome": "Ana sayfaya dön",
     "refreshPage": "Sayfayı yenile",
     "tryAgain": "Tekrar dene",
-    "boundary": "Hata siniri"
+    "boundary": "Hata siniri",
+    "pageNotFound": "Bu sayfa bulunamadı.",
+    "goHome": "Ana Sayfaya Dön"
   },
   "event_adı": "Etkinlik Adı",
   "event_hakkında_detaillar": "Etkinlik hakkında detaylar",
@@ -1967,7 +1989,8 @@
     "miniGames": "Mini Oyunlar",
     "noGamesYet": "Henüz oyun oynanmadı!",
     "startGame": "Oyunu Başlat",
-    "makeMoveButton": "Hamle yap"
+    "makeMoveButton": "Hamle yap",
+    "hangman": "Adam Asmaca"
   },
   "gdpr.completed": "Tamamlandı",
   "gdpr.download": "İndir",
@@ -4160,6 +4183,7 @@
         "currentSession": "● Şu anki oturum",
         "endAllSessions": "Diğer Tüm Oturumları Sonlandır",
         "endSession": "Sonlandır",
+        "hoursAgo": "2 saat önce",
         "sessionsDesc": "Hesabınızın giriş yaptığı cihazlar."
       },
       "keybinds": {
@@ -5525,7 +5549,15 @@
     "loading": "Ses Ayarları yükleniyor...",
     "noiseSuppTitle": "Gürültü Bastırma",
     "noiseSuppDesc": "Arka plan gürültüsünü azalt",
-    "startRecording": "Kaydetmek icin basin"
+    "startRecording": "Kaydetmek icin basin",
+    "inputDevice": "Giriş Cihazı",
+    "outputDevice": "Çıkış Cihazı",
+    "videoDevice": "Video Cihazı",
+    "audioProcessing": "Ses İşleme",
+    "camera": "Kamera",
+    "microphone": "Mikrofon",
+    "liveChat": "Sohbet",
+    "voiceChatLabel": "Ses Sohbeti"
   },
   "voice.keyBind": "Tus: {{key}}",
   "voiceControl": {
@@ -6336,7 +6368,8 @@
     "title": "📺 Birlikte İzle",
     "subtitle": "Arkadaşlarla birlikte video izle!",
     "newParty": "Yeni İzleme Partisi",
-    "createParty": "🎬 İzleme Partisi Oluştur"
+    "createParty": "🎬 İzleme Partisi Oluştur",
+    "supportedPlatforms": "Desteklenen platformlar:"
   },
   "srs": {
     "dontKnow": "Hiç bilmiyorum",
@@ -6372,7 +6405,11 @@
     "letterInput": "Bir harf girin",
     "guessLetter": "Harf tahmin et",
     "cellPosition": "Hücre {{idx}}",
-    "guessNumber_input": "Tahmin ettiğiniz sayı"
+    "guessNumber_input": "Tahmin ettiğiniz sayı",
+    "guessActionBtn": "Tahmin Et!",
+    "guessLetterBtn": "Harf Tahmin Et",
+    "remainingGuesses": "Kalan tahmin:",
+    "lastHint": "Son ipucu:"
   },
   "screenShare": {
     "stop": "Ekran paylaşımını durdur",
@@ -6483,7 +6520,19 @@
     "overview": "Genel Bakış",
     "privacyPolicy": "🔒 Gizlilik Politikası",
     "members": "üye",
-    "add": "Ekle"
+    "add": "Ekle",
+    "features": "Özellikler",
+    "links": "Bağlantılar",
+    "developer": "Geliştirici",
+    "commands": "Komutlar",
+    "reviews": "Yorumlar",
+    "addToServer": "Sunucuya Ekle",
+    "verified": "✓ Doğrulanmış",
+    "noCommands": "Komut listesi mevcut değil",
+    "servers": "sunucu",
+    "comments": "yorum",
+    "website": "🌐 Web Sitesi",
+    "supportServer": "💬 Destek Sunucusu"
   },
   "highlights": {
     "keywordInput": "Yeni anahtar kelime",
@@ -6614,7 +6663,15 @@
   },
   "inviteAudit": {
     "subtitle": "Davet kullanımını ve üye katılımlarını takip edin",
-    "details": "Davet Detayları"
+    "details": "Davet Detayları",
+    "code": "Davet Kodu",
+    "inviter": "Davetçi",
+    "usedBy": "Kullanan",
+    "lastUsed": "Son Kullanan",
+    "totalInvites": "Toplam Davet",
+    "inviteCount": "{{count}} davet",
+    "thisWeek": "Bu Hafta",
+    "thisMonth": "Bu Ay"
   },
   "massActions": {
     "usersAffected": "kullanıcıyı etkileyecek!",
@@ -6791,7 +6848,9 @@
     "loadingInvite": "Davet yükleniyor..."
   },
   "reportSystem": {
-    "reportedUser": "Şikayet Edilen Kullanıcı"
+    "reportedUser": "Şikayet Edilen Kullanıcı",
+    "title": "Rapor Sistemi",
+    "totalReports": "Toplam Rapor"
   },
   "adminUser": {
     "unban": "Yasağı Kaldır",

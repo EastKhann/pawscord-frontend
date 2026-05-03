@@ -20,7 +20,7 @@ const DURATION_OPTIONS = [
 const EMOJI_SUGGESTIONS = ['😀', '😎', '🎮', '💻', '📚', '🎵', '☕', '🌙', '❤️', '🔥'];
 
 export const CustomStatusInput = ({ onSave, currentStatus }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
   const [emoji, setEmoji] = useState(currentStatus?.emoji || '');
   const [text, setText] = useState(currentStatus?.text || '');
@@ -50,7 +50,7 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
       <div className="csi-header"><FaEdit /><span>{t('set_a_custom_status')}</span></div>
       <div className="csi-content">
         <div className="csi-emoji-row">
-          <input type="text" value={emoji} onChange={e => setEmoji(e.target.value)} placeholder=😀 className="csi-emoji-input" maxLength={2} />
+          <input type="text" value={emoji} onChange={e => setEmoji(e.target.value)} placeholder="😀" className="csi-emoji-input" maxLength={2} />
           <input type="text" value={text} onChange={e => setText(e.target.value)} placeholder={t('what_s_on_your_mind')} className="csi-text-input" maxLength={128} />
         </div>
         <div className="csi-emoji-suggestions">
@@ -58,7 +58,7 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
         </div>
         <div className="csi-expires">
           <label>{t('clear_after')}</label>
-          <select value={expiresIn} onChange={e => setExpiresIn(e.target.value)}
+          <select value={expiresIn} onChange={e => setExpiresIn(e.target.value)}>
             {DURATION_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
           </select>
         </div>
@@ -74,6 +74,6 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
 
 
 CustomStatusInput.propTypes = {
-    onSave: PropTypes.func,
-    currentStatus: PropTypes.array,
+  onSave: PropTypes.func,
+  currentStatus: PropTypes.array,
 };

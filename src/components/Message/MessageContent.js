@@ -46,7 +46,7 @@ export const MessageContent = memo(({
     return (
         <div style={styles.messageContent}>
             {isMessageEncrypted && (
-                <span style={S.txt}>title={t('end-to-end_encrypted')}>
+                <span style={S.txt} title={t('end-to-end_encrypted')}>
                     <FaLock />
                 </span>
             )}

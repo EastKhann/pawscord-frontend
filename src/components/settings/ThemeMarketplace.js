@@ -126,6 +126,7 @@ const ThemeMarketplace = () => {
 };
 
 const ThemeCard = ({ theme, onInstall }) => {
+    const { t } = useTranslation();
     const [preview, setPreview] = useState(false);
 
     const previewTheme = () => {

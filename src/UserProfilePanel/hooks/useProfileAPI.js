@@ -37,7 +37,7 @@ const useProfileAPI = ({ user, isOwnProfile, onUpdate }) => {
                 security.check2FAStatus(),
                 form.fetchDefaultAvatars(),
                 security.checkPasswordStatus(),
-            ]).catch((err) => logger.error('Initial fetch error:', err));
+            ]).catch((err) => logger.warn('Initial fetch error:', err));
         } else {
             form.fetchDefaultAvatars();
         }

@@ -1,4 +1,3 @@
-import { getToken } from './tokenStorage';
 // frontend/src/utils/fcm.js
 // 🔔 Firebase Cloud Messaging (FCM) Push Notifications Setup
 

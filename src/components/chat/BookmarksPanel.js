@@ -100,6 +100,7 @@ const BookmarksPanel = ({ apiBaseUrl, fetchWithAuth, username }) => {
 };
 
 const BookmarkCard = ({ bookmark, onRemove }) => {
+    const { t } = useTranslation();
     return (
         <div style={styles.bookmarkCard}>
             <div style={styles.bookmarkHeader}>

@@ -31,8 +31,8 @@ const PollSettingsPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => 
           <div className="header-info"><h2><FaPoll /> {t('poll.title', 'Poll Settings')}</h2><span className="subtitle">{t('poll.subtitle', 'Configure voting and poll options')}</span></div>
           <div className="header-actions">
             {hasChanges && (<><button
-              aria-label={t('poll.reset', 'Reset settings')} className="reset-btn" onClick={resetSettings}>{t('poll.reset,'Reset')}</button><button
-                aria - label= { t('poll.save', 'Save settings')} className="save-btn" onClick={saveSettings}>{t('poll.save', 'Save Changes')}</button></>)}>
+              aria-label={t('poll.reset', 'Reset settings')} className="reset-btn" onClick={resetSettings}>{t('poll.reset', 'Reset')}</button><button
+                aria-label={t('poll.save', 'Save settings')} className="save-btn" onClick={saveSettings}>{t('poll.save', 'Save Changes')}</button></>)}
             <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}><FaTimes /></button>
           </div>
         </div>

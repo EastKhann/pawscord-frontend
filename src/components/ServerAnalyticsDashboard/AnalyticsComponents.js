@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 export const StatCard = ({ icon, label, value, subtext, change, color }) => {
+    const { t } = useTranslation();
     const statIconStyle = { ...styles.statIcon, backgroundColor: color };
     const statChangeStyle =
         change !== undefined

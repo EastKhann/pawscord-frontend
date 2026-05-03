@@ -403,7 +403,7 @@ const RoomListModals = ({
                         canMoveDown={
                             servers &&
                             servers.findIndex((s) => s.id === serverContextMenu.server.id) <
-                                servers.length - 1
+                            servers.length - 1
                         }
                         isMuted={mutedServers.includes(serverContextMenu.server.id)}
                     />,
@@ -438,7 +438,7 @@ const RoomListModals = ({
                     title={t('contextMenu.deleteServer', 'Sunucuyu Sil')}
                     message={t(
                         'contextMenu.deleteServerConfirm',
-                        t('roomModals.deleteServerConfirm','You are about to PERMANENTLY delete "{{name}}"!', { name }),
+                        t('roomModals.deleteServerConfirm', 'You are about to PERMANENTLY delete "{{name}}"!', { name }),
                         { name: deleteServerModal.server.name }
                     )}
                     confirmText={t('contextMenu.deleteServer', 'Sunucuyu Sil')}
@@ -471,7 +471,7 @@ const RoomListModals = ({
                     title={t('contextMenu.leaveServer', 'Sunucudan Ayrıl')}
                     message={t(
                         'contextMenu.leaveServerConfirm',
-                        t('roomModals.leaveServerConfirm','Are you sure you want to leave "{{name}}"?', { name }),
+                        t('roomModals.leaveServerConfirm', 'Are you sure you want to leave "{{name}}"?', { name }),
                         { name: leaveServerModal.server.name }
                     )}
                     confirmText={t('contextMenu.leaveServer', 'Sunucudan Ayrıl')}
@@ -600,78 +600,150 @@ const DMContextMenuPortal = ({
         },
     ];
 
+    // Clamp position so menu never overflows viewport
+    const MENU_WIDTH = 240;
+    const MENU_HEIGHT_ESTIMATE = 420;
+    const vw = typeof window !== 'undefined' ? window.innerWidth : 1280;
+    const vh = typeof window !== 'undefined' ? window.innerHeight : 720;
+    const menuLeft = Math.max(8, Math.min(dmContextMenu.x, vw - MENU_WIDTH - 8));
+    const menuTop = Math.max(8, Math.min(dmContextMenu.y, vh - MENU_HEIGHT_ESTIMATE - 8));
+    const isOnlineNow = onlineUsers.includes(otherUser.username);
+
     return createPortal(
         <div
-            aria-label={t('aria.roomContextMenu', 'Room Menu')}
+            aria-label={t('aria.dmContextMenu', 'Direct message menu')}
             role="menu"
             tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+                e.stopPropagation();
+                if (e.key === 'Escape') setDmContextMenu(null);
+            }}
             style={{
                 position: 'fixed',
-                top: dmContextMenu.y,
-                left: dmContextMenu.x,
-                backgroundColor: '#111214',
-                border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: '8px',
-                minWidth: '220px',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.4), 0 0 1px rgba(0,0,0,0.5)',
+                top: menuTop,
+                left: menuLeft,
+                backgroundColor: '#17191c',
+                border: '1px solid #2a2a2e',
+                borderRadius: '12px',
+                width: `${MENU_WIDTH}px`,
+                boxShadow: '0 8px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.4)',
                 zIndex: 999999,
                 overflow: 'hidden',
-                animation: 'contextMenuSlide 0.1s ease-out',
+                animation: 'contextMenuSlide 150ms ease-out',
+                fontFamily: 'inherit',
             }}
         >
             {/* User Header */}
-            <div>
-                <img src={getAvatarUrl(otherUser.avatar, otherUser.username)} alt="" />
-                <div>
-                    <div>{otherUser.username}</div>
-                    <div>
-                        {onlineUsers.includes(otherUser.username)
-                            ? `🟢 ${t('common.online', 'Çevrimici')}`
-                            : `⚫ ${t('common.offline', 'Çevrimdışı')}`}
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '12px',
+                    background: 'linear-gradient(135deg, rgba(88,101,242,0.18) 0%, rgba(124,58,237,0.12) 100%)',
+                    borderBottom: '1px solid #2a2a2e',
+                }}
+            >
+                <div style={{ position: 'relative', flexShrink: 0 }}>
+                    <img
+                        src={getAvatarUrl(otherUser.avatar, otherUser.username)}
+                        alt=""
+                        width={40}
+                        height={40}
+                        style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            display: 'block',
+                            background: '#0b0e1b',
+                        }}
+                        onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+                    />
+                    <span
+                        aria-hidden="true"
+                        style={{
+                            position: 'absolute',
+                            right: -2,
+                            bottom: -2,
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '50%',
+                            background: isOnlineNow ? '#23a559' : '#80848e',
+                            border: '2px solid #17191c',
+                        }}
+                    />
+                </div>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                    <div
+                        style={{
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            color: '#ffffff',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}
+                    >
+                        {otherUser.username}
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#b5bac1', marginTop: '2px' }}>
+                        {isOnlineNow
+                            ? t('common.online', 'Çevrimiçi')
+                            : t('common.offline', 'Çevrimdışı')}
                     </div>
                 </div>
             </div>
 
             {/* Menu Items */}
-            {menuItems.map((item, index) => (
-                <React.Fragment key={`item-${index}`}>
-                    <div
-                        onClick={item.onClick}
-                        role="menuitem"
-                        tabIndex={0}
-                        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && item.onClick()}
-                        style={{
-                            padding: '10px 12px',
-                            cursor: 'pointer',
-                            color: item.color,
-                            fontSize: '14px',
-                            fontWeight: '500',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                            transition: 'all 0.1s ease',
-                            backgroundColor: 'transparent',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor =
-                                item.color === '#f23f42' || item.color === '#f23f42'
-                                    ? 'rgba(237, 66, 69, 0.15)'
-                                    : 'rgba(88, 101, 242, 0.1)';
-                            e.currentTarget.style.paddingLeft = '16px';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                            e.currentTarget.style.paddingLeft = '12px';
-                        }}
-                    >
-                        <span>{item.icon}</span>
-                        <span>{item.label}</span>
-                    </div>
-                    {item.divider && <div />}
-                </React.Fragment>
-            ))}
+            <div style={{ padding: '4px' }}>
+                {menuItems.map((item, index) => (
+                    <React.Fragment key={`item-${index}`}>
+                        <div
+                            onClick={item.onClick}
+                            role="menuitem"
+                            tabIndex={0}
+                            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && item.onClick()}
+                            style={{
+                                padding: '8px 10px',
+                                cursor: 'pointer',
+                                color: item.color,
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '10px',
+                                transition: 'background-color 120ms ease-out',
+                                backgroundColor: 'transparent',
+                                borderRadius: '6px',
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                    item.color === '#f23f42'
+                                        ? 'rgba(242, 63, 66, 0.15)'
+                                        : 'rgba(88, 101, 242, 0.15)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = 'transparent';
+                            }}
+                        >
+                            <span style={{ fontSize: '15px', width: '18px', textAlign: 'center', flexShrink: 0 }}>{item.icon}</span>
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.label}</span>
+                        </div>
+                        {item.divider && (
+                            <div
+                                role="separator"
+                                style={{
+                                    height: '1px',
+                                    background: '#2a2a2e',
+                                    margin: '4px 6px',
+                                }}
+                            />
+                        )}
+                    </React.Fragment>
+                ))}
+            </div>
         </div>,
         document.body
     );

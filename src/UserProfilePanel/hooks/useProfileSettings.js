@@ -52,7 +52,7 @@ const useProfileSettings = () => {
             const response = await authGet('/themes/list/');
             setThemes(Array.isArray(response.data) ? response.data : []);
         } catch (err) {
-            logger.error('Themes fetch failed:', err);
+            logger.warn('Themes fetch failed:', err);
             setThemes([
                 { id: 'dark', name: 'Dark' },
                 { id: 'light', name: 'Light' },
@@ -99,12 +99,12 @@ const useProfileSettings = () => {
                 Array.isArray(response.data)
                     ? response.data
                     : [
-                          { code: 'tr', name: 'Turkish' },
-                          { code: 'en', name: 'English' },
-                      ]
+                        { code: 'tr', name: 'Turkish' },
+                        { code: 'en', name: 'English' },
+                    ]
             );
         } catch (err) {
-            logger.error('Languages fetch failed:', err);
+            logger.warn('Languages fetch failed:', err);
             setAvailableLanguages([
                 { code: 'tr', name: 'Turkish' },
                 { code: 'en', name: 'English' },

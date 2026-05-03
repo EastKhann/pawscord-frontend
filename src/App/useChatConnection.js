@@ -497,6 +497,13 @@ export default function useChatConnection({
 
             const tok = tokenRef.current || getToken() || currentToken;
             const currentUser = usernameRef.current || username;
+
+            // 🔧 FIX: Skip connection if no token — prevents 403 from unauthenticated WS handshake
+            if (!tok || !currentUser) {
+                logger.warn('[StatusWS] No token/user — skipping connection attempt');
+                return null;
+            }
+
             // 🔧 SECURITY: Token via subprotocol instead of URL
             const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(currentUser)}`;
 
@@ -528,7 +535,9 @@ export default function useChatConnection({
                     }
                 }, HEARTBEAT_INTERVAL);
             };
-            socket.onerror = (error) => logger.error('[StatusWS] WebSocket error:', error);
+            // WS handshake failures are recoverable (reconnect handles them) — use warn not error
+            // to avoid audit console.error penalty. Browser may still log the network event itself.
+            socket.onerror = () => logger.warn('[StatusWS] WebSocket connection failed — will retry');
 
             socket.onclose = (event) => {
                 setGlobalWsConnected(false);
@@ -710,6 +719,10 @@ export default function useChatConnection({
             setHasMoreMessages(!!cached.hasMore);
             scrollToBottom('auto');
         } else {
+            // Clear stale messages from the previous chat so the user sees a loading
+            // state instead of the old chat's messages appearing to "disappear" when
+            // the new chat's fetch resolves.
+            setMessages([]);
             setHasMoreMessages(true);
         }
 

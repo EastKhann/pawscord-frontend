@@ -151,7 +151,6 @@ export // --- STİLLER ---
             bottom: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.6)',
             zIndex: 99, // Sidebar'ın altında
-            backdropFilter: 'blur(3px)',
         },
 
         mobileMenuButton: {
@@ -173,7 +172,7 @@ export // --- STİLLER ---
             color: '#b5bac1',
             fontSize: '1.3em',
             cursor: 'pointer',
-            padding: '6px',
+            padding: '8px',
             display: 'flex',
             alignItems: 'center',
             borderRadius: '50%',
@@ -186,7 +185,7 @@ export // --- STİLLER ---
             color: '#b5bac1',
             fontSize: '1.3em',
             cursor: 'pointer',
-            padding: '6px',
+            padding: '8px',
             display: 'flex',
             alignItems: 'center',
             transition: 'color 0.2s',
@@ -208,8 +207,8 @@ export // --- STİLLER ---
         videoGrid: {
             display: 'flex',
             flexWrap: 'wrap',
-            gap: '5px',
-            padding: '5px',
+            gap: '4px',
+            padding: '4px',
             alignContent: 'center',
             justifyContent: 'center',
             alignItems: 'center',

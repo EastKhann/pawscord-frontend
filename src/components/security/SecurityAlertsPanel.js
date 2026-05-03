@@ -225,6 +225,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
                     <div className="filter-buttons">
                         {['all', 'unresolved', 'resolved', 'critical'].map((f) => (
                             <button
+                                key={f}
                                 aria-label={t('secAlerts.filterBtn', 'Filter: {{f}}', { f })}
                             >
                                 {f === 'all' && 'All'}
@@ -427,6 +428,7 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
                             <div className="quick-resolutions">
                                 {quickResolutions.map((res, idx) => (
                                     <button
+                                        key={idx}
                                         aria-label={t('secAlerts.quickResolution', '{{res}}', { res })}
                                         onClick={() => setResolution(res)}
                                     >

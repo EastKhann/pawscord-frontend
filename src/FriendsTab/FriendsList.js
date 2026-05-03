@@ -175,6 +175,7 @@ const FriendsList = ({
     }
 
     return (
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div ref={listRef} onKeyDown={handleListKeyDown}>
             {/* Header with search + online count */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', marginTop: '8px' }}>

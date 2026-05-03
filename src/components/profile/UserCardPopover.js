@@ -29,6 +29,7 @@ const UserCardPopover = ({
     onMessage,
     children,
 }) => {
+    const { t } = useTranslation();
     // Resolve from user object or individual props
     const username = user?.username ?? usernameProp;
     const avatar = user?.avatar ?? avatarProp;
@@ -99,7 +100,6 @@ const UserCardPopover = ({
     useEffect(() => {
         if (!show) return;
         const handleEsc = (e) => {
-            const { t } = useTranslation();
             if (e.key === 'Escape') {
                 setShow(false);
                 triggerRef.current?.focus();
@@ -252,7 +252,7 @@ const UserCardPopover = ({
                                                 {role.name}
                                             </span>
                                         );
-                                    })}>
+                                    })}
                                     {roles.length > 3 && <span style={S.moreRoles}>+{roles.length - 3}</span>}
                                 </div>
                             </div>

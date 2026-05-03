@@ -24,7 +24,6 @@ export const MessagePoll = memo(({
 }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    if (!poll) return null;
 
     const handleVote = useCallback(async (optionId) => {
         try {
@@ -36,6 +35,8 @@ export const MessagePoll = memo(({
             logger.error('Vote error:', error);
         }
     }, [poll.id, fetchWithAuth, absoluteHostUrl]);
+
+    if (!poll) return null;
 
     return (
         <div style={styles.pollContainer}>
@@ -79,7 +80,7 @@ export const MessagePoll = memo(({
                         </button>
                     </div>
                 );
-            })}>
+            })}
 
             {poll.expires_at && (
                 <div style={S.txt2}>

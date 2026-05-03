@@ -18,7 +18,7 @@ export const ActivityBadge = ({ activity, size = 'medium' }) => {
 
   return (
     <div aria-label={t('gamePresence.activityBadge', 'Activity badge')} className={`activity-badge activity-badge-${size}`} style={{ borderColor: color }}>
-      <span className="activity-icon" style={S.txt}<Icon /></span>
+      <span className="activity-icon" style={S.txt}><Icon /></span>
       <span className="activity-name">{activity.name}</span>
     </div >
   );

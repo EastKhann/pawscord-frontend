@@ -107,6 +107,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                         const Icon = type.icon;
                         return (
                             <button
+                                key={type.value}
                                 aria-label={t('inventory.filterBtn', 'Filter by category')}
                                 onClick={() => setFilter(type.value)}
                                 style={

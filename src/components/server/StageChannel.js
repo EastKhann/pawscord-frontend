@@ -162,7 +162,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
         <div className="stage-channel">
             <div className="stage-header">
                 <div className="stage-info">
-                    <h2>{stageInfo?.topic || t('ui.stage_channeli')</h2>
+                    <h2>{stageInfo?.topic || t('ui.stage_channeli')}</h2>
                     <p>{speakers.length} {t('stage.speakers', 'speakers')} • {listners.length} {t('stage.listeners', 'listeners')}</p>
                 </div>
                 <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>×</button>
@@ -211,7 +211,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
                 {userRole === 'moderator' && requests.length > 0 && (
                     <div className="requests-section">
                         <h3>
-                            <FaHandPaper /> {t('stage.requests', 'Speak Requests ({count})', { count: requests.length })}>
+                            <FaHandPaper /> {t('stage.requests', 'Speak Requests ({count})', { count: requests.length })}
                         </h3>
                         <div className="requests-list">
                             {requests.map(request => (

@@ -193,7 +193,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                             Davet Denetim Logu
                         </h2>
                         <span className="subtitle">
-                            {t('inviteAudit.subtitle','Track invite usage and member joins')}
+                            {t('inviteAudit.subtitle', 'Track invite usage and member joins')}
                         </span>
                     </div>
                     <div className="header-actions">
@@ -202,7 +202,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                             className="export-btn"
                             onClick={exportLogs}
                         >
-                            <FaDownload /> {t('common.export','Export')}
+                            <FaDownload /> {t('common.export', 'Export')}
                         </button>
                         <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                             <FaTimes />
@@ -218,7 +218,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         </div>
                         <div className="stat-content">
                             <span className="stat-value">{stats.total_invites}</span>
-                            <span className="stat-label">Toplam Davet</span>
+                            <span className="stat-label">{t('inviteAudit.totalInvites', 'Toplam Davet')}</span>
                         </div>
                     </div>
                     <div className="stat-card">
@@ -236,7 +236,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         </div>
                         <div className="stat-content">
                             <span className="stat-value">{stats.active_invites}</span>
-                            <span className="stat-label">Aktif</span>
+                            <span className="stat-label">{t('active', 'Aktif')}</span>
                         </div>
                     </div>
                     <div className="stat-card">
@@ -254,7 +254,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         </div>
                         <div className="stat-content">
                             <span className="stat-value">{stats.top_inviter.username}</span>
-                            <span className="stat-label">{stats.top_inviter.uses} davet</span>
+                            <span className="stat-label">{t('inviteAudit.inviteCount', '{{count}} davet', { count: stats.top_inviter.uses })}</span>
                         </div>
                     </div>
                 </div>
@@ -287,8 +287,8 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         <FaCalendar />
                         <select value={dateRange} onChange={(e) => setDateRange(e.target.value)}>
                             <option value="today">{t('common.today', 'Today')}</option>
-                            <option value="week">Bu Hafta</option>
-                            <option value="month">Bu Ay</option>
+                            <option value="week">{t('inviteAudit.thisWeek', 'Bu Hafta')}</option>
+                            <option value="month">{t('inviteAudit.thisMonth', 'Bu Ay')}</option>
                             <option value="all">{t('admin.allTime', 'All Time')}</option>
                         </select>
                     </div>
@@ -299,13 +299,13 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                     <table className="logs-table">
                         <thead>
                             <tr>
-                                <th>Durum</th>
-                                <th>Davet Kodu</th>
-                                <th>Davetci</th>
-                                <th>Kullanan</th>
+                                <th>{t('common.status', 'Durum')}</th>
+                                <th>{t('inviteAudit.code', 'Davet Kodu')}</th>
+                                <th>{t('inviteAudit.inviter', 'Davetçi')}</th>
+                                <th>{t('inviteAudit.usedBy', 'Kullanan')}</th>
                                 <th>{t('admin.usageDate', 'Usage Date')}</th>
                                 <th>{t('admin.usage', 'Usage')}</th>
-                                <th>Eylemler</th>
+                                <th>{t('actions', 'Eylemler')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -398,7 +398,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                         >
                             <div className="modal-header">
                                 <h3>
-                                    <FaLink /> {t('inviteAudit.details','Invite Details')}
+                                    <FaLink /> {t('inviteAudit.details', 'Invite Details')}
                                 </h3>
                                 <button aria-label={t('common.close')} onClick={() => setSelectedLog(null)}>
                                     <FaTimes />
@@ -406,11 +406,11 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                             </div>
                             <div className="modal-content">
                                 <div className="detail-row">
-                                    <span className="detail-label">Davet Kodu</span>
+                                    <span className="detail-label">{t('inviteAudit.code', 'Davet Kodu')}</span>
                                     <code className="detail-value">{selectedLog.invite_code}</code>
                                 </div>
                                 <div className="detail-row">
-                                    <span className="detail-label">Durum</span>
+                                    <span className="detail-label">{t('common.status', 'Durum')}</span>
                                     <span className={`status-badge ${selectedLog.status}`}>
                                         {getStatusIcon(selectedLog.status)}
                                         {selectedLog.status}
@@ -430,7 +430,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                                 </div>
                                 {selectedLog.used_by && (
                                     <div className="detail-row">
-                                        <span className="detail-label">Son Kullanan</span>
+                                        <span className="detail-label">{t('inviteAudit.lastUsed', 'Son Kullanan')}</span>
                                         <span className="detail-value">
                                             {selectedLog.used_by.username}
                                         </span>

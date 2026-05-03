@@ -58,36 +58,36 @@ const useProfileForm = ({ user, onUpdate }) => {
             const BASE = API_URL.replace('/api', '');
             const avatars = Array.isArray(response.data)
                 ? response.data
-                      .map((item) => {
-                          if (typeof item === 'string') {
-                              const filename = item.split('/').pop();
-                              const name = filename.split('.')[0].replace('_100x100', '');
-                              const fullUrl = item.startsWith('/api/') ? `${BASE}${item}` : item;
-                              return { url: fullUrl, thumbnailUrl: fullUrl, name, filename };
-                          } else {
-                              const buildUrl = (path) =>
-                                  path
-                                      ? path.startsWith('/api/')
-                                          ? `${BASE}${path}`
-                                          : path
-                                      : null;
-                              return {
-                                  url: buildUrl(item.original),
-                                  thumbnailUrl: buildUrl(item.thumbnail) || buildUrl(item.original),
-                                  name: item.name,
-                                  filename: item.original
-                                      ? item.original.split('/').pop()
-                                      : 'avatar.webp',
-                              };
-                          }
-                      })
-                      .filter((a) => a.url)
+                    .map((item) => {
+                        if (typeof item === 'string') {
+                            const filename = item.split('/').pop();
+                            const name = filename.split('.')[0].replace('_100x100', '');
+                            const fullUrl = item.startsWith('/api/') ? `${BASE}${item}` : item;
+                            return { url: fullUrl, thumbnailUrl: fullUrl, name, filename };
+                        } else {
+                            const buildUrl = (path) =>
+                                path
+                                    ? path.startsWith('/api/')
+                                        ? `${BASE}${path}`
+                                        : path
+                                    : null;
+                            return {
+                                url: buildUrl(item.original),
+                                thumbnailUrl: buildUrl(item.thumbnail) || buildUrl(item.original),
+                                name: item.name,
+                                filename: item.original
+                                    ? item.original.split('/').pop()
+                                    : 'avatar.webp',
+                            };
+                        }
+                    })
+                    .filter((a) => a.url)
                 : [];
             avatarCache.data = avatars;
             avatarCache.timestamp = Date.now();
             setDefaultAvatars(avatars);
         } catch (err) {
-            logger.error('Default avatars fetch failed:', err);
+            logger.warn('Default avatars fetch failed:', err);
             setDefaultAvatars([]);
         }
     };

@@ -115,6 +115,12 @@ export function injectRoomListAnimations() {
                 transform: translateY(0) scale(1);
             }
         }
+
+        /* Drop indicator pulse for server reorder */
+        @keyframes pulseDrop {
+            from { opacity: 0.6; transform: scaleX(0.85); }
+            to   { opacity: 1;   transform: scaleX(1); }
+        }
     `;
 
     styleSheet.setAttribute('data-roomlist-animations', 'true');

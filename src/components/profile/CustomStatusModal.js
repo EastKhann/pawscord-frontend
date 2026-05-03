@@ -293,6 +293,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
 
                             return (
                                 <button
+                                    key={type.key}
                                     aria-label={t('status.selectType', 'Select status type {{type}}', { type: type.label })}
                                 >
                                     <span>{type.icon}</span>
@@ -351,6 +352,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
 
                             return (
                                 <button
+                                    key={opt.value}
                                     aria-label={t('status.expiry', 'Clear after {{when}}', { when: opt.label })}
                                 >
                                     {opt.label}

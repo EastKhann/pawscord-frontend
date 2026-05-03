@@ -48,11 +48,7 @@ export default function GrowthDashboard() {
         }
     };
 
-    if (loading) {
-        return <div className="loading">{t('growth.loading', 'Loading growth dashboard...')}</div>;
-    }
-
-    // Memoize expensive chart data computations
+    // Memoize expensive chart data computations — must be before any early return
     const { sourceData, pieData, avgActiveRate, growthRate, lastWeekUsers, prevWeekUsers } =
         useMemo(() => {
             const src = metrics.reduce((acc, day) => {
@@ -87,6 +83,10 @@ export default function GrowthDashboard() {
                 prevWeekUsers: prevWeek,
             };
         }, [metrics]);
+
+    if (loading) {
+        return <div className="loading">{t('growth.loading', 'Loading growth dashboard...')}</div>;
+    }
 
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
     const goalUsersFillStyle = { width: `${Math.min((totals.users / 1000) * 100, 100)}%` };

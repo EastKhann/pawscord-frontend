@@ -118,7 +118,7 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
                     <div className="flex-align-10">
                         <FaUsers className="icon-danger" />
 
-                        <h2 className="m-0">Toplu Moderasyon</h2>
+                        <h2 className="m-0">{t('massModeration', 'Toplu Moderasyon')}</h2>
                     </div>
 
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -189,13 +189,13 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
                     <div style={styles.warning}>
                         ⚠️ Bu eylem{' '}
                         <strong>{userIds.split('\n').filter((id) => id.trim()).length}</strong>{' '}
-                        {t('massActions.usersAffected','users will be affected!')}
+                        {t('massActions.usersAffected', 'users will be affected!')}
                     </div>
                 </div>
 
                 <div style={styles.footer}>
                     <button aria-label={t('common.close')} onClick={onClose} style={styles.cancelBtn}>
-                        {t('common.cancel','Cancel')}
+                        {t('common.cancel', 'Cancel')}
                     </button>
 
                     <button
@@ -204,7 +204,7 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
                         disabled={processing}
                         style={styles.executeBtn}
                     >
-                        {processing ? t('common.processing','Processing...') : t('common.apply','Apply')}
+                        {processing ? t('common.processing', 'Processing...') : t('common.apply', 'Apply')}
                     </button>
                 </div>
             </div>

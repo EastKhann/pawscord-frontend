@@ -6,7 +6,7 @@ const STAT_CARDS = [
     { icon: '🏰', key: 'servers_count', label: 'Server' },
     { icon: '👥', key: 'users_count', label: 'User' },
     { icon: '💬', key: 'messages_sent', label: 'Mesaj' },
-    { icon: '📡', key: 'api_calls', label: t('botDetails.apiCalls', 'API Calls') },
+    { icon: '📡', key: 'api_calls', label: 'API Calls' },
 ];
 
 const BotDetailsView = ({

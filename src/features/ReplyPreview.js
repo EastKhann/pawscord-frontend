@@ -2,16 +2,18 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 
 const ReplyPreview = ({ message, onCancel }) => {
+    const { t } = useTranslation();
     if (!message) return null;
 
     return (
         <div aria-label={i18n.t('aria.replyPreview', { defaultValue: 'Reply Preview' })} style={styles.container}>
             <div style={styles.content}>
                 <span style={styles.replyingTo}>
-                    {t('replyPreview.replyingTo','Replying to')} <strong>@{message.username}</strong>
+                    {t('replyPreview.replyingTo', 'Replying to')} <strong>@{message.username}</strong>
                 </span>
                 <p style={styles.messageText}>{message.content}</p>
             </div>

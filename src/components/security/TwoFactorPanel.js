@@ -269,47 +269,47 @@ const TwoFactorPanel = ({ onClose }) => {
                                 </button>
                                 <button
                                     aria-label={t('twoFactor.saveAndContinueBtn', 'Save and continue')}
-                                    setIsEnabled(true);
-                                    }}
+                                    className="primary-btn"
+                                    onClick={() => { setIsEnabled(true); }}
                                 >
-                                {t('twoFactor.saveAndContinue')}
-                            </button>
-                        </div>
+                                    {t('twoFactor.saveAndContinue')}
+                                </button>
+                            </div>
                         </div>
                     )}
 
-                {step === 'complete' && isEnabled && (
-                    <div className="step-complete">
-                        <div className="success-box">
-                            <FaCheck size={48} color="#23a559" />
-                            <h3>{t('twoFactor.active')}</h3>
-                            <p>{t('twoFactor.activeDesc')}</p>
-                        </div>
-                        <div className="info-list">
-                            <div className="info-item">
-                                <strong>{t('twoFactor.authenticatorApps')}:</strong>
-                                <span>
-                                    Google Authenticator, Authy, Microsoft Authenticator
-                                </span>
+                    {step === 'complete' && isEnabled && (
+                        <div className="step-complete">
+                            <div className="success-box">
+                                <FaCheck size={48} color="#23a559" />
+                                <h3>{t('twoFactor.active')}</h3>
+                                <p>{t('twoFactor.activeDesc')}</p>
                             </div>
-                            <div className="info-item">
-                                <strong>{t('twoFactor.backupCodesLabel')}:</strong>
-                                <span>{t('twoFactor.keepBackupCodesSafe')}</span>
+                            <div className="info-list">
+                                <div className="info-item">
+                                    <strong>{t('twoFactor.authenticatorApps')}:</strong>
+                                    <span>
+                                        Google Authenticator, Authy, Microsoft Authenticator
+                                    </span>
+                                </div>
+                                <div className="info-item">
+                                    <strong>{t('twoFactor.backupCodesLabel')}:</strong>
+                                    <span>{t('twoFactor.keepBackupCodesSafe')}</span>
+                                </div>
                             </div>
+                            <button
+                                aria-label={t('twoFactor.disableBtn', 'Disable 2FA')}
+                                className="danger-btn"
+                                onClick={disable2FA}
+                                disabled={loading}
+                            >
+                                <FaTrash />{' '}
+                                {loading ? t('ui.devre_disi_birakiliyor') : t('twoFactor.disable')}
+                            </button>
                         </div>
-                        <button
-                            aria-label={t('twoFactor.disableBtn', 'Disable 2FA')}
-                            className="danger-btn"
-                            onClick={disable2FA}
-                            disabled={loading}
-                        >
-                            <FaTrash />{' '}
-                            {loading ? t('ui.devre_disi_birakiliyor') : t('twoFactor.disable')}
-                        </button>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-        </div>
         </div >
     );
 };

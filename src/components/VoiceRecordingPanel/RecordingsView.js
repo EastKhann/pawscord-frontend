@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import PropTypes from 'prop-types';
-import {
 import { useTranslation } from 'react-i18next';
-FaPlay, FaPause, FaDownload, FaTrash,
+import {
+  FaPlay, FaPause, FaDownload, FaTrash,
   FaClock, FaUser, FaFileAudio, FaMicrophoneSlash,
   FaCloud, FaCheck
 } from 'react-icons/fa';
@@ -53,15 +53,15 @@ const RecordingsView = ({ recordings, playingId, setPlayingId, onDownload, onDel
               </span>
             )}
             <div className="recording-actions">
-              <button onClick={() => handlePlay(recording)} title={t('oynat')}
+              <button onClick={() => handlePlay(recording)} title={t('oynat')}>
                 {playingId === recording.id ? <FaPause /> : <FaPlay />}
               </button>
-            <button onClick={() => onDownload(recording)} title={t('download')}><FaDownload /></button>
-            <button onClick={() => onDelete(recording.id)} className="delete" title={t('delete')}><FaTrash /></button>
-          </div>
+              <button onClick={() => onDownload(recording)} title={t('download')}><FaDownload /></button>
+              <button onClick={() => onDelete(recording.id)} className="delete" title={t('delete')}><FaTrash /></button>
+            </div>
           </div>
         ))}
-    </div>
+      </div>
     </div >
   );
 };

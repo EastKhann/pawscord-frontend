@@ -53,6 +53,7 @@ export {
     FaSmile,
     FaStickyNote,
     FaGamepad,
+    FaStore,
 } from 'react-icons/fa';
 
 // TbIcons

@@ -93,18 +93,18 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                         <div className="bot-header-info">
                             <h2>
                                 {bot.name}
-                                {bot.is_verified && <span className="verified">✓ Verified</span>}
+                                {bot.is_verified && <span className="verified">{t('botDetail.verified', '✓ Doğrulanmış')}</span>}
                             </h2>
                             <p>{bot.short_description}</p>
                             <div className="bot-stats">
-                                <span>📥 {bot.install_count?.toLocaleString()} servers</span>
+                                <span>📥 {bot.install_count?.toLocaleString()} {t('botDetail.servers', 'sunucu')}</span>
                                 <span>
-                                    ⭐ {bot.avg_rating} ({bot.review_count} comment)
+                                    ⭐ {bot.avg_rating} ({bot.review_count} {t('botDetail.comments', 'yorum')})
                                 </span>
                             </div>
                         </div>
                         <button className="add-bot-btn" onClick={() => setShowServerSelect(true)}>
-                            Serverya Add
+                            {t('botDetail.addToServer', 'Sunucuya Ekle')}
                         </button>
                     </div>
                 </div>
@@ -121,13 +121,13 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                         className={activeTab === 'commands' ? 'active' : ''}
                         onClick={() => setActiveTab('commands')}
                     >
-                        Komutlar
+                        {t('botDetail.commands', 'Komutlar')}
                     </button>
                     <button
                         className={activeTab === 'reviews' ? 'active' : ''}
                         onClick={() => setActiveTab('reviews')}
                     >
-                        Yorumlar
+                        {t('botDetail.reviews', 'Yorumlar')}
                     </button>
                 </div>
 
@@ -142,7 +142,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
 
                             {bot.features && bot.features.length > 0 && (
                                 <div className="features-section">
-                                    <h3>Features</h3>
+                                    <h3>{t('botDetail.features', 'Özellikler')}</h3>
                                     <div className="features-list">
                                         {bot.features.map((feature, idx) => (
                                             <div key={`item-${idx}`} className="feature-item">
@@ -154,7 +154,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                             )}
 
                             <div className="links-section">
-                                <h3>{t('bağlantılar')}</h3>
+                                <h3>{t('botDetail.links', 'Bağlantılar')}</h3>
                                 <div className="links-list">
                                     {bot.website && (
                                         <a
@@ -162,12 +162,12 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            🌐 Web Sitesi
+                                            {t('botDetail.website', '🌐 Web Sitesi')}
                                         </a>
                                     )}
                                     {bot.support_server && (
                                         <a href={`/invite/${bot.support_server}`}>
-                                            💬 Destek Serversu
+                                            {t('botDetail.supportServer', '💬 Destek Sunucusu')}
                                         </a>
                                     )}
                                     {bot.privacy_policy && (
@@ -184,7 +184,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
 
                             {bot.developer && (
                                 <div className="developer-section">
-                                    <h3>{t('geliştirici')}</h3>
+                                    <h3>{t('botDetail.developer', 'Geliştirici')}</h3>
                                     <div className="developer-info">
                                         <img
                                             src={bot.developer.avatar || '/default-avatar.png'}
@@ -215,7 +215,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="no-data">{t('komut_listsi_mevcut_değil')}</p>
+                                <p className="no-data">{t('botDetail.noCommands', 'Komut listesi mevcut değil')}</p>
                             )}
                         </div>
                     )}

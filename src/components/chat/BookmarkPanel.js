@@ -115,6 +115,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                     </button>
                     {tags.map((tag) => (
                         <button
+                            key={tag.id}
                             aria-label={tag.name}
                             onClick={() => setSelectedTag(tag.id)}
                             style={{

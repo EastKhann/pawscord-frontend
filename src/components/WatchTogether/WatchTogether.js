@@ -29,7 +29,7 @@ const WatchTogether = ({ roomId, onClose }) => {
                         <FaPlus /> {t('watchTogether.newParty', 'New Watch Party')}
                     </button>
                     <div className="supported-platforms">
-                        <span>Desteklenen platformlar:</span>
+                        <span>{t('watchTogether.supportedPlatforms', 'Desteklenen platformlar:')}</span>
                         <div className="platforms">
                             <span>YouTube</span>
                             <span>Twitch</span>

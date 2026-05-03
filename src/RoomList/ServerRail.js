@@ -2,7 +2,7 @@
 import React, { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { FaCompass, FaPlus } from '../utils/iconOptimization';
+import { FaCompass, FaPlus, FaStore } from '../utils/iconOptimization';
 import LazyImage from '../components/shared/LazyImage';
 import { styles } from '../styles/SidebarStyles';
 import { hapticLight } from '../utils/haptics';
@@ -125,6 +125,7 @@ const ServerRail = ({
             <div style={styles.separator} />
 
             {/* Server Icons */}
+            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
             <div role="list" aria-label={t('nav.servers', 'Servers')} ref={serverListRef} onKeyDown={handleServerListKeyDown}>
                 {servers &&
                     servers.map((server, index) => {
@@ -188,7 +189,19 @@ const ServerRail = ({
                                 />
 
                                 {/* Drop indicator (before) */}
-                                {isDropTarget && dropPosition === 'before' && <div />}
+                                {isDropTarget && dropPosition === 'before' && (
+                                    <div
+                                        aria-hidden="true"
+                                        style={{
+                                            height: '4px',
+                                            margin: '4px 8px',
+                                            borderRadius: '2px',
+                                            background: 'linear-gradient(90deg, #5865f2, #7c3aed)',
+                                            boxShadow: '0 0 8px rgba(88,101,242,0.6)',
+                                            animation: 'pulseDrop 600ms ease-in-out infinite alternate',
+                                        }}
+                                    />
+                                )}
 
                                 <div
                                     draggable={true}
@@ -212,8 +225,9 @@ const ServerRail = ({
                                         cursor: isDragging ? 'grabbing' : 'grab',
                                         position: 'relative',
                                         transition:
-                                            'border-radius 0.3s ease, background-color 0.3s ease, opacity 0.2s ease, transform 0.1s ease',
-                                        opacity: isDragging ? 0.4 : 1,
+                                            'border-radius 0.25s ease, background-color 0.25s ease, opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                        opacity: isDragging ? 0.35 : 1,
+                                        transform: isDragging ? 'scale(0.85) rotate(-3deg)' : 'scale(1)',
                                         marginBottom: 0,
                                     }}
                                     onClick={() => { hapticLight(); handleServerClick(server); }}
@@ -261,7 +275,19 @@ const ServerRail = ({
                                 </div>
 
                                 {/* Drop indicator (after) */}
-                                {isDropTarget && dropPosition === 'after' && <div />}
+                                {isDropTarget && dropPosition === 'after' && (
+                                    <div
+                                        aria-hidden="true"
+                                        style={{
+                                            height: '4px',
+                                            margin: '4px 8px',
+                                            borderRadius: '2px',
+                                            background: 'linear-gradient(90deg, #5865f2, #7c3aed)',
+                                            boxShadow: '0 0 8px rgba(88,101,242,0.6)',
+                                            animation: 'pulseDrop 600ms ease-in-out infinite alternate',
+                                        }}
+                                    />
+                                )}
                             </div>
                         );
                     })}
@@ -313,7 +339,7 @@ const ServerRail = ({
                 aria-label={t('nav.premiumStore', 'Premium Store')}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onOpenStore()}
             >
-                ??
+                <FaStore size={22} />
             </div>
 
             {/* Add */}

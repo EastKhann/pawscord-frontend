@@ -254,7 +254,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                         onKeyDown={(e) => handleStatKey(e, 'all')}
                     >
                         <span className="stat-value">{stats.total}</span>
-                        <span className="stat-label">Toplam</span>
+                        <span className="stat-label">{t('total', 'Toplam')}</span>
                     </div>
                     <div
                         className="stat-item active"
@@ -265,7 +265,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                         onKeyDown={(e) => handleStatKey(e, 'active')}
                     >
                         <span className="stat-value">{stats.active}</span>
-                        <span className="stat-label">Aktif</span>
+                        <span className="stat-label">{t('active', 'Aktif')}</span>
                     </div>
                     <div
                         className="stat-item expired"

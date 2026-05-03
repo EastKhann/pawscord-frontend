@@ -104,6 +104,7 @@ const FileManagerPanel = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
 
                     return (
                         <button
+                            key={cat.label}
                             aria-label={t('fileManager.filterBy', 'Filter by {{cat}}', { cat: cat.label })}
                         >
                             <Icon style={styles.categoryIcon} />

@@ -277,21 +277,21 @@ const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers
                                     type="checkbox"
                                     checked={filters.hasFile}
                                     onChange={handleHasFileFilter}
-                                    aria-label={t('search.hasFiles', 'Has files filter')}>
+                                    aria-label={t('search.hasFiles', 'Has files filter')} />
                             </label>
                             <label>
                                 <input
                                     type="checkbox"
                                     checked={filters.hasImage}
                                     onChange={handleHasImageFilter}
-                                    aria-label={t('search.hasImages', 'Has images filter')}>
+                                    aria-label={t('search.hasImages', 'Has images filter')} />
                             </label>
                             <label>
                                 <input
                                     type="checkbox"
                                     checked={filters.hasReaction}
                                     onChange={handleHasReactionFilter}
-                                    aria-label={t('search.hasReactions', 'Has reactions filter')}>
+                                    aria-label={t('search.hasReactions', 'Has reactions filter')} />
                             </label>
                         </div>
                     </div>

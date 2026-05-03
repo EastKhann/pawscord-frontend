@@ -56,7 +56,7 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
         return (
             <div style={styles.overlay}>
                 <div style={styles.modal}>
-                    <div style={styles.error}>{t('adminAnalytics.loadError','Failed to load analytics data')}</div>
+                    <div style={styles.error}>{t('adminAnalytics.loadError', 'Failed to load analytics data')}</div>
                 </div>
             </div>
         );
@@ -86,7 +86,7 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaChartLine size={24} />
-                        <h2 style={styles.title}>Admin Analitik</h2>
+                        <h2 style={styles.title}>{t('admin.analytics', 'Admin Analitik')}</h2>
                     </div>
                     <div style={styles.headerRight}>
                         <button

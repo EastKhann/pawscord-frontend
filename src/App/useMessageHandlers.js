@@ -145,8 +145,9 @@ export default function useMessageHandlers({
             const jsonPayload = JSON.stringify(payload);
 
             const sendViaWebSocket = async () => {
-                // 🚀 PERF: Keep wait very short — avoid perceivable send lag on flaky sockets
-                const maxWait = 250;
+                // 🚀 PERF: Wait long enough for a CONNECTING socket to finish the handshake.
+                // 250ms was too aggressive on flaky networks → false "offline" toasts.
+                const maxWait = 1500;
                 const checkInterval = 50;
                 let waited = 0;
                 while (
@@ -370,6 +371,13 @@ export default function useMessageHandlers({
     // --- 📋 FETCH MESSAGE HISTORY ---
     // 🚀 Cursor-based pagination — no offset needed, uses next cursor URL
     const nextCursorRef = useRef(null);
+    // 🛡️ Guard against stale fetches when user switches chats mid-flight
+    const latestChatKeyRef = useRef(null);
+    useEffect(() => {
+        latestChatKeyRef.current = activeChat?.id
+            ? `${activeChat.type}-${activeChat.id}`
+            : null;
+    }, [activeChat]);
 
     const fetchMessageHistory = useCallback(
         async (isInitial = true, silent = false) => {
@@ -384,6 +392,13 @@ export default function useMessageHandlers({
                 activeChat.type === 'room' ? MESSAGE_HISTORY_ROOM_URL : MESSAGE_HISTORY_DM_URL;
             const key =
                 activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
+            // Snapshot the chat key this fetch belongs to, so a late response
+            // for a chat the user has navigated away from cannot wipe the new chat's messages.
+            const fetchKey = key;
+            // Update ref NOW (before await) so any concurrent stale fetch for the
+            // previous chat sees this key and bails. The useEffect also sets it, but
+            // effects are async; setting it here is the belt-and-suspenders guard.
+            latestChatKeyRef.current = fetchKey;
 
             // 🚀 PERF: Show cached messages instantly, then refresh in background
             if (isInitial) {
@@ -413,6 +428,11 @@ export default function useMessageHandlers({
                 const res = await fetchWithAuth(url);
                 if (res.ok) {
                     const data = await res.json();
+                    // 🛡️ Stale-response guard: if user switched chats while we were fetching,
+                    // do NOT touch state — we'd overwrite the new chat's messages.
+                    if (latestChatKeyRef.current && latestChatKeyRef.current !== fetchKey) {
+                        return;
+                    }
                     const rawMessages = data.results || [];
                     const validMessages = rawMessages.filter(
                         (msg) => msg && typeof msg === 'object' && (msg.id || msg.temp_id)
@@ -426,8 +446,17 @@ export default function useMessageHandlers({
 
                     let combinedMessages = newMsgs;
                     if (isInitial) {
-                        setMessages(newMsgs);
-                        setTimeout(() => scrollToBottom('auto'), 60);
+                        // 🛡️ Don't blow away cached messages if the network result is empty
+                        // (transient backend hiccup). Keep what we already showed.
+                        const cached = historyCacheRef.current[key];
+                        const cachedHasMessages =
+                            cached && cached.messages && cached.messages.length > 0;
+                        if (newMsgs.length === 0 && cachedHasMessages) {
+                            combinedMessages = cached.messages;
+                        } else {
+                            setMessages(newMsgs);
+                            setTimeout(() => scrollToBottom('auto'), 60);
+                        }
                     } else {
                         // Prepend older messages, deduplicate by id
                         setMessages((prev) => {
@@ -555,7 +584,7 @@ export default function useMessageHandlers({
             !(await confirmDialog(
                 t(
                     'chat.confirmClearChat',
-                    t('msgHandlers.deleteAllConfirm','Are you sure you want to delete all messages in this room?')
+                    t('msgHandlers.deleteAllConfirm', 'Are you sure you want to delete all messages in this room?')
                 )
             ))
         )
@@ -598,7 +627,7 @@ export default function useMessageHandlers({
                 !(await confirmDialog(
                     t(
                         'chat.confirmAdminDelete',
-                        t('msgHandlers.adminDeleteConfirmFull','⚠️ ADMIN: Are you sure you want to permanently delete this conversation for both parties?\n\nThis action CANNOT BE UNDONE!')
+                        t('msgHandlers.adminDeleteConfirmFull', '⚠️ ADMIN: Are you sure you want to permanently delete this conversation for both parties?\n\nThis action CANNOT BE UNDONE!')
                     )
                 ))
             )

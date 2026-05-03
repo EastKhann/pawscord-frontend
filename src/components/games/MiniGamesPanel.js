@@ -272,15 +272,16 @@ MiniGamesPanel.displayName = 'MiniGamesPanel';
 // Extracted sub-components with their own hooks (Rules of Hooks fix)
 
 const NumberGuessGame = memo(({ state, onAction }) => {
+    const { t } = useTranslation();
     const [guess, setGuess] = useState('');
 
     return (
         <div style={styles.gameArea}>
             <h3>{t('miniGamesPanel.guessNumber', 'Guess the Number (1-100)')}</h3>
 
-            <p>Kalan tahmin: {state.max_guesses - (state.guesses?.length || 0)}</p>
+            <p>{t('miniGamesPanel.remainingGuesses', 'Remaining guesses:')} {state.max_guesses - (state.guesses?.length || 0)}</p>
 
-            {state.hints?.length > 0 && <p>Son ipucu: {state.hints[state.hints.length - 1]}</p>}
+            {state.hints?.length > 0 && <p>{t('miniGamesPanel.lastHint', 'Last hint:')} {state.hints[state.hints.length - 1]}</p>}
 
             <input
                 type="number"
@@ -298,7 +299,7 @@ const NumberGuessGame = memo(({ state, onAction }) => {
                 }}
                 style={styles.guessButton}
             >
-                Tahmin Et!
+                {t('miniGamesPanel.guessActionBtn', 'Tahmin Et!')}
             </button>
         </div>
     );
@@ -307,11 +308,12 @@ const NumberGuessGame = memo(({ state, onAction }) => {
 NumberGuessGame.displayName = 'NumberGuessGame';
 
 const HangmanGame = memo(({ state, onAction }) => {
+    const { t } = useTranslation();
     const [letter, setLetter] = useState('');
 
     return (
         <div style={styles.gameArea}>
-            <h3>Adam Asmaca</h3>
+            <h3>{t('games.hangman', 'Adam Asmaca')}</h3>
 
             <p style={styles.hangmanWord}>{state.display?.join(' ')}</p>
 
@@ -337,7 +339,7 @@ const HangmanGame = memo(({ state, onAction }) => {
                 }}
                 style={styles.guessButton}
             >
-                Harf Tahmin Et
+                {t('miniGamesPanel.guessLetterBtn', 'Harf Tahmin Et')}
             </button>
         </div>
     );
@@ -348,6 +350,7 @@ HangmanGame.displayName = 'HangmanGame';
 // Game Renderer Component
 
 const GameRenderer = memo(({ game, onAction }) => {
+    const { t } = useTranslation();
     const { game_type, state } = game;
 
     if (game_type === 'trivia') {

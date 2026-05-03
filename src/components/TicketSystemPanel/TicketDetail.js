@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const TicketDetail = ({
     ticket,
@@ -10,6 +11,7 @@ const TicketDetail = ({
     closeTicket,
     formatDate,
 }) => {
+    const { t } = useTranslation();
     return (
         <div
             className="ticket-detail-modal"

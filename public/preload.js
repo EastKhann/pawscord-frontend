@@ -45,9 +45,22 @@ contextBridge.exposeInMainWorld('electron', {
         ipcRenderer.on('download-error', (_event, state) => callback(state));
     },
 
+    // � OAuth tokens from deep link (main process → renderer)
+    onOAuthTokens: (callback) => {
+        ipcRenderer.on('oauth-tokens', (_event, tokens) => callback(tokens));
+    },
+
+    // 🔗 OAuth cancelled (user closed popup)
+    onGoogleAuthCancelled: (callback) => {
+        ipcRenderer.on('google-auth-cancelled', () => callback());
+    },
+
     // 🔗 Actions
     startGoogleLogin: (authUrl) => {
         ipcRenderer.send('start-google-login', authUrl);
+    },
+    focusWindow: () => {
+        ipcRenderer.send('focus-window');
     },
     startDownload: (url) => {
         ipcRenderer.send('start-download', url);

@@ -1,0 +1,35 @@
+{
+    "$schema": "https://unpkg.com/knip@latest/schema.json",
+    "entry": [
+        "src/main.jsx",
+        "src/App.js",
+        "src/App/lazyImports.js",
+        "src/components/AppModals/batch11Config.js",
+        "src/components/AppModals/AppModalsBatch1to8.js",
+        "src/components/AppModals/AppModalsBatch10.js",
+        "src/components/AppModals/AppModalsCore.js",
+        "src/components/AppModals/AppModalsStandard.js",
+        "src/i18n/index.{js,ts}",
+        "vite.config.js",
+        "electron/main.js"
+    ],
+    "project": [
+        "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "ignore": [
+        "build/**",
+        "dist/**",
+        "electron/**",
+        "capacitor/**",
+        "scripts/**",
+        "src/**/__tests__/**",
+        "src/**/*.test.{js,jsx,ts,tsx}",
+        "src/**/*.spec.{js,jsx,ts,tsx}"
+    ],
+    "ignoreDependencies": [
+        "vite-plugin-*",
+        "@vitejs/*",
+        "vitest",
+        "playwright"
+    ]
+}

@@ -496,27 +496,7 @@ ActivityStatusPanel.displayName = 'ActivityStatusPanel';
 
 
 
-// NewFeaturesPanel/InteractivePanels.js
-
-import { useState, useEffect } from 'react';
-
-import { useAuth } from '../../../AuthContext';
-
-import toast from '../../../utils/toast';
-
-import { getApiBase } from '../../../utils/apiEndpoints';
-
-
-
-import { useTranslation } from 'react-i18next';
-
-import PropTypes from 'prop-types';
-
-import logger from '../../../utils/logger';
-
-const API_URL = getApiBase();
-
-
+// continued
 
 export const UserBadgesPanel = ({ username, onClose }) => {
 
@@ -680,7 +660,7 @@ export const EngagementMetricsPanel = ({ onClose }) => {
 
             <div className="panel-content">
 
-                {loading ? <div className="loading">{t("common.loading")}</div>{t('metrics')}<>
+                {loading ? <div className="loading">{t("common.loading")}</div> : <>
 
                     <div className="rank-badge">
 
@@ -771,7 +751,7 @@ export const StreakTrackerPanel = ({ onClose }) => {
 
             <div className="panel-content">
 
-                {loading ? <div className="loading">{t("common.loading")}</div>{t('streak')}<>
+                {loading ? <div className="loading">{t("common.loading")}</div> : <>
 
                     <div className="streak-display">
 

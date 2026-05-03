@@ -70,7 +70,7 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
             <div style={styles.modalContent} {...dialogProps}>
                 <div style={styles.modalHeader}>
                     <h3>
-                        {mode === 'BUY' ? '🟢 Buy' : '🔴 Sell'}: {coin}
+                        {mode === 'BUY' ? `🟢 ${t('crypto.buy', 'AL')}` : `🔴 ${t('crypto.sell', 'SAT')}`}: {coin}
                     </h3>
                     <button
                         onClick={onClose}
@@ -100,7 +100,7 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                             opacity: mode === 'BUY' ? 1 : 0.5,
                         }}
                     >
-                        AL (Buy)
+                        {t('crypto.buy', 'AL')}
                     </button>
                     <button
                         aria-label={t('crypto.sell', 'Sell')}
@@ -115,22 +115,22 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                             opacity: mode === 'SELL' ? 1 : 0.5,
                         }}
                     >
-                        SAT (Sell)
+                        {t('crypto.sell', 'SAT')}
                     </button>
                 </div>
                 <div>
                     <span>
-                        💰 Bakiye: <span>${userBalance.toFixed(2)}</span>
+                        💰 {t('crypto.yourBalance', 'Bakiye')}: <span>${userBalance.toFixed(2)}</span>
                     </span>
                     <span>
-                        🪙 Sahip Olunan:{' '}
+                        🪙 {t('crypto.youOwn', 'Sahip Olunan')}:{' '}
                         <span>
                             {formatPrice(userCoinHolding)} {coin}
                         </span>
                     </span>
                 </div>
                 <div style={styles.inputWrapper}>
-                    <label>Miktar ({coin})</label>
+                    <label>{t('crypto.amount', 'Miktar')} ({coin})</label>
                     <div>
                         <input
                             type="number"
@@ -172,7 +172,7 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                     }}
                     disabled={!amount || parseFloat(amount) <= 0}
                 >
-                    {mode === 'BUY' ? 'BUY' : 'SELL'}
+                    {mode === 'BUY' ? t('crypto.buy', 'AL') : t('crypto.sell', 'SAT')}
                 </button>
             </div>
         </div>

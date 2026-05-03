@@ -173,6 +173,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                 <div style={styles.tabs}>
                     {tabs.map((tab) => (
                         <button
+                            key={tab.id}
                             aria-label={tab.label}
                             onClick={() => setActiveTab(tab.id)}
                             style={{

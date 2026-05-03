@@ -38,7 +38,7 @@ const S = {
 const FEATURE_KEYS = {
     access_education: {
         labelKey: 'admin.panel.englishLearning',
-        fallback: t('featureWhitelist.engLearning', '📚 English Learning'),
+        fallback: '📚 English Learning',
         color: '#5865f2',
         icon: <FaBookOpen size={10} />,
     },

@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { formatNumber, getGrowthIndicator } from './useAdvancedAnalytics';
 
 const CARDS = [
-    { key: 'total_members', icon: FaUsers, label: t('analytics.totalMembers', 'Total Members'), cls: 'members', growth: 'member' },
-    { key: 'active_members', icon: FaEye, label: t('analytics.activeMembers', 'Active Members'), cls: 'active' },
+    { key: 'total_members', icon: FaUsers, label: 'Total Members', cls: 'members', growth: 'member' },
+    { key: 'active_members', icon: FaEye, label: 'Active Members', cls: 'active' },
     {
         key: 'messages_count',
         icon: FaComments,
@@ -17,6 +17,7 @@ const CARDS = [
 ];
 
 const OverviewCards = ({ overview }) => {
+    const { t } = useTranslation();
     const memberGrowth = getGrowthIndicator(overview.member_growth);
     const messageGrowth = getGrowthIndicator(overview.message_growth);
     const growths = { member: memberGrowth, message: messageGrowth };

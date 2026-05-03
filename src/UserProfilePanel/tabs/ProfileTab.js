@@ -80,7 +80,7 @@ const ProfileTab = ({
                             if (!e.target.dataset.errorHandled) {
                                 e.target.dataset.errorHandled = 'true';
 
-                                logger.error(' [Avatar Load Error]', e.target.src);
+                                logger.warn(' [Avatar Load Error]', e.target.src);
 
                                 e.target.src =
                                     'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect fill="%235865f2" width="100" height="100"/%3E%3Ctext x="50" y="50" font-size="45" text-anchor="middle" dy=".35em" fill="white" font-family="Arial"%3E👤%3C/text%3E%3C/svg%3E';
