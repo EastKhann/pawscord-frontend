@@ -1,0 +1,1 @@
+var o=Object.defineProperty;var r=(p,t)=>o(p,"name",{value:t,configurable:!0});import{r as e,_ as i}from"./main-BwuyWJ_z.js";import"./react-core-C4sSNWFT.js";import"./app-vendor-CI43PQw-.js";import"./i18n-vendor-hr65qrS4.js";import"./icons-vendor-DUJ9xTEr.js";const P=e("App",{web:r(()=>i(()=>import("./web-CcfsUShW.js"),[]).then(p=>new p.AppWeb),"web")});export{P as App};

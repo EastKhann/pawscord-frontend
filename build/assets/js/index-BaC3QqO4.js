@@ -1,0 +1,1 @@
+var e=Object.defineProperty;var t=(r,o)=>e(r,"name",{value:o,configurable:!0});import{r as i,_}from"./main-BwuyWJ_z.js";import"./react-core-C4sSNWFT.js";import"./app-vendor-CI43PQw-.js";import"./i18n-vendor-hr65qrS4.js";import"./icons-vendor-DUJ9xTEr.js";const k=i("Network",{web:t(()=>_(()=>import("./web-CT8DKIWI.js"),[]).then(r=>new r.NetworkWeb),"web")});export{k as Network};
