@@ -1,1 +1,0 @@
-import{r as i}from"./main-BwuyWJ_z.js";import"./react-core-C4sSNWFT.js";import"./app-vendor-CI43PQw-.js";import"./i18n-vendor-hr65qrS4.js";import"./icons-vendor-DUJ9xTEr.js";const p=i("PushNotifications",{});export{p as PushNotifications};

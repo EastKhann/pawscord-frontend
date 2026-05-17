@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./web-2bSvVRJD.js","./electron-Be_96jig.js","../css/electron-DJTa6uiA.css"])))=>i.map(i=>d[i]);
+var o=Object.defineProperty;var r=(e,t)=>o(e,"name",{value:t,configurable:!0});import{bE as _,_ as i}from"./electron-Be_96jig.js";const a=_("Network",{web:r(()=>i(()=>import("./web-2bSvVRJD.js"),__vite__mapDeps([0,1,2]),import.meta.url).then(e=>new e.NetworkWeb),"web")});export{a as Network};

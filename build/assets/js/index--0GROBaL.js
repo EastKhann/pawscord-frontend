@@ -1,1 +1,0 @@
-var t=Object.defineProperty;var o=(r,e)=>t(r,"name",{value:e,configurable:!0});import{r as i,_}from"./main-BwuyWJ_z.js";import"./react-core-C4sSNWFT.js";import"./app-vendor-CI43PQw-.js";import"./i18n-vendor-hr65qrS4.js";import"./icons-vendor-DUJ9xTEr.js";const B=i("Browser",{web:o(()=>_(()=>import("./web-CyLTbXHj.js"),[]).then(r=>new r.BrowserWeb),"web")});export{B as Browser};
