@@ -5,7 +5,7 @@
 
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { shallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 import type { ServerStore } from '../types/store';
 
 export const useServerStore = create<ServerStore>()(
@@ -40,7 +40,7 @@ export const useServerStore = create<ServerStore>()(
                         servers: state.servers.filter((s) => s.id !== serverId),
                         selectedServer:
                             state.selectedServer?.id === serverId ? null : state.selectedServer,
-                        joinedServerIds: state.joinedServerIds.filter((id) => id !== serverId),
+                        joinedServerIds: state.joinedServerIds.filter((id: number) => id !== serverId),
                     })),
 
                 /** Update a server's properties by ID. */
@@ -171,17 +171,17 @@ export const selectMembers = (state: ServerStore) => state.members;
 export const selectRoles = (state: ServerStore) => state.roles;
 /** Select text channels only. */
 export const selectTextChannels = (state: ServerStore) =>
-    state.channels.filter((c: any) => c.type === 'text' || !c.type);
+    state.channels.filter((c) => c.type === 'text' || c.room_type === 'text' || (!c.type && c.room_type !== 'voice' && c.room_type !== 'announcement'));
 /** Select voice channels only. */
 export const selectVoiceChannels = (state: ServerStore) =>
-    state.channels.filter((c: any) => c.type === 'voice');
+    state.channels.filter((c) => c.type === 'voice' || c.room_type === 'voice');
 /** Select the server count. */
 export const selectServerCount = (state: ServerStore) => state.servers.length;
 
 // Hook selectors (shallow prevents re-renders when object/array ref changes but content is same)
-export const useCurrentServer = () => useServerStore((s) => s.selectedServer, shallow);
-export const useServers = () => useServerStore((s) => s.servers, shallow);
-export const useChannels = () => useServerStore((s) => s.channels, shallow);
-export const useMembers = () => useServerStore((s) => s.members, shallow);
-export const useTextChannels = () => useServerStore(selectTextChannels, shallow);
-export const useVoiceChannels = () => useServerStore(selectVoiceChannels, shallow);
+export const useCurrentServer = () => useServerStore(useShallow((s) => s.selectedServer));
+export const useServers = () => useServerStore(useShallow((s) => s.servers));
+export const useChannels = () => useServerStore(useShallow((s) => s.channels));
+export const useMembers = () => useServerStore(useShallow((s) => s.members));
+export const useTextChannels = () => useServerStore(useShallow(selectTextChannels));
+export const useVoiceChannels = () => useServerStore(useShallow(selectVoiceChannels));

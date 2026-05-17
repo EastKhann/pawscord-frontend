@@ -1321,3 +1321,51 @@
     margin-bottom: 20px;
     line-height: 1.5;
 }
+
+/* ====================================================
+   🔥 MOBILE RESPONSIVE (audit fix)
+   Önceki: 1323 satırın hepsi sabit grid (2/3/4/6 col)
+   ve 0 @media query → mobile (375) viewport'ta admin
+   panel içeriği 51+ overflow ile dağılıyordu.
+   Bu blok tek seferde her grid'i 1fr'a, flex satırlarını
+   wrap'e çevirir.
+   ==================================================== */
+@media (max-width: 768px) {
+    .grid2col,
+    .grid3col,
+    .grid4colGap10,
+    .grid4colGap12,
+    .grid3colGap10,
+    .grid6colGap10Mb16,
+    .grid6colGap12Mb20,
+    .grid2colGap10,
+    .grid2colGap8,
+    .gridAsymMb20 {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    /* Flex satırları wrap olsun (admin panel header bar'ı vb.) */
+    [class*='flexAlignGap'],
+    [class*='flexBetween'],
+    [class*='flexRow'] {
+        flex-wrap: wrap !important;
+    }
+
+    /* Sayısal value text'leri shrink edilebilir olsun */
+    [class*='valueWhite22'],
+    [class*='valueLgGreen22'],
+    [class*='cardTitle'] {
+        min-width: 0 !important;
+        word-break: break-word;
+    }
+}
+
+/* ── 480 px: küçük telefonlar ─────────────────── */
+@media (max-width: 480px) {
+    [class*='card'],
+    [class*='miniCard'],
+    [class*='successMiniCard'] {
+        padding: 10px !important;
+    }
+}

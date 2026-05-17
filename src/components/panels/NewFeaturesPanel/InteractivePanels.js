@@ -61,7 +61,7 @@ export const MemberLevelsPanel = memo(({ serverId, onClose }) => {
 
                     {leaderboard.map((member, i) => (
 
-                        <div key={`item-${i}`} className={`member-row ${i < 3 ? 'top-' + (i + 1) : ''}`}>
+                        <div key={member.username} className={`member-row ${i < 3 ? 'top-' + (i + 1) : ''}`}>
 
                             <span className="rank">{i + 1}</span>
 
@@ -343,7 +343,7 @@ export const UserConnectionsPanel = memo(({ onClose }) => {
 
                         return (
 
-                            <div key={`item-${i}`} className="connection-item" style={connItemStyle}>
+                            <div key={conn.platform} className="connection-item" style={connItemStyle}>
 
                                 <span className="icon">{conn.icon}</span><span className="platform">{conn.display_name}</span><span className="username">@{conn.username}</span>
 
@@ -536,9 +536,9 @@ export const UserBadgesPanel = ({ username, onClose }) => {
 
                     : badges.length === 0 ? <div className="empty">{t('not_yet_rozet_yok')}</div>
 
-                        : <div className="badges-grid">{badges.map((badge, i) => (
+                        : <div className="badges-grid">{badges.map((badge) => (
 
-                            <div key={`item-${i}`} className="badge-item" title={badge.description}><span className="badge-icon">{badge.icon}</span><span className="badge-name">{badge.name}</span></div>
+                            <div key={badge.name} className="badge-item" title={badge.description}><span className="badge-icon">{badge.icon}</span><span className="badge-name">{badge.name}</span></div>
 
                         ))}</div>}
 
@@ -607,7 +607,7 @@ export const FavoriteRoomsPanel = ({ onClose, onRoomSelect }) => {
 
                             <div key={room.id} className="favorite-item">
 
-                                <span className="room-name" onClick={() => onRoomSelect && onRoomSelect(room.id)}>{room.name}</span>
+                                <span className="room-name" role="button" tabIndex={0} onClick={() => onRoomSelect && onRoomSelect(room.id)} onKeyDown={(e) => e.key === 'Enter' && onRoomSelect && onRoomSelect(room.id)}>{room.name}</span>
 
                                 {room.server_name && <span className="server-name">{room.server_name}</span>}
 

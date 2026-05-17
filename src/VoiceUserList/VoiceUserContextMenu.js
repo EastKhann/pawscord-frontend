@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 // frontend/src/VoiceUserList/VoiceUserContextMenu.js
-import React, { useCallback, useRef, useEffect, useState } from 'react';
+import { useCallback, useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';

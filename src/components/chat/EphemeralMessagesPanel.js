@@ -92,7 +92,7 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaClock className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Otomatik Mesaj Silme</h2>
+                        <h2 style={styles.title}>{t('ephemeral.title', 'Auto Message Delete')}</h2>
                     </div>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />

@@ -8,9 +8,11 @@ import { FaTimes, FaSearch, FaFilter, FaCalendar, FaUser, FaFile } from 'react-i
 import { toast } from '../../utils/toast';
 
 import { useTranslation } from 'react-i18next';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const AdvancedSearchPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId, roomSlug }) => {
     const { t } = useTranslation();
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('search.advancedSearch', 'Advanced Search') });
 
     const [query, setQuery] = useState('');
 
@@ -81,8 +83,8 @@ const AdvancedSearchPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId, roo
     };
 
     return (
-        <div style={styles.overlay} role="presentation" onClick={(e) => e.target === e.currentTarget && onClose()}>
-            <div style={styles.modal} role="dialog" aria-modal="true" aria-label={t('search.advancedSearch', 'Advanced Search')}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaSearch className="icon-primary-mr10" />

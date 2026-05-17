@@ -1,4 +1,3 @@
-import React from 'react';
 import logger from '../utils/logger';
 import { getToken } from './tokenStorage';
 // frontend/src/utils/offlineMode.js
@@ -14,7 +13,7 @@ import { getToken } from './tokenStorage';
 class OfflineModeManager {
     constructor() {
         this.isOnline = navigator.onLine;
-        this.listners = new Set();
+        this.listeners = new Set();
         this.pendingActions = []; // Offline iken yapılan işlemler
         this.db = null;
 
@@ -25,7 +24,7 @@ class OfflineModeManager {
      * Offline mode'u başlat
      */
     async init() {
-        // Online/offline event listner'ları
+        // Online/offline event listener'ları
         window.addEventListener('online', () => this.handleOnline());
         window.addEventListener('offline', () => this.handleOffline());
 
@@ -101,15 +100,15 @@ class OfflineModeManager {
      * @param {Function} callback - Callback fonksiyonu
      */
     onStatusChange(callback) {
-        this.listners.add(callback);
-        return () => this.listners.delete(callback);
+        this.listeners.add(callback);
+        return () => this.listeners.delete(callback);
     }
 
     /**
      * Listener'ları bilgwithndir
      */
     notify(status) {
-        this.listners.forEach((callback) => {
+        this.listeners.forEach((callback) => {
             try {
                 callback({ status, isOnline: this.isOnline });
             } catch (error) {
@@ -318,7 +317,8 @@ class OfflineModeManager {
      * API URL'ini al
      */
     getApiUrl() {
-        const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
+        const isElectron =
+            window.process?.versions?.electron || window.location.protocol === 'file:';
         const isPawscordDomain = window.location.hostname.includes('pawscord.com');
         const isLocalhost =
             window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';

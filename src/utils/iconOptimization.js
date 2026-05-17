@@ -42,7 +42,6 @@ export {
     FaEdit,
     FaCompass,
     FaHeart,
-    FaBitcoin,
     FaCopy,
     FaVideoSlash,
     FaCheck,
@@ -54,6 +53,7 @@ export {
     FaStickyNote,
     FaGamepad,
     FaStore,
+    FaBitcoin,
 } from 'react-icons/fa';
 
 // TbIcons

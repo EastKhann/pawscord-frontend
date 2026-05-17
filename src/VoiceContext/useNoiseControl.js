@@ -143,7 +143,7 @@ export function useNoiseControl({
         reapplyAudioChain(true).then(() => {
             if (import.meta.env.DEV)
                 logger.log(`[Noise] Level changed to ${noiseSuppressionLevel}, filters reapplied`);
-        });
+        }).catch((err) => console.error('Failed to reapply audio chain after noise level change:', err));
     }, [noiseSuppressionLevel, reapplyAudioChain]);
 
     return { toggleNoiseSuppression };

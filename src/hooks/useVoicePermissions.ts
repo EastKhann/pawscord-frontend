@@ -5,19 +5,39 @@
  * Check if user can join a voice channel based on roles and permissions
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import logger from '../utils/logger';
 
-export const useVoicePermissions = (apiBaseUrl, fetchWithAuth) => {
-    const [channelPermissions, setChannelPermissions] = useState({});
+interface ChannelPermissionData {
+    isPrivate?: boolean;
+    deniedUsers?: (string | number)[];
+    allowedUsers?: (string | number)[];
+    allowedRoles?: (string | number)[];
+    maxUsers?: number;
+    [key: string]: unknown;
+}
+
+interface ChannelLike {
+    id: string | number;
+    [key: string]: unknown;
+}
+
+interface UserLike {
+    id: string | number;
+    [key: string]: unknown;
+}
+
+export const useVoicePermissions = (
+    apiBaseUrl: string,
+    fetchWithAuth: (url: string) => Promise<Response>
+) => {
+    const [channelPermissions, setChannelPermissions] = useState<Record<string | number, ChannelPermissionData>>({});
     const [loading, setLoading] = useState(false);
 
-    // Load permissions for a channel
     const loadChannelPermissions = useCallback(
-        async (channelId) => {
+        async (channelId: string | number) => {
             if (!channelId) return null;
 
-            // Check cache
             if (channelPermissions[channelId]) {
                 return channelPermissions[channelId];
             }
@@ -29,7 +49,7 @@ export const useVoicePermissions = (apiBaseUrl, fetchWithAuth) => {
                 );
 
                 if (response.ok) {
-                    const data = await response.json();
+                    const data = await response.json() as ChannelPermissionData;
                     setChannelPermissions((prev) => ({
                         ...prev,
                         [channelId]: data,
@@ -47,29 +67,24 @@ export const useVoicePermissions = (apiBaseUrl, fetchWithAuth) => {
         [channelPermissions, apiBaseUrl, fetchWithAuth]
     );
 
-    // Check if user can join a voice channel
     const canJoinVoiceChannel = useCallback(
-        (channel, user, userRoles = []) => {
+        (channel: ChannelLike, user: UserLike, userRoles: (string | number)[] = []): boolean => {
             if (!channel || !user) return false;
 
             const perms = channelPermissions[channel.id];
 
-            // If no permissions set or channel is public, everyone can join
             if (!perms || !perms.isPrivate) {
                 return true;
             }
 
-            // Check if user is explicitly denied
             if (perms.deniedUsers?.includes(user.id)) {
                 return false;
             }
 
-            // Check if user is explicitly allowed
             if (perms.allowedUsers?.includes(user.id)) {
                 return true;
             }
 
-            // Check if any of user's roles are allowed
             const hasAllowedRole = userRoles.some((roleId) => perms.allowedRoles?.includes(roleId));
 
             return hasAllowedRole;
@@ -77,13 +92,12 @@ export const useVoicePermissions = (apiBaseUrl, fetchWithAuth) => {
         [channelPermissions]
     );
 
-    // Check if channel is full
     const isChannelFull = useCallback(
-        (channel, currentUserCount = 0) => {
+        (channel: ChannelLike, currentUserCount = 0): boolean => {
             const perms = channelPermissions[channel.id];
 
             if (!perms || !perms.maxUsers) {
-                return false; // No limit
+                return false;
             }
 
             return currentUserCount >= perms.maxUsers;
@@ -91,9 +105,8 @@ export const useVoicePermissions = (apiBaseUrl, fetchWithAuth) => {
         [channelPermissions]
     );
 
-    // Get join error message
     const getJoinError = useCallback(
-        (channel, user, userRoles = [], currentUserCount = 0) => {
+        (channel: ChannelLike, user: UserLike, userRoles: (string | number)[] = [], currentUserCount = 0): string | null => {
             if (!canJoinVoiceChannel(channel, user, userRoles)) {
                 const perms = channelPermissions[channel.id];
 
@@ -117,8 +130,7 @@ export const useVoicePermissions = (apiBaseUrl, fetchWithAuth) => {
         [canJoinVoiceChannel, isChannelFull, channelPermissions]
     );
 
-    // Clear cache for a channel
-    const clearChannelCache = useCallback((channelId) => {
+    const clearChannelCache = useCallback((channelId: string | number) => {
         setChannelPermissions((prev) => {
             const updated = { ...prev };
             delete updated[channelId];
@@ -126,7 +138,6 @@ export const useVoicePermissions = (apiBaseUrl, fetchWithAuth) => {
         });
     }, []);
 
-    // Clear all cache
     const clearAllCache = useCallback(() => {
         setChannelPermissions({});
     }, []);

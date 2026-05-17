@@ -15,6 +15,7 @@ import { useChatStore } from './useChatStore';
 import { useUIStore } from './useUIStore';
 import { useVoiceStore } from './useVoiceStore';
 import { useServerStore } from './useServerStore';
+import type { Server } from '../types/api';
 
 /**
  * Helper: subscribe to a derived slice of a store.
@@ -65,10 +66,10 @@ export const onVoiceRoomChange = (callback: (isInVoice: boolean) => void) =>
 /**
  * Subscribe to server selection changes.
  * Fires callback whenever the user selects a different server.
- * @param {(server: any) => void} callback
+ * @param {(server: Server | null) => void} callback
  * @returns {() => void} Unsubscribe function
  */
-export const onServerChange = (callback: (server: any) => void) =>
+export const onServerChange = (callback: (server: Server | null) => void) =>
     subscribeToSlice(useServerStore, (s) => s.selectedServer, callback);
 
 /**
@@ -78,16 +79,16 @@ export const onServerChange = (callback: (server: any) => void) =>
  * @returns {() => void} Unsubscribe function
  */
 export const onConnectionChange = (callback: (state: string) => void) =>
-    subscribeToSlice(useChatStore, (s: any) => s.connectionState as string, callback);
+    subscribeToSlice(useChatStore, (s) => s.connectionState, callback);
 
 /**
  * Reset all stores — useful for full logout cleanup.
  * Calls reset() on every store to return to initial state.
  */
 export const resetAllStores = () => {
-    (useUserStore.getState() as any).reset();
-    (useChatStore.getState() as any).reset();
-    (useUIStore.getState() as any).resetTransient();
-    (useVoiceStore.getState() as any).reset();
-    (useServerStore.getState() as any).reset();
+    useUserStore.getState().reset();
+    useChatStore.getState().reset();
+    useUIStore.getState().resetTransient();
+    useVoiceStore.getState().reset();
+    useServerStore.getState().reset();
 };

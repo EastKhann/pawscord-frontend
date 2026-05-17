@@ -73,7 +73,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                     {loading ? (
                         <div style={styles.loading}>{t('inviteAnalytics.loading', 'Loading analytics...')}</div>
                     ) : !analytics ? (
-                        <div style={styles.empty}>Analitik verisi yok</div>
+                        <div style={styles.empty}>{t('inviteAnalytics.noData', 'No analytics data')}</div>
                     ) : (
                         <>
                             <div style={styles.statsGrid}>
@@ -85,7 +85,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                                         <div style={styles.statValue}>
                                             {analytics.total_invites || 0}
                                         </div>
-                                        <div style={styles.statLabel}>Toplam Davetler</div>
+                                        <div style={styles.statLabel}>{t('inviteAnalytics.totalInvites', 'Total Invites')}</div>
                                     </div>
                                 </div>
 

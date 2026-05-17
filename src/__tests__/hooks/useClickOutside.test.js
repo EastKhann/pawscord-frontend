@@ -76,8 +76,8 @@ describe('useClickOutside', () => {
         expect(callback).not.toHaveBeenCalled();
     });
 
-    // ── 5. Cleans up event listner on unmount ──
-    it('should remove event listner on unmount', () => {
+    // ── 5. Cleans up event listener on unmount ──
+    it('should remove event listener on unmount', () => {
         const removeSpy = vi.spyOn(document, 'removeEventListener');
         const callback = vi.fn();
         const { unmount } = renderHook(() => useClickOutside(callback));

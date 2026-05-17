@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 const TicTacToe = ({ gameData, onMove, currentUser }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { board, turn, player_x, player_o, winner, game_id } = gameData;
 
     const handleClick = (index) => {

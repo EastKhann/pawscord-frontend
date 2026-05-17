@@ -2,23 +2,37 @@
 // 🚀 PERFORMANS: Mesajları optimize ederek render sayısını %40 azaltır
 
 import { useMemo, useRef } from 'react';
+import type { Message } from '../types/api';
+
+interface MessageLike {
+    id: number | string;
+    content?: string;
+    user?: { username?: string };
+    created_at?: string;
+    timestamp?: string;
+}
+
+interface CacheRef {
+    messages: MessageLike[] | null;
+    searchQuery: string;
+    result: MessageLike[];
+}
 
 /**
  * Mesajları optimize eder ve gereksiz re-render'ları önler
- * @param {Array} messages - Ham mesaj listesi
- * @param {string} searchQuery - Searchma sorgusu
- * @param {Object} activeChat - Aktif chat objesi (unused but kept for API compat)
- * @returns {Array} Optimize edilmiş mesaj listesi
  */
-export const useOptimizedMessages = (messages, searchQuery, _activeChat) => {
+export const useOptimizedMessages = (
+    messages: MessageLike[],
+    searchQuery: string,
+    _activeChat?: unknown
+): MessageLike[] => {
     // Cache previous result to avoid recalculation when reference changes but content is same
-    const prevRef = useRef({ messages: null, searchQuery: '', result: [] });
+    const prevRef = useRef<CacheRef>({ messages: null, searchQuery: '', result: [] });
 
     const filteredMessages = useMemo(() => {
         if (!messages || !Array.isArray(messages) || messages.length === 0) return [];
 
         // 🔧 FIX: Skip recalculation if messages array identity changed but content is identical
-        // Check first, middle, and last message IDs + last content for robust cache validation
         const prev = prevRef.current;
         if (
             prev.messages !== null &&
@@ -66,25 +80,32 @@ export const useOptimizedMessages = (messages, searchQuery, _activeChat) => {
     return filteredMessages;
 };
 
+interface UserLike {
+    is_online?: boolean;
+    online?: boolean;
+}
+
 /**
  * Online kullanıcıları optimize eder
- * @param {Array} users - Kullanıcı listesi
- * @returns {Array} Online kullanıcılar
  */
-export const useOnlineUsers = (users) => {
+export const useOnlineUsers = (users: UserLike[]): UserLike[] => {
     return useMemo(() => {
         if (!users || !Array.isArray(users)) return [];
         return users.filter((u) => u.is_online || u.online);
     }, [users]);
 };
 
+interface ServerLike {
+    id: number | string;
+}
+
 /**
  * Serverları sıralama ile optimize eder
- * @param {Array} servers - Server listesi
- * @param {Array} serverOrder - Server sıralaması
- * @returns {Array} Sıralanmış sunucular
  */
-export const useOrderedServers = (servers, serverOrder) => {
+export const useOrderedServers = (
+    servers: ServerLike[],
+    serverOrder: (number | string)[]
+): ServerLike[] => {
     return useMemo(() => {
         if (!servers || !Array.isArray(servers)) return [];
         if (!serverOrder || serverOrder.length === 0) return servers;
@@ -100,4 +121,5 @@ export const useOrderedServers = (servers, serverOrder) => {
     }, [servers, serverOrder]);
 };
 
+export type { Message };
 export default useOptimizedMessages;

@@ -1,4 +1,3 @@
-import React from 'react';
 import logger from '../utils/logger';
 // frontend/src/utils/connectionPool.js
 

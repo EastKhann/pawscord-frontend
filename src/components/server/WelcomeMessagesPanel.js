@@ -13,7 +13,7 @@ const STAT_ITEMS = [
 ];
 
 const WelcomeMessagesPanel = ({ serverId, onClose }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const {
         welcomeConfig,
@@ -126,7 +126,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                             </label>
                         </div>
                         <div className="form-group">
-                            <label>Otomatik Verilecek Roller</label>
+                            <label>{t('welcomeMessages.autoRoles', 'Auto-Assigned Roles')}</label>
                             <div className="roles-selector">
                                 {roles.map((role) => (
                                     <label key={role.id} className="role-checkbox">

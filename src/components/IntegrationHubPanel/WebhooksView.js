@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -31,7 +31,7 @@ const CreateWebhookModal = ({ serverId, token, onClose, onCreated }) => {
 
             .then((data) => setChannels(data.channels || []))
 
-            .catch(() => { });
+            .catch((err) => logger.error('Failed to fetch channels for webhook modal:', err));
     }, []);
 
     const handleCreate = async () => {
@@ -189,7 +189,7 @@ const WebhooksView = ({ serverId, token }) => {
                     {webhooks.map((webhook) => (
                         <div key={webhook.id} className="webhook-item">
                             <div className="webhook-avatar">
-                                {webhook.avatar ? <img src={webhook.avatar} alt="" /> : <FaBell />}
+                                {webhook.avatar ? <img src={webhook.avatar} alt={webhook.name} /> : <FaBell />}
                             </div>
 
                             <div className="webhook-info">

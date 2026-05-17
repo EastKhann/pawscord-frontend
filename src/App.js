@@ -16,7 +16,7 @@
  *   - App/useAppCallbacks.js   → Scroll, avatar, draft, navigation, computed values
  *   - App/ChatArea.js          → Main chat rendering (header, messages, input)
  */
-import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import './index.css';
 import './styles/modern-theme.css';
@@ -920,9 +920,13 @@ const AppContent = () => {
                             <RoomList
                                 onFriendsClick={handleFriendsClick}
                                 onRoomSelect={handleRoomChange}
-                                onDMSelect={(id, targetUsername) =>
-                                    setActiveChat('dm', id, targetUsername)
-                                }
+                                onDMSelect={(id, targetUsername) => {
+                                    setActiveChat('dm', id, targetUsername);
+                                    // 🔥 Mobile: DM'e tıklandığında sidebar otomatik kapansın,
+                                    // chat görünür olsun (önceki davranış: sidebar açık kalıyordu,
+                                    // chat hidden, kullanıcıya hiçbir şey olmamış görüntüsü).
+                                    if (isMobile) setIsLeftSidebarVisible(false);
+                                }}
                                 onPrefetchChat={messageHandlers.prefetchMessages}
                                 onWelcomeClick={handleWelcomeClick}
                                 setIsLeftSidebarVisible={setIsLeftSidebarVisible}
@@ -1003,11 +1007,19 @@ const AppContent = () => {
                 )}
 
                 {/* ─── MAIN CONTENT ─── */}
+                {/* 🔥 FIX: mobile'da sol sidebar açıkken chat area'yı tamamen gizle.
+                    Aksi halde main 63px'e sıkışıp içerik (chat header, welcome card)
+                    viewport dışına taşıyor — Discord mobile pattern: sidebar VEYA chat,
+                    ikisi aynı anda değil. */}
                 <main
                     id="main-content"
-                    style={styles.mainContent}
+                    style={{
+                        ...styles.mainContent,
+                        display: isMobile && isLeftSidebarVisible ? 'none' : styles.mainContent.display,
+                    }}
                     role="main"
                     aria-label={t('nav.chatArea', 'Chat area')}
+                    aria-hidden={isMobile && isLeftSidebarVisible ? 'true' : undefined}
                 >
                     <div>
                         <Suspense fallback={null}>
@@ -1325,7 +1337,7 @@ const AppContent = () => {
                 )}
 
                 {isInVoice && !showVoiceIsland && activeChat.type !== 'voice' && (
-                    <button onClick={() => setShowVoiceIsland(true)} title="Ses Paneli">
+                    <button onClick={() => setShowVoiceIsland(true)} title="Ses Paneli" aria-label={t('voiceControl.showPanel', 'Show voice panel')}>
                         🎤
                     </button>
                 )}

@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-undef */
-import React from 'react';
 
 import {
     FaComment,

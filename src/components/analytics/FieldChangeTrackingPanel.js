@@ -90,7 +90,7 @@ const FieldChangeTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, entityTy
                     </select>
                     <button onClick={exportChanges} style={styles.exportButton}>
                         <FaDownload className="mr-6" />
-                        Export
+                        {t('common.export', 'Export')}
                     </button>
                 </div>
 

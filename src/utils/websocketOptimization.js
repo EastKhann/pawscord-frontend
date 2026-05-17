@@ -1,4 +1,3 @@
-import React from 'react';
 import logger from '../utils/logger';
 // ⚡ WEBSOCKET OPTIMIZATION
 // Enhanced WebSocket with reconnection, batching, and compression
@@ -23,7 +22,7 @@ export class OptimizedWebSocket {
         this.messageQueue = [];
         this.batchTimer = null;
         this.heartbeatTimer = null;
-        this.listners = new Map();
+        this.listeners = new Map();
         this.isConnected = false;
         this.isReconnecting = false;
     }
@@ -161,23 +160,23 @@ export class OptimizedWebSocket {
     }
 
     on(event, callback) {
-        if (!this.listners.has(event)) {
-            this.listners.set(event, new Set());
+        if (!this.listeners.has(event)) {
+            this.listeners.set(event, new Set());
         }
-        this.listners.get(event).add(callback);
+        this.listeners.get(event).add(callback);
 
         // Return cleanup function
         return () => this.off(event, callback);
     }
 
     off(event, callback) {
-        if (!this.listners.has(event)) return;
-        this.listners.get(event).delete(callback);
+        if (!this.listeners.has(event)) return;
+        this.listeners.get(event).delete(callback);
     }
 
     emit(event, data) {
-        if (!this.listners.has(event)) return;
-        this.listners.get(event).forEach((callback) => {
+        if (!this.listeners.has(event)) return;
+        this.listeners.get(event).forEach((callback) => {
             try {
                 callback(data);
             } catch (error) {
@@ -208,7 +207,7 @@ export class OptimizedWebSocket {
         this.isConnected = false;
         this.isReconnecting = false;
         this.messageQueue = [];
-        this.listners.clear();
+        this.listeners.clear();
     }
 
     getState() {

@@ -2,7 +2,6 @@
  * 🎫 InviteServerModal — Portal modal for inviting a user to a server
  * Extracted from App.js inline JSX
  */
-import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import toast from '../utils/toast';

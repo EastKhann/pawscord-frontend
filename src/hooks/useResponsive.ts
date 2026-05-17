@@ -36,7 +36,7 @@ export const useResponsive = () => {
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
-        let timeoutId;
+        let timeoutId: ReturnType<typeof setTimeout>;
 
         const handleResize = () => {
             // Debounce resize events (performance optimization)

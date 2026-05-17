@@ -56,7 +56,10 @@ const AdvancedTab = () => {
                             if (window.caches) {
                                 window.caches
                                     .keys()
-                                    .then((names) => names.forEach((n) => window.caches.delete(n)));
+                                    .then((names) => names.forEach((n) => window.caches.delete(n)))
+                                    .catch((err) =>
+                                        console.error('[AdvancedTab] Cache clear failed:', err)
+                                    );
                             }
                             localStorage.removeItem('pawscord_msg_cache');
                             toast.info(t('settings.tabs.advanced.cacheCleared'));

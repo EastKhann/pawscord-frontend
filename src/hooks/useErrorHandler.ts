@@ -3,6 +3,7 @@
 
 import { useCallback } from 'react';
 import ErrorReporter from '../utils/errorReporter';
+import toast from '../utils/toast';
 
 interface ErrorContext {
     component?: string;
@@ -19,31 +20,13 @@ interface ErrorContext {
  *   try { ... } catch (err) { handleError(err, { component: 'ChatArea' }); }
  */
 export const useErrorHandler = () => {
-    return useCallback((error: Error | unknown, context: ErrorContext = {}) => {
+    return useCallback((error: unknown, context: ErrorContext = {}) => {
         // 1. Central reporting
-        ErrorReporter.report(error, context);
+        ErrorReporter.report(error instanceof Error ? error : new Error(String(error)), context);
 
-        // 2. User-visible toast (lazy-import to avoid hard dep)
-        const message = (error as Error)?.message || 'An error occurred';
-        try {
-            // Try react-hot-toast first (most common in this project)
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
-            const toast = require('react-hot-toast').default ?? require('react-hot-toast');
-            if (typeof toast?.error === 'function') {
-                toast.error(message);
-            } else if (typeof toast === 'function') {
-                toast(message);
-            }
-        } catch {
-            // Fallback: custom toast util
-            try {
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-                const { showToast } = require('../utils/toast');
-                showToast?.(message, 'error');
-            } catch {
-                // Last resort: console only (already logged above)
-            }
-        }
+        // 2. User-visible toast
+        const message = error instanceof Error ? error.message : String(error) || 'An error occurred';
+        toast.error(message);
     }, []);
 };
 

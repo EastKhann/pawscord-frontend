@@ -1,5 +1,5 @@
 ﻿// frontend/src/components/MessageInput.js
-import React, { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react';
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import toast from '../../utils/toast';
@@ -114,7 +114,7 @@ const MessageInput = ({
 
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showGifPicker, setShowGifPicker] = useState(false);
     const [showTemplates, setShowTemplates] = useState(false);
@@ -588,6 +588,7 @@ const MessageInput = ({
                 <textarea
                     ref={textareaRef}
                     value={message}
+                    data-testid="message-input"
                     aria-label={
                         editingMessage
                             ? 'Mesaj edit'

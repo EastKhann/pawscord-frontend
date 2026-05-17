@@ -113,8 +113,8 @@ describe('useKeyboardShortcuts', () => {
         }).not.toThrow();
     });
 
-    // ── 10. Cleans up event listner on unmount ──
-    it('should remove keydown listner on unmount', () => {
+    // ── 10. Cleans up event listener on unmount ──
+    it('should remove keydown listener on unmount', () => {
         const onEscape = vi.fn();
         const { unmount } = renderHook(() => useKeyboardShortcuts({ onEscape }));
 

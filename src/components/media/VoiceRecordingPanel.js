@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const {
         activeTab,

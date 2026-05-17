@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
@@ -33,7 +32,7 @@ const DeveloperTab = ({ botAccounts: rawBots, oauthApps: rawOAuth, webhooks: raw
     const botAccounts = rawBots || [];
     const styles = profileStyles;
     const { t } = useTranslation();
-    const [error, setError] = React.useState(null);
+    const [_error, _setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (

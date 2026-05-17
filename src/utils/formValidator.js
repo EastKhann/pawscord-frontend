@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-escape */
-import React from 'react';
 import logger from '../utils/logger';
 // frontend/src/utils/formValidator.js
 

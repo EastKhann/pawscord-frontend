@@ -42,85 +42,24 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
         }
     }, []);
 
-    // ✅ 1. ELECTRON DEEP LINK DİNLEYİCİSİ (EXE'ye Dönüş)
+    // 🔗 ELECTRON OAUTH ERROR / CANCELLED LISTENERS ONLY
+    // The actual deep-link → token → login flow is handled in AuthContext so it
+    // works whether or not LoginPage is currently mounted. Here we only watch
+    // for explicit error/cancel events to surface them in the form UI.
     useEffect(() => {
         if (!isElectron || !window.electron) return;
-
-        const handleAuthSuccess = (tokens) => {
-            try {
-                const { access, refresh } = tokens;
-                if (access && refresh) {
-                    const decoded = jwtDecode(access);
-                    localStorage.removeItem('chat_username');
-                    localStorage.setItem('access_token', access);
-                    localStorage.removeItem('refresh_token');
-                    localStorage.setItem('chat_username', decoded.username);
-                    setTimeout(() => window.location.reload(), 500);
-                }
-            } catch (e) {
-                logger.error('❌ [Electron] OAuth token error:', e);
-                setAuthError(t('auth.tokenError'));
-            }
-        };
 
         const handleAuthError = (error) => {
             logger.error('❌ [Electron] Google auth error:', error);
             setAuthError(t('auth.googleFailed'));
+            setIsGoogleLoading(false);
         };
 
-        const handleDeepLink = (url) => {
-            try {
-                const urlObj = new URL(url);
-                const params = new URLSearchParams(urlObj.search);
-                const accessToken = params.get('access');
-                const refreshToken = params.get('refresh');
-
-                if (accessToken && refreshToken) {
-                    const decoded = jwtDecode(accessToken);
-                    localStorage.removeItem('chat_username');
-                    localStorage.setItem('access_token', accessToken);
-                    localStorage.removeItem('refresh_token');
-                    localStorage.setItem('chat_username', decoded.username);
-                    window.electron.focusWindow?.();
-                    setTimeout(() => window.location.reload(), 300);
-                }
-            } catch (e) {
-                logger.error('Deep link error:', e);
-                try {
-                    if (url.includes('access=') && url.includes('refresh=')) {
-                        const parts = url.split('access=');
-                        if (parts.length > 1) {
-                            const access = parts[1].split('&')[0];
-                            const decoded = jwtDecode(access);
-                            localStorage.removeItem('chat_username');
-                            localStorage.setItem('access_token', access);
-                            localStorage.removeItem('refresh_token');
-                            localStorage.setItem('chat_username', decoded.username);
-                            window.location.reload();
-                        } else {
-                            setAuthError(t('auth.inputError'));
-                        }
-                    } else {
-                        setAuthError(t('auth.inputError'));
-                    }
-                } catch (parseError) {
-                    logger.error('Manual parsing error:', parseError);
-                    setAuthError(t('auth.loginFailed'));
-                }
-            }
-        };
-
-        // Register via contextBridge (preload.js) — replaces broken window.require approach
-        window.electron.onGoogleAuthSuccess(handleAuthSuccess);
-        window.electron.onGoogleAuthError(handleAuthError);
-        window.electron.onDeepLinkAuth(handleDeepLink);
-        window.electron.onOAuthTokens(handleAuthSuccess);
-
-        // Kullanıcı OAuth popup'ı kapattıysa loading state'i temizle
-        if (window.electron.onGoogleAuthCancelled) {
-            window.electron.onGoogleAuthCancelled(() => {
-                setIsGoogleLoading(false);
-            });
+        try {
+            window.electron.onGoogleAuthError?.(handleAuthError);
+            window.electron.onGoogleAuthCancelled?.(() => setIsGoogleLoading(false));
+        } catch (e) {
+            logger.warn('[Login/Electron] Failed to register error listeners:', e);
         }
     }, [setAuthError, t]);
 
@@ -389,7 +328,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} data-testid="auth-form">
                     <div className="input-group">
                         <FaUser className="input-icon" />
                         <input
@@ -400,6 +339,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                             value={formData.username}
                             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                             required
+                            data-testid="auth-username"
                         />
                     </div>
 
@@ -416,6 +356,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                                     setFormData({ ...formData, email: e.target.value })
                                 }
                                 required
+                                data-testid="auth-email"
                             />
                         </div>
                     )}
@@ -430,6 +371,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             required
+                            data-testid="auth-password"
                         />
                         <button
                             type="button"
@@ -441,12 +383,18 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                                     : t('login.showPassword', 'Show password')
                             }
                             tabIndex={0}
+                            data-testid="auth-password-toggle"
                         >
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </button>
                     </div>
 
-                    <button type="submit" className="submit-btn" disabled={isLoading}>
+                    <button
+                        type="submit"
+                        className="submit-btn"
+                        disabled={isLoading}
+                        data-testid={isLoginMode ? 'login-submit-btn' : 'signup-submit-btn'}
+                    >
                         {isLoading ? (
                             <div className="spinner-white"></div>
                         ) : isLoginMode ? (
@@ -482,11 +430,21 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                         {isGoogleLoading ? (
                             <span className="google-btn-spinner" aria-label={t('common.loading', 'Loading')} />
                         ) : (
-                            <img
-                                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                                alt="G"
+                            // Inline Google "G" SVG — 3rd-party CDN'e (Wikipedia) bağımlılık
+                                                       // kaldırıldı: cache miss / outage / izleme riskini
+                                                       // ortadan kaldırır, login sayfası tek istek azalır.
+                            <svg
+                                aria-hidden="true"
+                                focusable="false"
                                 className="google-btn-logo"
-                            />
+                                viewBox="0 0 48 48"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+                                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+                                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+                                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+                            </svg>
                         )}
                         <span>
                             {isGoogleLoading ? t('common.loading') : t('login.loginWithGoogle')}
@@ -512,6 +470,30 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                     >
                         {isLoginMode ? t('login.signUp') : t('login.login')}
                     </span>
+                </div>
+
+                {/* Google ToS: badge gizliyse bu metin görünür olmak zorunda */}
+                <div className="recaptcha-notice">
+                    {t(
+                        'login.recaptchaNotice',
+                        'Bu site reCAPTCHA ile korunmaktadır;'
+                    )}{' '}
+                    <a
+                        href="https://policies.google.com/privacy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {t('login.recaptchaPrivacy', 'Gizlilik Politikası')}
+                    </a>{' '}
+                    {t('login.and', 've')}{' '}
+                    <a
+                        href="https://policies.google.com/terms"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {t('login.recaptchaTerms', 'Hizmet Şartları')}
+                    </a>{' '}
+                    {t('login.recaptchaApply', 'geçerlidir.')}
                 </div>
             </div>
         </div>

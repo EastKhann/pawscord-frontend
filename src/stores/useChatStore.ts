@@ -3,12 +3,9 @@
 
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { shallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 import type { ChatStore } from '../types/store';
 import logger from '../utils/logger';
-
-// Simple ID generator
-const getTemporaryId = () => (Date.now() + Math.floor(Math.random() * 1000)).toString();
 
 // --- PERSISTENT UNREAD: Restore from localStorage ---
 const UNREAD_STORAGE_KEY = 'pawscord_unread';
@@ -85,11 +82,11 @@ export const useChatStore = create<ChatStore>()(
                 // Reset unread for this chat (+ persist)
                 const key = type === 'room' ? `room-${chatId}` : `dm-${chatId}`;
                 set((state: any) => {
-                    const newCounts = { ...state.unreadCounts };
+                    const newCounts: Record<string, number> = { ...state.unreadCounts };
                     delete newCounts[key];
                     persistUnread(newCounts);
                     // 🔔 Update tab title badge
-                    const total = Object.values(newCounts).reduce((a: any, b: any) => a + b, 0);
+                    const total = Object.values(newCounts).reduce((a: number, b: number) => a + b, 0);
                     if (typeof document !== 'undefined') {
                         document.title = total > 0 ? `(${total}) PawsCord` : 'PawsCord';
                     }
@@ -187,13 +184,13 @@ export const useChatStore = create<ChatStore>()(
             /** Increment the unread count for a chat key and persist to localStorage. */
             incrementUnread: (key: string) =>
                 set((state: any) => {
-                    const newCounts = {
+                    const newCounts: Record<string, number> = {
                         ...state.unreadCounts,
                         [key]: (state.unreadCounts[key] || 0) + 1,
                     };
                     persistUnread(newCounts);
                     // 🔔 Tab title badge: (N) PawsCord
-                    const total = Object.values(newCounts).reduce((a: any, b: any) => a + b, 0);
+                    const total = Object.values(newCounts).reduce((a: number, b: number) => a + b, 0);
                     if (typeof document !== 'undefined') {
                         document.title = total > 0 ? `(${total}) PawsCord` : 'PawsCord';
                     }
@@ -296,7 +293,7 @@ export const useChatStore = create<ChatStore>()(
                         can_ban_members: false,
                     },
                     connectionState: 'disconnected',
-                    selectedMessages: new Set(),
+                    selectedMessages: [],
                 }),
         }),
         { name: 'pawscord-chat-store' }
@@ -304,14 +301,14 @@ export const useChatStore = create<ChatStore>()(
 );
 
 // --- SELECTORS (shallow prevents re-renders when array/object ref changes but content doesn't) ---
-export const useMessages = () => useChatStore((s) => s.messages, shallow);
-export const useActiveChat = () => useChatStore((s) => s.activeChat, shallow);
-export const useUnreadCounts = () => useChatStore((s) => s.unreadCounts, shallow);
-export const useTypingUsers = () => useChatStore((s) => s.typingUsers, shallow);
-export const useOnlineUsers = () => useChatStore((s) => s.onlineUsers, shallow);
-export const useVoiceUsers = () => useChatStore((s) => s.voiceUsers, shallow);
-export const usePermissions = () => useChatStore((s) => s.currentPermissions, shallow);
-export const useConnectionState = () => useChatStore((s) => (s as any).connectionState);
+export const useMessages = () => useChatStore(useShallow((s) => s.messages));
+export const useActiveChat = () => useChatStore(useShallow((s) => s.activeChat));
+export const useUnreadCounts = () => useChatStore(useShallow((s) => s.unreadCounts));
+export const useTypingUsers = () => useChatStore(useShallow((s) => s.typingUsers));
+export const useOnlineUsers = () => useChatStore(useShallow((s) => s.onlineUsers));
+export const useVoiceUsers = () => useChatStore(useShallow((s) => s.voiceUsers));
+export const usePermissions = () => useChatStore(useShallow((s) => s.currentPermissions));
+export const useConnectionState = () => useChatStore((s) => s.connectionState);
 export const useUnreadCount = (key: string) => useChatStore((s) => s.unreadCounts[key] || 0);
 
 // --- DERIVED SELECTORS ---
@@ -319,7 +316,7 @@ export const useUnreadCount = (key: string) => useChatStore((s) => s.unreadCount
 export const selectTotalUnreadCount = (state: ChatStore) =>
     Object.values(state.unreadCounts || {}).reduce((sum, c) => sum + c, 0);
 /** Select whether the WebSocket is connected. */
-export const selectIsConnected = (state: any) => state.connectionState === 'connected';
+export const selectIsConnected = (state: ChatStore) => state.connectionState === 'connected';
 /** Select the current active messages array. */
 export const selectActiveMessages = (state: ChatStore) => state.messages;
 /** Select the active chat type. */

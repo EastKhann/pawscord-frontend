@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
 import { FEATURE_SECTIONS, getHoverBg } from '../FeatureHubModal/featureSections';
@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 const FeatureHubModal = () => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { openModal, closeModal } = useUIStore();
     const onClose = () => closeModal('featureHub');
     const { overlayProps, dialogProps } = useModalA11y({

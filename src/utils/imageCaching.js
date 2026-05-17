@@ -1,7 +1,6 @@
 // frontend/src/utils/imageCaching.js
 // 🖼️ Advanced Image Caching Strategy with localStorage
 
-import React from 'react';
 import logger from '../utils/logger';
 
 const CACHE_NAME = 'pawscord-image-cache';

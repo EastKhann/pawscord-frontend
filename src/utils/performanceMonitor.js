@@ -6,7 +6,6 @@
  * Development modda detaillı log, production'da minimal overhead
  */
 
-import React from 'react';
 import logger from '../utils/logger';
 
 class PerformanceMonitor {

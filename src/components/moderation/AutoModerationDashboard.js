@@ -37,7 +37,7 @@ const S = {
  */
 const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         rules,
         logs,
@@ -71,7 +71,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaShieldAlt style={styles.headerIcon} />
-                        <h2 style={styles.title}>Auto-Moderation</h2>
+                        <h2 style={styles.title}>{t('autoModDash.title', 'Auto-Moderation')}</h2>
                     </div>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
@@ -88,7 +88,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                     <div style={styles.statCard}>
                         <FaBan style={S.txt} />
                         <div style={styles.statValue}>{stats.auto_deleted}</div>
-                        <div style={styles.statLabel}>Auto-Deleted</div>
+                        <div style={styles.statLabel}>{t('autoModDash.autoDeleted', 'Auto-Deleted')}</div>
                     </div>
                     <div style={styles.statCard}>
                         <FaClock style={S.txt2} />
@@ -100,7 +100,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                         <div style={styles.statValue}>
                             {rules.filter((r) => r.is_enabled).length}
                         </div>
-                        <div style={styles.statLabel}>Aktif Kurallar</div>
+                        <div style={styles.statLabel}>{t('autoModDash.activeRules', 'Active Rules')}</div>
                     </div>
                 </div>
 

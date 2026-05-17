@@ -10,8 +10,10 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
     const [activeTournament, setActiveTournament] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [filter, setFilter] = useState('all');
+    const [loading, setLoading] = useState(false);
 
     const loadTournaments = async (currentFilter) => {
+        setLoading(true);
         try {
             const f = currentFilter || filter;
             const res = await fetchWithAuth(`${apiBaseUrl}/tournaments/?filter=${f}`);
@@ -21,6 +23,8 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
             }
         } catch (error) {
             logger.error('Tournament load error:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -78,6 +82,7 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
         setShowCreateModal,
         filter,
         setFilter,
+        loading,
         loadTournaments,
         createTournament,
         joinTournament,

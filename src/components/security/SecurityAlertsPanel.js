@@ -196,15 +196,15 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
                 <div className="stats-bar">
                     <div className="stat-item">
                         <span className="stat-value">{stats.total}</span>
-                        <span className="stat-label">Toplam</span>
+                        <span className="stat-label">{t('secAlerts.total', 'Total')}</span>
                     </div>
                     <div className="stat-item danger">
                         <span className="stat-value">{stats.unresolved}</span>
-                        <span className="stat-label">Bekleyen</span>
+                        <span className="stat-label">{t('secAlerts.pending', 'Pending')}</span>
                     </div>
                     <div className="stat-item critical">
                         <span className="stat-value">{stats.critical}</span>
-                        <span className="stat-label">Kritik</span>
+                        <span className="stat-label">{t('secAlerts.critical', 'Critical')}</span>
                     </div>
                     <div className="stat-item success">
                         <span className="stat-value">{stats.resolved_today}</span>
@@ -374,18 +374,18 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
                     <p className="detail-message">{alert.message}</p>
 
                     <div className="detail-section">
-                        <h4>Detaylar</h4>
+                        <h4>{t('secAlerts.details', 'Details')}</h4>
                         <div className="detail-grid">
                             <div className="detail-item">
                                 <label>
-                                    <FaClock /> Zaman
+                                    <FaClock /> {t('secAlerts.time', 'Time')}
                                 </label>
                                 <span>{new Date(alert.created_at).toLocaleString('tr-TR')}</span>
                             </div>
                             {alert.source_ip && (
                                 <div className="detail-item">
                                     <label>
-                                        <FaGlobe /> Kaynak IP
+                                        <FaGlobe /> {t('secAlerts.sourceIp', 'Source IP')}
                                     </label>
                                     <span className="mono">{alert.source_ip}</span>
                                 </div>
@@ -406,7 +406,7 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
                             )}
                             {alert.location && (
                                 <div className="detail-item">
-                                    <label>Konum</label>
+                                    <label>{t('secAlerts.location', 'Location')}</label>
                                     <span>{alert.location}</span>
                                 </div>
                             )}
@@ -415,7 +415,7 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
 
                     {alert.additional_data && (
                         <div className="detail-section">
-                            <h4>Ek Veriler</h4>
+                            <h4>{t('secAlerts.additionalData', 'Additional Data')}</h4>
                             <pre className="json-data">
                                 {JSON.stringify(alert.additional_data, null, 2)}
                             </pre>

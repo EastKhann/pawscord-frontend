@@ -103,7 +103,7 @@ describe('useKeyPress', () => {
         expect(result.current).toBe(false);
     });
 
-    it('should cleanup listners on unmount', () => {
+    it('should cleanup listeners on unmount', () => {
         const spy = vi.spyOn(window, 'removeEventListener');
         const { unmount } = renderHook(() => useKeyPress('Enter'));
         unmount();

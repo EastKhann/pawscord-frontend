@@ -1,7 +1,7 @@
 import { getToken } from '../utils/tokenStorage';
 // frontend/src/SpotifyCallback.js
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

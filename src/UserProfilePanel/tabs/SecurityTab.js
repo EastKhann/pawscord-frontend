@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -100,7 +100,7 @@ const SecurityTab = ({
 
     const isLoading = loading ? Object.values(loading).some(Boolean) : false;
 
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     return (
         <>

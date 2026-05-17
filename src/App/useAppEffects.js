@@ -296,23 +296,31 @@ export default function useAppEffects({
         // Initialize critical CSS optimization
         initializeCSSOptimization();
 
-        // 🚀 CODE SPLITTING: Preload critical chunks after 3 seconds
-        const preloadTimer = setTimeout(() => {
-            preloadCriticalChunks();
-        }, 3000);
-
-        // 🚀 CODE SPLITTING: Prefetch next chunks during idle time
-        let idleCallbackId;
-        if ('requestIdleCallback' in window) {
-            idleCallbackId = requestIdleCallback(() => {
-                prefetchNextChunks();
-            });
-        }
-
         // 🔗 Initialize Deep Link Handler (APK)
         if (isNative) {
             import('../utils/urlHandlers').then(({ initializeDeepLinkHandler }) => {
                 // Deep link handler initialized
+            }).catch((err) => console.error('Failed to initialize deep link handler:', err));
+        }
+    }, []); // INTENTIONAL: PWA services initialized once on mount
+
+    // =========================================================================
+    // 8b. CODE SPLITTING — auth-aware prefetch (no work until login)
+    // =========================================================================
+    useEffect(() => {
+        // 🔒 Anonim ziyaretçi için chunk indirmiyoruz — login ekranı sade kalsın.
+        // Eski davranış: 17+ feature chunk login öncesi yükleniyordu (admin paneli,
+        // voice settings, server settings vs.) — auth gate olmadığından.
+        if (!isAuthenticated) return;
+
+        const preloadTimer = setTimeout(() => {
+            preloadCriticalChunks();
+        }, 3000);
+
+        let idleCallbackId;
+        if ('requestIdleCallback' in window) {
+            idleCallbackId = requestIdleCallback(() => {
+                prefetchNextChunks();
             });
         }
 
@@ -322,7 +330,7 @@ export default function useAppEffects({
                 cancelIdleCallback(idleCallbackId);
             }
         };
-    }, []); // INTENTIONAL: PWA services initialized once on mount
+    }, [isAuthenticated]);
 
     // =========================================================================
     // 9. PUSH NOTIFICATIONS
@@ -331,7 +339,7 @@ export default function useAppEffects({
         if (isAuthenticated) {
             import('../utils/pushNotifications').then(({ pushNotificationManager }) => {
                 pushNotificationManager.init(API_BASE_URL, fetchWithAuthRef.current);
-            });
+            }).catch((err) => console.error('Failed to initialize push notifications:', err));
         }
     }, [isAuthenticated, API_BASE_URL]);
 
@@ -363,8 +371,40 @@ export default function useAppEffects({
                         // Malformed URL — ignore
                     }
                 });
-            });
+            }).catch((err) => console.error('Failed to initialize Capacitor app deep link listener:', err));
         }
+
+        // Service worker bridge: handle notification click deep links (iOS + web)
+        const handleSwMessage = (event) => {
+            if (event.data?.type === 'NOTIFICATION_NAVIGATE' && event.data.route) {
+                window.location.hash = '#' + event.data.route;
+            }
+        };
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', handleSwMessage);
+
+            // Check Cache API for pending route (set by SW when app was closed)
+            caches.open('pawscord-sw-bridge').then((cache) => {
+                return cache.match('/sw-pending-route');
+            }).then((response) => {
+                if (response) {
+                    return response.json();
+                }
+            }).then((pending) => {
+                if (pending?.route && Date.now() - pending.ts < 30000) {
+                    window.location.hash = '#' + pending.route;
+                }
+                // Clear after consuming
+                caches.open('pawscord-sw-bridge').then((c) => c.delete('/sw-pending-route'));
+            }).catch(() => {});
+        }
+
+        return () => {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.removeEventListener('message', handleSwMessage);
+            }
+        };
     }, []); // INTENTIONAL: Capacitor/Google native init once on mount
 
     // =========================================================================
@@ -474,9 +514,8 @@ export default function useAppEffects({
         const prevActivityRef = { current: null };
 
         const checkActivity = async () => {
+            if (document.hidden) return; // Don't poll when backgrounded
             try {
-                // Fetch my own rich presence locally
-                // Note: We use the endpoint that calls Spotify/Steam APIs
                 const res = await fetchWithAuth(`${API_BASE_URL}/users/rich_presence/${username}/`);
                 if (res.ok) {
                     const data = await res.json();
@@ -573,6 +612,7 @@ export default function useAppEffects({
         }
 
         const fetchPresenceForOthers = async () => {
+            if (document.hidden) return; // Don't poll when backgrounded
             const targets = onlineUsers.filter((name) => name && name !== username).slice(0, 25);
 
             if (targets.length === 0) return;
@@ -662,6 +702,7 @@ export default function useAppEffects({
     // =========================================================================
     useEffect(() => {
         const checkMaintenanceMode = async () => {
+            if (document.hidden) return; // Don't poll when backgrounded
             try {
                 const res = await fetch(`${API_BASE_URL}/maintenance/status/`);
                 if (res.ok) {

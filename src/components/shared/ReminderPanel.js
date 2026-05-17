@@ -11,10 +11,12 @@ import confirmDialog from '../../utils/confirmDialog';
 
 import { useTranslation } from 'react-i18next';
 import logger from '../../utils/logger';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const ReminderPanel = ({ serverId, onClose }) => {
     const { t } = useTranslation();
     const apiBaseUrl = getApiBase();
+    const { overlayProps: panelOverlayProps, dialogProps: panelDialogProps } = useModalA11y({ onClose, label: t('reminder.panel', 'Reminders') });
 
     const [reminders, setReminders] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -171,17 +173,11 @@ const ReminderPanel = ({ serverId, onClose }) => {
     return (
         <div
             className="reminder-overlay"
-            role="button"
-            tabIndex={0}
-            onClick={onClose}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            {...panelOverlayProps}
         >
             <div
                 className="reminder-panel"
-                role="button"
-                tabIndex={0}
-                onClick={handleStopPropagation}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+                {...panelDialogProps}
             >
                 <div className="reminder-header">
                     <h2>⏰ Reminderlar</h2>

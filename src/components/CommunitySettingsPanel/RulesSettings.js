@@ -29,6 +29,7 @@ const RulesSettings = ({ rules, onAdd, onUpdate, onRemove }) => {
                                     placeholder={t('kural_başlığı')}
                                     value={rule.title}
                                     onChange={(e) => onUpdate(rule.id, 'title', e.target.value)}
+                                    aria-label={t('community.ruleTitle', 'Rule title')}
                                 />
                                 <textarea
                                     placeholder={t('kural_aklaması')}
@@ -37,6 +38,7 @@ const RulesSettings = ({ rules, onAdd, onUpdate, onRemove }) => {
                                         onUpdate(rule.id, 'description', e.target.value)
                                     }
                                     rows="2"
+                                    aria-label={t('community.ruleDescription', 'Rule description')}
                                 />
                             </div>
                             <button className="remove-btn" onClick={() => onRemove(rule.id)}>

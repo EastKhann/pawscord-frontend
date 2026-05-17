@@ -11,9 +11,11 @@ import confirmDialog from '../../utils/confirmDialog';
 
 import { useTranslation } from 'react-i18next';
 import logger from '../../utils/logger';
+import useModalA11y from '../../hooks/useModalA11y';
 const AnnouncementsPanel = ({ serverId, onClose }) => {
     const { t } = useTranslation();
     const apiBaseUrl = getApiBase();
+    const { overlayProps: panelOverlayProps, dialogProps: panelDialogProps } = useModalA11y({ onClose, label: t('announcements.panel', 'Announcements') });
 
     const [announcements, setAnnouncements] = useState([]);
     const [channels, setChannels] = useState([]);
@@ -186,17 +188,11 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
     return (
         <div
             className="announcements-overlay"
-            role="button"
-            tabIndex={0}
-            onClick={onClose}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            {...panelOverlayProps}
         >
             <div
                 className="announcements-panel"
-                role="button"
-                tabIndex={0}
-                onClick={handleStopPropagation}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+                {...panelDialogProps}
             >
                 <div className="announcements-header">
                     <h2>📢 Announcements</h2>
@@ -283,7 +279,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                             onClick={handleStopPropagation}
                         >
                             <div className="modal-header">
-                                <h3>Yeni Duyuru</h3>
+                                <h3>{t('announcements.newAnnouncement', 'New Announcement')}</h3>
                                 <button
                                     aria-label={t('common.close', 'Close')}
                                     className="close-btn"
@@ -318,7 +314,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                             onChange={handleChannelChange}
                                             aria-label={t('announcements.channelSelect', 'Select channel')}
                                         >
-                                            <option value="">Selectin</option>
+                                            <option value="">{t('common.selectOption', 'Select...')}</option>
                                             {channels.map((ch) => (
                                                 <option key={ch.id} value={ch.id}>
                                                     {ch.name}
@@ -327,13 +323,13 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                         </select>
                                     </div>
                                     <div className="form-group">
-                                        <label>Bahset</label>
+                                        <label>{t('announcements.mention', 'Mention')}</label>
                                         <select
                                             value={newAnnouncement.mention_role_id}
                                             onChange={handleMentionChange}
                                             aria-label={t('announcements.mentionSelect', 'Select role to mention')}
                                         >
-                                            <option value="">Role yok</option>
+                                            <option value="">{t('announcements.noRole', 'No role')}</option>
                                             {roles.map((r) => (
                                                 <option key={r.id} value={r.id}>
                                                     @{r.name}
@@ -344,7 +340,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group">
-                                        <label>Zamanlama</label>
+                                        <label>{t('announcements.schedule', 'Schedule')}</label>
                                         <input
                                             type="datetime-local"
                                             value={newAnnouncement.schedule_time}
@@ -353,7 +349,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>Tekrar</label>
+                                        <label>{t('announcements.repeat', 'Repeat')}</label>
                                         <select
                                             value={newAnnouncement.repeat}
                                             onChange={handleRepeatChange}
@@ -362,7 +358,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                                             <option value="once">{t('common.once', 'Once')}</option>
                                             <option value="daily">{t('common.daily', 'Daily')}</option>
                                             <option value="weekly">{t('common.weekly', 'Weekly')}</option>
-                                            <option value="monthly">Monthly</option>
+                                            <option value="monthly">{t('common.monthly', 'Monthly')}</option>
                                         </select>
                                     </div>
                                 </div>

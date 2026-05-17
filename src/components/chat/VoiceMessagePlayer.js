@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 // frontend/src/components/VoiceMessagePlayer.js
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaPlay, FaPause, FaDownload } from 'react-icons/fa';

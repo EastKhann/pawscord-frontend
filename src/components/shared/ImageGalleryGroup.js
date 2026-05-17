@@ -4,7 +4,7 @@
 // Extracted from App.js - WhatsApp-style image gallery
 // =============================================
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 const _s = (o) => o;
@@ -33,7 +33,7 @@ const ImageGalleryGroup = React.memo(
         fetchWithAuth,
         onVisible,
     }) => {
-        const [error, setError] = useState(null);
+        const [_error, _setError] = useState(null);
         const { t } = useTranslation();
         const firstMsg = messages[0];
 

@@ -79,7 +79,7 @@ const SessionManagerModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
         <div style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
-                    <h2 style={styles.title}>?? Active Sessions</h2>
+                    <h2 style={styles.title}>🔐 Aktif Oturumlar</h2>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
@@ -113,7 +113,7 @@ const SessionManagerModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                                             {session.ip_address && (
                                                 <span>IP: {session.ip_address}</span>
                                             )}
-                                            {session.location && <span> � {session.location}</span>}
+                                            {session.location && <span> · {session.location}</span>}
                                         </div>
                                         <div style={styles.sessionTime}>
                                             Son Aktivite:{' '}

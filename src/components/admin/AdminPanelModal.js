@@ -39,7 +39,7 @@ import {
     ToolsTab,
     QuickActionsTab,
     WhitelistTab,
-    CryptoSignalsTab,
+    // 🔥 REMOVED: CryptoSignalsTab (English/Crypto modülleri kaldırıldı)
     VisitorLogsTab,
     FeatureWhitelistTab,
 } from '../AdminPanelModal/tabs';
@@ -113,7 +113,9 @@ const MENU_ITEMS = [
     },
     {
         id: 'whitelist',
-        labelKey: 'admin.panel.featureWhitelist',
+        // 🔥 FIX: bu sekme önce 'featureWhitelist' key'ini paylaşıyordu →
+        // her iki tab da TR'de "Özellik Whitelist" görünüyordu (duplicate isim).
+        labelKey: 'admin.panel.whitelist',
         label: 'Whitelist',
         icon: <FaCrown size={14} />,
     },
@@ -123,12 +125,7 @@ const MENU_ITEMS = [
         label: 'Feature Access',
         icon: <FaFingerprint size={14} />,
     },
-    {
-        id: 'cryptoSignals',
-        labelKey: 'admin.panel.cryptoSignals',
-        label: 'Crypto Signals',
-        icon: <FaBitcoin size={14} />,
-    },
+    // 🔥 REMOVED: cryptoSignals tab (Crypto modülü kaldırıldı)
     {
         id: 'visitorLogs',
         labelKey: 'admin.panel.visitorLogs',
@@ -149,7 +146,7 @@ const AdminPanelModal = ({
     fetchWithAuth,
     apiBaseUrl,
 }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const api = useAdminAPI({ fetchWithAuth, apiBaseUrl, onClose });
 
@@ -196,8 +193,7 @@ const AdminPanelModal = ({
                 return <WhitelistTab />;
             case 'featureWhitelist':
                 return <FeatureWhitelistTab />;
-            case 'cryptoSignals':
-                return <CryptoSignalsTab />;
+            // 🔥 REMOVED: cryptoSignals case
             case 'visitorLogs':
                 return <VisitorLogsTab />;
             default:

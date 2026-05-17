@@ -161,11 +161,11 @@ const InvitePage = () => {
                 <div style={styles.backgroundGradient}></div>
                 <div style={styles.card}>
                     <FaCheckCircle size={64} color="var(--success)" />
-                    <h2 style={styles.successTitle}>Successful!</h2>
+                    <h2 style={styles.successTitle}>{t('invite.success', 'Successful!')}</h2>
                     <p style={styles.successText}>
-                        <strong>{inviteInfo.server.name}</strong> !
+                        <strong>{inviteInfo.server.name}</strong>
                     </p>
-                    <p style={styles.redirectText}>Redirecting to homepage...</p>
+                    <p style={styles.redirectText}>{t('invite.redirecting', 'Redirecting to homepage...')}</p>
                 </div>
             </div>
         );

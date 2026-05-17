@@ -3,9 +3,27 @@
 
 import { useEffect, useCallback } from 'react';
 
-export const useKeyboardShortcuts = (handlers = {}) => {
+interface KeyboardShortcutHandlers {
+    onQuickSwitcher?: () => void;
+    onSearch?: () => void;
+    onCommandList?: () => void;
+    onToggleMute?: () => void;
+    onCommandPalette?: () => void;
+    onSettings?: () => void;
+    onToggleDeafen?: () => void;
+    onNavigateChannel?: (direction: number) => void;
+    onSendMessage?: () => void;
+    onEscape?: () => void;
+    onToggleSidebar?: () => void;
+    onToggleUserInfo?: () => void;
+    onToggleEmoji?: () => void;
+    onToggleTheme?: () => void;
+    onEditLastMessage?: () => void;
+}
+
+export const useKeyboardShortcuts = (handlers: KeyboardShortcutHandlers = {}) => {
     const handleKeyDown = useCallback(
-        (event) => {
+        (event: KeyboardEvent) => {
             const { ctrlKey, shiftKey, altKey, metaKey, key } = event;
             const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
             const cmdOrCtrl = isMac ? metaKey : ctrlKey;

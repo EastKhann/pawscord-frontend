@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/BotDeveloperPortal.js - Decomposed
-import React, { useState, useCallback, memo } from 'react';
+import { useState, useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
 import {
     FaRobot,
@@ -40,7 +40,7 @@ const S = {
 
 const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         view,
         setView,
@@ -225,23 +225,23 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                             </div>
 
                                             <p className="bot-description">
-                                                {bot.description || 'Description yok'}
+                                                {bot.description || t('bot.noDescription', 'No description')}
                                             </p>
 
                                             <div className="bot-stats">
                                                 <div className="stat">
                                                     <FaServer />
-                                                    <span>{bot.servers_count || 0} servers</span>
+                                                    <span>{bot.servers_count || 0} {t('bot.servers', 'servers')}</span>
                                                 </div>
                                                 <div className="stat">
                                                     <FaChartLine />
-                                                    <span>{bot.commands_used || 0} komut</span>
+                                                    <span>{bot.commands_used || 0} {t('bot.commands', 'commands')}</span>
                                                 </div>
                                             </div>
 
                                             <div className="bot-token-section">
                                                 <div className="token-header">
-                                                    <FaKey /> Token
+                                                    <FaKey /> {t('bot.token', 'Token')}
                                                     <button
                                                         aria-label={showToken[bot.id] ? t('bot.hideToken', 'Hide token') : t('bot.showToken', 'Show token')}
                                                     >
@@ -290,7 +290,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                         setView('analytics');
                                                     }}
                                                 >
-                                                    <FaChartLine /> Analytics
+                                                    <FaChartLine /> {t('bot.analytics', 'Analytics')}
                                                 </button>
                                             </div>
                                         </div>
@@ -317,7 +317,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                             <h3>{view === 'create' ? '🤖 ' + t('bot.createNew', 'New Bot') : '✏️ ' + t('bot.editBot', 'Edit Bot')}</h3>
 
                             <div className="form-group">
-                                <label>Bot Name *</label>
+                                <label>{t('bot.botNameRequired', 'Bot Name *')}</label>
                                 <input
                                     type="text"
                                     placeholder={t('bot.namePlaceholder', 'My Awesome Bot')}
@@ -329,7 +329,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Description</label>
+                                <label>{t('bot.description', 'Description')}</label>
                                 <textarea
                                     placeholder={t('bot.descriptionPlaceholder', 'What does this bot do?')}
                                     value={botForm.description}
@@ -340,7 +340,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Avatar URL</label>
+                                <label>{t('bot.avatarUrl', 'Avatar URL')}</label>
                                 <input
                                     type="text"
                                     placeholder={t('botDeveloper.callbackUrl', 'https://...')}
@@ -430,14 +430,14 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                             >
                                 ← {t('common.back', 'Back')}
                             </button>
-                            <h3>📊 {selectedBot.name} - Analytics</h3>
+                            <h3>📊 {selectedBot.name} - {t('bot.analytics', 'Analytics')}</h3>
 
                             <div className="analytics-grid">
                                 <div className="analytics-card">
                                     <div className="analytics-value">
                                         {selectedBot.servers_count || 0}
                                     </div>
-                                    <div className="analytics-label">Toplam Sunucu</div>
+                                    <div className="analytics-label">{t('bot.totalServers', 'Total Servers')}</div>
                                 </div>
                                 <div className="analytics-card">
                                     <div className="analytics-value">
@@ -516,7 +516,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                             </h3>
 
                             <div className="form-group">
-                                <label>Webhook URL *</label>
+                                <label>{t('bot.webhookUrlRequired', 'Webhook URL *')}</label>
                                 <input
                                     type="text"
                                     placeholder={t('bot.webhookUrlPlaceholder', 'https://your-server.com/webhook')}
@@ -527,7 +527,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Olaylar</label>
+                                <label>{t('bot.events', 'Events')}</label>
                                 <div className="webhook-events">
                                     {webhookEventOptions.map((event) => (
                                         <label key={event.id} className="event-checkbox">

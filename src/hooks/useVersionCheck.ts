@@ -1,19 +1,28 @@
 // frontend/src/hooks/useVersionCheck.js
 // Extracted from App.js - checks for app updates via CDN
+
 import { useState, useEffect } from 'react';
 import logger from '../utils/logger';
+
+interface VersionCheckOptions {
+    isElectron: boolean;
+    isNative: boolean;
+}
+
+// window.electron is declared in useGamePresence.ts global augmentation
+// window.require is declared in the global Window interface elsewhere
 
 /**
  * Checks for application updates by comparing semantic versions
  * against the CDN version manifest. Runs on mount + every 30 minutes.
  * Only active on Electron, Capacitor (native), or debug mode.
  */
-export default function useVersionCheck({ isElectron, isNative }) {
+export default function useVersionCheck({ isElectron, isNative }: VersionCheckOptions) {
     const [updateAvailable, setUpdateAvailable] = useState(false);
 
     useEffect(() => {
         // Semantic version comparison
-        const compareVersions = (latest, current) => {
+        const compareVersions = (latest: string, current: string): boolean => {
             try {
                 const latestParts = latest.split('.').map(Number);
                 const currentParts = current.split('.').map(Number);
@@ -42,7 +51,8 @@ export default function useVersionCheck({ isElectron, isNative }) {
             try {
                 let currentVersion = import.meta.env.VITE_APP_VERSION || '1.1.203';
 
-                if (window.electron?.getAppVersion) {
+                // window.electron is declared in useGamePresence.ts global augmentation
+                if (window.electron && 'getAppVersion' in window.electron) {
                     try {
                         currentVersion = await window.electron.getAppVersion();
                     } catch (e) {
@@ -57,7 +67,7 @@ export default function useVersionCheck({ isElectron, isNative }) {
                     return;
                 }
 
-                const data = await res.json();
+                const data = await res.json() as { latest_version: string; download_url_windows?: string };
                 const latestVersion = data.latest_version;
 
                 const isNewer = compareVersions(latestVersion, currentVersion);
@@ -66,7 +76,7 @@ export default function useVersionCheck({ isElectron, isNative }) {
                     setUpdateAvailable(true);
 
                     if (window.require) {
-                        const { ipcRenderer } = window.require('electron');
+                        const { ipcRenderer } = window.require('electron') as { ipcRenderer: { send: (event: string, data: unknown) => void } };
                         ipcRenderer.send('update-available', {
                             currentVersion,
                             latestVersion,

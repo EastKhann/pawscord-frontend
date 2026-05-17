@@ -190,7 +190,7 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                     <div className="header-info">
                         <h2>
                             <FaLink />
-                            Davet Denetim Logu
+                            {t('inviteAudit.title', 'Invite Audit Log')}
                         </h2>
                         <span className="subtitle">
                             {t('inviteAudit.subtitle', 'Track invite usage and member joins')}

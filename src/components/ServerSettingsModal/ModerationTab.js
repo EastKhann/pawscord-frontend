@@ -99,7 +99,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                     <FaShieldAlt style={S.txt} />
                     <div>
                         <h3 className={css.headerWhite18}>{t('moderation_center')}</h3>
-                        <p className={css.chatText13}>Advanced tools to keep your server safe</p>
+                        <p className={css.chatText13}>{t('moderation.advancedTools', 'Advanced tools to keep your server safe')}</p>
                     </div>
                 </div>
                 <div style={styles.serverStats}>

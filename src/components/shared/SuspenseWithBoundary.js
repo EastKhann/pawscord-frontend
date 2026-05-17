@@ -1,7 +1,7 @@
 // components/SuspenseWithBoundary.js
 // Wraps children in both ErrorBoundary + Suspense for resilient lazy loading
 
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { handleChunkErrorInBoundary, isChunkLoadError } from '../../utils/lazyWithRetry';
 import logger from '../../utils/logger';

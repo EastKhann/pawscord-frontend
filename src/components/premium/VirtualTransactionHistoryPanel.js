@@ -154,7 +154,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                             <FaCoins />
                         </div>
                         <div className="balance-info">
-                            <span className="balance-label">Mevcut Bakiye</span>
+                            <span className="balance-label">{t('virtualTx.currentBalance', 'Current Balance')}</span>
                             <span className="balance-value">{stats.current_balance.toLocaleString()}</span>
                         </div>
                     </div>
@@ -172,7 +172,7 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                             <FaArrowUp />
                         </div>
                         <div className="balance-info">
-                            <span className="balance-label">Bu Ay Harcanan</span>
+                            <span className="balance-label">{t('virtualTx.spentThisMonth', 'Spent This Month')}</span>
                             <span className="balance-value negative">-{stats.this_month_spent.toLocaleString()}</span>
                         </div>
                     </div>
@@ -204,9 +204,9 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                             value={filterType}
                             onChange={(e) => setFilterType(e.target.value)}>
                             <option value="all">{t('common.allTypes', 'All Types')}</option>
-                            <option value="earn">Earned</option>
-                            <option value="spend">Spent</option>
-                            <option value="transfer">Transfers</option>
+                            <option value="earn">{t('virtualTx.earned', 'Earned')}</option>
+                            <option value="spend">{t('virtualTx.spent', 'Spent')}</option>
+                            <option value="transfer">{t('virtualTx.transfers', 'Transfers')}</option>
                         </select>
                     </div>
                     <div className="filter-group">
@@ -214,8 +214,8 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
                         <select
                             value={dateRange}
                             onChange={(e) => setDateRange(e.target.value)}>
-                            <option value="week">Bu Hafta</option>
-                            <option value="month">Bu Ay</option>
+                            <option value="week">{t('common.thisWeek', 'This Week')}</option>
+                            <option value="month">{t('common.thisMonth', 'This Month')}</option>
                             <option value="year">{t('common.thisYear', 'This Year')}</option>
                             <option value="all">{t('admin.allTime', 'All Time')}</option>
                         </select>

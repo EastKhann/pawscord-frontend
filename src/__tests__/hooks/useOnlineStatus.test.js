@@ -73,7 +73,7 @@ describe('useNetworkStatus (standalone hook)', () => {
         expect(result.current.wasOffline).toBe(false);
     });
 
-    it('cleans up event listners on unmount', () => {
+    it('cleans up event listeners on unmount', () => {
         const removeSpy = vi.spyOn(window, 'removeEventListener');
         const { unmount } = renderHook(() => useNetworkStatus());
         unmount();

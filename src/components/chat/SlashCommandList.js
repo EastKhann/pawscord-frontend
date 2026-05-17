@@ -45,14 +45,14 @@ export const COMMANDS = [
         adminOnly: true,
     },
     { name: 'sablon', description: 'Ready-made Templates', icon: <FaStickyNote /> },
-    { name: 'shrug', description: 'Send �\\_(?)_/�', icon: <FaRegSmile /> },
+    { name: 'shrug', description: 'Send ¯\\_(?)_/¯', icon: <FaRegSmile /> },
 ];
 
 const SlashCommandList = ({ query, onSelect, activeIndex }) => {
     const { t } = useTranslation();
     const [filteredCommands, setFilteredCommands] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     useEffect(() => {
         if (query === null || query === undefined) return;
@@ -108,7 +108,7 @@ const SlashCommandList = ({ query, onSelect, activeIndex }) => {
 const styles = {
     container: {
         position: 'absolute',
-        bottom: '100%', // Inputun �st�nde
+        bottom: '100%', // Inputun üstünde
         left: 0,
         width: '300px',
         maxHeight: '300px',

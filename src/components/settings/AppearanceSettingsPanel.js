@@ -41,7 +41,7 @@ const ACCESSIBILITY_TOGGLES = [
 
 const AppearanceSettingsPanel = ({ onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { settings, loading, updateSetting, toggleSetting, resetToDefaults } =
         useAppearanceSettings();
 
@@ -119,7 +119,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                 <div className="appearance-settings-content">
                     {/* Theme */}
                     <div className="settings-section">
-                        <h3>🌙 Tema</h3>
+                        <h3>🌙 {t('appearance.theme', 'Theme')}</h3>
                         <div className="theme-selector">
                             {[
                                 { value: 'light', icon: '☀️', label: 'Open', cls: 'light-theme' },
@@ -151,7 +151,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
 
                     {/* Accent Color */}
                     <div className="settings-section">
-                        <h3>🎨 Vurgu Rengi</h3>
+                        <h3>🎨 {t('appearance.accentColor', 'Accent Color')}</h3>
                         <div className="color-picker">
                             {accentColors.map((c) => (
                                 <div
@@ -187,10 +187,9 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                         <div className="settings-group">
                             <div className="setting-item">
                                 <div className="setting-info">
-                                    <div className="setting-label">Mesaj Modu</div>
+                                    <div className="setting-label">{t('appearance.messageMode', 'Message Mode')}</div>
                                     <div className="setting-desc">
-                                        Mesajlar\u0131n nas\u0131l
-                                        g\u00f6r\u00fcnt\u00fclendi\u011fini se\u00e7in
+                                        {t('appearance.messageModeDesc', 'Choose how messages are displayed')}
                                     </div>
                                 </div>
                                 <div className="display-mode-selector">
@@ -235,8 +234,8 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                             onChange={handleSpacingChange}
                             className="spacing-select"
                             aria-label={t('appearance.spacingSelect', 'Select message spacing')}>
-                            <option value="default">Default</option>
-                            <option value="spacious">Spacious</option>
+                            <option value="default">{t('appearance.spacingDefault', 'Default')}</option>
+                            <option value="spacious">{t('appearance.spacingSpacious', 'Spacious')}</option>
                         </select>
                     </div>
                 </div>
@@ -289,12 +288,12 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                             aria-label={t('appearance.saturationSlider', 'Color saturation')}
                         />
                         <div className="settings-section">
-                            <h3>🌍 Language & Region</h3>
+                            <h3>🌍 {t('appearance.languageRegion', 'Language & Region')}</h3>
                             <div className="settings-group">
                                 <div className="setting-item">
                                     <div className="setting-info">
-                                        <div className="setting-label">Language</div>
-                                        <div className="setting-desc">Uygulama dili</div>
+                                        <div className="setting-label">{t('appearance.language', 'Language')}</div>
+                                        <div className="setting-desc">{t('appearance.appLanguage', 'Application language')}</div>
                                     </div>
                                     <select
                                         value={settings.language}
@@ -312,7 +311,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
 
                                 <div className="setting-item">
                                     <div className="setting-info">
-                                        <div className="setting-label">Timezone</div>
+                                        <div className="setting-label">{t('appearance.timezone', 'Timezone')}</div>
                                         <div className="setting-desc">
                                             {t('appearance.timestampTimezone', 'Message timestamp timezone')}
                                         </div>

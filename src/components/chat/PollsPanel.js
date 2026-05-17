@@ -8,7 +8,7 @@ import CreatePollModal from '../PollsPanel/CreatePollModal';
 
 const PollsPanel = ({ serverId, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         polls,
         loading,

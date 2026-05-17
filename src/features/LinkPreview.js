@@ -171,7 +171,7 @@ const LinkPreview = ({ data }) => {
                         <div style={styles.thumbnailContainer}>
                             <img
                                 src={data.image}
-                                alt=""
+                                alt={data.title || ''}
                                 style={styles.thumbnailImg}
                                 loading="lazy"
                             />
@@ -181,7 +181,7 @@ const LinkPreview = ({ data }) => {
                 {/* Büyük image altta */}
                 {hasLargeImage && (!data.description || data.description.length >= 100) && (
                     <a href={data.url} target="_blank" rel="noopener noreferrer" style={_st2}>
-                        <img src={data.image} alt="" style={styles.largeImage} loading="lazy" />
+                        <img src={data.image} alt={data.title || ''} style={styles.largeImage} loading="lazy" />
                     </a>
                 )}
             </div>

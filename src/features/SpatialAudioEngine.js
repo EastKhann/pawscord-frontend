@@ -16,7 +16,7 @@ class SpatialAudioEngine {
         this.audioContext = null;
         this.masterGain = null;
         this.spatialNodes = {}; // { username: { panner, gain, analyser, source } }
-        this.listnerPosition = { x: 0, y: 0, z: 0 };
+        this.listenerPosition = { x: 0, y: 0, z: 0 };
         this.initialized = false;
     }
 
@@ -40,7 +40,7 @@ class SpatialAudioEngine {
                 await this.audioContext.resume();
             }
 
-            // Set up listner (user's position)
+            // Set up listener (user's position)
             this.setupListener();
 
             this.initialized = true;
@@ -51,36 +51,36 @@ class SpatialAudioEngine {
     }
 
     /**
-     * Set up the audio listner (user's ears)
+     * Set up the audio listener (user's ears)
      */
     setupListener() {
-        const listner = this.audioContext.listner;
+        const listener = this.audioContext.listener;
 
-        // Set listner position
-        if (listner.positionX) {
+        // Set listener position
+        if (listener.positionX) {
             // Modern browsers
-            listner.positionX.value = this.listnerPosition.x;
-            listner.positionY.value = this.listnerPosition.y;
-            listner.positionZ.value = this.listnerPosition.z;
+            listener.positionX.value = this.listenerPosition.x;
+            listener.positionY.value = this.listenerPosition.y;
+            listener.positionZ.value = this.listenerPosition.z;
         } else {
             // Safari fallback
-            listner.setPosition(
-                this.listnerPosition.x,
-                this.listnerPosition.y,
-                this.listnerPosition.z
+            listener.setPosition(
+                this.listenerPosition.x,
+                this.listenerPosition.y,
+                this.listenerPosition.z
             );
         }
 
-        // Set listner orientation (forward and up vectors)
-        if (listner.forwardX) {
-            listner.forwardX.value = 0;
-            listner.forwardY.value = 0;
-            listner.forwardZ.value = -1;
-            listner.upX.value = 0;
-            listner.upY.value = 1;
-            listner.upZ.value = 0;
+        // Set listener orientation (forward and up vectors)
+        if (listener.forwardX) {
+            listener.forwardX.value = 0;
+            listener.forwardY.value = 0;
+            listener.forwardZ.value = -1;
+            listener.upX.value = 0;
+            listener.upY.value = 1;
+            listener.upZ.value = 0;
         } else {
-            listner.setOrientation(0, 0, -1, 0, 1, 0);
+            listener.setOrientation(0, 0, -1, 0, 1, 0);
         }
     }
 
@@ -230,11 +230,11 @@ class SpatialAudioEngine {
     }
 
     /**
-     * Update listner position (camera/user position)
+     * Update listener position (camera/user position)
      * @param {Object} position - New position {x, y, z}
      */
     updateListenerPosition(position) {
-        this.listnerPosition = position;
+        this.listenerPosition = position;
         this.setupListener();
     }
 
@@ -276,7 +276,7 @@ class SpatialAudioEngine {
     }
 
     /**
-     * Get distance between listner and user
+     * Get distance between listener and user
      * @param {string} username - User identifier
      * @returns {number} - Distance
      */
@@ -285,12 +285,12 @@ class SpatialAudioEngine {
         if (!node) return Infinity;
 
         const pos = node.position;
-        const listner = this.listnerPosition;
+        const listener = this.listenerPosition;
 
         return Math.sqrt(
-            Math.pow(pos.x - listner.x, 2) +
-                Math.pow(pos.y - listner.y, 2) +
-                Math.pow(pos.z - listner.z, 2)
+            Math.pow(pos.x - listener.x, 2) +
+                Math.pow(pos.y - listener.y, 2) +
+                Math.pow(pos.z - listener.z, 2)
         );
     }
 

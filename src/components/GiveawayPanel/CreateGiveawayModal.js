@@ -35,6 +35,7 @@ const CreateGiveawayModal = ({
                             placeholder={t('discord_nitro_çekilişi')}
                             value={newGiveaway.title}
                             onChange={(e) => update('title', e.target.value)}
+                            aria-label={t('admin.reportTitleLabel', 'Giveaway title')}
                         />
                     </div>
 
@@ -45,6 +46,7 @@ const CreateGiveawayModal = ({
                             value={newGiveaway.description}
                             onChange={(e) => update('description', e.target.value)}
                             rows="3"
+                            aria-label={t('giveaway.description', 'Giveaway description')}
                         />
                     </div>
 
@@ -55,6 +57,7 @@ const CreateGiveawayModal = ({
                             placeholder={t('1_monthly_discord_nitro')}
                             value={newGiveaway.prize}
                             onChange={(e) => update('prize', e.target.value)}
+                            aria-label={t('giveaway.prize', 'Prize')}
                         />
                     </div>
 
@@ -64,6 +67,7 @@ const CreateGiveawayModal = ({
                             <select
                                 value={newGiveaway.channel_id}
                                 onChange={(e) => update('channel_id', e.target.value)}
+                                aria-label={t('channel')}
                             >
                                 <option value="">{t('giveaway.selectChannel','Select Channel')}</option>
                                 {channels.map((ch) => (
@@ -81,6 +85,7 @@ const CreateGiveawayModal = ({
                                 max="100"
                                 value={newGiveaway.winners_count}
                                 onChange={(e) => update('winners_count', parseInt(e.target.value))}
+                                aria-label={t('giveaway.winnerCount', 'Winner count')}
                             />
                         </div>
                     </div>
@@ -90,6 +95,7 @@ const CreateGiveawayModal = ({
                         <select
                             value={newGiveaway.duration}
                             onChange={(e) => update('duration', parseInt(e.target.value))}
+                            aria-label={t('common.duration', 'Duration')}
                         >
                             {DURATION_OPTIONS.map((opt) => (
                                 <option key={opt.value} value={opt.value}>
@@ -107,6 +113,7 @@ const CreateGiveawayModal = ({
                             <select
                                 value={newGiveaway.required_role_id}
                                 onChange={(e) => update('required_role_id', e.target.value)}
+                                aria-label={t('gerekli_role')}
                             >
                                 <option value="">{t('role_yok')}</option>
                                 {roles.map((role) => (
@@ -127,6 +134,7 @@ const CreateGiveawayModal = ({
                                     onChange={(e) =>
                                         update('required_messages', parseInt(e.target.value))
                                     }
+                                    aria-label={t('giveaway.minMessages', 'Minimum message count')}
                                 />
                             </div>
                             <div className="form-group">
@@ -138,6 +146,7 @@ const CreateGiveawayModal = ({
                                     onChange={(e) =>
                                         update('required_invites', parseInt(e.target.value))
                                     }
+                                    aria-label={t('giveaway.minInvites', 'Minimum invite count')}
                                 />
                             </div>
                         </div>

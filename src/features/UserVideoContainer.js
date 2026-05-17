@@ -1,6 +1,6 @@
 ﻿// frontend/src/UserVideoContainer.js
 
-import React, { useEffect, useRef, useMemo, useState } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import logger from '../utils/logger';
 import i18n from '../i18n';
@@ -188,11 +188,11 @@ const UserVideoContainer = ({
             // Tam ekrandan çık
             document.exitFullscreen().then(() => {
                 setIsFullscreen(false);
-            });
+            }).catch((err) => console.error('Failed to exit fullscreen:', err));
         }
     };
 
-    // Fullscreen change listner
+    // Fullscreen change listener
     useEffect(() => {
         const handleFullscreenChange = () => {
             setIsFullscreen(!!document.fullscreenElement);

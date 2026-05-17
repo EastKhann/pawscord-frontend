@@ -196,7 +196,6 @@
       "cacheCleared": "Cache cleared",
       "connectedCount": "Connected",
       "consoleTodo": "Console — coming soon",
-      "cryptoSignals": "Crypto Signals",
       "dashboard": "Dashboard",
       "database": "Database Management",
       "dbConnections": "DB Connections",
@@ -207,6 +206,7 @@
       "featureWhitelist": "Feature Whitelist",
       "featureWhitelistEmpty": "Feature whitelist is empty",
       "featureWhitelistLoadError": "Could not load feature whitelist",
+      "whitelist": "Witte lijst",
       "fileCount": "File Count",
       "fileStats": "File Statistics",
       "filteredRecords": "Filtered Records",
@@ -459,14 +459,14 @@
     "2faDisabled": "2FA uitgeschakeld.",
     "2faEnabled": "2FA succesvol ingeschakeld!",
     "alreadyHaveAccount": "Heb je al een account?",
-    "backToLogin": "Back to Login",
+    "backToLogin": "Terug naar inloggen",
     "backendError": "Backend error: HTML response received instead of JSON.",
     "backupCodePlaceholder": "Backup code",
-    "buyNow": "Buy Now",
+    "buyNow": "Nu kopen",
     "changePassword": "Change Password",
-    "checkSpam": "Check your email (and spam folder too)",
+    "checkSpam": "Controleer je e-mail (ook de spammap)",
     "codeRequired": "Code is required",
-    "codeSent": "A verification code has been sent to your email",
+    "codeSent": "Er is een verificatiecode naar je e-mail gestuurd",
     "confirmPassword": "Wachtwoord bevestigen",
     "confirmPasswordPlaceholder": "Confirm password",
     "createNewPassword": "Create a new password for your account",
@@ -474,28 +474,28 @@
     "dontHaveAccount": "Heb je nog geen account?",
     "email": "E-mail",
     "emailAlreadyInUse": "Dit e-mailadres is al in gebruik",
-    "emailPlaceholder": "Your email address",
+    "emailPlaceholder": "Jouw e-mailadres",
     "emailRequired": "E-mailadres is verplicht",
-    "emailSent": "Email Sent!",
-    "emailSentDesc": "If an account with {email} exists, we've sent a password reset link.",
+    "emailSent": "E-mail verzonden!",
+    "emailSentDesc": "Als er een account bestaat met {email}, hebben we een link voor wachtwoordherstel verstuurd.",
     "emailVerified": "Your email has been successfully verified!",
     "emailVerifiedWelcome": "✅ Email verified! Welcome {{username}}!",
     "enable2FA": "2FA inschakelen",
     "enterBackupCode": "Enter your backup code",
     "enterCode": "Code invoeren",
     "forgotPassword": "Wachtwoord vergeten?",
-    "forgotPasswordDesc": "Enter your email address and we'll send you a password reset link.",
+    "forgotPasswordDesc": "Voer je e-mailadres in en we sturen je een link om je wachtwoord te herstellen.",
     "googleError": "An error occurred during Google login",
     "googleFailed": "Google-login mislukt.",
     "googleTokenError": "Google token could not be retrieved. Please try again.",
-    "hasEmailAccess": "You must have access to your email account",
+    "hasEmailAccess": "Je moet toegang hebben tot je e-mailaccount",
     "inputError": "Could not read input data.",
-    "invalidCode": "Invalid code, please try again",
+    "invalidCode": "Ongeldige code, probeer opnieuw",
     "invalidCredentials": "Ongeldig e-mailadres of wachtwoord",
     "invalidLink": "Invalid link",
     "linkAlreadyUsed": "Link may have already been used",
     "linkExpired": "Link may have expired (24 hours)",
-    "linkExpiry": "Link is valid for 1 hour",
+    "linkExpiry": "Link is 1 uur geldig",
     "login": "Inloggen",
     "loginError": "An error occurred during login. Please try again.",
     "loginFailed": "Login failed.",
@@ -527,14 +527,14 @@
     "registerWith": "Registreren met",
     "registrationSuccess": "Registration successful! Please check your email.",
     "requestNewLink": "Request New Link",
-    "resendCode": "Resend Code",
-    "securityNote": "For security reasons we don't reveal whether the email is registered",
-    "sendResetLink": "Send Reset Link",
+    "resendCode": "Code opnieuw sturen",
+    "securityNote": "Om veiligheidsredenen onthullen we niet of het e-mailadres geregistreerd is",
+    "sendResetLink": "Herstelkoppeling verzenden",
     "sessionEnded": "Sessie beëindigd.",
     "signInWithGoogle": "Sign in with Google",
     "storageError": "Browser storage error. Please check if you are not in private mode.",
-    "storeDesc": "Get coins and premium features",
-    "storeTitle": "Store",
+    "storeDesc": "Haal munten en premiumfuncties",
+    "storeTitle": "Winkel",
     "strong": "Strong",
     "tokenError": "Token processing error.",
     "tokenMissing": "Token information is missing.",
@@ -547,12 +547,12 @@
     "usernameAlreadyInUse": "Deze gebruikersnaam is al bezet",
     "verificationExpired": "⏰ Verification link has expired. Request a new link.",
     "verificationInvalid": "❌ Invalid verification link.",
-    "verify": "Verify",
+    "verify": "Verifiëren",
     "verifyCode": "Verify",
     "verifyEmail": "Verifieer je e-mail",
-    "verifyEmailDesc": "Enter the verification code sent to your email",
+    "verifyEmailDesc": "Voer de verificatiecode in die naar je e-mail is gestuurd",
     "verifyEmailSent": "Verificatie-e-mail verzonden",
-    "verifyEmailTitle": "Verify Your Email",
+    "verifyEmailTitle": "Verifieer je e-mail",
     "verifyError": "Verification Error",
     "verifySuccess": "Verification Successful!",
     "verifyingEmail": "Verifying Email...",
@@ -2393,10 +2393,84 @@
     "showActivityDesc": "Show the game you play or music you listen to",
     "showOnline": "Show online status",
     "showOnlineDesc": "Other users can see when you are online",
-    "title": "Privacy & Security Settings",
+    "title": "Privacybeleid",
     "typingIndicator": "Show typing indicator",
     "typingIndicatorDesc": "Shows typing notification to the other party",
-    "visibility": "Visibility"
+    "visibility": "Visibility",
+    "removeWord": "Geblokkeerd woord verwijderen",
+    "lastUpdated": "Laatste update: 9 mei 2026",
+    "quickSummaryLabel": "Samenvatting",
+    "quickSummary": "We gebruiken uw account-, bericht- en gebruiksgegevens uitsluitend om de Pawscord-service te leveren en te verbeteren. We verkopen uw gegevens niet aan derden.",
+    "section1Title": "1. Informatie die we verzamelen",
+    "section1Intro": "Om de service te leveren, verzamelen we gegevens in de volgende categorieën:",
+    "personalInfo": "Persoonlijke informatie",
+    "accountData": "Accountgegevens",
+    "accountDataDesc": "Gebruikersnaam, e-mail, wachtwoord-hash, profielfoto.",
+    "profileInfo": "Profielinformatie",
+    "profileInfoDesc": "Weergavenaam, bio, statusbericht, sociale links.",
+    "userId": "Gebruikersidentificatie",
+    "userIdDesc": "Unieke gebruikers-ID en vriendcode waarmee u in ons systeem wordt herkend.",
+    "commData": "Communicatiegegevens",
+    "messages": "Berichten",
+    "messagesDesc": "Berichten die u verzendt en ontvangt in chatrooms en DM's.",
+    "mediaFiles": "Mediabestanden",
+    "mediaFilesDesc": "Afbeeldingen, audio, video en andere bestanden die u uploadt.",
+    "voiceMessages": "Spraakberichten",
+    "voiceMessagesDesc": "Spraakberichten die u opneemt (alleen afgeleverd aan de ontvanger).",
+    "techData": "Technische gegevens",
+    "techDataDesc": "IP-adres, browser-/apparaatinformatie, sessietokens.",
+    "deviceIds": "Apparaat-ID's",
+    "deviceIdsDesc": "Anonieme apparaat-ID's voor pushmeldingen op mobiele/desktop-apps.",
+    "activityData": "Activiteitsgegevens",
+    "activityDataDesc": "Welke servers/rooms u bijwoont, uw onlinestatus.",
+    "appInteractions": "App-interacties",
+    "appInteractionsDesc": "Welke functies u gebruikt (anoniem, voor analyse).",
+    "section2Title": "2. Hoe we informatie gebruiken",
+    "section2Intro": "We gebruiken de verzamelde gegevens om:",
+    "use1": "Uw Pawscord-account aan te maken en te beheren.",
+    "use2": "Uw berichten naar de juiste ontvanger te bezorgen.",
+    "use3": "De service te verbeteren en problemen te verhelpen.",
+    "use4": "Gedrag dat de communityrichtlijnen schendt te detecteren.",
+    "use5": "U te contacteren over belangrijke updates.",
+    "use6": "Te voldoen aan wettelijke verplichtingen.",
+    "section3Title": "3. Met wie we informatie delen",
+    "section3Intro": "We delen uw gegevens alleen in de volgende gevallen:",
+    "withOtherUsers": "Met andere gebruikers",
+    "withOtherUsersDesc": "Uw profielinformatie en berichten zijn zichtbaar voor mensen met wie u communiceert.",
+    "serviceProviders": "Met serviceproviders",
+    "serviceProvidersDesc": "Infrastructuurproviders zoals hosting (Railway, Cloudflare), opslag (R2) en meldingen (FCM).",
+    "legalReqs": "Wettelijke vereisten",
+    "legalReqsDesc": "Wanneer dit vereist is door een gerechtelijk bevel of juridisch proces.",
+    "noSell": "We verkopen uw gegevens NIET aan derden.",
+    "section4Title": "4. Uw rechten",
+    "section4Intro": "Op grond van de AVG heeft u de volgende rechten:",
+    "right1": "Inzage in uw gegevens opvragen.",
+    "right2": "Correctie van onjuiste gegevens verzoeken.",
+    "right3": "Uw account en gegevens verwijderen.",
+    "right4": "Gegevensoverdraagbaarheid (uw gegevens exporteren).",
+    "right5": "Bezwaar maken tegen gegevensverwerking.",
+    "section5Title": "5. Neem contact op",
+    "section5Intro": "Voor privacyvragen of -verzoeken:",
+    "howToDelete": "Uw account verwijderen",
+    "deleteStep1": "Ga naar Instellingen → Mijn account → Account verwijderen.",
+    "deleteStep2": "Bevestig uw wachtwoord.",
+    "deleteStep3": "Dien uw verwijderingsverzoek in.",
+    "deleteStep4": "30 dagen respijt waarin u kunt herstellen.",
+    "deleteStep5": "Na 30 dagen worden al uw gegevens definitief verwijderd.",
+    "contactTitle": "Contact",
+    "contactIntro": "Neem contact met ons op met uw vragen:",
+    "email": "E-mail",
+    "website": "Website",
+    "inApp": "In de app",
+    "inAppDesc": "Schrijf ons via Instellingen → Ondersteuning.",
+    "deviceInfo": "Apparaatinformatie",
+    "usageInfo": "Gebruiksinformatie",
+    "sec1": "Communicatie",
+    "sec2": "Gegevens",
+    "sec3": "Beveiliging",
+    "sec4": "Derden",
+    "footerTagline": "Pawscord — Verbinding met uw community, veilig.",
+    "copyright": "© 2026 Pawscord. Alle rechten voorbehouden."
   },
   "privacy.connectionError": "❌ Connection error",
   "privacy.exportFailed": "❌ Request could not be sent",
@@ -3263,14 +3337,14 @@
   "stickyMessages.messageRequired": "Enter a message",
   "stopmak_for_stop_butonuna_basın": "Press the Stop button to stop",
   "store": {
-    "buyNow": "Buy Now",
+    "buyNow": "Nu kopen",
     "buyPawsCoin": "Buy PawsCoin",
     "category": {
-      "all": "All Items",
+      "all": "Alle items",
       "badges": "Badges",
       "boosters": "Boosters",
-      "cosmetics": "Cosmetics",
-      "special": "Special"
+      "cosmetics": "Cosmetica",
+      "special": "Speciaal"
     },
     "claimFailed": "Reward could not be claimed.",
     "coinStore": "Coin Store",
@@ -3298,7 +3372,7 @@
     "equip": "Equip",
     "equipped": "Equipped",
     "featured": "Featured Items",
-    "free": "FREE",
+    "free": "GRATIS",
     "info": {
       "bonus": "Bonus coins are included with certain packages",
       "instant": "Coins are added to your account instantly",
@@ -3307,11 +3381,11 @@
     },
     "insufficientCoins": "Insufficient Coins",
     "itemDetail": "Item Detail",
-    "loading": "Loading store...",
+    "loading": "Winkel laden...",
     "myInventory": "My Inventory",
     "noDescription": "No description available.",
-    "noItems": "No items in this category yet",
-    "owned": "Owned",
+    "noItems": "Geen items in deze categorie",
+    "owned": "Eigendom",
     "premium": "💎 Premium",
     "purchase": "Purchase",
     "rarity": "Rarity",
@@ -3319,9 +3393,28 @@
     "streak": "Streak",
     "title": "Pawscord Store",
     "empty": {
-      "title": "No items yet",
-      "desc": "New items will be added to this category soon."
-    }
+      "title": "Nog geen items",
+      "desc": "Binnenkort worden nieuwe items aan deze categorie toegevoegd."
+    },
+    "subtitle": "Besteed je coins aan speciale items",
+    "categories": "Categorieën",
+    "comingSoonBtn": "🔒 Binnenkort beschikbaar",
+    "emojiPack": "Aangepast emoji-pakket",
+    "emojiPackDesc": "50 premium emoji's",
+    "profileTheme": "Profielthema",
+    "serverBoostItem": "Serverboost",
+    "serverBoostDesc": "1 maand serverboost",
+    "soundEffects": "Geluidseffecten",
+    "soundEffectsDesc": "Pakket met 10 geluidseffecten",
+    "animatedStickers": "Geanimeerd stickerpakket",
+    "animatedStickersDesc": "30 geanimeerde stickers",
+    "customBadgeDesc": "Upload je eigen badge",
+    "storeItems": "Winkelartikelen",
+    "buyNowPrice": "Nu kopen",
+    "devNotice": "De winkel is momenteel in ontwikkeling. Binnenkort vind je hier prachtige cosmetische items, badges en speciale artikelen!",
+    "mostPopular": "MEEST POPULAIR",
+    "soon": "BINNENKORT",
+    "limited": "BEPERKT"
   },
   "store.insufficientCoins": "❌ Insufficient coins! {{required}} coins required, {{available}} available.",
   "store.membershipRequired": "❌ {{tier}} membership required!",
@@ -5068,5 +5161,2014 @@
   "🟢_online": "🟢 Online",
   "activity_label": "Activity",
   "ticket_label": "Ticket",
-  "webhook_label": "Webhook"
+  "webhook_label": "Webhook",
+  "media": {
+    "videoUrl": "Video URL",
+    "clipName": "Clip name...",
+    "pasteVideoUrl": "Paste video URL...",
+    "watchParty": "Watch Party",
+    "youtubePlayer": "YouTube video player",
+    "spotifyPlayer": "Spotify Player",
+    "videoLoading": "Loading video...",
+    "converting": "⏳ Converting...",
+    "playerLoading": "Loading player..."
+  },
+  "social": {
+    "documentTitle": "Document title",
+    "projectName": "Project name",
+    "startTyping": "Start typing...",
+    "startWriting": "Start writing your document...",
+    "projectNamePlaceholder": "Project Name",
+    "projectDescription": "Description (optional)",
+    "documentTitlePlaceholder": "Document Title",
+    "startTypingPlaceholder": "Start writing...",
+    "startWritingPlaceholder": "Start writing your document..."
+  },
+  "stage": {
+    "topicPlaceholder": "What is this stage about?",
+    "descriptionPlaceholder": "Describe your stage event...",
+    "loading": "Loading stages...",
+    "subtitle": "Manage stage events and speakers",
+    "create": "Create Stage",
+    "handRaised": "Hand Raised",
+    "handRaisings": "Hand Raisings",
+    "noHandRaisings": "No hands raised yet",
+    "noneSelected": "No Stage Selected",
+    "selectOrCreate": "Select a stage from the list or create a new one",
+    "description": "Description",
+    "startNow": "Start Now",
+    "maxSpeakers": "Max Speakers",
+    "cancel": "Cancel",
+    "speakers": "speakers",
+    "listeners": "listeners",
+    "speakersLabel": "Speakers",
+    "requests": "Speak Requests ({{count}})",
+    "requestToSpeak": "Request to Speak",
+    "joinStage": "Join stage",
+    "leaveStage": "Leave stage",
+    "cancelRequest": "✋ Cancel Request",
+    "openCreate": "Create stage event",
+    "tabActive": "Active stages",
+    "tabScheduled": "Scheduled stages",
+    "tabPast": "Past stages",
+    "startStage": "Start stage now",
+    "startStageNow": "Start stage now",
+    "endStage": "End active stage",
+    "removeSpeaker": "Move to audience",
+    "inviteSpeaker": "Invite as speaker",
+    "denyHandRaise": "Deny hand raise",
+    "schedule": "Stage schedule",
+    "approveRequest": "Approve speak request",
+    "inviteToSpeak": "Invite to speak",
+    "unmute": "Unmute",
+    "mute": "Mute",
+    "listenersLabel": "Listeners",
+    "moderatorBadge": "Moderator",
+    "confirm": "Confirm",
+    "a11y": {
+      "handRaised": "Speak request sent",
+      "requestCancelled": "Speak request cancelled",
+      "muted": "Microphone muted",
+      "unmuted": "Microphone unmuted"
+    }
+  },
+  "apiUsage": {
+    "title": "API Usage Analytics",
+    "rateLimitStatus": "Rate Limit Status",
+    "recentActivity": "Recent Activity"
+  },
+  "dailyRewards": {
+    "title": "Daily Rewards",
+    "dayStreak": "Day Streak",
+    "todaysReward": "Today's Reward",
+    "claiming": "Claiming...",
+    "claimReward": "Claim Reward 🎁",
+    "alreadyClaimed": "Already Claimed!",
+    "comeBackTomorrow": "Come back tomorrow for your next reward",
+    "nextRewardIn": "Next reward in",
+    "weeklyCalendar": "Weekly Rewards Calendar",
+    "day": "Day",
+    "loginDaily": "Log in every day to keep your streak and earn rewards!",
+    "missingDay": "Missing a day will reset your streak to 0",
+    "comeTomorrow": "Come back tomorrow for the next reward",
+    "desc": "Log in every day to maintain your streak and earn rewards!"
+  },
+  "gifPicker": {
+    "searchCollection": "Search collection...",
+    "localCollectionLoading": "Loading local collection...",
+    "title": "GIF Library",
+    "loading": "Loading GIFs...",
+    "notFound": "No GIFs found",
+    "loadError": "Failed to load GIF collection. Please check the server and 'gifs' folder.",
+    "loadingLocal": "Loading local collection...",
+    "gridView": "Grid view",
+    "listView": "List view",
+    "allCategories": "All categories",
+    "toggleFavorite": "Toggle favorite"
+  },
+  "pins": {
+    "searchPinned": "Search pinned messages..."
+  },
+  "oauth": {
+    "appDescription": "What does your app do?",
+    "appNamePlaceholder": "My Awesome App"
+  },
+  "embed": {
+    "deleteConfirm": "Are you sure you want to delete this embed?",
+    "title": "Custom Embed Creator",
+    "images": "Images",
+    "preview": "Preview",
+    "noEmbeds": "No saved embeds yet",
+    "selectChannel": "Select channel",
+    "iconUrl": "Icon URL",
+    "thumbnailUrl": "Thumbnail URL",
+    "imageUrl": "Large Image URL",
+    "toggleEditor": "Toggle embed editor",
+    "authorName": "Author name",
+    "authorIcon": "Author icon URL",
+    "titleInput": "Embed title",
+    "descriptionInput": "Embed description",
+    "colorPicker": "Embed color",
+    "imageUrlInput": "Large image URL",
+    "addField": "Add field",
+    "removeField": "Remove field",
+    "footerText": "Footer text",
+    "footerIcon": "Footer icon URL",
+    "save": "Save embed",
+    "channelSelect": "Select channel",
+    "sendEmbed": "Send embed",
+    "deleteEmbed": "Delete embed",
+    "description": "Embed description"
+  },
+  "community": {
+    "screeningQuestions": "Member Screening Questions",
+    "noQuestionsYet": "No questions added yet",
+    "serverRules": "Server Rules",
+    "noRulesYet": "No rules added yet",
+    "serverDescription": "Server Description",
+    "selectPlaceholder": "Select...",
+    "allMessages": "All Messages",
+    "features": "Features",
+    "serverDescLabel": "Server Description",
+    "featuresLabel": "Features",
+    "rulesChannel": "Rules Channel",
+    "updatesChannel": "Updates Channel",
+    "defaultNotifications": "Default Notifications",
+    "welcomeScreen": "Welcome Screen",
+    "memberScreening": "Member Screening",
+    "discoverServers": "Discover Servers"
+  },
+  "bots": {
+    "featured": "⭐ Featured",
+    "apiKeysTitle": "API Keys",
+    "noApiKeys": "No API keys yet",
+    "securityWarning": "⚠️ Security: Keep your API keys secret! Anyone with your key",
+    "keepSecure": "Keep this info in a safe place! It will not be shown again.",
+    "noWebhooks": "No webhooks yet",
+    "createBotTitle": "🤖 Create New Bot",
+    "botNameLabel": "Bot Name *",
+    "descriptionLabel": "Description",
+    "quickStart": "🚀 Quick Start",
+    "docsIntro": "You can create your own bot with the PAWSCORD Bot API.",
+    "sendMessage": "Send message",
+    "onNewMessage": "When a new message is sent",
+    "onMemberJoin": "When member joins server",
+    "installStatus": "Installing...",
+    "generalOverview": "General Overview"
+  },
+  "translation": {
+    "mostPopular": "Most Popular",
+    "autoTranslate": "Auto translate",
+    "emojiTranslate": "Translate with emoji",
+    "mostUsedLangs": "📊 Most Used Languages",
+    "emojiInput": "Translation emoji"
+  },
+  "stickers": {
+    "deleteConfirm": "Are you sure you want to delete this sticker?",
+    "loading": "Loading stickers...",
+    "noStickers": "No Stickers Yet",
+    "uploadFirst": "Upload your first custom sticker",
+    "loadingPacks": "Loading packs...",
+    "noPacks": "No Packs Found",
+    "checkBackLater": "Check back later for new sticker packs",
+    "name": "My Sticker",
+    "image": "Sticker Image",
+    "clickToSelect": "Click to select an image",
+    "myStickers": "My stickers",
+    "stickerPacks": "Sticker packs",
+    "showUpload": "Upload sticker",
+    "deleteSticker": "Delete sticker",
+    "installPack": "Install pack",
+    "installed": "Installed",
+    "uploadModal": "Upload sticker",
+    "nameInput": "Sticker name",
+    "fileInput": "Sticker image file",
+    "uploadBtn": "Upload sticker"
+  },
+  "spotify": {
+    "connect": "Connect Spotify",
+    "disconnect": "Disconnect Spotify",
+    "enableFeature": "Enable feature"
+  },
+  "giveaway": {
+    "winnersLabel": "Winners:",
+    "winnersCount": "{{count}} people",
+    "participants": "Participants:",
+    "remainingTime": "Time Remaining:",
+    "finish": "Finish",
+    "createNew": "Create New Giveaway",
+    "prize": "Prize *",
+    "selectChannel": "Select Channel",
+    "winnerCount": "Winner Count",
+    "requirements": "Entry Requirements (Optional)",
+    "minMessages": "Minimum Message Count",
+    "minInvites": "Minimum Invite Count",
+    "allowMultiEntry": "Allow multiple entries",
+    "title": "🎉 Giveaways",
+    "loading": "Loading giveaways...",
+    "noGiveaways": "No giveaways yet",
+    "emptyHint": "Create a new giveaway!",
+    "endConfirm": "Are you sure you want to end this giveaway?",
+    "card": "Giveaway card"
+  },
+  "economy": {
+    "sendCoin": "Send Coin",
+    "recipientUsername": "Recipient Username:",
+    "noteOptional": "Note (optional):",
+    "historyLoading": "Loading history...",
+    "noTransactions": "No transactions yet",
+    "transferCoins": "Transfer coins",
+    "amount": "0",
+    "message": "Add a message..."
+  },
+  "premiumMgmt": {
+    "start": "Start:",
+    "end": "End:",
+    "noSubscription": "No Premium Subscription",
+    "selectPlan": "Choose one of the plans below to enjoy premium features",
+    "upgrade": "Upgrade",
+    "stripeNote": "Premium subscriptions are processed securely with Stripe. You can cancel anytime."
+  },
+  "inviteAnalytics": {
+    "title": "Invite Analytics",
+    "loading": "Loading analytics...",
+    "totalJoins": "Total Joins",
+    "conversionRate": "Conversion Rate",
+    "topInvites": "Top Invites",
+    "dailyJoins": "Daily Joins"
+  },
+  "poll": {
+    "addOption": "Add option",
+    "submit": "Create poll"
+  },
+  "projects": {
+    "title": "Project Collaboration",
+    "projects": "Projects",
+    "newProject": "New Project",
+    "noProjects": "No projects yet. Create one!",
+    "createNewProject": "Create New Project",
+    "createProject": "Create Project",
+    "cancel": "Cancel",
+    "creating": "Creating...",
+    "goToProjects": "Go to projects",
+    "goToProject": "{{name}} project",
+    "newDocument": "New Document",
+    "createNewDocument": "Create New Document",
+    "createDocument": "Create Document",
+    "save": "Save",
+    "history": "History",
+    "documents": "Documents",
+    "teamMembers": "Team Members",
+    "noDocuments": "No documents yet"
+  },
+  "raid": {
+    "title": "Raid Protection",
+    "subtitle": "Protect your server from coordinated raids and mass joins",
+    "detected": "RAID DETECTED",
+    "locked": "Server is in locked mode. New members cannot join.",
+    "unlock": "Unlock Server",
+    "joinRateLimit": "Join Rate Limit",
+    "joinRateLimitDesc": "Maximum joins per minute before triggering protection",
+    "minAccountAge": "Minimum Account Age",
+    "minAccountAgeDesc": "Minimum account age required to join (days)",
+    "lockDuration": "Lock Duration",
+    "lockDurationDesc": "How long to lock the server when a raid is detected (minutes)"
+  },
+  "codeRunner": {
+    "title": "Code Runner",
+    "history": "History",
+    "historySnippets": "History & Snippets",
+    "historyTitle": "View history",
+    "output": "Output",
+    "run": "Run",
+    "stop": "Stop execution",
+    "shareToChannel": "Share to channel",
+    "saveSnippet": "Save code snippet",
+    "toggleFullscreen": "Toggle fullscreen",
+    "selectLang": "Select {{lang}}",
+    "noSnippets": "No code snippets yet",
+    "recentRuns": "Recent Runs",
+    "noHistory": "No history",
+    "snippetName": "Snippet Name",
+    "language": "Programming language"
+  },
+  "export": {
+    "title": "Export Chat History",
+    "fileFormat": "File Format",
+    "dateRange": "Date Range (optional)",
+    "processing": "Processing messages...",
+    "mayTakeMinutes": "This may take a few minutes",
+    "complete": "Export Complete!",
+    "fileReady": "Your file is ready to download.",
+    "download": "Download File",
+    "exportProcessing": "Processing...",
+    "export": "Export"
+  },
+  "appearance": {
+    "loading": "Loading appearance settings...",
+    "title": "Appearance Settings",
+    "messageDisplay": "Message Display",
+    "fontSize": "Message font size",
+    "messageDensity": "Message density",
+    "messageSpacing": "Message spacing",
+    "chatFeatures": "Chat Features",
+    "colorVibrance": "Adjust color vibrance",
+    "timestampTimezone": "Message timestamp timezone",
+    "resetConfirm": "Are you sure you want to reset all appearance settings to defaults?",
+    "cozyMode": "Cozy mode",
+    "compactMode": "Compact mode",
+    "fontSizeSlider": "Font size",
+    "spacingSelect": "Select message spacing",
+    "saturationSlider": "Color saturation",
+    "languageSelect": "Select language",
+    "timezoneSelect": "Select timezone",
+    "resetDefaults": "Reset to defaults"
+  },
+  "webauthn": {
+    "enterKeyName": "Please enter a key name",
+    "keyRegistered": "Security key registered successfully!",
+    "keyRemoved": "Security key removed",
+    "removeError": "Key could not be removed: ",
+    "title": "Hardware Security Keys",
+    "insertKey": "Insert your key...",
+    "registerKey": "Register Key",
+    "insertHint": "Insert your security key when your browser prompts you",
+    "registeredKeys": "Registered Keys",
+    "noKeys": "No security keys registered yet"
+  },
+  "whiteboard": {
+    "title": "Shared Whiteboard",
+    "eraser": "Eraser",
+    "pen": "Pen",
+    "clearBoard": "Clear Board",
+    "connectionError": "Connection error",
+    "authRequired": "Authentication required"
+  },
+  "reactionRoles": {
+    "deleteConfirm": "Are you sure you want to delete this reaction role?",
+    "loading": "Loading reaction roles...",
+    "selectChannel": "Select channel (optional)",
+    "copyIdHint": "Right-click on the message → Copy Message ID",
+    "selectRole": "Select role",
+    "noRoles": "No reaction roles yet",
+    "subtitle": "Let users get roles by reacting with emoji",
+    "usagesLabel": "👥 Uses:",
+    "timesUsed": "times used",
+    "messageId": "Enter message ID"
+  },
+  "advAnalytics": {
+    "memberActivity": "Member Activity",
+    "peakHours": "Peak Hours",
+    "peakHint": "Peak hours are shown in green",
+    "mostActiveMembers": "Most Active Members",
+    "topReactions": "Top Reactions",
+    "geoDistribution": "Geographic Distribution",
+    "linkClicks": "Link Clicks",
+    "clicks": "Clicks"
+  },
+  "blockList": {
+    "blockUser": "Block user",
+    "unblockUser": "Unblock user"
+  },
+  "slash": {
+    "rollDiceDesc": "Roll dice between 1-100",
+    "coinFlipDesc": "Flip a coin",
+    "rpsDesc": "Play Rock Paper Scissors (@user)",
+    "tttDesc": "Start Tic-Tac-Toe game",
+    "chooseDesc": "Choose from options (/choose a b c)",
+    "walletDesc": "View your coin balance",
+    "transferDesc": "Send coins (/transfer @user amount)",
+    "kanbanDesc": "Open Kanban board",
+    "runCodeDesc": "Run Python code",
+    "aiImageDesc": "Generate image with AI",
+    "clearDesc": "Delete messages (Admin)",
+    "helpDesc": "View command list",
+    "themeDesc": "Open Theme Store",
+    "templatesDesc": "Ready-made Templates",
+    "shrugDesc": "Send ¯_(ツ)_/¯"
+  },
+  "botMarket": {
+    "loading": "Loading Bot Marketplace...",
+    "subtitle": "Discover thousands of bots to enhance your server",
+    "allCategories": "All Categories",
+    "popular": "Popular",
+    "topRated": "Top Rated",
+    "featured": "Featured Bots",
+    "trending": "Trending Bots",
+    "notFound": "No bots found",
+    "searchPlaceholder": "Search bots..."
+  },
+  "botDocs": {
+    "title": "Bot API Documentation",
+    "quickStart": "Quick Start",
+    "intro": "You can create your own bot with the PAWSCORD Bot API.",
+    "sendMessage": "Send message",
+    "onNewMessage": "When a new message is sent",
+    "onReaction": "When a reaction is added",
+    "onMemberJoin": "When a member joins the server",
+    "onVoiceState": "When voice state changes",
+    "jsNodejs": "JavaScript (Node.js)"
+  },
+  "verif": {
+    "none": "None",
+    "noneDesc": "Anyone can send messages",
+    "low": "Low",
+    "lowDesc": "Email verification required",
+    "medium": "Medium",
+    "mediumDesc": "Must be registered for 5 minutes",
+    "high": "High",
+    "highDesc": "Must be on server for 10 minutes",
+    "highest": "Highest",
+    "highestDesc": "Phone verification required"
+  },
+  "contentFilter": {
+    "disabled": "Off",
+    "disabledDesc": "No content filter",
+    "medium": "Medium",
+    "mediumDesc": "Filter members without roles",
+    "high": "High",
+    "highDesc": "Filter all messages"
+  },
+  "secAlerts": {
+    "title": "Security Alerts",
+    "todayResolved": "Resolved Today",
+    "noAlerts": "No security alerts found",
+    "systemSafe": "Your system appears secure",
+    "resolved": "Resolved",
+    "userId": "User ID",
+    "resolution": "Resolution",
+    "resolve": "Resolve",
+    "filterBtn": "Filter: {{f}}",
+    "quickResolve": "Quick resolve",
+    "quickResolution": "{{res}}",
+    "dismiss": "Dismiss alert"
+  },
+  "inviteExport": {
+    "exportCSV": "Export as CSV",
+    "exportJSON": "Export as JSON"
+  },
+  "slowMode": {
+    "title": "Slow Mode",
+    "enable": "Enable slow mode",
+    "desc1": "Users must wait a certain time after sending a message",
+    "desc2": "before they can send another",
+    "cooldown": "Cooldown Between Messages",
+    "customDuration": "Custom Duration (seconds)",
+    "usersCan": "⏱️ Users can send every",
+    "seconds": "seconds",
+    "disable": "Disable slow mode",
+    "save": "Save slow mode settings"
+  },
+  "passkey": {
+    "noSupport": "⚠️ Your browser does not support WebAuthn / Passkey. Use Chrome, Firefox, Safari or Edge",
+    "noSupportCont": "to use this feature.",
+    "biometricDesc": "Biometric authentication (Touch ID, Windows Hello) or physical security",
+    "biometricDesc2": "keys (YubiKey) to sign in. No password needed.",
+    "compatibility": "Works with Chrome 119+ and Edge 108+. Physical YubiKey requires USB or NFC connection."
+  },
+  "logout": {
+    "title": "Signing Out",
+    "confirm": "Are you sure you want to sign out of your account?",
+    "secureSignout": "Your session will be securely terminated",
+    "dataKept": "Your messages and settings will be preserved",
+    "noNotifs": "You will no longer receive notifications",
+    "goodbye": "Goodbye, {{username}}! 👋",
+    "closing": "Closing your session..."
+  },
+  "challenges": {
+    "loading": "Loading tasks...",
+    "title": "Weekly Challenges",
+    "remaining": "left",
+    "weekly": "Weekly",
+    "daily": "Daily",
+    "special": "Special",
+    "earnedRewards": "Earned Rewards",
+    "switchTab": "Switch tab",
+    "card": "Challenge card"
+  },
+  "ephemeral": {
+    "toggle": "Toggle ephemeral messages"
+  },
+  "translate": {
+    "totalTranslations": "Total Translations",
+    "mostPopular": "Most Popular",
+    "autoTranslate": "Auto Translate",
+    "emojiTranslate": "Emoji Translate",
+    "allowedLangs": "Allowed Languages",
+    "topLangs": "Top Languages",
+    "translations": "translations"
+  },
+  "liveStream": {
+    "title": "Live Stream",
+    "notStarted": "Stream not started",
+    "shareScreen": "Share Screen",
+    "start": "Start Stream",
+    "stop": "Stop Stream",
+    "viewers": "Viewers",
+    "sendChat": "Send chat message",
+    "messagePlaceholder": "Send a message..."
+  },
+  "autoMod": {
+    "deleteRule": "Delete rule"
+  },
+  "dataPanels": {
+    "quickReact": "Quick Reactions",
+    "msgStats": "Message Stats",
+    "dailyAvg": "Daily Avg",
+    "serverStats": "Server Stats",
+    "growth": "Growth",
+    "activityFeed": "Activity Feed",
+    "customCommands": "Custom Commands",
+    "serverAnalytics": "Server Analytics",
+    "messageContent": "Message content",
+    "scheduledTime": "Scheduled time",
+    "commandName": "Command name",
+    "commandResponse": "Command response"
+  },
+  "virtualTx": {
+    "loading": "Loading...",
+    "subtitle": "View your complete transaction history",
+    "earnedThisMonth": "Earned This Month",
+    "totalTransactions": "Total Transactions",
+    "notFound": "No transactions found"
+  },
+  "memberActivity": {
+    "export": "Export activity data",
+    "backToList": "Back to list"
+  },
+  "forward": {
+    "countMessages": "{{count}} Forwarding Messages",
+    "mediaFiles": "{{count}} selected media file(s) will be forwarded.",
+    "forwardMsg": "Forward Message:",
+    "forwarding": "Forwarding:",
+    "title": "Forward Message"
+  },
+  "ocr": {
+    "selectImageFirst": "Please select an image first",
+    "networkError": "Network error: ",
+    "clickToUpload": "Click to upload an image",
+    "extracting": "Extracting...",
+    "extractText": "Extract Text",
+    "extractedText": "Extracted Text",
+    "fileInput": "Upload file for OCR"
+  },
+  "soundboard": {
+    "searchPlaceholder": "Search sounds...",
+    "search": "Search sounds",
+    "uploadBtn": "Upload sound",
+    "playSound": "Play {{name}}",
+    "deleteSound": "Delete {{name}}",
+    "uploadTitle": "Upload Sound",
+    "namePlaceholder": "e.g. Airhorn"
+  },
+  "miniGames": {
+    "won": "Won!",
+    "restart": "🔄 Restart",
+    "triviaName": "Trivia",
+    "triviaDesc": "Knowledge quiz",
+    "q1": "What does \"typeof null\" return in JavaScript?",
+    "q2": "In which year was the first version of React released?",
+    "q3": "Who is the creator of Python?",
+    "ticTacToe": "Tic-tac-toe game"
+  },
+  "raidDash": {
+    "overview": "Overview",
+    "joined": "Joined:",
+    "noPending": "No pending verifications",
+    "raidLogs": "Raid Logs",
+    "usersAffected": "users affected",
+    "noLogs": "No logs yet"
+  },
+  "oauthApps": {
+    "appsTab": "OAuth Apps",
+    "botsTab": "Bots"
+  },
+  "raidProt": {
+    "joinRateLimit": "Join Rate Limit",
+    "joinRateLimitDesc": "Maximum number of joins per minute before protection is triggered",
+    "minAccountAge": "Minimum Account Age",
+    "minAccountAgeDesc": "Minimum account age required to join (days)",
+    "lockDuration": "Lock Duration",
+    "lockDurationDesc": "Server lock duration when a raid is detected (minutes)"
+  },
+  "welcomeEditor": {
+    "backToEdit": "Back to Edit",
+    "title": "Welcome Screen",
+    "suggestedChannels": "Suggested Channels ({{count}}/5)"
+  },
+  "confirmModal": {
+    "dangerHeader": "⚠️ This action:",
+    "irreversible": "CANNOT BE UNDONE!",
+    "typeToConfirm": "Type",
+    "toContinue": "to continue:",
+    "textMismatch": "Text does not match",
+    "confirm": "Confirm action"
+  },
+  "tournament": {
+    "createNew": "Create New Tournament",
+    "nPeople": "{{n}} People",
+    "participants": "Participants:",
+    "startTime": "Start:",
+    "prize": "Prize:",
+    "matches": "Matches",
+    "participantsTitle": "Participants",
+    "leave": "Leave",
+    "card": "Tournament card",
+    "detailModal": "Tournament detail",
+    "joinTournament": "Join tournament"
+  },
+  "watchTogether": {
+    "title": "📺 Watch Together",
+    "subtitle": "Watch videos together with friends!",
+    "newParty": "New Watch Party",
+    "createParty": "🎬 Create Watch Party",
+    "supportedPlatforms": "Supported platforms:"
+  },
+  "srs": {
+    "dontKnow": "I have no idea",
+    "remembered": "Remembered",
+    "tooEasy": "Too easy!",
+    "title": "SRS Review",
+    "addWords": "Add new words to use the SRS system."
+  },
+  "errReport": {
+    "captureConsole": "📝 Capture Console Errors",
+    "descPreview": "Description preview will appear here...",
+    "sendReport": "📨 Send Report"
+  },
+  "botDetails": {
+    "apiCalls": "API Calls",
+    "storeSecure": "Store this information in a safe place! It will not be shown again.",
+    "noWebhooks": "No webhooks yet"
+  },
+  "reactionAnalytics": {
+    "heatmapTab": "Heatmap",
+    "dailyTab": "Daily stats",
+    "leaderboardTab": "Leaderboard"
+  },
+  "miniGamesPanel": {
+    "guessNumber": "Guess the Number (1-100)",
+    "wrongGuesses": "Wrong guesses: {{wrong}}/{{max}}",
+    "used": "Used:",
+    "rpsTitle": "Rock Paper Scissors - Round {{round}}/{{max}}",
+    "rock": "rock",
+    "paper": "paper",
+    "scissors": "scissors",
+    "guess": "Make a guess",
+    "letterInput": "Enter a letter",
+    "guessLetter": "Guess letter",
+    "cellPosition": "Cell {{idx}}",
+    "guessNumber_input": "Your number guess",
+    "guessActionBtn": "Guess!",
+    "guessLetterBtn": "Guess Letter",
+    "remainingGuesses": "Remaining guesses:",
+    "lastHint": "Last hint:"
+  },
+  "screenShare": {
+    "stop": "Stop screen share",
+    "start": "Start screen share",
+    "fullscreen": "Fullscreen"
+  },
+  "userWarnings": {
+    "title": "User Warnings",
+    "addWarning": "Add Warning",
+    "loading": "Loading warnings...",
+    "noWarnings": "No warnings found",
+    "expired": "EXPIRED",
+    "addWarningBtn": "Add warning",
+    "banUser": "Ban user"
+  },
+  "botsTab": {
+    "createBot": "Create Bot Account",
+    "botName": "My Bot",
+    "createBtn": "Create Bot",
+    "noBots": "No bots yet. Create one to automate tasks!",
+    "botDesc": "What does your bot do?"
+  },
+  "nicknameHistory": {
+    "title": "Nickname History",
+    "loading": "Loading history...",
+    "noHistory": "No recorded nickname changes found",
+    "noNickname": "No nickname",
+    "noChanges": "No changes",
+    "willAppear": "Your name changes will appear here"
+  },
+  "archivedRooms": {
+    "unarchive": "Restore archived channel",
+    "delete": "Permanently delete channel"
+  },
+  "autoRoles": {
+    "deleteConfirm": "Are you sure you want to delete this auto role?",
+    "loading": "Loading auto roles...",
+    "noRoles": "No auto roles yet",
+    "subtitle": "You can set up automatic role assignments for users",
+    "createBtn": "Create auto role",
+    "enableRole": "Enable role",
+    "disableRole": "Disable role",
+    "deleteRole": "Delete auto role",
+    "delay": "0 = Never"
+  },
+  "msgTemplate": {
+    "deleteConfirm": "Are you sure you want to delete this template?",
+    "templates": "Ready Templates",
+    "global": "Public (Global)",
+    "createNew": "+ Create New Template",
+    "noTemplates": "No templates yet."
+  },
+  "serverThemes": {
+    "title": "Server Themes",
+    "presets": "Preset Themes",
+    "createCustom": "Create Custom Theme",
+    "secondaryColor": "Secondary color",
+    "saveTheme": "Save custom theme",
+    "themeName": "Theme Name",
+    "primaryColor": "Primary color",
+    "backgroundColor": "Background color",
+    "textColor": "Text color",
+    "accentColor": "Accent color"
+  },
+  "createGroup": {
+    "create": "Create group"
+  },
+  "topicHistory": {
+    "title": "Topic History",
+    "loading": "Loading history...",
+    "empty": "Topic history not found",
+    "setBy": "by",
+    "set": "set"
+  },
+  "joinLogs": {
+    "loading": "Loading logs...",
+    "title": "Member Activity",
+    "noActivity": "No activity records",
+    "joined": "Joined the server",
+    "left": "Left the server"
+  },
+  "welcomeMsg": {
+    "codeUser": "Username",
+    "codeUserMention": "User Mention",
+    "codeServer": "Server Name",
+    "codeMemberCount": "Member Count",
+    "codeUserId": "User ID",
+    "embedTitle": "Embed Title"
+  },
+  "activityTab": {
+    "noActivity": "No activity yet",
+    "messageSent": "Message sent",
+    "joined": "Joined the server",
+    "voiceJoined": "Joined voice chat",
+    "gameStarted": "Started a game"
+  },
+  "fieldChange": {
+    "allFields": "All Fields ({{count}})",
+    "empty": "empty",
+    "changedBy": "Changed by:"
+  },
+  "createBot": {
+    "title": "🤖 Create New Bot",
+    "botName": "Bot Name *",
+    "placeholder": "ExampleBot"
+  },
+  "botDetail": {
+    "overview": "Overview",
+    "privacyPolicy": "🔒 Privacy Policy",
+    "members": "members",
+    "add": "Add",
+    "features": "Features",
+    "links": "Links",
+    "developer": "Developer",
+    "commands": "Commands",
+    "reviews": "Reviews",
+    "addToServer": "Add to Server",
+    "verified": "✓ Verified",
+    "noCommands": "No commands available",
+    "servers": "server(s)",
+    "comments": "review(s)",
+    "website": "🌐 Website",
+    "supportServer": "💬 Support Server"
+  },
+  "highlights": {
+    "keywordInput": "New keyword",
+    "addKeywordBtn": "Add keyword",
+    "saveConfig": "Save highlight settings",
+    "clearHighlights": "Clear highlights",
+    "addKeyword": "Add keyword...",
+    "title": "Highlight System",
+    "settings": "Settings",
+    "save": "Save"
+  },
+  "customStatus": {
+    "emojiInput": "Status emoji",
+    "textInput": "Status text"
+  },
+  "clips": {
+    "deleteConfirm": "Are you sure you want to delete this clip?",
+    "loading": "Loading clips...",
+    "noClips": "No Clips Yet",
+    "recordFirst": "Record your first clip during voice chat",
+    "myClips": "My clips",
+    "serverClips": "Server clips",
+    "startRecording": "Start recording",
+    "playClip": "Play clip",
+    "shareClip": "Share clip",
+    "downloadClip": "Download clip",
+    "deleteClip": "Delete clip"
+  },
+  "screenShare2": {
+    "sharing": "Your screen is being shared",
+    "selectSource": "Select Screen or Window",
+    "loadingSources": "Loading sources...",
+    "frameRate": "Frame Rate"
+  },
+  "avatarCropper": {
+    "cropComplete": "Crop and save avatar"
+  },
+  "customStatusModal": {
+    "customPlaceholder": "Write your custom status...",
+    "streamPlaceholder": "Stream title...",
+    "competitionPlaceholder": "Which competition?",
+    "workingPlaceholder": "What are you working on?"
+  },
+  "interactivePanel": {
+    "usernameHint": "Write username for",
+    "connectedAccounts": "Connected Accounts",
+    "days": "days",
+    "showOnlineStatus": "Show online status",
+    "enabledToggle": "Enable welcome message",
+    "messageInput": "Welcome message",
+    "dmToggle": "Enable DM welcome",
+    "activityName": "Activity name",
+    "activityDetails": "Activity details"
+  },
+  "emailVerif": {
+    "verifying": "Verifying your email...",
+    "success": "Email successfully verified! Redirecting...",
+    "failed": "Verification failed",
+    "error": "An error occurred during verification"
+  },
+  "encryption": {
+    "keyInput": "Encryption key",
+    "disableEncryption": "Disable encryption"
+  },
+  "welcomeMessages": {
+    "totalWelcomes": "Total Welcomes",
+    "loading": "Loading welcome messages...",
+    "title": "👋 Welcome & Farewell Messages",
+    "saveConfig": "Save configuration"
+  },
+  "event": {
+    "createTitle": "Create Event",
+    "createTitle2": "📅 Create Event",
+    "biweekly": "Every two weeks",
+    "create": "Create Event",
+    "going": "going",
+    "interested": "Interested"
+  },
+  "modTab": {
+    "lockConfirm": "Are you sure you want to lock the server? Only administrators will be able to send messages.",
+    "pauseJoinsConfirm": "Are you sure you want to pause new memberships?",
+    "pauseJoins": "Stop New Memberships",
+    "sendAnnouncement": "Send Announcement",
+    "configAutoMod": "Configure auto moderation",
+    "configRaid": "Configure raid protection",
+    "manageWarnings": "Manage warnings",
+    "viewReports": "View reports",
+    "viewAuditLogs": "View audit logs",
+    "configSlowMode": "Configure slow mode",
+    "lockServer": "Lock server",
+    "clearMessages": "Clear all messages"
+  },
+  "changelog": {
+    "allModels": "All Models",
+    "allTypes": "All Types",
+    "loading": "Loading changelog...",
+    "notFound": "Changelog not found"
+  },
+  "tickets": {
+    "changePriority": "Change priority",
+    "closeTicket": "Close ticket"
+  },
+  "msgEdit": {
+    "hint": "cancel with",
+    "saveHint": "save with"
+  },
+  "inventory": {
+    "noEquipped": "No equipped items yet.",
+    "allItems": "📦 All Items",
+    "empty": "Inventory empty",
+    "buyHint": "You can purchase items from the Premium Store",
+    "loading": "Loading inventory...",
+    "title": "Inventory & Equipment",
+    "unequip": "Remove item",
+    "remove": "Remove",
+    "equip": "Equip item",
+    "equipBtn": "Equip item",
+    "filterBtn": "Filter by category",
+    "unequipBtn": "Unequip item",
+    "useBtn": "Use item"
+  },
+  "gdpr": {
+    "requestExport": "Request data export",
+    "downloadExport": "Download export"
+  },
+  "advMod": {
+    "timeoutApplied": "Applied {{duration}} minute timeout to {{user}}",
+    "massActionComplete": "Mass action completed: {{count}} users affected",
+    "raidEnabled": "Raid protection enabled",
+    "raidDisabled": "Raid protection disabled"
+  },
+  "inviteAudit": {
+    "subtitle": "Track invite usage and member joins",
+    "details": "Invite Details",
+    "code": "Invite Code",
+    "inviter": "Inviter",
+    "usedBy": "Used By",
+    "lastUsed": "Last Used By",
+    "totalInvites": "Total Invites",
+    "inviteCount": "{{count}} invite(s)",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month"
+  },
+  "massActions": {
+    "usersAffected": "users will be affected!",
+    "userIds": "User IDs (one per line)",
+    "duration": "Duration in minutes",
+    "reason": "Spam, rule violation, etc."
+  },
+  "reports": {
+    "resolved": "Resolved",
+    "deleteMsg": "Delete Message",
+    "deleteMsgConfirm": "Are you sure you want to delete this message?",
+    "banUserConfirm": "Are you sure you want to ban this user?"
+  },
+  "broadcast": {
+    "title": "Broadcast Announcement"
+  },
+  "adminDash": {
+    "totalUsers": "Total Users",
+    "verified": "Verified",
+    "pinned": "Pinned"
+  },
+  "adminTools": {
+    "backupDb": "Backup Database",
+    "export": "Export",
+    "exportData": "Export Data"
+  },
+  "botBuilder": {
+    "namePlaceholder": "My Awesome Bot",
+    "avatarPlaceholder": "🤖",
+    "addCommand": "Add Command",
+    "createBot": "Create Bot"
+  },
+  "chanAdvanced": {
+    "stats": "Channel Statistics",
+    "dangerZone": "Danger Zone",
+    "deleteChannel": "Delete Channel"
+  },
+  "chanGeneral": {
+    "nsfwHint": "Adult content warning will be shown.",
+    "lockHint": "No one can send messages (temporary lock).",
+    "maxUsersHint": "Max number of people (0 = unlimited)",
+    "privateToggle": "Toggle private channel",
+    "roleAccess": "Role has access",
+    "nsfwToggle": "Toggle NSFW channel",
+    "lockToggle": "Toggle locked channel",
+    "readOnlyToggle": "Toggle read-only channel",
+    "userLimit": "User limit (0 = unlimited)",
+    "deleteChannel": "Delete channel",
+    "saveSettings": "Save channel settings"
+  },
+  "autoModDash": {
+    "totalViolations": "Total Violations",
+    "warnings": "Warnings",
+    "noRules": "No moderation rules yet. Create one to get started!"
+  },
+  "contentScanner": {
+    "exportResults": "Export results",
+    "resultCard": "Scan result card"
+  },
+  "keywordMutes": {
+    "newKeyword": "New keyword",
+    "addKeyword": "Add keyword",
+    "removeKeyword": "Remove keyword",
+    "keyword": "Enter word/phrase to filter..."
+  },
+  "customCmds": {
+    "newCommand": "New command",
+    "exportCommands": "Export commands",
+    "editCommand": "Edit command",
+    "deleteCommand": "Delete command"
+  },
+  "userCard": {
+    "sendMessage": "Send message",
+    "viewProfile": "View profile"
+  },
+  "msgTemplatesPanel": {
+    "title": "Message Templates",
+    "create": "Create Template",
+    "noTemplates": "No templates yet"
+  },
+  "serverBoost": {
+    "removeConfirm": "Do you want to remove your boost from this server?",
+    "loading": "Loading boost data...",
+    "noBoosters": "No one has boosted this server yet",
+    "progressToNext": "Progress to Next Level",
+    "noBoosts": "No boosts yet. Be the first to support this server!",
+    "openBoostModal": "Boost this server",
+    "removeBoost": "Remove boost",
+    "cancelBoost": "Cancel",
+    "confirmBoost": "Confirm boost",
+    "boostServer": "Boost server"
+  },
+  "serverNicks": {
+    "title": "Server Nicknames",
+    "loading": "Loading nicknames...",
+    "noMatch": "No members match your search",
+    "notFound": "No members found"
+  },
+  "communitySettings": {
+    "title": "Community Settings",
+    "enableDesc": "Activate community features (discover, welcome screen, etc.)",
+    "enableCommunity": "Enable community server",
+    "disableCommunity": "Disable community server",
+    "saveBtn": "Save community settings"
+  },
+  "joinLeaveLogs": {
+    "title": "Join/Leave Logs",
+    "loading": "Loading logs...",
+    "noLogs": "No logs found",
+    "filterAll": "All logs",
+    "filterJoined": "Joins only",
+    "filterLeft": "Leaves only",
+    "exportLogs": "Export logs",
+    "filter": "Filter logs"
+  },
+  "scheduledAnnouncements": {
+    "title": "Scheduled Announcements",
+    "none": "No scheduled announcements",
+    "hint": "Schedule your first announcement to get started"
+  },
+  "friendsTab": {
+    "enterUsername": "Enter a username to send a friend request.",
+    "placeholder": "Username or Friend Code (e.g.: 8392014)",
+    "placeholder2": "Username or friend code"
+  },
+  "bookmarks": {
+    "removeBookmark": "Remove bookmark"
+  },
+  "emojiMgmt": {
+    "title": "Emoji Management",
+    "noEmoji": "No custom emoji yet",
+    "suggestedBy": "Suggested by",
+    "trending": "Trending",
+    "suggestions": "Suggestions"
+  },
+  "mentions": {
+    "refresh": "Refresh mentions",
+    "loadMore": "Load more mentions"
+  },
+  "stickyMsgs": {
+    "createSticky": "Create sticky message",
+    "deleteSticky": "Delete sticky message"
+  },
+  "screening": {
+    "title": "Member Screening Questions",
+    "desc": "New members must answer these questions before joining the server.",
+    "noQuestions": "No questions added yet"
+  },
+  "mediaRec": {
+    "audio": "Audio Recording",
+    "video": "Video Recording",
+    "screen": "Screen Recording",
+    "startRecording": "Start recording",
+    "pauseRecording": "Pause recording",
+    "resumeRecording": "Resume recording",
+    "stopRecording": "Stop recording",
+    "cancelRecording": "Cancel recording",
+    "deleteRecording": "Delete recording",
+    "sendRecording": "Send recording",
+    "voiceMessageBtn": "Hold to record voice message"
+  },
+  "musicPlayer": {
+    "noSong": "No song selected",
+    "queueEmpty": "Queue empty",
+    "addSong": "Add Song"
+  },
+  "advModPanel": {
+    "bulkWarning": "Bulk actions affect multiple users. Use with caution!",
+    "joinRateDesc": "Number of users joining in the time window"
+  },
+  "msgHandlers": {
+    "deleteAllConfirm": "Are you sure you want to delete all messages in this room?",
+    "adminDeleteConfirmFull": "⚠️ ADMIN: Are you sure you want to permanently delete this conversation for both parties?\n\nThis action CANNOT BE UNDONE!"
+  },
+  "app": {
+    "loadingInvite": "Loading invitation..."
+  },
+  "reportSystem": {
+    "reportedUser": "Reported User",
+    "title": "Report System",
+    "totalReports": "Total Reports",
+    "reportedBy": "By"
+  },
+  "adminUser": {
+    "unban": "Unban",
+    "deleteUser": "Delete User"
+  },
+  "featureWhitelist": {
+    "engLearning": "📚 English Learning",
+    "desc": "This list gives free users access to selected sections (English Learning or Critical Thinking) without requiring Premium.",
+    "addByUsername": "Add by username",
+    "addByFriendCode": "Add by friend code",
+    "addUser": "Add to feature whitelist",
+    "removeUser": "Remove from feature whitelist"
+  },
+  "adminLogs": {
+    "noLogs": "📭 No logs found",
+    "never": "Never"
+  },
+  "adminSec": {
+    "loginAttempts": "Login Attempts",
+    "failedLogins": "Failed Logins",
+    "last24h": "Last 24 hours"
+  },
+  "botDev": {
+    "title": "🤖 Bot Developer Panel"
+  },
+  "permTab": {
+    "addPerm": "Add Permission",
+    "userNotFound": "User not found"
+  },
+  "aiChatbot": {
+    "title": "PawsCord Assistant",
+    "subtitle": "Powered by GPT-4 • Responses may not always be accurate"
+  },
+  "codeBlock": {
+    "runCode": "Run code",
+    "copyCode": "Copy code",
+    "collapse": "Collapse code"
+  },
+  "gameMsg": {
+    "rpsTitle": "🎮 Rock Paper Scissors",
+    "waitingOpponent": "You made your move, waiting for opponent..."
+  },
+  "schedulePicker": {
+    "schedule": "Schedule message"
+  },
+  "msgThread": {
+    "noReplies": "No replies yet",
+    "beFirst": "Be the first to reply!",
+    "replyPlaceholder": "Reply in thread...",
+    "replies": "replies"
+  },
+  "rulesSettings": {
+    "title": "Server Rules",
+    "noRules": "No rules added yet"
+  },
+  "integrations": {
+    "connectedTab": "Connected integrations",
+    "availableTab": "Available integrations",
+    "webhooksTab": "Webhooks",
+    "available": "Available integrations",
+    "searchPlaceholder": "Search integrations...",
+    "connected": "Connected integrations"
+  },
+  "videoCall": {
+    "settings": "Settings",
+    "fullscreen": "Fullscreen",
+    "endCall": "End call"
+  },
+  "aiMod": {
+    "desc": "Automatic content filtering powered by machine learning",
+    "sensitivityDesc": "Sensitivity level for toxic content"
+  },
+  "modNotes": {
+    "addPlaceholder": "Add a new note...",
+    "addNote": "Add note"
+  },
+  "spamDetect": {
+    "loading": "Loading spam protection system...",
+    "subtitle": "ML-based intelligent spam detection"
+  },
+  "timeoutPanel": {
+    "customDuration": "Custom Duration (minutes)",
+    "willBeTimeout": "⏰ User will not be able to send messages for"
+  },
+  "notifs": {
+    "clearAllConfirm": "Are you sure you want to delete all notifications?",
+    "unread": "unread",
+    "clearAllConfirm2": "Are you sure you want to clear all notifications?"
+  },
+  "connQuality": {
+    "connection": "Connection:",
+    "packetLoss": "Packet Loss:"
+  },
+  "profileCard": {
+    "joined": "Joined",
+    "spotifyConnected": "🎵 Spotify Connected",
+    "ariaLabel": "profile card",
+    "bannerUrl": "Banner URL",
+    "bannerColor": "Banner color",
+    "bioInput": "Bio",
+    "linkName": "Link name (optional)",
+    "linkUrl": "Link URL",
+    "backgroundUrl": "https://...",
+    "badgeName": "Name (optional)",
+    "badgeUrl": "URL"
+  },
+  "userActivity": {
+    "activityTab": "Activity Log",
+    "presenceTab": "Presence History"
+  },
+  "userNotes": {
+    "noteAbout": "Note about {{user}}",
+    "selectColor": "Select color {{name}}",
+    "placeholder": "Write your note here..."
+  },
+  "loginHistory": {
+    "unknownOS": "Unknown Operating System",
+    "notFound": "No login history found",
+    "revokeSession": "Revoke session"
+  },
+  "sessions": {
+    "revokeAll": "Revoke all sessions",
+    "revokeSession": "Revoke session"
+  },
+  "chanAbout": {
+    "members": "Members",
+    "channelType": "CHANNEL TYPE",
+    "aboutTab": "About",
+    "membersTab": "Members"
+  },
+  "lang": {
+    "tr": "🇹🇷 Turkish",
+    "fr": "🇫🇷 French"
+  },
+  "serverTemplates": {
+    "title": "Server Templates",
+    "useThis": "Use This Template",
+    "allCategories": "All categories",
+    "preview": "Preview template",
+    "useTemplate": "Use template"
+  },
+  "vanityInvite": {
+    "returnHome": "Return to home",
+    "join": "Join server"
+  },
+  "waitingRoom": {
+    "title": "Waiting Queue",
+    "peopleAhead": "people ahead of you"
+  },
+  "managementTab": {
+    "changeIcon": "Change Icon",
+    "deleteConfirmKey": "this_action_cannot_be_undone"
+  },
+  "themeMarket": {
+    "searchPlaceholder": "Search themes...",
+    "popularFilter": "Popular themes",
+    "newFilter": "New themes",
+    "topRatedFilter": "Top rated themes"
+  },
+  "ticketConfig": {
+    "title": "⚙️ System Settings",
+    "save": "💾 Save Settings"
+  },
+  "webhooks": {
+    "create": "Create webhook",
+    "nameInput": "Webhook name"
+  },
+  "msgMedia": {
+    "chart": "Chart",
+    "expires": "Expires",
+    "showChart": "Show chart"
+  },
+  "roomModals": {
+    "deleteServerConfirm": "You are about to PERMANENTLY delete \"{{name}}\"!",
+    "leaveServerConfirm": "Are you sure you want to leave \"{{name}}\"?"
+  },
+  "badgesTab": {
+    "noBadges": "No badges earned yet. Show more activity!",
+    "noAchievements": "No achievements earned yet."
+  },
+  "linkTracking": {
+    "exportStats": "Export link statistics"
+  },
+  "adminAnalytics": {
+    "loadError": "Failed to load analytics data"
+  },
+  "adminModal": {
+    "actionConfirm": "Action Confirmation",
+    "editUser": "Edit User",
+    "changePassword": "Change Password"
+  },
+  "botCard": {
+    "featured": "Featured"
+  },
+  "bookmarksPanel": {
+    "empty": "No saved messages yet"
+  },
+  "codeEditor": {
+    "copyCode": "Copy code",
+    "downloadCode": "Download code",
+    "saveCode": "Save code",
+    "runCode": "Run code"
+  },
+  "filePreview": {
+    "copy": "Copy code",
+    "collapse": "Collapse",
+    "expand": "Expand"
+  },
+  "markdownPreview": {
+    "label": "Markdown Preview"
+  },
+  "msgInput": {
+    "replyingTo": "Replying to message",
+    "cancelReply": "Cancel reply",
+    "editingMessage": "Editing message",
+    "cancelEdit": "Cancel edit"
+  },
+  "ocrPanel": {
+    "processing": "Processing...",
+    "start": "Start OCR Process"
+  },
+  "savedMsgs": {
+    "empty": "No saved messages yet"
+  },
+  "voiceMsgPlayer": {
+    "fileNotFound": "Audio file not found (old message)"
+  },
+  "depositTab": {
+    "txIdPlaceholder": "Paste your transaction ID here"
+  },
+  "djModal": {
+    "loading": "Player loading..."
+  },
+  "inputMenu": {
+    "template": "Template (Ctrl+T)"
+  },
+  "pendingFiles": {
+    "removeAll": "Remove All",
+    "waiting": "{{count}} files pending"
+  },
+  "notifPrefs": {
+    "dndHours": "Do Not Disturb Hours"
+  },
+  "serverHealth": {
+    "allSystemsOk": "All Systems Operational",
+    "panel": "Server health panel"
+  },
+  "premiumStore": {
+    "title": "Premium Store",
+    "boostTab": "Server boost tab",
+    "premiumTab": "Premium tab",
+    "storeTab": "Store tab"
+  },
+  "themeStore": {
+    "title": "Theme Store"
+  },
+  "profileCardEditor": {
+    "badgeHint": "Select up to 3 badges to display on your profile"
+  },
+  "scheduledAnn": {
+    "deleteConfirm": "Are you sure you want to delete this scheduled announcement?"
+  },
+  "inviteModal": {
+    "linkSection": "Invite link section",
+    "inviteLink": "Invite link",
+    "friendList": "Friend list"
+  },
+  "serverDiscovery": {
+    "subtitle": "Discover communities you might enjoy",
+    "searchPlaceholder": "Search servers...",
+    "categoryBtn": "Filter by {{cat}}",
+    "serverCard": "Server card"
+  },
+  "serverMembers": {
+    "members": "Members"
+  },
+  "serverEvents": {
+    "createFirst": "Create the first event",
+    "container": "Server events",
+    "eventCard": "Event card"
+  },
+  "systemBot": {
+    "removeAvatar": "Remove bot avatar",
+    "save": "Save system bot settings"
+  },
+  "connBanner": {
+    "disconnected": "Disconnected. Attempting to reconnect..."
+  },
+  "errorBoundary": {
+    "title": "Oops! Something went wrong",
+    "message": "Sorry, the application encountered an unexpected error."
+  },
+  "fileManager": {
+    "searchPlaceholder": "Search files...",
+    "filterBy": "Filter by {{cat}}"
+  },
+  "imageGallery": {
+    "photos": "photos"
+  },
+  "ticketSystem": {
+    "closeConfirm": "Are you sure you want to close this ticket?"
+  },
+  "warnings": {
+    "removeConfirm": "Are you sure you want to remove this warning?"
+  },
+  "voiceIsland": {
+    "title": "VOICE CHAT"
+  },
+  "pinnedMsgs": {
+    "unpin": "Unpin"
+  },
+  "replyPreview": {
+    "replyingTo": "Replying to"
+  },
+  "msgComponents": {
+    "download": "Download"
+  },
+  "msgContextMenu": {
+    "deleteConfirm": "Are you sure you want to delete this message?"
+  },
+  "bookmarksTab": {
+    "noBookmarks": "No bookmarks yet"
+  },
+  "confirmDialog": {
+    "thisAction": "This action:"
+  },
+  "echoWarning": {
+    "message": "Using headphones is recommended. Using speakers may cause echo."
+  },
+  "settingsModal": {
+    "stopTest": "⏹️ Stop Test",
+    "startTest": "▶️ Start Test"
+  },
+  "gif": {
+    "search": "Search GIFs..."
+  },
+  "bookmark": {
+    "remove": "Remove bookmark",
+    "add": "Add bookmark",
+    "removeStar": "Remove star",
+    "addStar": "Star message",
+    "removeReadLater": "Remove from read later",
+    "addReadLater": "Read later"
+  },
+  "noiseTab": {
+    "noiseSuppressionToggle": "Toggle noise suppression",
+    "echoCancellationToggle": "Toggle echo cancellation",
+    "echoCancellationLevel": "Select echo cancellation level",
+    "noiseGateToggle": "Toggle noise gate",
+    "noiseGateThreshold": "Noise gate threshold",
+    "attackDuration": "Select attack duration",
+    "releaseDuration": "Select release duration",
+    "agcToggle": "Toggle automatic gain control",
+    "highPassToggle": "Toggle high pass filter",
+    "highPassFrequency": "Select high pass filter frequency"
+  },
+  "polls": {
+    "questionInput": "Poll question",
+    "removeOption": "Remove option",
+    "selectDuration": "Select duration",
+    "createPollBtn": "Create poll",
+    "card": "Poll card",
+    "newPoll": "New poll",
+    "vote": "Vote for option"
+  },
+  "lightbox": {
+    "zoomOut": "Zoom out",
+    "zoomIn": "Zoom in",
+    "rotate": "Rotate image",
+    "reset": "Reset view",
+    "prevImage": "Previous image",
+    "nextImage": "Next image"
+  },
+  "notifCenter": {
+    "panel": "Notifications",
+    "pushToggle": "Toggle push notifications",
+    "emailToggle": "Toggle email notifications",
+    "soundToggle": "Toggle notification sounds",
+    "mentionsToggle": "Toggle mentions only",
+    "dndToggle": "Toggle do not disturb",
+    "list": "Notification items"
+  },
+  "serverBackup": {
+    "createBtn": "Create backup",
+    "restore": "Restore backup",
+    "download": "Download backup",
+    "delete": "Delete backup"
+  },
+  "scheduledMsg": {
+    "in5min": "Schedule in 5 minutes",
+    "in30min": "Schedule in 30 minutes",
+    "in1hour": "Schedule in 1 hour",
+    "scheduleBtn": "Schedule message"
+  },
+  "voiceMsg": {
+    "cancelRecording": "Cancel recording",
+    "stopRecording": "Stop recording",
+    "sendVoiceMsg": "Send voice message"
+  },
+  "msgSummary": {
+    "generateBtn": "Generate summary",
+    "copySummary": "Copy summary",
+    "exportSummary": "Export summary"
+  },
+  "notifSound": {
+    "masterToggle": "Toggle all sounds",
+    "playPreview": "Play sound preview",
+    "stopPreview": "Stop preview",
+    "toggleEvent": "Toggle sound event",
+    "saveSettings": "Save sound settings"
+  },
+  "voiceRec": {
+    "recordTab": "Record",
+    "recordingsTab": "Recordings",
+    "settingsTab": "Settings"
+  },
+  "voiceSettings": {
+    "stopMicTest": "Stop microphone test",
+    "testMic": "Test microphone",
+    "resetDefaults": "Reset to defaults",
+    "saveSettings": "Save settings",
+    "effectsTab": "Effects tab",
+    "pushToTalkKey": "Push-to-talk key",
+    "micTestStarted": "Microphone test started",
+    "micTestStopped": "Microphone test stopped"
+  },
+  "voiceTranscripts": {
+    "searchInput": "Search transcripts",
+    "exportAll": "Export all transcripts",
+    "download": "Download transcript"
+  },
+  "msgActions": {
+    "react": "React",
+    "reply": "Reply",
+    "edit": "Edit message",
+    "more": "More actions"
+  },
+  "premiumModal": {
+    "monthlyBilling": "Monthly billing",
+    "yearlyBilling": "Yearly billing",
+    "selectTier": "Select tier",
+    "subscribe": "Subscribe"
+  },
+  "subManager": {
+    "cancelSub": "Cancel subscription",
+    "resumeSub": "Resume subscription"
+  },
+  "transactions": {
+    "exportBtn": "Export transactions"
+  },
+  "mutuals": {
+    "friendsTab": "Mutual friends",
+    "serversTab": "Mutual servers",
+    "sendMessage": "Send message"
+  },
+  "safetyNumber": {
+    "showQR": "Show QR code",
+    "showNumber": "Show safety number",
+    "verifyBtn": "Verify safety number"
+  },
+  "msgTemplates": {
+    "nameInput": "Template name",
+    "createBtn": "Create template",
+    "useTemplate": "Use template",
+    "deleteTemplate": "Delete template"
+  },
+  "serverNicknames": {
+    "searchInput": "Search members",
+    "editNickname": "Edit nickname",
+    "clearNickname": "Clear nickname"
+  },
+  "rolesTab": {
+    "createRole": "Create new role",
+    "selectColor": "Select role color",
+    "deleteRole": "Delete role",
+    "saveRole": "Save role"
+  },
+  "msgOCR": {
+    "copyText": "Copy text",
+    "downloadText": "Download text",
+    "requestOCR": "Extract text from image"
+  },
+  "msgExport": {
+    "downloadExport": "Download export",
+    "startExport": "Start export"
+  },
+  "msgReactions": {
+    "react": "React with",
+    "addReaction": "Add reaction"
+  },
+  "msgTemplateModal": {
+    "createBtn": "Create template"
+  },
+  "serverRoles": {
+    "createRole": "Create new role",
+    "hideNewRole": "Hide new role form",
+    "deleteRole": "Delete role"
+  },
+  "calendar": {
+    "calendarView": "Calendar view",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
+  "dj": {
+    "addToQueue": "Add to queue",
+    "playNext": "Play next"
+  },
+  "aiChat": {
+    "getSummary": "Get conversation summary",
+    "sendMessage": "Send message"
+  },
+  "createEvent": {
+    "nameInput": "Event name",
+    "locationInput": "External location"
+  },
+  "inviteLinks": {
+    "createLink": "Create invite link",
+    "copyLink": "Copy link",
+    "revokeLink": "Revoke link"
+  },
+  "pollCreator": {
+    "closePoll": "Close poll",
+    "addOption": "Add option",
+    "createPoll": "Create poll"
+  },
+  "timeoutMute": {
+    "removeMute": "Remove mute",
+    "applyMute": "Apply mute",
+    "duration": "Duration in minutes",
+    "reason": "Spam, rule violation, etc."
+  },
+  "modTools": {
+    "banUser": "Ban user",
+    "addNote": "Add note"
+  },
+  "kanbanCard": {
+    "removeItem": "Remove checklist item",
+    "newChecklistItem": "New checklist item"
+  },
+  "savedMessages": {
+    "goToMessage": "Go to message",
+    "removeMessage": "Remove saved message"
+  },
+  "scheduledMessages": {
+    "cancel": "Cancel scheduled message"
+  },
+  "threads": {
+    "subscribe": "Subscribe to thread",
+    "unsubscribe": "Unsubscribe from thread",
+    "sendMessage": "Send thread message",
+    "createThread": "Create thread",
+    "pinThread": "Pin thread",
+    "noThreads": "No threads yet",
+    "subscribers": "{{count}} subscribers",
+    "subscribeToThread": "Subscribe",
+    "newThread": "New Thread"
+  },
+  "game": {
+    "rock": "Rock",
+    "paper": "Paper",
+    "scissors": "Scissors"
+  },
+  "voicePlayer": {
+    "play": "Play",
+    "pause": "Pause",
+    "transcribe": "Transcribe voice message"
+  },
+  "emailVerify": {
+    "goToLogin": "Go to login",
+    "backToRegister": "Back to registration"
+  },
+  "cryptoStore": {
+    "dailyClaim": "Claim daily reward",
+    "inventoryTab": "Inventory",
+    "storeTab": "Store"
+  },
+  "raidProtection": {
+    "toggle": "Toggle raid protection",
+    "overview": "Overview",
+    "checkbox": "Toggle option"
+  },
+  "eventCalendar": {
+    "going": "Going",
+    "interested": "Interested"
+  },
+  "webAuthn": {
+    "registerKey": "Register security key",
+    "removeKey": "Remove security key"
+  },
+  "sessionManager": {
+    "revokeSession": "Revoke session"
+  },
+  "vanityURL": {
+    "setVanity": "Set vanity URL"
+  },
+  "codeSnippet": {
+    "submit": "Submit code snippet",
+    "title": "Title (Optional)"
+  },
+  "extraFeaturesPanel": {
+    "panel": "Extra features panel"
+  },
+  "smartSuggestions": {
+    "panel": "Smart suggestions panel"
+  },
+  "newFeatures": {
+    "panel": "New features panel"
+  },
+  "signalNotification": {
+    "container": "Signal notification"
+  },
+  "reportDetail": {
+    "modal": "Report detail"
+  },
+  "connectionQuality": {
+    "indicator": "Connection quality indicator"
+  },
+  "connectionStatus": {
+    "bar": "Connection status bar"
+  },
+  "levelingSystem": {
+    "saveConfig": "Save configuration",
+    "leaderboard": "Leaderboard"
+  },
+  "messageSection": {
+    "embedTitle": "Embed title"
+  },
+  "toastDemo": {
+    "showSuccess": "Show success toast",
+    "showError": "Show error toast",
+    "showWarning": "Show warning toast",
+    "showInfo": "Show info toast",
+    "showMultiple": "Show multiple toasts",
+    "showLongDuration": "Show long duration toast",
+    "showLongMessage": "Show long message toast",
+    "customMessage": "Custom message input",
+    "toastType": "Toast type",
+    "showToast": "Show toast",
+    "messagePlaceholder": "Type your message here..."
+  },
+  "appModals": {
+    "batch10": "App modals",
+    "batch11": "App modals",
+    "batch1to8": "App modals",
+    "core": "App modals"
+  },
+  "botDeveloper": {
+    "detailsView": "Bot details",
+    "listView": "Bot list",
+    "docsView": "Bot documentation",
+    "switchView": "Switch view",
+    "callbackUrl": "https://..."
+  },
+  "botMarketplace": {
+    "card": "Bot card",
+    "detailModal": "Bot detail",
+    "nextPage": "Next page"
+  },
+  "coinStore": {
+    "packageCard": "Package card"
+  },
+  "gamePresence": {
+    "activityBadge": "Activity badge",
+    "container": "Game presence",
+    "playtimeStats": "Playtime statistics",
+    "richPresenceCard": "Rich presence card",
+    "spotifyCard": "Spotify card"
+  },
+  "messageInput": {
+    "pendingFiles": "Pending files"
+  },
+  "userPresence": {
+    "panel": "User presence insights panel"
+  },
+  "videoStreaming": {
+    "dashPlayer": "Video player",
+    "nativePlayer": "Video player",
+    "play": "Play video"
+  },
+  "voiceRecording": {
+    "recordingsView": "Recordings",
+    "saveRecording": "Save recording"
+  },
+  "gallery": {
+    "imageGroup": "Image gallery"
+  },
+  "banAppeals": {
+    "submitAppeal": "Submit appeal"
+  },
+  "themeMarketplace": {
+    "previewTheme": "Preview theme"
+  },
+  "logoutModal": {
+    "confirm": "Confirm logout"
+  },
+  "quickSwitcher": {
+    "clear": "Clear search"
+  },
+  "channelSettings": {
+    "deleteHistory": "Delete message history",
+    "createWebhook": "Create webhook",
+    "addPermission": "Add permission"
+  },
+  "emojiPicker": {
+    "toggle": "Toggle emoji section"
+  },
+  "giftPremium": {
+    "giftButton": "Gift premium"
+  },
+  "customEmbed": {
+    "imageUrl": "https://...",
+    "thumbnailUrl": "https://...",
+    "authorIconUrl": "https://...",
+    "footerText": "Footer text",
+    "footerIconUrl": "https://..."
+  },
+  "webhooksPanel": {
+    "webhookName": "e.g. GitHub Bot",
+    "webhookAvatarUrl": "https://example.com/avatar.png"
+  },
+  "webhookManager": {
+    "webhookUrl": "Webhook URL"
+  },
+  "vanityUrlManager": {
+    "slug": "myserver"
+  },
+  "transfer": {
+    "amount": "0"
+  },
+  "commandCard": {
+    "trigger": "!command"
+  },
+  "errorReport": {
+    "whatHappened": "What happened?"
+  },
+  "appsTab": {
+    "callbackUrl": "https://example.com/callback"
+  },
+  "profileShowcase": {
+    "url": "https://..."
+  },
+  "aria": {
+    "advancedModerationPanel": "Advanced Moderation Panel",
+    "inviteServerModal": "Invite to Server",
+    "coinDetailModal": "Coin Detail",
+    "cryptoLoading": "Loading",
+    "cinemaModal": "Cinema & Music",
+    "cryptoChartModal": "Crypto Chart",
+    "floatingVoiceIsland": "Voice Island",
+    "gifPicker": "GIF Picker",
+    "youtubeEmbed": "YouTube Video",
+    "messageEditForm": "Edit Message",
+    "summaryModal": "AI Summary",
+    "voiceAudioController": "Voice Audio",
+    "videoMessage": "Video Message",
+    "messageContextMenu": "Message Menu",
+    "analyticsDashboard": "Analytics Dashboard",
+    "authCallback": "Authentication",
+    "economyPanel": "Economy Panel",
+    "circleProgress": "Progress",
+    "invitePage": "Invite",
+    "pawIcon": "Paw",
+    "scoreArc": "Score",
+    "spotifyCallback": "Spotify Connection",
+    "roomContextMenu": "Room Menu",
+    "userProfilePanel": "User Profile",
+    "activityTab": "Activity",
+    "appearanceTab": "Appearance",
+    "badgesTab": "Badges",
+    "bookmarksTab": "Bookmarks",
+    "customStatusInput": "Custom Status",
+    "saveStatus": "Save Status",
+    "developerTab": "Developer",
+    "deleteDraft": "Delete Draft",
+    "endorsementsTab": "Endorsements",
+    "nicknameHistoryTab": "Name History",
+    "notificationsTab": "Notifications",
+    "premiumTab": "Premium",
+    "soundSettingsTab": "Sound Settings",
+    "controlBar": "Voice Controls",
+    "streamBadge": "Screen Share",
+    "voicePanel": "Voice Panel",
+    "hoverControls": "Video Controls",
+    "activityBadge": "Activity",
+    "priceDisplay": "Price",
+    "signalBadge": "Signal Badge",
+    "reactionPicker": "Reaction Picker",
+    "replyPreview": "Reply Preview",
+    "videoPlayer": "Video Player",
+    "pawscordLoading": "Pawscord Loading",
+    "videoChatFeed": "Video",
+    "videoDisplay": "Video",
+    "userOverlay": "User Status",
+    "connectionQuality": "Connection Quality",
+    "loadingSpinner": "Loading",
+    "errorBoundary": "Error"
+  },
+  "toast": {
+    "dismiss": "Dismiss notification"
+  },
+  "alt": {
+    "pawscordLogo": "Pawscord",
+    "albumArt": "Album Art",
+    "videoThumbnail": "Video Thumbnail",
+    "preview": "Preview",
+    "gallery": "Gallery",
+    "cropPreview": "Crop Preview",
+    "qrCode2fa": "2FA QR Code",
+    "qrCode": "QR Code",
+    "botAvatar": "Bot Avatar",
+    "pawscordInterface": "Pawscord Interface",
+    "chatInterface": "Chat Interface",
+    "voiceChannels": "Voice Channels",
+    "mobileApp": "Mobile App",
+    "userAvatar": "User Avatar",
+    "enlargedAttachment": "Enlarged Attachment",
+    "attachment": "Attachment",
+    "logo": "Logo"
+  },
+  "messageOCR": {
+    "noText": "No OCR text in this message"
+  },
+  "richTextEditor": {
+    "placeholder": "Write a message..."
+  },
+  "webhooks.loading": "Loading webhooks...",
+  "webhooks.management": "Webhook Management",
+  "webhooks.createNew": "Create New Webhook",
+  "webhooks.newWebhook": "New Webhook",
+  "webhooks.webhookNameRequired": "Webhook Name *",
+  "webhooks.channelRequired": "Channel *",
+  "webhooks.avatarUrlOptional": "Avatar URL (Optional)",
+  "webhooks.channel": "Channel",
+  "webhooks.avatarUrl": "Avatar URL",
+  "webhooks.logs": "Logs",
+  "webhooks.totalCalls": "Total Calls:",
+  "webhooks.successful": "Successful:",
+  "webhooks.failed": "Failed:",
+  "webhooks.lastCall": "Last Call:",
+  "webhooks.noWebhooksYet": "No webhooks yet",
+  "webhooks.createToReceive": "Create a webhook to receive messages from external apps",
+  "webhooks.webhookLogs": "Webhook Logs",
+  "webhooks.noLogsYet": "No logs yet",
+  "webhooks.subscribeEvents": "Events to Subscribe",
+  "webhooks.noChannelWebhooks": "No webhooks configured for this channel",
+  "webhooks.recentDeliveries": "Recent Deliveries",
+  "webhooks.noDeliveries": "No deliveries yet",
+  "webhooks.noWebhooksCreated": "No webhooks created yet",
+  "stage.stageChannels": "Stage Channels",
+  "stage.noActiveStages": "No active stages",
+  "stage.createFirst": "Create the first stage",
+  "stage.topicLabel": "Topic *",
+  "stage.maxListeners": "Max Listeners",
+  "stage.publicStage": "Public",
+  "backup.includeRoles": "🎭 Include roles",
+  "backup.includeEmojis": "😀 Include emojis",
+  "backup.existingBackups": "Existing Backups",
+  "backup.backupLabel": "Backup",
+  "serverBackup.title": "Server Backup",
+  "serverBoost.currentTier": "Current Tier",
+  "serverBoost.beFirstBooster": "Be the first to support!",
+  "vanityUrl.currentLabel": "Current Vanity URL:",
+  "appearance.theme": "Theme",
+  "appearance.accentColor": "Accent Color",
+  "appearance.messageMode": "Message Mode",
+  "appearance.messageModeDesc": "Choose how messages are displayed",
+  "appearance.appLanguage": "Application language",
+  "themeMarket.title": "Theme Marketplace",
+  "admin.errorReporting": "Error Reporting",
+  "admin.category": "Category",
+  "admin.bugReport": "🐛 Bug",
+  "admin.performance": "⚡ Performance",
+  "admin.priorityMedium": "🟡 Medium",
+  "admin.priorityCritical": "🔴 Critical",
+  "admin.systemInfo": "System Information",
+  "admin.massActions.ban": "🔨 Ban",
+  "admin.massActions.kick": "💢 Kick",
+  "admin.massActions.mute": "🔇 Mute",
+  "admin.massActions.warn": "⚠️ Warn",
+  "analytics.hourlyActivity": "Hourly Activity",
+  "boost.serverBoost": "Server Boost"
 }

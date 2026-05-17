@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
@@ -154,33 +154,36 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
         toast.info(t('memberActivity.exporting'));
     };
 
-    const sortedMembers = [...members]
-        .filter((m) => m.username.toLowerCase().includes(searchTerm.toLowerCase()))
-        .sort((a, b) => {
-            let aVal, bVal;
-            switch (sortBy) {
-                case 'messages':
-                    aVal = a.stats.messages;
-                    bVal = b.stats.messages;
-                    break;
-                case 'voice':
-                    aVal = a.stats.voice_minutes;
-                    bVal = b.stats.voice_minutes;
-                    break;
-                case 'reactions':
-                    aVal = a.stats.reactions_given;
-                    bVal = b.stats.reactions_given;
-                    break;
-                case 'last_active':
-                    aVal = new Date(a.stats.last_active).getTime();
-                    bVal = new Date(b.stats.last_active).getTime();
-                    break;
-                default:
-                    aVal = a.stats.messages;
-                    bVal = b.stats.messages;
-            }
-            return sortOrder === 'desc' ? bVal - aVal : aVal - bVal;
-        });
+    const sortedMembers = useMemo(() => {
+        const lowerSearch = searchTerm.toLowerCase();
+        return [...members]
+            .filter((m) => m.username.toLowerCase().includes(lowerSearch))
+            .sort((a, b) => {
+                let aVal, bVal;
+                switch (sortBy) {
+                    case 'messages':
+                        aVal = a.stats.messages;
+                        bVal = b.stats.messages;
+                        break;
+                    case 'voice':
+                        aVal = a.stats.voice_minutes;
+                        bVal = b.stats.voice_minutes;
+                        break;
+                    case 'reactions':
+                        aVal = a.stats.reactions_given;
+                        bVal = b.stats.reactions_given;
+                        break;
+                    case 'last_active':
+                        aVal = new Date(a.stats.last_active).getTime();
+                        bVal = new Date(b.stats.last_active).getTime();
+                        break;
+                    default:
+                        aVal = a.stats.messages;
+                        bVal = b.stats.messages;
+                }
+                return sortOrder === 'desc' ? bVal - aVal : aVal - bVal;
+            });
+    }, [members, searchTerm, sortBy, sortOrder]);
 
     const renderMiniChart = (data) => {
         const max = Math.max(...data);
@@ -235,7 +238,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                 <span className="stat-value">
                                     {serverStats.total_messages.toLocaleString()}
                                 </span>
-                                <span className="stat-label">Toplam Mesaj</span>
+                                <span className="stat-label">{t('memberActivity.totalMessages', 'Total Messages')}</span>
                             </div>
                             <span
                                 className={`trend ${serverStats.message_trend >= 0 ? 'up' : 'down'}`}
@@ -265,7 +268,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                 <span className="stat-value">
                                     {serverStats.total_reactions.toLocaleString()}
                                 </span>
-                                <span className="stat-label">Reactions</span>
+                                <span className="stat-label">{t('memberActivity.reactions', 'Reactions')}</span>
                             </div>
                             <span
                                 className={`trend ${serverStats.reaction_trend >= 0 ? 'up' : 'down'}`}
@@ -291,9 +294,9 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                     <div className="filter-group">
                         <FaCalendar />
                         <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
-                            <option value="day">Today</option>
-                            <option value="week">Bu Hafta</option>
-                            <option value="month">Bu Ay</option>
+                            <option value="day">{t('common.today', 'Today')}</option>
+                            <option value="week">{t('common.thisWeek', 'This Week')}</option>
+                            <option value="month">{t('common.thisMonth', 'This Month')}</option>
                             <option value="all">{t('admin.allTime', 'All Time')}</option>
                         </select>
                     </div>
@@ -340,7 +343,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                     <span className="value">
                                         {selectedMember.stats.messages.toLocaleString()}
                                     </span>
-                                    <span className="label">Mesajlar</span>
+                                    <span className="label">{t('memberActivity.messages', 'Messages')}</span>
                                 </div>
                                 <div className="detail-stat">
                                     <FaMicrophone />
@@ -354,7 +357,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                     <span className="value">
                                         {selectedMember.stats.reactions_given}
                                     </span>
-                                    <span className="label">Verilen Tepkiler</span>
+                                    <span className="label">{t('memberActivity.reactionsGiven', 'Reactions Given')}</span>
                                 </div>
                                 <div className="detail-stat">
                                     <FaMedal />
@@ -387,7 +390,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                     ) : (
                         <div className="members-table">
                             <div className="table-header">
-                                <div className="col col-member">Member</div>
+                                <div className="col col-member">{t('memberActivity.member', 'Member')}</div>
                                 <div
                                     className={`col col-messages sortable ${sortBy === 'messages' ? 'active' : ''}`}
                                     role="button"
@@ -433,7 +436,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                         <FaSortAmountDown className={sortOrder} />
                                     )}
                                 </div>
-                                <div className="col col-trend">Trend</div>
+                                <div className="col col-trend">{t('memberActivity.trend', 'Trend')}</div>
                                 <div
                                     className={`col col-last sortable ${sortBy === 'last_active' ? 'active' : ''}`}
                                     role="button"

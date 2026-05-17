@@ -144,6 +144,7 @@ const ServerSettingsModal = ({
                                 </span>
                                 <button
                                     aria-label={t('serverSettings.generalSettings', 'General settings')}
+                                    aria-current={activeTab === 'management' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'management' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -156,6 +157,7 @@ const ServerSettingsModal = ({
                                 </button>
                                 <button
                                     aria-label={t('serverSettings.roles', 'Roles')}
+                                    aria-current={activeTab === 'roles' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'roles' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -168,6 +170,7 @@ const ServerSettingsModal = ({
                                 </button>
                                 <button
                                     aria-label={t('serverSettings.members', 'Members')}
+                                    aria-current={activeTab === 'members' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'members' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -188,6 +191,7 @@ const ServerSettingsModal = ({
                                 </span>
                                 <button
                                     aria-label={t('autoResponder.title', 'Auto responders')}
+                                    aria-current={activeTab === 'autoresponders' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'autoresponders' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -201,6 +205,7 @@ const ServerSettingsModal = ({
                                 </button>
                                 <button
                                     aria-label={t('serverSettings.vanityUrl', 'Vanity URL')}
+                                    aria-current={activeTab === 'vanity' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'vanity' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -213,6 +218,7 @@ const ServerSettingsModal = ({
                                 </button>
                                 <button
                                     aria-label={t('serverSettings.welcomeMessage', 'Welcome message')}
+                                    aria-current={activeTab === 'welcome' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'welcome' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -225,6 +231,7 @@ const ServerSettingsModal = ({
                                 </button>
                                 <button
                                     aria-label={t('serverSettings.systemBot', 'System bot')}
+                                    aria-current={activeTab === 'systembot' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'systembot' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -246,6 +253,7 @@ const ServerSettingsModal = ({
                                 </span>
                                 <button
                                     aria-label={t('serverSettings.moderation', 'Moderation')}
+                                    aria-current={activeTab === 'moderation' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'moderation' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -258,6 +266,7 @@ const ServerSettingsModal = ({
                                 </button>
                                 <button
                                     aria-label={t('serverSettings.banManagement', 'Ban management')}
+                                    aria-current={activeTab === 'bans' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'bans' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -270,6 +279,7 @@ const ServerSettingsModal = ({
                                 </button>
                                 <button
                                     aria-label={t('serverSettings.auditLog', 'Audit log')}
+                                    aria-current={activeTab === 'auditlog' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'auditlog' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,
@@ -290,6 +300,7 @@ const ServerSettingsModal = ({
                                 </span>
                                 <button
                                     aria-label={t('serverSettings.analytics', 'Analytics')}
+                                    aria-current={activeTab === 'stats' ? 'page' : undefined}
                                     className={`ss-nav-item${activeTab === 'stats' ? ' ss-nav-active' : ''}`}
                                     style={{
                                         ...styles.navItem,

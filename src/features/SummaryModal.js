@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes, FaMagic, FaRobot } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
@@ -131,7 +130,7 @@ const styles = {
     },
 };
 
-// Animasyon stili (Header'a eklemek i�in)
+// Animasyon stili (Header'a eklemek için)
 const styleSheet = document.createElement('style');
 styleSheet.innerText = `
     @keyframes popIn {

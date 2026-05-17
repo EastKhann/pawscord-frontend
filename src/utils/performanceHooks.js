@@ -17,7 +17,7 @@
 
 // Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
 // aria-label: n/a — hook/context/utility module, no directly rendered JSX
-import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import logger from '../utils/logger';
 
@@ -290,7 +290,7 @@ export const reportWebVitals = (onPerfEntry) => {
             getFCP(onPerfEntry);
             getLCP(onPerfEntry);
             getTTFB(onPerfEntry);
-        });
+        }).catch((err) => console.error('Failed to load web-vitals module:', err));
     }
 };
 
@@ -944,7 +944,7 @@ export const useDeepCompare = (obj) => {
 // =====================================================================
 
 /**
- * Attach an event listner with automatic cleanup.
+ * Attach an event listener with automatic cleanup.
  *
  * @param {string} eventName - DOM event name
  * @param {Function} handler - Event handler

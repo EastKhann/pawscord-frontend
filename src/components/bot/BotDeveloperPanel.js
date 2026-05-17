@@ -9,7 +9,7 @@ import './BotDeveloperPanel.css';
 
 const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         bots,
         selectedBot,

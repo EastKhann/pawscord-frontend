@@ -3,7 +3,7 @@
 // 🖼️ FEATURE 2: Enhanced Image Lightbox
 // Zoom, download, rotate, prev/next navigation
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
@@ -22,7 +22,7 @@ const ImageLightbox = ({ imageUrl, images = [], startIndex = 0, onClose }) => {
     const { t } = useTranslation();
     const [currentIndex, setCurrentIndex] = useState(startIndex);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [zoom, setZoom] = useState(1);
     const [rotation, setRotation] = useState(0);
     const [position, setPosition] = useState({ x: 0, y: 0 });

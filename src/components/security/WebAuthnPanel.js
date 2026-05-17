@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import './WebAuthnPanel.css';
 import { FaKey, FaShieldAlt, FaPlus, FaTrash, FaFingerprint, FaUsb } from 'react-icons/fa';

@@ -21,6 +21,7 @@ import ActivityTab from '../UserSettingsModal/tabs/ActivityTab';
 import DevicesTab from '../UserSettingsModal/tabs/DevicesTab';
 import AdvancedTab from '../UserSettingsModal/tabs/AdvancedTab';
 import useModalA11y from '../../hooks/useModalA11y';
+import '../UserSettingsModal/responsive.css';
 
 if (typeof document !== 'undefined') {
     const _id = 'settings-tab-anim-css';
@@ -73,7 +74,7 @@ const UserSettingsModal = ({ onClose, user }) => {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('account');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [isDirty, setIsDirty] = useState(false);
 
     const handleDirtyChange = useCallback((dirty) => setIsDirty(dirty), []);
@@ -114,12 +115,12 @@ const UserSettingsModal = ({ onClose, user }) => {
 
     return (
         <div style={S.overlay} {...overlayProps}>
-            <div style={S.modal} {...dialogProps}>
-                <div style={S.sidebar}>
+            <div style={S.modal} {...dialogProps} className="pawscord-settings-modal">
+                <div style={S.sidebar} className="pawscord-settings-sidebar">
                     <div style={S.sidebarScroll}>
                         {Object.entries(sections).map(([section, tabs]) => (
                             <div key={section}>
-                                <div style={S.sectionLabel}>{section}</div>
+                                <div style={S.sectionLabel} className="pawscord-settings-section-label">{section}</div>
                                 {tabs.map((tab) => {
                                     const Icon = tab.icon;
                                     const isActive = activeTab === tab.id;
@@ -132,6 +133,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                                             aria-current={isActive ? 'page' : undefined}
                                             key={tab.id}
                                             type="button"
+                                            data-testid={`settings-tab-${tab.id}`}
                                             style={{
                                                 ...S.tabBtn,
                                                 backgroundColor: isActive
@@ -151,7 +153,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                                                         'transparent';
                                             }}
                                         >
-                                            <Icon style={M.font} />
+                                            <Icon style={M.font} className="pawscord-settings-tab-icon" />
                                             <span>{tabLabel}</span>
                                         </button>
                                     );
@@ -159,14 +161,20 @@ const UserSettingsModal = ({ onClose, user }) => {
                                 <div style={S.divider} />
                             </div>
                         ))}
-                        <button aria-label={t('common.close', 'Close')} type="button" style={M.txt} onClick={handleClose}>
+                        <button
+                            aria-label={t('common.close', 'Close')}
+                            type="button"
+                            data-testid="settings-logout-btn"
+                            style={M.txt}
+                            onClick={handleClose}
+                        >
                             <FaSignOutAlt className="fs-14" />
                             <span>{t('common.logout', 'Log Out')}</span>
                         </button>
                     </div>
                 </div>
-                <div style={S.content}>
-                    <div style={S.contentHeader}>
+                <div style={S.content} className="pawscord-settings-content">
+                    <div style={S.contentHeader} className="pawscord-settings-content-header">
                         <h2 style={M.txt2}>
                             {(() => {
                                 const tab = TABS.find((t2) => t2.id === activeTab);
@@ -185,7 +193,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                             <span style={M.txt3}>ESC</span>
                         </button>
                     </div>
-                    <div style={S.contentBody} key={activeTab} className="settings-tab-content">
+                    <div style={S.contentBody} key={activeTab} className="settings-tab-content pawscord-settings-content-body">
                         <ActiveComponent user={user} onDirtyChange={handleDirtyChange} />
                     </div>
                 </div>

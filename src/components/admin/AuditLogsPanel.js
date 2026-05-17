@@ -165,10 +165,10 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
         const now = new Date();
         const diffInSeconds = Math.floor((now - date) / 1000);
 
-        if (diffInSeconds < 60) return 'Just now';
-        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-        if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+        if (diffInSeconds < 60) return t('common.justNow', 'Just now');
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} ${t('common.minutesAgo', 'minutes ago')}`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} ${t('common.hoursAgo', 'hours ago')}`;
+        if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} ${t('common.daysAgo', 'days ago')}`;
 
         return date.toLocaleDateString('tr-TR', {
             year: 'numeric',
@@ -195,7 +195,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="audit-header">
-                    <h2>📋 Audit Logs</h2>
+                    <h2>📋 {t('admin.auditLog', 'Audit Logs')}</h2>
                     <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
@@ -296,14 +296,14 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
                             className="filter-btn clear-btn"
                             onClick={clearFilters}
                         >
-                            🗑️ Clear
+                            🗑️ {t('admin.clearFilters', 'Clear')}
                         </button>
                         <button
                             aria-label={t('admin.exportLogs', 'Export logs')}
                             className="filter-btn export-btn"
                             onClick={exportLogs}
                         >
-                            📥 Export
+                            📥 {t('common.export', 'Export')}
                         </button>
                     </div>
                 </div>
@@ -354,7 +354,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
                                             </div>
 
                                             <div className="log-description">
-                                                {log.description || 'Description yok'}
+                                                {log.description || t('admin.noDescription', 'No description')}
                                             </div>
 
                                             {log.metadata &&

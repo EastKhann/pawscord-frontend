@@ -102,7 +102,7 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
     // Faz 3.2: profile hover popup
     const [showPopup, setShowPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const itemRef = useRef(null);
 
     const handleKeyDown = (e) => {

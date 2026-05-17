@@ -17,7 +17,7 @@ const _st1181 = {
 
 const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const a = useScheduledAnnouncements(fetchWithAuth, apiBaseUrl);
 
     return (

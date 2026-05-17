@@ -107,9 +107,9 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
 
     const getStatusBadge = (status) => {
         const badges = {
-            pending: { label: 'Bekliyor', className: 'status-pending' },
+            pending: { label: t('common.pending', 'Pending'), className: 'status-pending' },
             resolved: { label: t('reports.resolved', 'Resolved'), className: 'status-resolved' },
-            dismissed: { label: 'Reddedildi', className: 'status-dismissed' },
+            dismissed: { label: t('reports.rejected', 'Rejected'), className: 'status-dismissed' },
         };
         return badges[status] || { label: status, className: '' };
     };
@@ -143,12 +143,15 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
         });
     };
 
-    const stats = {
-        total: reports.length,
-        pending: reports.filter((r) => r.status === 'pending').length,
-        resolved: reports.filter((r) => r.status === 'resolved').length,
-        dismissed: reports.filter((r) => r.status === 'dismissed').length,
-    };
+    const stats = useMemo(() => {
+        let pending = 0, resolved = 0, dismissed = 0;
+        for (const r of reports) {
+            if (r.status === 'pending') pending++;
+            else if (r.status === 'resolved') resolved++;
+            else if (r.status === 'dismissed') dismissed++;
+        }
+        return { total: reports.length, pending, resolved, dismissed };
+    }, [reports]);
 
     return (
         <div
@@ -206,7 +209,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                         className={filter === 'pending' ? 'active' : ''}
                         onClick={() => setFilter('pending')}
                     >
-                        Bekliyor ({stats.pending})
+                        {t('common.pending', 'Pending')} ({stats.pending})
                     </button>
                     <button
                         aria-label={t('admin.resolvedReports')}
@@ -265,20 +268,20 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                         <div className="report-body">
                                             <div className="report-info">
                                                 <div className="info-row">
-                                                    <span className="info-label">Raporlayan:</span>
+                                                    <span className="info-label">{t('reports.reporter', 'Reporter')}:</span>
                                                     <span className="info-value">
                                                         👤 {report.reporter_username}
                                                     </span>
                                                 </div>
                                                 <div className="info-row">
-                                                    <span className="info-label">Raporlanan:</span>
+                                                    <span className="info-label">{t('reports.reported', 'Reported')}:</span>
                                                     <span className="info-value">
                                                         ⚠️ {report.reported_user_username}
                                                     </span>
                                                 </div>
                                                 {report.message_content && (
                                                     <div className="info-row">
-                                                        <span className="info-label">Mesaj:</span>
+                                                        <span className="info-label">{t('common.message', 'Message')}:</span>
                                                         <div className="message-preview">
                                                             {report.message_content}
                                                         </div>
@@ -306,7 +309,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                                     }}
                                                     title={t('moderation.banUser', 'Ban User')}
                                                 >
-                                                    🚫 Banla
+                                                    🚫 {t('reports.ban', 'Ban')}
                                                 </button>
                                                 <button
                                                     aria-label={t('admin.warnUser')}
@@ -320,7 +323,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                                     }
                                                     title={t('moderation.warnUser', 'Warn User')}
                                                 >
-                                                    ⚠️ Uyar
+                                                    ⚠️ {t('reports.warn', 'Warn')}
                                                 </button>
                                                 <button
                                                     aria-label={t('admin.deleteMessage')}
@@ -346,9 +349,9 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
                                                             'Invalid report'
                                                         )
                                                     }
-                                                    title="Raporu Reddet"
+                                                    title={t('reports.rejectReport', 'Reject Report')}
                                                 >
-                                                    ✕ Reddet
+                                                    ✕ {t('reports.reject', 'Reject')}
                                                 </button>
                                             </div>
                                         ) : (

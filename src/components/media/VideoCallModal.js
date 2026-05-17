@@ -34,7 +34,7 @@ const VideoCallModal = ({
 }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const v = useVideoCall(isOpen, localStream, remoteStream);
     const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Video Call' });
 
@@ -63,14 +63,14 @@ const VideoCallModal = ({
                             aria-label={t('videoCall.settings', 'Settings')}
                             onClick={() => v.setShowSettings(!v.showSettings)}
                             style={styles.headerButton}
-                            title="Ayarlar"
+                            title={t('videoCall.settings', 'Settings')}
                         >
                             <FaCog />
                         </button>
                         <button
                             onClick={v.toggleFullscreen}
                             style={styles.headerButton}
-                            title="Tam ekran"
+                            title={t('videoCall.fullscreen', 'Fullscreen')}
                             aria-label={t('videoCall.fullscreen', 'Fullscreen')}
                         >
                             {v.isFullscreen ? <FaCompress /> : <FaExpand />}
@@ -91,7 +91,7 @@ const VideoCallModal = ({
                     <div style={styles.settingsPanel}>
                         <h4 style={styles.settingsTitle}>{t('videoCall.settings', 'Video Settings')}</h4>
                         <div style={styles.settingGroup}>
-                            <label style={styles.settingLabel}>Kamera</label>
+                            <label style={styles.settingLabel}>{t('videoCall.camera', 'Camera')}</label>
                             <select
                                 value={v.selectedCamera}
                                 onChange={(e) => v.setSelectedCamera(e.target.value)}
@@ -105,7 +105,7 @@ const VideoCallModal = ({
                             </select>
                         </div>
                         <div style={styles.settingGroup}>
-                            <label style={styles.settingLabel}>Mikrofon</label>
+                            <label style={styles.settingLabel}>{t('videoCall.microphone', 'Microphone')}</label>
                             <select
                                 value={v.selectedMicrophone}
                                 onChange={(e) => v.setSelectedMicrophone(e.target.value)}
@@ -119,7 +119,7 @@ const VideoCallModal = ({
                             </select>
                         </div>
                         <div style={styles.settingGroup}>
-                            <label style={styles.settingLabel}>Kalite</label>
+                            <label style={styles.settingLabel}>{t('videoCall.quality', 'Quality')}</label>
                             <select
                                 value={v.videoQuality}
                                 onChange={(e) => v.setVideoQuality(e.target.value)}

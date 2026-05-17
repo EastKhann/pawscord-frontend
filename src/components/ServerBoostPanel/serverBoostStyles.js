@@ -1,4 +1,4 @@
-﻿export const styles = {
+﻿const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -147,3 +147,6 @@
     perkDescription: { fontSize: '12px', color: '#949ba4' },
     perkUnlocked: { fontSize: '12px', color: '#23a559', fontWeight: '600', marginTop: '4px' },
 };
+
+export { styles };
+export default styles;

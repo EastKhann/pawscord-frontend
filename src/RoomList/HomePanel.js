@@ -1,5 +1,5 @@
 ﻿// frontend/src/RoomList/HomePanel.js
-import React, { useCallback, useRef, useEffect, useState } from 'react';
+import { useCallback, useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaUserFriends, FaRobot, FaChartLine, FaCompass } from '../utils/iconOptimization';

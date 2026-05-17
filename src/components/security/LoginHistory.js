@@ -40,7 +40,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
     const { t } = useTranslation();
     const [expanded, setExpanded] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     const handleRevoke = useCallback(
         (sessionId) => {
@@ -54,7 +54,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
             <div style={S.header}>
                 <FaShieldAlt className="icon-primary-18" />
                 <div className="flex-1">
-                    <h3 style={S.title}>Entry Ge�misi</h3>
+                    <h3 style={S.title}>Giriş Geçmişi</h3>
                     <span style={S.subtitle}>Son 30 daydeki giris aktiviteleri</span>
                 </div>
                 {logins.length > 1 && (
@@ -120,16 +120,16 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                                             {login.os || t('loginHistory.unknownOS', 'Unknown Operating System')}
                                         </span>
                                         {isCurrent && (
-                                            <span style={S.currentBadge}>Mevcut oturum</span>
+                                            <span style={S.currentBadge}>{t('loginHistory.currentSession', 'Current Session')}</span>
                                         )}
                                         {!isSuccess && <FaExclamationTriangle />}
                                     </div>
                                     <div style={S.loginMeta}>
                                         <BrowserIcon className="icon-tiny" />
                                         <span>{login.browser || t('ui.bilinmeyen_tarayici')}</span>
-                                        <span>�</span>
+                                        <span>·</span>
                                         <span>{login.ip || '?.?.?.?'}</span>
-                                        <span>�</span>
+                                        <span>·</span>
                                         <span>
                                             {login.location || t('session.unknownLocation')}
                                         </span>
@@ -153,26 +153,26 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                             {isExpanded && (
                                 <div style={S.details}>
                                     <div style={S.detailRow}>
-                                        <span style={S.detailLabel}>IP Adresi</span>
+                                        <span style={S.detailLabel}>{t('loginHistory.ipAddress', 'IP Address')}</span>
                                         <span style={S.detailValue}>
                                             {login.ip || 'Bilinmiyor'}
                                         </span>
                                     </div>
                                     <div style={S.detailRow}>
-                                        <span style={S.detailLabel}>Konum</span>
+                                        <span style={S.detailLabel}>{t('loginHistory.location', 'Location')}</span>
                                         <span style={S.detailValue}>
                                             {login.location || 'Bilinmiyor'}
                                         </span>
                                     </div>
                                     <div style={S.detailRow}>
-                                        <span style={S.detailLabel}>Tarayici</span>
+                                        <span style={S.detailLabel}>{t('loginHistory.browser', 'Browser')}</span>
                                         <span style={S.detailValue}>
                                             {login.browser || 'Bilinmiyor'}{' '}
                                             {login.browserVersion || ''}
                                         </span>
                                     </div>
                                     <div style={S.detailRow}>
-                                        <span style={S.detailLabel}>Status</span>
+                                        <span style={S.detailLabel}>{t('loginHistory.status', 'Status')}</span>
                                         <span
                                             style={{
                                                 ...S.detailValue,
@@ -189,7 +189,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                                             style={S.revokeBtn}
                                             onClick={() => handleRevoke(login.id)}
                                         >
-                                            Close Session
+                                            {t('loginHistory.revokeSession', 'Close Session')}
                                         </button>
                                     )}
                                 </div>

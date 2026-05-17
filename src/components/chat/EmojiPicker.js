@@ -1,5 +1,5 @@
 ﻿// frontend/src/components/EmojiPicker.js
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import styles from '../EmojiPicker/styles';

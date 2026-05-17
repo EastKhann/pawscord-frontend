@@ -1,6 +1,6 @@
 // frontend/src/components/VirtualMessageList.js
 // 10/10 Edition: Adaptive overscan, scroll position restore, load-more trigger
-import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
+import { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { VariableSizeList as List } from 'react-window';
@@ -27,7 +27,7 @@ const Row = memo(
     ({ index, style, data, isScrolling }) => {
         const { t } = useTranslation();
         const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
+        const [_error, _setError] = useState(null);
         const { messages, renderMessage, setItemSize, getItemSize } = data;
         const innerRef = useRef();
 

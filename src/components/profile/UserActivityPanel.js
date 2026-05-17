@@ -96,7 +96,7 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
                     ) : activeTab === 'activity' ? (
                         <div style={styles.activityList}>
                             {activityLog.length === 0 ? (
-                                <div style={styles.empty}>Aktivite verisi yok</div>
+                                <div style={styles.empty}>{t('userActivity.noData', 'No activity data')}</div>
                             ) : (
                                 activityLog.map((activity, idx) => (
                                     <div key={`item-${idx}`} style={styles.activityItem}>

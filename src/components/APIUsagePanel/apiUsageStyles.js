@@ -12,7 +12,7 @@
     return `${minutes}m`;
 };
 
-export const styles = {
+const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -262,3 +262,6 @@ export const styles = {
         color: '#949ba4',
     },
 };
+
+export { styles };
+export default styles;

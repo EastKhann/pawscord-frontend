@@ -1,5 +1,4 @@
 // frontend/src/components/EnhancedProfile/EnhancedProfile.js
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
     FaEdit,
@@ -63,8 +62,8 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
             <div className="enhanced-profile-container">
                 {/* Banner */}
                 <div className="profile-banner" style={bannerStyle}>
-                    <button className="close-button" onClick={onClose}>
-                        <FaTimes />
+                    <button className="close-button" onClick={onClose} aria-label={t('common.close', 'Close')}>
+                        <FaTimes aria-hidden="true" />
                     </button>
                 </div>
 
@@ -302,6 +301,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                                         onBlur={saveProfileNote}
                                         placeholder={t('this_user_hakkında_bir_not_yaz')}
                                         maxLength={256}
+                                        aria-label={t('profile.privateNote', 'Private note about this user')}
                                     />
                                 </div>
                             )}

@@ -130,7 +130,7 @@ export default function useAppInit({
 
                 import('../utils/imageCaching').then(({ prefetchUserAvatars }) => {
                     prefetchUserAvatars(uniqueFriendProfiles);
-                });
+                }).catch((err) => console.error('Failed to prefetch user avatars:', err));
             } catch (e) {
                 logger.error('Init Data Error', e);
                 setAuthError(t('errors.data_load_failed'));

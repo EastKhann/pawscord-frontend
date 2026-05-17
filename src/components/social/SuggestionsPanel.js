@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { getToken } from '../../utils/tokenStorage';
 import PropTypes from 'prop-types';
 import './SuggestionsPanel.css';
@@ -135,7 +135,10 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
         return badges[status] || badges.pending;
     };
 
-    const filteredSuggestions = suggestions.filter((s) => filter === 'all' || s.status === filter);
+    const filteredSuggestions = useMemo(
+        () => suggestions.filter((s) => filter === 'all' || s.status === filter),
+        [suggestions, filter]
+    );
 
     // 🎯 Performance: Memoized event handlers
     const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
@@ -222,7 +225,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                             onChange={handleChannelIdChange}
                                             aria-label={t('suggestions.channelSelect', 'Select suggestion channel')}
                                         >
-                                            <option value="">Selectin</option>
+                                            <option value="">{t('common.selectOption', 'Select...')}</option>
                                             {channels.map((ch) => (
                                                 <option key={ch.id} value={ch.id}>
                                                     {ch.name}
@@ -327,7 +330,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                                                             {suggestion.author_avatar ? (
                                                                 <img
                                                                     src={suggestion.author_avatar}
-                                                                    alt=""
+                                                                    alt={suggestion.author_name}
                                                                 />
                                                             ) : (
                                                                 <div className="default-avatar">

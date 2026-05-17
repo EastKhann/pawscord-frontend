@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes, FaCoins, FaShoppingBag, FaTshirt, FaBitcoin } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ const S = {
 };
 
 const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Crypto Store' });
     const store = useCryptoStore({ fetchWithAuth, apiBaseUrl, onClose });
     const { t } = useTranslation();

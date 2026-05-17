@@ -633,12 +633,14 @@ form .input-group:nth-child(4) {
 
 .password-toggle-btn {
     position: absolute;
-    right: 12px;
+    right: 6px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
-    padding: 4px;
+    padding: 10px;
+    min-width: 44px;
+    min-height: 44px;
     cursor: pointer;
     color: #555a66;
     font-size: 15px;
@@ -738,8 +740,8 @@ form .input-group:nth-child(4) {
     align-items: center;
     gap: 10px;
     margin: 22px 0 6px;
-    color: #3a3d44;
-    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 12.5px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -852,6 +854,7 @@ form .input-group:nth-child(4) {
 .login-forgot-link {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     color: var(--color-primary);
     font-size: 13px;
     font-weight: 500;
@@ -860,7 +863,8 @@ form .input-group:nth-child(4) {
         color 0.15s ease,
         opacity 0.15s ease;
     margin-top: 4px;
-    padding: 3px 8px;
+    padding: 10px 14px;
+    min-height: 44px;
     border-radius: 6px;
     border: 1px solid transparent;
 }
@@ -974,4 +978,28 @@ form .input-group:nth-child(4) {
         width: 70px;
         height: 70px;
     }
+}
+
+/* ─── reCAPTCHA badge: hidden; show ToS notice instead per Google's policy ─── */
+.grecaptcha-badge {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.recaptcha-notice {
+    margin-top: 12px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.recaptcha-notice a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: underline;
+}
+
+.recaptcha-notice a:hover {
+    color: #fff;
 }

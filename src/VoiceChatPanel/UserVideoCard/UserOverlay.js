@@ -3,7 +3,6 @@
 // frontend/src/VoiceChatPanel/UserVideoCard/UserOverlay.js
 // 🎨 Bottom info overlay with talking indicator, connection quality, username, status icons
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from '../../i18n';
 const _s = (o) => o;

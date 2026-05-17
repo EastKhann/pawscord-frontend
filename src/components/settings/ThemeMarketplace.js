@@ -69,7 +69,7 @@ const ThemeMarketplace = () => {
     return (
         <div className="theme-marketplace">
             <div className="marketplace-header">
-                <h1>🎨 Tema Pazaryeri</h1>
+                <h1>🎨 {t('themeMarket.title', 'Theme Marketplace')}</h1>
                 <p>{t('themeMarket.desc', 'Discover and install community-created themes')}</p>
             </div>
 

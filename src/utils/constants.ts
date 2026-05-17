@@ -20,9 +20,11 @@ export const isElectron = (() => {
     // Method 2: process.versions.electron check
     if (typeof process !== 'undefined' && process.versions && process.versions.electron)
         return true;
-    // Method 3: userAgent check
-    if (navigator.userAgent.toLowerCase().includes('electron')) return true;
-    // Method 4: file:// protocol check (Electron loads from file://)
+    // Method 3: file:// protocol check (Electron loads from file://)
+    // 🔥 NOT: UA-string Electron tespiti kaldırıldı. Discord/Slack/Claude gibi
+    // Electron-tabanlı tarayıcılar pawscord.com web sürümünü açtığında false
+    // pozitif veriyordu — API'ler production'a doğrudan gidiyor, lokal backend
+    // kullanılamıyor, web push/SW devre dışı kalıyordu.
     if (window.location.protocol === 'file:') return true;
     return false;
 })();

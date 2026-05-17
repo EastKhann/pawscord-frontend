@@ -1,7 +1,7 @@
 // components/CommandPalette.js
 // 🎨 Command Palette - All shortcuts and commands in one place
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaTimes, FaKeyboard } from 'react-icons/fa';
@@ -10,7 +10,7 @@ import './CommandPalette.css';
 
 const CommandPalette = ({ onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const [filter, setFilter] = useState('all'); // all, keyboard, actions
     const cmdKey = getShortcutKey();

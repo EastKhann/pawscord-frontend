@@ -112,10 +112,12 @@ const VideoPlaceholder = memo(({ onClick, thumbnail, duration }) => {
 });
 
 // Video Loading Spinner
-const VideoLoadingSpinner = memo(() => (
+const VideoLoadingSpinner = memo(() => {
+    const { t } = useTranslation();
+    return (
     <div style={S.flex3}>
         <div className="video-spinner" style={S.border} />
-        <span style={S.txt2}>Loading video...</span>
+        <span style={S.txt2}>{t('videoStreaming.loading', 'Loading video...')}</span>
         <style>{`
             @keyframes spin {
                 0% { transform: rotate(0deg); }
@@ -123,7 +125,8 @@ const VideoLoadingSpinner = memo(() => (
             }
         `}</style>
     </div>
-));
+    );
+});
 
 // Detect video type from URL
 const getVideoType = (url) => {

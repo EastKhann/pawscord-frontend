@@ -48,7 +48,7 @@ const AccountTab = ({ user, onAvatarChange }) => {
                         <div className="pos-relative">
                             <img
                                 src={user?.avatar || '/default-avatar.png'}
-                                alt=""
+                                alt={user?.username || 'User avatar'}
                                 style={S.border}
                             />
                             <button

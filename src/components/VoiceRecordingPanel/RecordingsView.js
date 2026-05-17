@@ -53,11 +53,11 @@ const RecordingsView = ({ recordings, playingId, setPlayingId, onDownload, onDel
               </span>
             )}
             <div className="recording-actions">
-              <button onClick={() => handlePlay(recording)} title={t('oynat')}>
+              <button onClick={() => handlePlay(recording)} title={t('oynat')} aria-label={playingId === recording.id ? t('voiceRecording.pause', 'Pause') : t('voiceRecording.play', 'Play')}>
                 {playingId === recording.id ? <FaPause /> : <FaPlay />}
               </button>
-              <button onClick={() => onDownload(recording)} title={t('download')}><FaDownload /></button>
-              <button onClick={() => onDelete(recording.id)} className="delete" title={t('delete')}><FaTrash /></button>
+              <button onClick={() => onDownload(recording)} title={t('download')} aria-label={t('download', 'Download')}><FaDownload /></button>
+              <button onClick={() => onDelete(recording.id)} className="delete" title={t('delete')} aria-label={t('delete', 'Delete')}><FaTrash /></button>
             </div>
           </div>
         ))}

@@ -1,7 +1,7 @@
 ﻿// frontend/src/VoiceChatPanel/GridView.js
 // 🎨 Grid view for voice chat — screen shares + camera cards
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import UserVideoCard from './UserVideoCard';
 import { StreamBadge } from './StatusBadges';

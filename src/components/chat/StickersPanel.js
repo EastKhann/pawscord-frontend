@@ -290,7 +290,7 @@ const StickersPanel = ({ serverId, onClose }) => {
                                                 aria-label={t('stickers.deleteSticker', 'Delete sticker')}
                                                 className="delete-sticker-btn"
                                                 onClick={() => deleteSticker(sticker.id)}
-                                                title="Sil"
+                                                title={t('common.delete', 'Delete')}
                                             >
                                                 🗑
                                             </button>

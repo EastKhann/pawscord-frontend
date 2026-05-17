@@ -22,8 +22,11 @@ const getApiBaseUrl = () => {
         return 'https://api.pawscord.com';
     }
 
-    // 3. Production detection (Electron or pawscord.com)
-    const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
+    // 3. Production detection — pawscord.com domain veya gerçek Electron.
+    // UA-string check'i kaldırıldı (Discord/Slack/Claude vb Electron browser'larda false pozitif).
+    const isElectron =
+        typeof window !== 'undefined' &&
+        (window.process?.versions?.electron || window.location.protocol === 'file:');
     const isPawscordDomain = window.location.hostname.includes('pawscord.com');
     const isLocalhost =
         window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';

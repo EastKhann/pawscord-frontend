@@ -66,13 +66,18 @@ export function useVoiceSettings() {
         }
     });
 
-    // 🔥 YENİ: Gürültü Blockme Seviyesi - Default 'medium' (audio kısılmasın)
+    // 🔥 Gürültü engelleme seviyesi — default 'high'
+    // Real-world voice chat (gaming, group calls) yields better intelligibility
+    // with the high preset: gateThreshold -50dBFS rejects most ambient noise
+    // (fans, AC, traffic) while the makeupGain compensates for compressor loss
+    // so the speaker doesn't sound quiet. Existing users keep their stored
+    // setting; this default only applies on first launch / fresh install.
     const [noiseSuppressionLevel, setNoiseSuppressionLevel] = useState(() => {
         try {
             const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
-            return voiceSettings.audio?.noiseSuppressionLevel || 'medium'; // 🔥 Default ORTA
+            return voiceSettings.audio?.noiseSuppressionLevel || 'high';
         } catch {
-            return 'medium'; // 🔥 Default ORTA
+            return 'high';
         }
     });
 

@@ -269,7 +269,7 @@ export const VoiceMessageButton = ({ onRecord }) => {
             onTouchEnd={handleMouseUp}
         >
             <FaMicrophone />
-            {isHolding && <span className="recording-hint">Kaydediliyor...</span>}
+            {isHolding && <span className="recording-hint">{t('mediaRec.recording', 'Recording...')}</span>}
         </button>
     );
 };

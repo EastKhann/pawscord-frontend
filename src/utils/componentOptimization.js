@@ -1,7 +1,7 @@
 // ⚡ COMPONENT OPTIMIZATION WRAPPERS
 // HOCs and utilities for optimizing React components
 
-import React, { memo, forwardRef, useCallback, useMemo, useRef, useEffect } from 'react';
+import { memo, forwardRef, useCallback, useMemo, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 // =====================================

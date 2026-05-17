@@ -1,4 +1,3 @@
-import React from 'react';
 import { toast } from 'react-toastify';
 import i18n from '../../i18n';
 import { ABSOLUTE_HOST_URL as API } from '../../config/api';

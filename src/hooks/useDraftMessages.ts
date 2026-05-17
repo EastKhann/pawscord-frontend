@@ -6,23 +6,33 @@ import { useState, useEffect } from 'react';
 const DRAFT_PREFIX = 'pawscord_draft_';
 const AUTO_SAVE_DELAY = 1000; // 1 second
 
-export const useDraftMessages = (roomId, conversationId = null) => {
+interface DraftData {
+    content: string;
+    timestamp: string;
+    roomId: string | number | null;
+    conversationId: string | number | null;
+}
+
+export const useDraftMessages = (
+    roomId: string | number | null,
+    conversationId: string | number | null = null
+) => {
     const draftKey = conversationId
         ? `${DRAFT_PREFIX}conv_${conversationId}`
         : `${DRAFT_PREFIX}room_${roomId}`;
 
     const [draft, setDraft] = useState('');
-    const [lastSaved, setLastSaved] = useState(null);
+    const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
     // Load draft on mount or when room/conversation changes
     useEffect(() => {
         const savedDraft = localStorage.getItem(draftKey);
         if (savedDraft) {
             try {
-                const parsed = JSON.parse(savedDraft);
+                const parsed = JSON.parse(savedDraft) as DraftData;
                 setDraft(parsed.content || '');
                 setLastSaved(new Date(parsed.timestamp));
-            } catch (e) {
+            } catch (_e) {
                 // Fallback to plain text
                 setDraft(savedDraft);
             }
@@ -35,7 +45,7 @@ export const useDraftMessages = (roomId, conversationId = null) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (draft.trim()) {
-                const draftData = {
+                const draftData: DraftData = {
                     content: draft,
                     timestamp: new Date().toISOString(),
                     roomId,
@@ -71,28 +81,32 @@ export const useDraftMessages = (roomId, conversationId = null) => {
 };
 
 // Get all drafts (for drafts list)
-export const getAllDrafts = () => {
-    const drafts = [];
+export const getAllDrafts = (): (DraftData & { key: string })[] => {
+    const drafts: (DraftData & { key: string })[] = [];
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key && key.startsWith(DRAFT_PREFIX)) {
             try {
-                const draft = JSON.parse(localStorage.getItem(key));
+                const raw = localStorage.getItem(key);
+                if (!raw) continue;
+                const draft = JSON.parse(raw) as DraftData;
                 drafts.push({
                     key,
                     ...draft,
                 });
-            } catch (e) {
+            } catch (_e) {
                 // Skip invalid drafts
             }
         }
     }
-    return drafts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    return drafts.sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
 };
 
 // Clear all drafts
 export const clearAllDrafts = () => {
-    const keys = [];
+    const keys: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key && key.startsWith(DRAFT_PREFIX)) {

@@ -1,5 +1,5 @@
 // frontend/src/components/MessageInput/InputMenu.js
-import React, { useRef, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FaPaperclip, FaSmile, FaImage, FaPlus, FaFileAlt, FaClock, FaCode } from 'react-icons/fa';
 import styles from './styles';
@@ -133,8 +133,9 @@ const InputMenu = ({
                                 style={styles.mobileMenuItem}
                                 className="mobile-menu-item"
                                 disabled={disabled}
+                                role="menuitem"
                             >
-                                <FaCode />
+                                <FaCode aria-hidden="true" />
                                 <span>{t('kod_snippet')}</span>
                             </button>
                         )}
@@ -143,8 +144,9 @@ const InputMenu = ({
                             style={styles.mobileMenuItem}
                             className="mobile-menu-item"
                             disabled={disabled}
+                            role="menuitem"
                         >
-                            <FaFileAlt />
+                            <FaFileAlt aria-hidden="true" />
                             <span>{t('inputMenu.template','Template (Ctrl+T)')}</span>
                         </button>
                         <button
@@ -152,8 +154,9 @@ const InputMenu = ({
                             style={styles.mobileMenuItem}
                             className="mobile-menu-item"
                             disabled={disabled || !message.trim()}
+                            role="menuitem"
                         >
-                            <FaClock />
+                            <FaClock aria-hidden="true" />
                             <span>{t('zamanla')}</span>
                         </button>
                     </div>

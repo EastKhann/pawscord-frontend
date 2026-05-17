@@ -70,8 +70,8 @@ describe('useNetworkStatus', () => {
         expect(result.current.isOnline).toBe(true);
     });
 
-    // ── 5. Registers online and offline event listners ──
-    it('should register online and offline event listners', () => {
+    // ── 5. Registers online and offline event listeners ──
+    it('should register online and offline event listeners', () => {
         renderHook(() => useNetworkStatus());
 
         const calls = addEventListenerSpy.mock.calls.map((c) => c[0]);
@@ -79,8 +79,8 @@ describe('useNetworkStatus', () => {
         expect(calls).toContain('offline');
     });
 
-    // ── 6. Cleans up listners on unmount ──
-    it('should remove event listners on unmount', () => {
+    // ── 6. Cleans up listeners on unmount ──
+    it('should remove event listeners on unmount', () => {
         const { unmount } = renderHook(() => useNetworkStatus());
         unmount();
 

@@ -500,7 +500,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
                                 <div className="form-section">
 
-                                    <h3>Yazar</h3>
+                                    <h3>{t('customEmbed.author', 'Author')}</h3>
 
                                     <div className="form-row">
 
@@ -548,11 +548,11 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
                                 <div className="form-section">
 
-                                    <h3>Content</h3>
+                                    <h3>{t('customEmbed.content', 'Content')}</h3>
 
                                     <div className="form-group">
 
-                                        <label>Title</label>
+                                        <label>{t('customEmbed.title', 'Title')}</label>
 
                                         <input
 
@@ -570,7 +570,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
                                     <div className="form-group">
 
-                                        <label>Description</label>
+                                        <label>{t('customEmbed.description', 'Description')}</label>
 
                                         <textarea
 
@@ -590,7 +590,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
                                     <div className="form-group">
 
-                                        <label>Color</label>
+                                        <label>{t('customEmbed.color', 'Color')}</label>
 
                                         <input
 
@@ -662,7 +662,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
                                     <div className="section-header">
 
-                                        <h3>Alanlar</h3>
+                                        <h3>{t('customEmbed.fields', 'Fields')}</h3>
 
                                         <button
 
@@ -738,7 +738,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
                                                     />
 
-                                                    <span>Inline</span>
+                                                    <span>{t('customEmbed.inline', 'Inline')}</span>
 
                                                 </label>
 
@@ -768,13 +768,13 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
                                 <div className="form-section">
 
-                                    <h3>Footer</h3>
+                                    <h3>{t('customEmbed.footer', 'Footer')}</h3>
 
                                     <div className="form-row">
 
                                         <div className="form-group">
 
-                                            <label>Metin</label>
+                                            <label>{t('customEmbed.text', 'Text')}</label>
 
                                             <input
 
@@ -904,7 +904,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
                                                         src={currentEmbed.image}
 
-                                                        alt=""
+                                                        alt={currentEmbed.title || ''}
 
                                                     />
 

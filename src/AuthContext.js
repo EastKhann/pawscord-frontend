@@ -192,6 +192,57 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // 🔗 ELECTRON DEEP-LINK & OAUTH-TOKENS LISTENERS
+    // The OAuth callback returns via `pawscord://auth?access=…&refresh=…` which
+    // the main process forwards as IPC events. Previously LoginPage handled this
+    // via localStorage.setItem + window.location.reload(), but the reload races
+    // were fragile in production: the listener was registered too late, the
+    // `persist:pawscord` partition didn't always preserve writes across reload,
+    // and the user saw "token alındı ama login ekranındayım" symptoms.
+    //
+    // Listening here in AuthContext (mounted at app root for the entire session)
+    // and calling `login()` directly updates state synchronously — no reload,
+    // no race, no lost listener.
+    useEffect(() => {
+        if (typeof window === 'undefined' || !window.electron) return;
+
+        const handleTokens = ({ access, refresh } = {}) => {
+            if (!access) {
+                logger.warn('[Auth/Electron] OAuth tokens IPC received without access token');
+                return;
+            }
+            try {
+                login(access, refresh);
+                window.electron.focusWindow?.();
+            } catch (e) {
+                logger.error('[Auth/Electron] login() from OAuth tokens failed:', e);
+            }
+        };
+
+        const handleDeepLink = (url) => {
+            try {
+                const u = new URL(url);
+                const access = u.searchParams.get('access');
+                const refresh = u.searchParams.get('refresh');
+                if (access) handleTokens({ access, refresh });
+            } catch (e) {
+                logger.error('[Auth/Electron] deep-link parse failed:', e);
+            }
+        };
+
+        try {
+            window.electron.onOAuthTokens?.(handleTokens);
+            window.electron.onDeepLinkAuth?.(handleDeepLink);
+            window.electron.onGoogleAuthSuccess?.(handleTokens);
+        } catch (e) {
+            logger.warn('[Auth/Electron] Failed to register IPC listeners:', e);
+        }
+        // Listeners are registered once for the lifetime of the AuthProvider.
+        // ipcRenderer.on accumulates if remounted, but AuthProvider is at app
+        // root and never unmounts during a session.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const logout = useCallback(() => {
         if (refreshTimerRef.current) {
             clearTimeout(refreshTimerRef.current);

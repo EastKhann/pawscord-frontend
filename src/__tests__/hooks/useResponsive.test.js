@@ -167,8 +167,8 @@ describe('useResponsive', () => {
         expect(result.current.breakpoints.desktop).toBe(1920);
     });
 
-    // ── 11. Cleans up listners on unmount ──
-    it('should clean up resize and orientationchange listners on unmount', () => {
+    // ── 11. Cleans up listeners on unmount ──
+    it('should clean up resize and orientationchange listeners on unmount', () => {
         const removeSpy = vi.spyOn(window, 'removeEventListener');
         const { unmount } = renderHook(() => useResponsive());
 

@@ -3,6 +3,20 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    /* 🔥 FIX: mobile'da içerik (referral-input, stat-card vb) min-content
+       width forcelıyor → container 428px geniş olup viewport (375) dışına
+       taşıyordu. width:100%+box-sizing+overflow-x:hidden içeriği viewport'a
+       sığdırır, içeride uzun text/input wrap eder. */
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.referral-program * {
+    max-width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .referral-header {
@@ -295,8 +309,30 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .referral-program {
+        padding: 12px;
+    }
+
+    .referral-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .referral-link-card,
+    .rewards-tiers,
+    .progress-section,
+    .how-it-works,
+    .social-share,
+    .stat-card {
+        padding: 16px;
+    }
+
+    .stat-value {
+        font-size: 2.2rem;
+    }
+
     .referral-stats {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
 
     .share-buttons {
@@ -306,5 +342,14 @@
     .tier-item {
         flex-direction: column;
         text-align: center;
+        gap: 10px;
+    }
+
+    .link-container {
+        flex-direction: column;
+    }
+
+    .copy-btn {
+        width: 100%;
     }
 }

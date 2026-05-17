@@ -1,5 +1,5 @@
 ﻿// frontend/src/RoomList/RoomListModals.js
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -648,7 +648,7 @@ const DMContextMenuPortal = ({
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                     <img
                         src={getAvatarUrl(otherUser.avatar, otherUser.username)}
-                        alt=""
+                        alt={otherUser.username}
                         width={40}
                         height={40}
                         style={{

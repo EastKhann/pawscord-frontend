@@ -138,7 +138,7 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                     <div className="flex-align-10">
                         <FaFilter className="icon-danger" />
 
-                        <h2 className="m-0">Kelime Filtreleri</h2>
+                        <h2 className="m-0">{t('keywordMutes.title', 'Keyword Filters')}</h2>
                     </div>
 
                     <FaTimes onClick={onClose} style={styles.closeBtn} />

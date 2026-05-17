@@ -94,7 +94,7 @@ const MessageOCRPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) => {
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaImage className="icon-primary" />
-                        <h2 className="m-0">OCR - Text from Image</h2>
+                        <h2 className="m-0">{t('msgOCR.title', 'OCR - Text from Image')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>
@@ -130,7 +130,7 @@ const MessageOCRPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) => {
                     ) : (
                         <div style={styles.empty}>
                             <FaImage className="icon-lg-mb15" />
-                            <p>Bu mesajda OCR metni yok</p>
+                            <p>{t('messageOCR.noText')}</p>
                             <button
                                 aria-label={t('msgOCR.requestOCR', 'Extract text from image')}
                                 onClick={requestOCR}

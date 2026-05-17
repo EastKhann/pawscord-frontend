@@ -77,6 +77,9 @@ export const authFetch = async (url: string, options: RequestInit = {}): Promise
             isRefreshing = true;
             try {
                 accessToken = await refreshToken();
+                if (!accessToken) {
+                    throw new Error('Token refresh returned null');
+                }
                 onTokenRefreshed(accessToken);
             } catch (error) {
                 logger.error('❌ [AuthFetch] Token refresh failed:', error);
@@ -114,6 +117,9 @@ export const authFetch = async (url: string, options: RequestInit = {}): Promise
             isRefreshing = true;
             try {
                 accessToken = await refreshToken();
+                if (!accessToken) {
+                    throw new Error('Token refresh returned null');
+                }
                 onTokenRefreshed(accessToken);
 
                 // Retry the request with new token

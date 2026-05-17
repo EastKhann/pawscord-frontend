@@ -219,7 +219,7 @@ const ServerBoost = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="boost-header">
-                    <h2>🚀 Server Boost</h2>
+                    <h2>🚀 {t('boost.serverBoost', 'Server Boost')}</h2>
                     <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
@@ -230,7 +230,7 @@ const ServerBoost = ({ serverId, onClose }) => {
                     <div className="boost-status-card">
                         <div className="boost-status-header">
                             <div className="current-tier">
-                                <span className="tier-label">Mevcut Seviye</span>
+                                <span className="tier-label">{t('serverBoost.currentTier', 'Current Tier')}</span>
                                 <span className={`tier-number tier-${currentTier}`}>
                                     {currentTier === 0 ? 'None' : `Tier ${currentTier}`}
                                 </span>
@@ -311,7 +311,7 @@ const ServerBoost = ({ serverId, onClose }) => {
                         {boostHistory.length === 0 ? (
                             <div className="empty-history">
                                 <p>{t('serverBoost.noBoosters', 'No one has boosted this server yet')}</p>
-                                <p className="empty-hint">Destekleyen ilk siz olun! 🚀</p>
+                                <p className="empty-hint">{t('serverBoost.beFirstBooster', 'Be the first to support!')} 🚀</p>
                             </div>
                         ) : (
                             <div className="history-list">
@@ -365,7 +365,7 @@ const ServerBoost = ({ serverId, onClose }) => {
                             }
                         >
                             <div className="boost-confirm-icon">🚀</div>
-                            <h3>Boost This Server?</h3>
+                            <h3>{t('serverBoost.boostServer', 'Boost This Server?')}</h3>
                             <p className="boost-confirm-text">
                                 You're about to use one of your Nitro boosts on this server. This
                                 will help unlock server perks and features!

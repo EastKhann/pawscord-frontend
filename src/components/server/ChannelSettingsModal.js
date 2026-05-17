@@ -274,33 +274,47 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
                     </button>
                 </div>
 
-                {/* 🔥 TAB NAVIGATION - Daha Fazla Tab */}
-                <div style={styles.tabs}>
+                {/* TAB NAVIGATION */}
+                <div style={styles.tabs} role="tablist" aria-label={t('channel.settingsTabs', 'Channel settings tabs')}>
                     <button
-                        aria-label={t('channel.generalTab', 'General settings')}>
+                        role="tab"
+                        aria-selected={activeTab === 'general'}
+                        aria-label={t('channel.generalTab', 'General settings')}
+                        style={activeTab === 'general' ? styles.tabActive : styles.tab}
+                        onClick={() => setActiveTab('general')}
+                    >
+                        <FaCog /> {t('channel.general', 'General')}
                     </button>
-                <button
-                    aria-label={t('channel.permissionsTab', 'Permissions settings')}
-                >
-                    <FaShieldAlt /> {t('channel.permissions', 'Permissions')}
-                </button>
-                <button
-                    aria-label={t('channel.integrationsTab', 'Integration settings')}
-                    style={activeTab === 'integrations' ? styles.tabActive : styles.tab}
-                    onClick={() => setActiveTab('integrations')}
-                >
-                    <FaLink /> {t('channel.integrations', 'Integrations')}
-                </button>
-                <button
-                    aria-label={t('channel.advancedTab', 'Advanced settings')}
-                    style={activeTab === 'advanced' ? styles.tabActive : styles.tab}
-                    onClick={() => setActiveTab('advanced')}
-                >
-                    <FaHistory /> {t('common.advanced', 'Advanced')}
-                </button>
-            </div>
+                    <button
+                        role="tab"
+                        aria-selected={activeTab === 'permissions'}
+                        aria-label={t('channel.permissionsTab', 'Permissions settings')}
+                        style={activeTab === 'permissions' ? styles.tabActive : styles.tab}
+                        onClick={() => setActiveTab('permissions')}
+                    >
+                        <FaShieldAlt /> {t('channel.permissions', 'Permissions')}
+                    </button>
+                    <button
+                        role="tab"
+                        aria-selected={activeTab === 'integrations'}
+                        aria-label={t('channel.integrationsTab', 'Integration settings')}
+                        style={activeTab === 'integrations' ? styles.tabActive : styles.tab}
+                        onClick={() => setActiveTab('integrations')}
+                    >
+                        <FaLink /> {t('channel.integrations', 'Integrations')}
+                    </button>
+                    <button
+                        role="tab"
+                        aria-selected={activeTab === 'advanced'}
+                        aria-label={t('channel.advancedTab', 'Advanced settings')}
+                        style={activeTab === 'advanced' ? styles.tabActive : styles.tab}
+                        onClick={() => setActiveTab('advanced')}
+                    >
+                        <FaHistory /> {t('common.advanced', 'Advanced')}
+                    </button>
+                </div>
 
-            <div style={styles.body}>
+            <div style={styles.body} role="tabpanel" aria-label={t(`channel.${activeTab}Tab`, `${activeTab} settings`)}>
                 {activeTab === 'general' && (
                     <GeneralTab
                         name={name}

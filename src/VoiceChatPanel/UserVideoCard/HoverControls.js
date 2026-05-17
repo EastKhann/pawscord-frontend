@@ -1,7 +1,6 @@
 // frontend/src/VoiceChatPanel/UserVideoCard/HoverControls.js
-// ?? Hover action buttons (pin, expand, fullscreen) and volume slider
+// 🔥 Hover action buttons (pin, expand, fullscreen) and volume slider
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import ActionButton from '../ActionButton';
 import { useTranslation } from 'react-i18next';
@@ -60,7 +59,7 @@ const HoverControls = ({
             })}
         >
             <ActionButton
-                icon={isPinned ? '??' : '??'}
+                icon={isPinned ? '📌' : '📍'}
                 onClick={(e) => {
                     e.stopPropagation();
                     onPin();
@@ -69,7 +68,7 @@ const HoverControls = ({
                 bgColor="rgba(88, 101, 242, 0.9)"
             />
             <ActionButton
-                icon="?"
+                icon="🔍"
                 onClick={(e) => {
                     e.stopPropagation();
                     onExpand();
@@ -78,7 +77,7 @@ const HoverControls = ({
                 bgColor="rgba(67, 181, 129, 0.9)"
             />
             <ActionButton
-                icon="???"
+                icon="⛶"
                 onClick={(e) => {
                     e.stopPropagation();
                     // ?? FIX: Use cardRef for fullscreen (the UserVideoCard root div)
@@ -108,10 +107,10 @@ const HoverControls = ({
                 <div style={_st1}>
                     <span style={_st2}>
                         {(user.volume || 100) === 0
-                            ? '??'
+                            ? '🔇'
                             : (user.volume || 100) > 100
-                              ? '??'
-                              : '??'}
+                              ? '🔊'
+                              : '🔉'}
                     </span>
                     <input
                         type="range"

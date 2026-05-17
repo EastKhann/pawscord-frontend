@@ -3,13 +3,13 @@
 
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { shallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 import type { UserStore } from '../types/store';
 
 export const useUserStore = create<UserStore>()(
     devtools(
         persist(
-            (set, get) => ({
+            (set) => ({
                 // --- USER STATE ---
                 currentUser: null,
                 isAuthenticated: false,
@@ -182,7 +182,7 @@ export const selectBlockedUsers = (state: UserStore) => state.blockedUsers;
 export const selectFriendCount = (state: UserStore) => state.friends.length;
 
 // Hook selectors
-export const useCurrentUser = () => useUserStore((s) => s.currentUser, shallow);
+export const useCurrentUser = () => useUserStore(useShallow((s) => s.currentUser));
 export const useIsAuthenticated = () => useUserStore((s) => s.isAuthenticated);
-export const useProfile = () => useUserStore((s) => s.profile, shallow);
-export const useFriends = () => useUserStore((s) => s.friends, shallow);
+export const useProfile = () => useUserStore(useShallow((s) => s.profile));
+export const useFriends = () => useUserStore(useShallow((s) => s.friends));

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { styles } from './SettingsModal/settingsModalStyles';
 import useMicTest from './SettingsModal/useMicTest';

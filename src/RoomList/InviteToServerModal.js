@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import useModalA11y from '../hooks/useModalA11y';

@@ -1,7 +1,7 @@
 ﻿// frontend/src/VoiceChatPanel/UserVideoCard/VideoDisplay.js
 // 📹 Video feed or avatar fallback display with talking animation
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { getDeterministicAvatarFallback } from '../avatarUtils';
 import i18n from '../../i18n';
@@ -14,7 +14,7 @@ import i18n from '../../i18n';
  * talking animation and status when camera is off.
  */
 const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const hasVideo = stream && stream.active && stream.getVideoTracks().length > 0;
 
     return (

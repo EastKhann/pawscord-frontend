@@ -41,7 +41,7 @@ export const MessageContextMenu = memo(
     }) => {
         const { t } = useTranslation();
         const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
+        const [_error, _setError] = useState(null);
         const dangerContextMenuItemStyle = { ...styles.contextMenuItem, color: '#f23f42' };
         if (!contextMenu) return null;
 

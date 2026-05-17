@@ -537,7 +537,17 @@ export default function useChatConnection({
             };
             // WS handshake failures are recoverable (reconnect handles them) — use warn not error
             // to avoid audit console.error penalty. Browser may still log the network event itself.
-            socket.onerror = () => logger.warn('[StatusWS] WebSocket connection failed — will retry');
+            // 🔧 Spam guard: yalnızca ilk başarısızlıkta ve her 10. denemede warn ver — aksi halde
+            // backend uzun süre erişilmezse console saniyede 1 mesajla doluyordu.
+            socket.onerror = () => {
+                if (reconnectAttempts === 0 || reconnectAttempts % 10 === 0) {
+                    logger.warn(
+                        `[StatusWS] WebSocket connection failed — will retry${
+                            reconnectAttempts > 0 ? ` (attempt ${reconnectAttempts + 1})` : ''
+                        }`
+                    );
+                }
+            };
 
             socket.onclose = (event) => {
                 setGlobalWsConnected(false);

@@ -30,7 +30,7 @@ const BotDocsView = ({ copyToClipboard }) => {
                 <p>{t('botDocs.intro', 'You can create your own bot with the PAWSCORD Bot API.')}</p>
                 <div className="code-block">
                     <div className="code-header">
-                        <span>JavaScript (Node.js)</span>
+                        <span>{t('botDocs.jsNodejs', 'JavaScript (Node.js)')}</span>
                         <button onClick={() => copyToClipboard(CODE_SAMPLE)}>
                             <FaCopy />
                         </button>

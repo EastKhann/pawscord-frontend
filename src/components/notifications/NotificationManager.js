@@ -7,7 +7,7 @@
  * Web Notification API + Service Worker entegrasyonu
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import logger from '../../utils/logger';

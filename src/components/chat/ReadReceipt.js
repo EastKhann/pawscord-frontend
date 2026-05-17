@@ -7,7 +7,7 @@ import { FaCheck, FaCheckDouble } from 'react-icons/fa';
 const ReadReceipt = ({ status, readBy = [] }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     /*
     Status:
     - 'sent': Sent (tek tik)

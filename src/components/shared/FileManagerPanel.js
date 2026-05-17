@@ -1,5 +1,5 @@
 ﻿// frontend/src/components/FileManagerPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
     FaFolder,
@@ -63,13 +63,20 @@ const FileManagerPanel = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
         return (bytes / 1024 / 1024 / 1024).toFixed(1) + ' GB';
     };
 
-    const filteredFiles = files.filter((file) => {
-        const matchesFilter = filter === 'all' || getFileType(file.filename) === filter;
-        const matchesSearch = file.filename.toLowerCase().includes(search.toLowerCase());
-        return matchesFilter && matchesSearch;
-    });
+    const filteredFiles = useMemo(
+        () =>
+            files.filter((file) => {
+                const matchesFilter = filter === 'all' || getFileType(file.filename) === filter;
+                const matchesSearch = file.filename.toLowerCase().includes(search.toLowerCase());
+                return matchesFilter && matchesSearch;
+            }),
+        [files, filter, search]
+    );
 
-    const totalSize = filteredFiles.reduce((sum, file) => sum + (file.size || 0), 0);
+    const totalSize = useMemo(
+        () => filteredFiles.reduce((sum, file) => sum + (file.size || 0), 0),
+        [filteredFiles]
+    );
 
     return (
         <div style={styles.container}>

@@ -1,7 +1,7 @@
 ﻿// C:\USERS\EASTKHAN\SOFTWARE\JAVASCRIPT\PAWSCORD_CHAT\FRONTEND\SRC\FORWARDMESSAGEMODAL.JS
 //           --- YENİ DOSYA ---
 
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import toast from '../utils/toast';
 import { useTranslation } from 'react-i18next';

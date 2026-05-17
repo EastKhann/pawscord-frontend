@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-undef */
-import React from 'react';
 import { FaClock, FaPaperPlane } from 'react-icons/fa';
 import toast from '../../utils/toast';
 import { useTranslation } from 'react-i18next';

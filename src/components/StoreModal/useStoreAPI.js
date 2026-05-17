@@ -25,11 +25,20 @@ const useStoreAPI = ({ fetchWithAuth, apiBaseUrl }) => {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedItem, setSelectedItem] = useState(null);
 
+    // 🔥 Guard helper: bazı durumlarda (Cloudflare under-attack, SW HTML fallback,
+    // proxy yanlış route) sunucu 200 OK ama HTML body döndürür → response.json()
+    // SyntaxError fırlatır ve console "Failed to load store items" spam'liyordu.
+    const isJsonResponse = (response) => {
+        const ct = response.headers.get('content-type') || '';
+        return ct.toLowerCase().includes('application/json');
+    };
+
     const loadStoreItems = async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/store/items/`);
-            if (!response.ok) {
-                // Show preview items when store API unavailable or purchases disabled
+            if (!response.ok || !isJsonResponse(response)) {
+                // Show preview items when store API unavailable, purchases disabled,
+                // or response is HTML (Cloudflare / SW fallback)
                 if (!STORE_PURCHASES_ENABLED) setItems(PREVIEW_ITEMS);
                 else setItems([]);
                 return;
@@ -49,7 +58,7 @@ const useStoreAPI = ({ fetchWithAuth, apiBaseUrl }) => {
     const loadBalance = async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/users/balance/`);
-            if (!response.ok) return;
+            if (!response.ok || !isJsonResponse(response)) return;
             const data = await response.json();
             setBalance(data.balance || 0);
         } catch (error) {

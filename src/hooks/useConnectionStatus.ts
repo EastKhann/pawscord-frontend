@@ -12,8 +12,20 @@ interface ConnectionStatus {
     lastDisconnectedAt: Date | null;
 }
 
+/** Shape returned by the JS-authored GlobalWebSocketContext provider. */
+interface GlobalWebSocketContextValue {
+    isConnected: boolean;
+    setIsConnected: (value: boolean) => void;
+    globalData: unknown;
+    setGlobalData: (data: unknown) => void;
+    unreadGlobal: number;
+    setUnreadGlobal: (value: number) => void;
+}
+
 export function useConnectionStatus(): ConnectionStatus {
-    const { isConnected } = useGlobalWebSocket();
+    // useGlobalWebSocket is from a JS context with `null` as createContext default;
+    // the runtime value is always the provider object.
+    const { isConnected } = (useGlobalWebSocket() as GlobalWebSocketContextValue | null) ?? { isConnected: false };
 
     const [isReconnecting, setIsReconnecting] = useState(false);
     const [reconnectAttempts, setReconnectAttempts] = useState(0);

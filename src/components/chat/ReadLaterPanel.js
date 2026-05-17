@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import './ReadLaterPanel.css';
 import { FaBookmark, FaTag, FaSearch, FaTrash, FaPlus, FaTimes, FaFilter } from 'react-icons/fa';
@@ -156,18 +156,22 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
         }
     };
 
-    const filteredBookmarks = bookmarks.filter((bookmark) => {
-        const matchesSearch =
-            searchQuery === '' ||
-            bookmark.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            bookmark.author.toLowerCase().includes(searchQuery.toLowerCase());
+    const filteredBookmarks = useMemo(
+        () =>
+            bookmarks.filter((bookmark) => {
+                const matchesSearch =
+                    searchQuery === '' ||
+                    bookmark.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    bookmark.author.toLowerCase().includes(searchQuery.toLowerCase());
 
-        const matchesTags =
-            selectedTags.length === 0 ||
-            bookmark.tags?.some((tag) => selectedTags.includes(tag.id));
+                const matchesTags =
+                    selectedTags.length === 0 ||
+                    bookmark.tags?.some((tag) => selectedTags.includes(tag.id));
 
-        return matchesSearch && matchesTags;
-    });
+                return matchesSearch && matchesTags;
+            }),
+        [bookmarks, searchQuery, selectedTags]
+    );
 
     return (
         <div className="readlater-panel">

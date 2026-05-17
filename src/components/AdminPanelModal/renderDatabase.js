@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable no-undef */
-import React from 'react';
 import { FaBroom, FaCloudDownloadAlt, FaCloudUploadAlt, FaDatabase } from 'react-icons/fa';
 import toast from '../../utils/toast';
 import { useTranslation } from 'react-i18next';

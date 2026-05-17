@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, memo } from 'react';
 import { getToken } from '../../utils/tokenStorage';
 import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
@@ -234,4 +234,4 @@ AIChatbot.propTypes = {
     channelName: PropTypes.string,
     onClose: PropTypes.func,
 };
-export default AIChatbot;
+export default memo(AIChatbot);

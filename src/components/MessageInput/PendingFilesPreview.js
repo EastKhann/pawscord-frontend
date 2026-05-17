@@ -1,5 +1,4 @@
 // frontend/src/components/MessageInput/PendingFilesPreview.js
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FaFileAlt, FaTimes } from 'react-icons/fa';
 import styles from './styles';
@@ -13,7 +12,7 @@ const PendingFilesPreview = ({ pendingFiles, setPendingFiles, removePendingFile 
     return (
         <div aria-label={t('messageInput.pendingFiles', 'Pending files')} style={styles.pendingFilesContainer}>
             <div style={styles.pendingFilesHeader}>
-                <span>📎 {pendingFiles.length} dosya bekliyor</span>
+                <span>📎 {t('pendingFiles.waiting', { count: pendingFiles.length })}</span>
                 <button
                     onClick={() => setPendingFiles([])}
                     style={styles.clearAllButton}
@@ -52,8 +51,9 @@ const PendingFilesPreview = ({ pendingFiles, setPendingFiles, removePendingFile 
                             onClick={() => removePendingFile(file.id)}
                             style={styles.removeFileButton}
                             title={t('remove_file')}
+                            aria-label={t('msgInput.removeFile', 'Remove file')}
                         >
-                            <FaTimes />
+                            <FaTimes aria-hidden="true" />
                         </button>
                     </div>
                 ))}

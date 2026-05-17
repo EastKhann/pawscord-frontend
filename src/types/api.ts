@@ -33,6 +33,7 @@ export interface Server {
     name: string;
     owner: number | UserProfile;
     icon: string | null;
+    slug?: string;
     description: string;
     is_public: boolean;
     metadata: Record<string, unknown>;
@@ -53,6 +54,8 @@ export interface Room {
     slug: string;
     server: number;
     room_type: 'text' | 'voice' | 'announcement' | 'forum' | 'stage';
+    /** Alias for room_type — used in legacy store code. */
+    type?: 'text' | 'voice' | 'announcement' | 'forum' | 'stage' | 'category';
     category: number | null;
     topic: string;
     is_private: boolean;

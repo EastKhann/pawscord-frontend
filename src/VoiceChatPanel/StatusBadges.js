@@ -1,7 +1,6 @@
 // frontend/src/VoiceChatPanel/StatusBadges.js
 // 🎨 Status badge components for voice chat header
 
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 

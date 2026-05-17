@@ -30,7 +30,7 @@ const TABS = [
 
 const VoiceSettingsPanel = ({ onClose, channelId }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const api = useVoiceSettings({ channelId });
 

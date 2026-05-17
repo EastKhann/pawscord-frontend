@@ -238,7 +238,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                             ...(activeTab === 'trending' ? styles.activeTab : {}),
                         }}
                     >
-                        <FaStar /> Trend Olanlar
+                        <FaStar /> {t('emojiMgmt.trending')}
                     </button>
 
                     <button
@@ -248,7 +248,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
                             ...(activeTab === 'suggestions' ? styles.activeTab : {}),
                         }}
                     >
-                        Ãneriler
+                        {t('emojiMgmt.suggestions')}
                     </button>
                 </div >
 

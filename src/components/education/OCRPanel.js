@@ -89,7 +89,7 @@ function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
                         <div className="upload-placeholder">
                             <FaUpload className="upload-icon" />
                             <p>{t('ocr.clickToUpload', 'Click to upload an image')}</p>
-                            <span>Supports JPG, PNG, GIF</span>
+                            <span>{t('ocr.supportedFormats', 'Supports JPG, PNG, GIF')}</span>
                         </div>
                     )}
                 </label>

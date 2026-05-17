@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
@@ -30,7 +29,7 @@ const BookmarksTab = ({ bookmarks: rawBM }) => {
     const { t } = useTranslation();
     const bookmarks = rawBM || [];
     const styles = profileStyles;
-    const [error, setError] = React.useState(null);
+    const [_error, _setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (

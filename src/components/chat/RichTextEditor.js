@@ -17,14 +17,14 @@ const RichTextEditor = forwardRef(
         const isSendingRef = useRef(false);
         const [slashQuery, setSlashQuery] = useState(null);
         const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
+        const [_error, _setError] = useState(null);
         const [slashIndex, setSlashIndex] = useState(0);
 
         const editor = useEditor({
             extensions: [
                 StarterKit,
                 Placeholder.configure({
-                    placeholder: placeholder || 'Bir mesaj yaz...',
+                    placeholder: placeholder || t('richTextEditor.placeholder'),
                 }),
             ],
             content: initialValue,

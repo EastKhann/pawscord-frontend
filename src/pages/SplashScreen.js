@@ -1,6 +1,6 @@
 ﻿// frontend/src/SplashScreen.js - Premium Animated Splash
 
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import './SplashScreen.css';
 import { LOGO_URL } from '../utils/cdn';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import './RaidProtectionDashboard.css';
@@ -20,8 +20,7 @@ import OverviewView from '../RaidProtectionDashboard/OverviewView';
 import SettingsView from '../RaidProtectionDashboard/SettingsView';
 
 const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const {
         view,
@@ -40,6 +39,30 @@ const RaidProtectionDashboard = ({ serverId, onClose, apiBaseUrl }) => {
         handleVerifyUser,
         handleSaveSettings,
     } = useRaidProtectionDashboard(serverId, apiBaseUrl);
+
+    if (loading) {
+        return (
+            <div
+                className="raid-dashboard-overlay"
+                role="button"
+                tabIndex={0}
+                onClick={onClose}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            >
+                <div
+                    className="raid-dashboard"
+                    role="status"
+                    aria-label={t('common.loading')}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}
+                    tabIndex={0}
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+                >
+                    <div style={{ width: 32, height: 32, border: '3px solid var(--accent, #5865f2)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div

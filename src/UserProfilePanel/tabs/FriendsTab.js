@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
@@ -23,7 +22,7 @@ const FriendsTab = ({
     const friends = rawFriends || [];
     const { t } = useTranslation();
     const styles = profileStyles;
-    const [error, setError] = React.useState(null);
+    const [_error, _setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (

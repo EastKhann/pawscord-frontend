@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/UserWarningsPanel/AddWarningModal.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes, FaPlus } from 'react-icons/fa';
 import styles from './styles';
@@ -53,7 +53,7 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
                         </select>
                     </div>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Sebep</label>
+                        <label style={styles.label}>{t('warnings.reason', 'Reason')}</label>
                         <textarea
                             value={newWarning.reason}
                             onChange={(e) =>
@@ -65,7 +65,7 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
                         />
                     </div>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Ciddiyeti</label>
+                        <label style={styles.label}>{t('warnings.severity', 'Severity')}</label>
                         <select
                             value={newWarning.severity}
                             onChange={(e) =>
@@ -95,7 +95,7 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
                         />
                     </div>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Auto-ban Threshold</label>
+                        <label style={styles.label}>{t('warnings.autoBanThreshold', 'Auto-ban Threshold')}</label>
                         <input
                             type="number"
                             value={newWarning.auto_ban_on}

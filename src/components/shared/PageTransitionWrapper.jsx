@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 const PageTransitionWrapper = ({ children }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const location = useLocation();
     const ref = useRef(null);
 

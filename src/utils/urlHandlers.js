@@ -127,8 +127,10 @@ export const copyToClipboard = async (text) => {
  * Get app URL for sharing
  */
 export const getAppUrl = (path = '') => {
-    // Dynamic base URL detection
-    const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
+    // Dynamic base URL detection (UA-string Electron check kaldırıldı; false-positive
+    // riski Electron-tabanlı browser'larda — sadece gerçek Electron renderer'ı).
+    const isElectron =
+        window.process?.versions?.electron || window.location.protocol === 'file:';
     const isPawscordDomain = window.location.hostname.includes('pawscord.com');
     const isLocalhost =
         window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -173,11 +175,11 @@ export const promptPWAInstall = () => {
             if (choiceResult.outcome === 'accepted') {
             }
             window.deferredPrompt = null;
-        });
+        }).catch((err) => console.error('Failed to get PWA install choice result:', err));
     }
 };
 
-// PWA install prompt managed by pwaHelper.js — no duplicate listner needed
+// PWA install prompt managed by pwaHelper.js — no duplicate listener needed
 
 export default {
     initializeDeepLinkHandler,

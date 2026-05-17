@@ -18,18 +18,28 @@ export function useNetworkStatus() {
 
         if (Capacitor.isNativePlatform()) {
             // Native: use @capacitor/network for reliable status
-            import('@capacitor/network').then(({ Network }) => {
-                // Get initial status
-                Network.getStatus().then(({ connected }) => setIsOnline(connected));
+            import('@capacitor/network')
+                .then(({ Network }) => {
+                    // Get initial status
+                    Network.getStatus()
+                        .then(({ connected }) => setIsOnline(connected))
+                        .catch((err) => console.error('[useNetworkStatus] getStatus failed:', err));
 
-                // Subscribe to changes
-                Network.addListener('networkStatusChange', ({ connected }) => {
-                    if (!connected) setWasOffline(true);
-                    setIsOnline(connected);
-                }).then((handle) => {
-                    removeListener = () => handle.remove();
-                });
-            });
+                    // Subscribe to changes
+                    Network.addListener('networkStatusChange', ({ connected }) => {
+                        if (!connected) setWasOffline(true);
+                        setIsOnline(connected);
+                    })
+                        .then((handle) => {
+                            removeListener = () => handle.remove();
+                        })
+                        .catch((err) =>
+                            console.error('[useNetworkStatus] addListener failed:', err)
+                        );
+                })
+                .catch((err) =>
+                    console.error('[useNetworkStatus] @capacitor/network import failed:', err)
+                );
         } else {
             // Web: browser events
             const goOnline = () => setIsOnline(true);

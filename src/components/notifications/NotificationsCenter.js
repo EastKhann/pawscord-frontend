@@ -253,11 +253,11 @@ const NotificationsCenter = ({ userId, onClose }) => {
                         {unreadCount > 0 && <span className="unread-badge">{unreadCount} new</span>}
                     </div>
                     <div className="header-actions">
-                        <button onClick={handleToggleSettings} className="btn-settings">
-                            <FaCog />
+                        <button onClick={handleToggleSettings} className="btn-settings" aria-label={t('notifications.settings', 'Notification settings')}>
+                            <FaCog aria-hidden="true" />
                         </button>
-                        <button onClick={onClose} className="btn-close">
-                            <FaTimes />
+                        <button onClick={onClose} className="btn-close" aria-label={t('common.close', 'Close')}>
+                            <FaTimes aria-hidden="true" />
                         </button>
                     </div>
                 </div>
@@ -463,8 +463,9 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                             deleteNotification(notification.id);
                                         }}
                                         className="btn-delete-notification"
+                                        aria-label={t('notifications.dismiss', 'Dismiss notification')}
                                     >
-                                        <FaTimes />
+                                        <FaTimes aria-hidden="true" />
                                     </button>
                                     {!notification.read && <div className="unread-dot" />}
                                 </div>

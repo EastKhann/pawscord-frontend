@@ -64,13 +64,16 @@ const useCryptoStore = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const refreshData = () => {
         fetchWithAuth(`${apiBaseUrl}/store/balance/`)
             .then((r) => r.json())
-            .then((d) => setBalance(d.coins));
+            .then((d) => setBalance(d.coins))
+            .catch((err) => console.error('Failed to fetch store balance:', err));
         fetchWithAuth(`${apiBaseUrl}/store/items/`)
             .then((r) => r.json())
-            .then((d) => setStoreItems(d));
+            .then((d) => setStoreItems(d))
+            .catch((err) => console.error('Failed to fetch store items:', err));
         fetchWithAuth(`${apiBaseUrl}/store/inventory/`)
             .then((r) => r.json())
-            .then((d) => setInventory(d));
+            .then((d) => setInventory(d))
+            .catch((err) => console.error('Failed to fetch store inventory:', err));
     };
 
     useEffect(() => {

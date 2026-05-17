@@ -161,7 +161,7 @@ const OverviewTab = ({ stats }) => {
                 <>
                     <div style={styles.section}>
                         <h3 style={styles.sectionTitle}>
-                            {t('??_g�nl�k_message_count_last_30_days')}
+                            {t('gunluk_message_count_last_30_days')}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
                             <AreaChart data={stats.daily_stats}>
@@ -189,7 +189,7 @@ const OverviewTab = ({ stats }) => {
 
                     <div style={styles.section}>
                         <h3 style={styles.sectionTitle}>
-                            {t('??_g�nl�k_active_user_last_30_days')}
+                            {t('gunluk_active_user_last_30_days')}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
                             <LineChart data={stats.daily_stats}>
@@ -211,7 +211,7 @@ const OverviewTab = ({ stats }) => {
 
                     <div style={styles.section}>
                         <h3 style={styles.sectionTitle}>
-                            {t('??_g�nl�k_yeni_kayitlar_last_30_days')}
+                            {t('gunluk_yeni_kayitlar_last_30_days')}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
                             <BarChart data={stats.daily_stats}>
@@ -254,7 +254,7 @@ const OverviewTab = ({ stats }) => {
 
                     <div style={styles.section}>
                         <h3 style={styles.sectionTitle}>
-                            {t('??_g�nl�k_benzersiz_ziyaret�i_last_30_days')}
+                            {t('gunluk_benzersiz_ziyaretci_last_30_days')}
                         </h3>
                         <ResponsiveContainer width="100%" height={250}>
                             <LineChart data={stats.daily_stats}>
@@ -319,7 +319,7 @@ const OverviewTab = ({ stats }) => {
             {stats.top_pages && stats.top_pages.length > 0 && (
                 <div style={styles.section}>
                     <h3 style={styles.sectionTitle}>
-                        {t('??_en_�ok_ziyaret_edilen_sayfalar_last_30_days')}
+                        {t('en_cok_ziyaret_edilen_sayfalar_last_30_days')}
                     </h3>
                     <div style={styles.list}>
                         {stats.top_pages.slice(0, 10).map((page, index) => (

@@ -18,21 +18,21 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     const [activeTab, setActiveTab] = useState('overview');
 
     useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const response = await fetchWithAuth(`${apiBaseUrl}/admin/analytics/`);
+                if (response.ok) setStats(await response.json());
+            } catch (error) {
+                logger.error('Analytics fetch error:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchStats();
         const interval = setInterval(fetchStats, 30000);
         return () => clearInterval(interval);
-    }, []);
-
-    const fetchStats = async () => {
-        try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/admin/analytics/`);
-            if (response.ok) setStats(await response.json());
-        } catch (error) {
-            logger.error('Analytics fetch error:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [fetchWithAuth, apiBaseUrl]);
 
     const exportData = () => {
         if (!stats) return;
@@ -62,10 +62,10 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
         );
 
     const TABS = [
-        { key: 'overview', icon: <FaChartLine />, label: 'General' },
-        { key: 'users', icon: <FaUsers />, label: 'Users' },
-        { key: 'premium', icon: <FaCrown />, label: 'Premium' },
-        { key: 'servers', icon: <FaServer />, label: 'Servers' },
+        { key: 'overview', icon: <FaChartLine />, labelKey: 'admin.overviewTab', label: 'General' },
+        { key: 'users', icon: <FaUsers />, labelKey: 'admin.usersTab', label: 'Users' },
+        { key: 'premium', icon: <FaCrown />, labelKey: 'admin.premiumTab', label: 'Premium' },
+        { key: 'servers', icon: <FaServer />, labelKey: 'admin.serversTab', label: 'Servers' },
     ];
 
     return (
@@ -104,14 +104,14 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 </div>
 
                 <div style={styles.tabs}>
-                    {TABS.map((t) => (
+                    {TABS.map((tab) => (
                         <button
-                            aria-label={t.label}
-                            key={t.key}
-                            onClick={() => setActiveTab(t.key)}
-                            style={{ ...styles.tab, ...(activeTab === t.key && styles.activeTab) }}
+                            aria-label={t(tab.labelKey, tab.label)}
+                            key={tab.key}
+                            onClick={() => setActiveTab(tab.key)}
+                            style={{ ...styles.tab, ...(activeTab === tab.key && styles.activeTab) }}
                         >
-                            {t.icon} {t.label}
+                            {tab.icon} {t(tab.labelKey, tab.label)}
                         </button>
                     ))}
                 </div>

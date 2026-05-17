@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ children, redirectTo = '/launch' }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { isAuthenticated, token } = useAuth();
     const location = useLocation();
 

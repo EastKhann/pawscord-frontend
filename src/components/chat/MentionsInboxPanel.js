@@ -1,6 +1,6 @@
 import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/MentionsInboxPanel.js
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FaInbox, FaTimes, FaHashtag, FaReply, FaThumbtack, FaSync } from 'react-icons/fa';
 import { API_BASE_URL } from '../../utils/constants';
@@ -90,7 +90,7 @@ const MentionsInboxPanel = ({ isOpen, onClose, onNavigateToMessage, currentUsern
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaInbox style={S.txt} />
-                        <h3 style={styles.title}>Bahsedilmeler</h3>
+                        <h3 style={styles.title}>{t('mentions.title', 'Mentions')}</h3>
                         {total > 0 && <span style={styles.badge}>{total}</span>}
                     </div>
                     <div style={styles.headerRight}>
@@ -98,7 +98,7 @@ const MentionsInboxPanel = ({ isOpen, onClose, onNavigateToMessage, currentUsern
                             aria-label={t('mentions.refresh', 'Refresh mentions')}
                             onClick={() => fetchMentions(1)}
                             style={styles.refreshBtn}
-                            title="Yenile"
+                            title={t('mentions.refresh', 'Refresh')}
                         >
                             <FaSync
                                 style={loading ? { animation: 'spin 1s linear infinite' } : {}}
@@ -120,7 +120,7 @@ const MentionsInboxPanel = ({ isOpen, onClose, onNavigateToMessage, currentUsern
                     ) : mentions.length === 0 ? (
                         <div style={styles.emptyState}>
                             <span className="fs-48">📭</span>
-                            <p style={styles.emptyTitle}>Bahsedilme yok</p>
+                            <p style={styles.emptyTitle}>{t('mentions.noMentions', 'No mentions')}</p>
                             <p style={styles.emptySubtitle}>
                                 {t('mentions.emptyHint', 'It will appear here when someone tags you')}
                             </p>

@@ -54,7 +54,7 @@ export const useUIStore = create<UIStore>()(
                 removeNotification: (id: number) =>
                     set((state) => ({
                         toastNotifications: state.toastNotifications.filter(
-                            (n: any) => n.id !== id
+                            (n) => n.id !== id
                         ),
                     })),
                 clearNotifications: () => set({ toastNotifications: [] }),
@@ -130,7 +130,7 @@ export const useUIStore = create<UIStore>()(
 
                 closeAllModals: () =>
                     set((state) => ({
-                        modals: Object.keys(state.modals).reduce((acc, key) => {
+                        modals: Object.keys(state.modals).reduce<Record<string, boolean>>((acc, key) => {
                             acc[key] = false;
                             return acc;
                         }, {}),
@@ -170,7 +170,7 @@ export const useUIStore = create<UIStore>()(
                         modals: Object.keys(state.modals).reduce((acc, key) => {
                             acc[key] = false;
                             return acc;
-                        }, {} as any),
+                        }, {} as Record<string, boolean>),
                         modalData: {},
                         isLoading: false,
                         globalError: null,
@@ -204,13 +204,13 @@ export const selectAccentColor = (state: UIStore) => state.accentColor;
 export const selectIsModalOpen = (modalName: string) => (state: UIStore) =>
     !!state.modals[modalName];
 /** Select the connection status. */
-export const selectConnectionStatus = (state: UIStore) => (state as any).connectionStatus;
+export const selectConnectionStatus = (state: UIStore) => state.connectionStatus;
 /** Select the global loading state. */
-export const selectIsLoading = (state: UIStore) => (state as any).isLoading;
+export const selectIsLoading = (state: UIStore) => state.isLoading;
 /** Select the sidebar collapsed state. */
 export const selectSidebarCollapsed = (state: UIStore) => state.sidebarCollapsed;
 /** Select all toast notifications. */
-export const selectToastNotifications = (state: UIStore) => (state as any).toastNotifications;
+export const selectToastNotifications = (state: UIStore) => state.toastNotifications;
 
 // Hook selectors
 export const useTheme = () => useUIStore((s) => s.theme);

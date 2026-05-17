@@ -18,7 +18,7 @@ const EncryptionKeyModal = ({ onClose, onSetKey, existingKey }) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();

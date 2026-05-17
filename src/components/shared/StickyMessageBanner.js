@@ -33,7 +33,7 @@ const S = {
 const StickyMessageBanner = ({ message, type = 'info', onDismiss }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     if (!message) return null;
 
     const bgColors = {

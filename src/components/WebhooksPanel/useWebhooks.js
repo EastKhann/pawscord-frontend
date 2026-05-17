@@ -14,6 +14,7 @@ export default function useWebhooks(serverId) {
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingWebhook, setEditingWebhook] = useState(null);
+    const [editDraft, setEditDraft] = useState({ name: '', channel_id: '', avatar_url: '' });
     const [logs, setLogs] = useState([]);
     const [viewingLogs, setViewingLogs] = useState(null);
 
@@ -87,7 +88,12 @@ export default function useWebhooks(serverId) {
     };
 
     const deleteWebhook = async (webhookId) => {
-        if (!(await confirmDialog(t('webhooks.deleteConfirm', 'Are you sure you want to delete this webhook?')))) return;
+        if (
+            !(await confirmDialog(
+                t('webhooks.deleteConfirm', 'Are you sure you want to delete this webhook?')
+            ))
+        )
+            return;
         try {
             const res = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/delete/`, {
                 method: 'DELETE',
@@ -117,7 +123,10 @@ export default function useWebhooks(serverId) {
     const regenerateToken = async (webhookId) => {
         if (
             !(await confirmDialog(
-                t('webhooks.renewConfirm', 'Are you sure you want to renew the webhook token? The old token will become invalid.')
+                t(
+                    'webhooks.renewConfirm',
+                    'Are you sure you want to renew the webhook token? The old token will become invalid.'
+                )
             ))
         )
             return;
@@ -158,6 +167,21 @@ export default function useWebhooks(serverId) {
         toast.success(t('webhook.urlCopied'));
     };
 
+    // Starts editing a webhook and pre-populates the controlled draft state.
+    const startEditing = (webhook) => {
+        setEditDraft({
+            name: webhook.name || '',
+            channel_id: webhook.channel_id || '',
+            avatar_url: webhook.avatar_url || '',
+        });
+        setEditingWebhook(webhook.id);
+    };
+
+    const cancelEditing = () => {
+        setEditingWebhook(null);
+        setEditDraft({ name: '', channel_id: '', avatar_url: '' });
+    };
+
     return {
         webhooks,
         creating,
@@ -168,6 +192,10 @@ export default function useWebhooks(serverId) {
         loading,
         editingWebhook,
         setEditingWebhook,
+        editDraft,
+        setEditDraft,
+        startEditing,
+        cancelEditing,
         logs,
         viewingLogs,
         setViewingLogs,

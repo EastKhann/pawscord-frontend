@@ -1,6 +1,5 @@
 ﻿// frontend/src/ReplyPreview.js
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';

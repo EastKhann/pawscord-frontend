@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 const NewMessagesDivider = ({ count = 0 }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     return (
         <div aria-label={t('chat.newMessagesDivider', 'New messages')} style={S.container}>
             <div style={S.line} />

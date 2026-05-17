@@ -10,8 +10,7 @@ import styles from '../TournamentSystem/styles';
 import { useTranslation } from 'react-i18next';
 
 const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const {
         tournaments,
@@ -21,6 +20,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
         setShowCreateModal,
         filter,
         setFilter,
+        loading,
         loadTournaments,
         createTournament,
         joinTournament,
@@ -37,7 +37,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaTrophy size={24} color="#f0b232" />
-                        <h2 style={styles.title}>Turnuvalar</h2>
+                        <h2 style={styles.title}>{t('tournament.title', 'Tournaments')}</h2>
                     </div>
                     <div style={styles.headerActions}>
                         <button
@@ -46,7 +46,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                             style={styles.createButton}
                         >
                             <FaPlus size={14} />
-                            <span>Yeni Turnuva</span>
+                            <span>{t('tournament.newTournament', 'New Tournament')}</span>
                         </button>
                         <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                             <FaTimes size={20} />
@@ -77,10 +77,15 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                 </div>
 
                 <div style={styles.content}>
-                    {tournaments.length === 0 ? (
+                    {loading ? (
+                        <div style={styles.empty} role="status" aria-label={t('common.loading')}>
+                            <div style={{ width: 32, height: 32, border: '3px solid var(--accent, #5865f2)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 12px' }} />
+                            <p style={{ color: '#949ba4' }}>{t('tournament.loading', 'Loading tournaments...')}</p>
+                        </div>
+                    ) : tournaments.length === 0 ? (
                         <div style={styles.empty}>
                             <FaTrophy size={48} color="#4e5058" />
-                            <p>Hen�z turnuva yok</p>
+                            <p>Henüz turnuva yok</p>
                         </div>
                     ) : (
                         <div style={styles.tournamentGrid}>

@@ -1,4 +1,3 @@
-import React from 'react';
 // frontend/src/utils/securityManager.js
 
 /**

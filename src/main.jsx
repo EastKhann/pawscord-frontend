@@ -20,14 +20,7 @@ import lazyWithRetry, { isChunkLoadError, handleChunkReload, CHUNK_RELOAD_COUNT_
 // ⚡ OPTIMIZATION: Lazy load ALL feature pages (with retry)
 const VerifyEmailPage = lazyWithRetry(() => import('./pages/VerifyEmailPage'));
 const InvitePage = lazyWithRetry(() => import('./pages/InvitePage'));
-const EnglishHub = lazyWithRetry(() => import('./pages/EnglishHub'));
-const GrammarQuizPage = lazyWithRetry(() => import('./GrammarQuizPage')); // orchestrator at root
-const EnglishLearningPage = lazyWithRetry(() => import('./EnglishLearningPage')); // orchestrator at root
-const EnglishVoicePractice = lazyWithRetry(() => import('./pages/EnglishVoicePractice'));
-const PronunciationPage = lazyWithRetry(() => import('./pages/PronunciationPage'));
-const SrsReviewPage = lazyWithRetry(() => import('./pages/SrsReviewPage'));
-const CryptoDashboard = lazyWithRetry(() => import('./CryptoDashboard')); // orchestrator at root
-const CryptoSignals = lazyWithRetry(() => import('./CryptoSignals')); // orchestrator at root
+// 🔥 REMOVED: English + Crypto lazy imports (route'lar kaldırıldı, kullanılmıyor)
 const SpotifyCallback = lazyWithRetry(() => import('./pages/SpotifyCallback'));
 import reportWebVitals from './reportWebVitals';
 import { GlobalWebSocketProvider } from './GlobalWebSocketContext';
@@ -209,7 +202,12 @@ const RootApp = () => {
             <AuthProvider>
                 <GlobalWebSocketProvider>
                     <ErrorBoundary>
-                        <HashRouter>
+                        <HashRouter
+                            future={{
+                                v7_startTransition: true,
+                                v7_relativeSplatPath: true,
+                            }}
+                        >
                             <a href="#main-content" className="skip-nav">
                                 Skip to Content
                             </a>
@@ -463,141 +461,10 @@ const RootApp = () => {
                                         }
                                     />
 
-                                    {/* İngilizce Modülleri */}
-                                    <Route
-                                        path="/eng-learn"
-                                        element={
-                                            <RouteErrorBoundary>
-                                                <PageWrapper>
-                                                    <React.Suspense
-                                                        fallback={
-                                                            <LoadingSkeleton
-                                                                label={t('panels.educationLoading')}
-                                                            />
-                                                        }
-                                                    >
-                                                        <EnglishHub />
-                                                    </React.Suspense>
-                                                </PageWrapper>
-                                            </RouteErrorBoundary>
-                                        }
-                                    />
-                                    <Route
-                                        path="/eng-learn/vocab"
-                                        element={
-                                            <RouteErrorBoundary>
-                                                <PageWrapper>
-                                                    <React.Suspense
-                                                        fallback={<div>{t('common.loading')}</div>}
-                                                    >
-                                                        <EnglishLearningPage />
-                                                    </React.Suspense>
-                                                </PageWrapper>
-                                            </RouteErrorBoundary>
-                                        }
-                                    />
-                                    <Route
-                                        path="/eng-learn/grammar"
-                                        element={
-                                            <RouteErrorBoundary>
-                                                <PageWrapper>
-                                                    <React.Suspense
-                                                        fallback={<div>{t('common.loading')}</div>}
-                                                    >
-                                                        <GrammarQuizPage />
-                                                    </React.Suspense>
-                                                </PageWrapper>
-                                            </RouteErrorBoundary>
-                                        }
-                                    />
-                                    <Route
-                                        path="/eng-learn/voice"
-                                        element={
-                                            <RouteErrorBoundary>
-                                                <PageWrapper>
-                                                    <React.Suspense
-                                                        fallback={<div>{t('common.loading')}</div>}
-                                                    >
-                                                        <EnglishVoicePractice
-                                                            apiBaseUrl={API_BASE_URL}
-                                                        />
-                                                    </React.Suspense>
-                                                </PageWrapper>
-                                            </RouteErrorBoundary>
-                                        }
-                                    />
-                                    <Route
-                                        path="/eng-learn/pronunciation"
-                                        element={
-                                            <RouteErrorBoundary>
-                                                <PageWrapper>
-                                                    <React.Suspense
-                                                        fallback={<div>{t('common.loading')}</div>}
-                                                    >
-                                                        <PronunciationPage
-                                                            apiBaseUrl={API_BASE_URL}
-                                                        />
-                                                    </React.Suspense>
-                                                </PageWrapper>
-                                            </RouteErrorBoundary>
-                                        }
-                                    />
-                                    <Route
-                                        path="/eng-learn/srs"
-                                        element={
-                                            <RouteErrorBoundary>
-                                                <PageWrapper>
-                                                    <React.Suspense
-                                                        fallback={
-                                                            <LoadingSkeleton
-                                                                label={t('panels.srsLoading')}
-                                                            />
-                                                        }
-                                                    >
-                                                        <SrsReviewPage />
-                                                    </React.Suspense>
-                                                </PageWrapper>
-                                            </RouteErrorBoundary>
-                                        }
-                                    />
-
-                                    {/* Kripto Sinyaller (Sadece Whitelist) */}
-                                    <Route
-                                        path="/crypto-analysis"
-                                        element={
-                                            <RouteErrorBoundary>
-                                                <PageWrapper>
-                                                    <React.Suspense
-                                                        fallback={
-                                                            <LoadingSkeleton
-                                                                label={t('panels.cryptoLoading')}
-                                                            />
-                                                        }
-                                                    >
-                                                        <ProtectedRoute>
-                                                            <WhitelistGuard>
-                                                                <CryptoSignals />
-                                                            </WhitelistGuard>
-                                                        </ProtectedRoute>
-                                                    </React.Suspense>
-                                                </PageWrapper>
-                                            </RouteErrorBoundary>
-                                        }
-                                    />
-
-                                    {/* Eski Crypto Dashboard (yedek) */}
-                                    <Route
-                                        path="/crypto-dashboard-old"
-                                        element={
-                                            <RouteErrorBoundary>
-                                                <PageWrapper>
-                                                    <React.Suspense fallback={<LoadingSkeleton />}>
-                                                        <CryptoDashboard />
-                                                    </React.Suspense>
-                                                </PageWrapper>
-                                            </RouteErrorBoundary>
-                                        }
-                                    />
+                                    {/* 🔥 REMOVED (kullanıcı isteği): English ve Crypto modülleri kaldırıldı.
+                                        Eski route'lar: /eng-learn, /eng-learn/vocab, /eng-learn/grammar,
+                                        /eng-learn/voice, /eng-learn/pronunciation, /eng-learn/srs,
+                                        /crypto-analysis, /crypto-dashboard-old. */}
 
                                     {/* Ana Uygulama (Catch-All) */}
                                     <Route path="/" element={<App />} />
@@ -663,7 +530,13 @@ window.addEventListener('load', () => {
         /* boot gate failed; mount anyway */
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
+    // 🔥 HMR-safe: createRoot can only run once per container. Cache the root
+    // on window so Vite Fast Refresh doesn't re-create it (React 19 logs a
+    // warning otherwise: "createRoot() on a container that has already been
+    // passed to createRoot() before").
+    const container = document.getElementById('root');
+    const root = window.__pawscordReactRoot || ReactDOM.createRoot(container);
+    window.__pawscordReactRoot = root;
     root.render(
         <ErrorBoundary>
             <RootApp />

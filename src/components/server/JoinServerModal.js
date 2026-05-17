@@ -1,9 +1,9 @@
-﻿import { getToken } from '../../utils/tokenStorage';
+import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/JoinServerModal.js
 
 // OKen bağımsız - hiçbir dış prop'a ihtiyacı yok (sadece isOpen + onClose)
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -55,7 +55,7 @@ const S = {
     txt: { color: '#b5bac1', fontSize: '13px', margin: '0 0 8px' },
 };
 
-const JoinServerModal = ({ isOpen, onClose }) => {
+const JoinServerModal = ({ isOpen, onClose, setSelectedServerId }) => {
     const { t } = useTranslation();
 
     const [servers, setServers] = useState([]);
@@ -134,17 +134,23 @@ const JoinServerModal = ({ isOpen, onClose }) => {
                 method: 'POST',
             });
 
+            const data = await res.json().catch(() => ({}));
+
             if (res.ok) {
-                toast.success(t('ui.serverya_successfully_katildin'));
+                toast.success(t('server.joined', { name: data.server_name || 'Server' }));
 
-                // Listeyi daycelle
-
+                // Listede işaretle + kısa gecikme sonra kapat
                 setServers((prev) =>
                     prev.map((s) => (s.id === serverId ? { ...s, is_member: true } : s))
                 );
-            } else {
-                const data = await res.json().catch(() => ({}));
 
+                if (setSelectedServerId) {
+                    setSelectedServerId(serverId);
+                }
+
+                // Sayfayı yenilemeden sidebar'ın WebSocket güncellemesini alması için kısa bekle
+                setTimeout(() => onClose(), 1200);
+            } else {
                 toast.error(data.error || t('joinServer.error', 'Could not join the server.'));
             }
         } catch {
@@ -184,6 +190,12 @@ const JoinServerModal = ({ isOpen, onClose }) => {
                 setInviteCode('');
 
                 loadServers();
+
+                if (data.server_id && setSelectedServerId) {
+                    setSelectedServerId(data.server_id);
+                }
+                
+                setTimeout(() => onClose(), 1200);
             } else {
                 toast.error(data.error || t('ui.gecersiz_davet_kodu'));
             }
@@ -226,7 +238,10 @@ const JoinServerModal = ({ isOpen, onClose }) => {
                         <input
                             value={inviteCode}
                             onChange={(e) => setInviteCode(e.target.value)}
-                            placeholder={t('joinServer.inviteUrl', 'https://pawscord.com/invite/abc123')}
+                            placeholder={t(
+                                'joinServer.inviteUrl',
+                                'https://pawscord.com/invite/abc123'
+                            )}
                             style={input}
                         />
 
@@ -323,6 +338,7 @@ const JoinServerModal = ({ isOpen, onClose }) => {
                                     <button
                                         aria-label={t('joinServer.joinServer', 'Join server')}
                                         disabled={joiningId === srv.id}
+                                        onClick={() => handleJoinServer(srv.id)}
                                         style={{
                                             ...joinBtn,
 
@@ -331,7 +347,9 @@ const JoinServerModal = ({ isOpen, onClose }) => {
                                             flexShrink: 0,
                                         }}
                                     >
-                                        {joiningId === srv.id ? '...' : 'Join'}
+                                        {joiningId === srv.id
+                                            ? '...'
+                                            : t('joinServer.join', 'Katıl')}
                                     </button>
                                 )}
                             </div>
@@ -475,8 +493,8 @@ const infoText = {
 
 JoinServerModal.propTypes = {
     isOpen: PropTypes.bool,
-
     onClose: PropTypes.func,
+    setSelectedServerId: PropTypes.func,
 };
 
 export default JoinServerModal;

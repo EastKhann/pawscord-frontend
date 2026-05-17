@@ -1,4 +1,3 @@
-import React from 'react';
 import logger from '../utils/logger';
 // frontend/src/utils/webSocketManager.js
 
@@ -25,7 +24,7 @@ class WebSocketManager {
 
         // State
         this.messageQueue = [];
-        this.listners = new Map();
+        this.listeners = new Map();
         this.heartbeatTimer = null;
         this.heartbeatTimeoutTimer = null;
         this.reconnectTimer = null;
@@ -296,18 +295,18 @@ class WebSocketManager {
      * Event emitter
      */
     on(event, callback) {
-        if (!this.listners.has(event)) {
-            this.listners.set(event, []);
+        if (!this.listeners.has(event)) {
+            this.listeners.set(event, []);
         }
-        this.listners.get(event).push(callback);
+        this.listeners.get(event).push(callback);
 
         return () => this.off(event, callback);
     }
 
     off(event, callback) {
-        if (!this.listners.has(event)) return;
+        if (!this.listeners.has(event)) return;
 
-        const callbacks = this.listners.get(event);
+        const callbacks = this.listeners.get(event);
         const index = callbacks.indexOf(callback);
 
         if (index > -1) {
@@ -316,13 +315,13 @@ class WebSocketManager {
     }
 
     emit(event, data) {
-        if (!this.listners.has(event)) return;
+        if (!this.listeners.has(event)) return;
 
-        this.listners.get(event).forEach((callback) => {
+        this.listeners.get(event).forEach((callback) => {
             try {
                 callback(data);
             } catch (error) {
-                logger.error(`Error in ${event} listner:`, error);
+                logger.error(`Error in ${event} listener:`, error);
             }
         });
     }
@@ -391,10 +390,22 @@ export const useWebSocket = (url, options = {}) => {
 
 /**
  * React Hook - WebSocket with event handlers
+ *
+ * eventHandlers is intentionally excluded from the effect dep array.
+ * Call sites pass object literals that change reference every render;
+ * including them would re-register all listeners on every render.
+ * Instead we keep a ref that is always current and wrap each listener
+ * in a stable proxy so ws.off() can match the exact function reference.
  */
 export const useWebSocketEvent = (url, eventHandlers = {}, options = {}) => {
     const [ws] = React.useState(() => new WebSocketManager(url, options));
     const [isConnected, setIsConnected] = React.useState(false);
+
+    // Always-current ref — updated synchronously after every render
+    const handlersRef = React.useRef(eventHandlers);
+    React.useEffect(() => {
+        handlersRef.current = eventHandlers;
+    }); // no dep array: intentional, runs after every render
 
     React.useEffect(() => {
         const handleOpen = () => setIsConnected(true);
@@ -403,22 +414,24 @@ export const useWebSocketEvent = (url, eventHandlers = {}, options = {}) => {
         ws.on('open', handleOpen);
         ws.on('close', handleClose);
 
-        // Register event handlers
-        Object.keys(eventHandlers).forEach((event) => {
-            ws.on(event, eventHandlers[event]);
+        // Capture event names at mount time; build stable wrappers that
+        // always delegate to the latest handler via the ref.
+        const registeredEvents = Object.keys(handlersRef.current);
+        const stableWrappers = {};
+        registeredEvents.forEach((event) => {
+            stableWrappers[event] = (data) => handlersRef.current[event]?.(data);
+            ws.on(event, stableWrappers[event]);
         });
 
         return () => {
             ws.off('open', handleOpen);
             ws.off('close', handleClose);
-
-            Object.keys(eventHandlers).forEach((event) => {
-                ws.off(event, eventHandlers[event]);
+            registeredEvents.forEach((event) => {
+                ws.off(event, stableWrappers[event]);
             });
-
             ws.close();
         };
-    }, [ws, eventHandlers]);
+    }, [ws]); // eslint-disable-line react-hooks/exhaustive-deps -- handlers kept current via ref
 
     const send = React.useCallback(
         (data) => {

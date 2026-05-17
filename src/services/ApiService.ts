@@ -36,15 +36,17 @@ export class ApiError extends Error {
     }
 }
 
+interface QueueItem {
+    fn: () => Promise<unknown>;
+    resolve: (value: unknown) => void;
+    reject: (reason?: unknown) => void;
+}
+
 /**
  * Request Queue for rate limiting
  */
 class RequestQueue {
-    queue: Array<{
-        fn: () => Promise<unknown>;
-        resolve: (value: unknown) => void;
-        reject: (reason?: unknown) => void;
-    }>;
+    queue: QueueItem[];
     running: number;
     maxConcurrent: number;
     rateLimit: number;
@@ -58,7 +60,7 @@ class RequestQueue {
         this.requestTimes = [];
     }
 
-    async add(fn) {
+    async add(fn: () => Promise<unknown>): Promise<unknown> {
         return new Promise((resolve, reject) => {
             this.queue.push({ fn, resolve, reject });
             this.process();
@@ -76,7 +78,7 @@ class RequestQueue {
             return;
         }
 
-        const { fn, resolve, reject } = this.queue.shift();
+        const { fn, resolve, reject } = this.queue.shift()!;
         this.running++;
         this.requestTimes.push(now);
 
@@ -92,24 +94,41 @@ class RequestQueue {
     }
 }
 
+interface CacheItem {
+    data: unknown;
+    expiry: number;
+    timestamp: number;
+}
+
+interface SmartCacheOptions {
+    maxSize?: number;
+    defaultTTL?: number;
+}
+
 /**
  * Smart Cache with TTL and size limits
  */
 class SmartCache {
-    constructor(options = {}) {
+    cache: Map<string, CacheItem>;
+    maxSize: number;
+    defaultTTL: number;
+    hits: number;
+    misses: number;
+
+    constructor(options: SmartCacheOptions = {}) {
         this.cache = new Map();
-        this.maxSize = options.maxSize || 200;
-        this.defaultTTL = options.defaultTTL || 5 * 60 * 1000; // 5 minutes
+        this.maxSize = options.maxSize ?? 200;
+        this.defaultTTL = options.defaultTTL ?? 5 * 60 * 1000; // 5 minutes
         this.hits = 0;
         this.misses = 0;
     }
 
-    generateKey(url, params) {
+    generateKey(url: string, params?: Record<string, unknown> | null): string {
         const sortedParams = params
             ? JSON.stringify(
                   Object.keys(params)
                       .sort()
-                      .reduce((obj, key) => {
+                      .reduce<Record<string, unknown>>((obj, key) => {
                           obj[key] = params[key];
                           return obj;
                       }, {})
@@ -118,7 +137,7 @@ class SmartCache {
         return `${url}:${sortedParams}`;
     }
 
-    get(key) {
+    get(key: string): unknown {
         const item = this.cache.get(key);
         if (!item) {
             this.misses++;
@@ -135,11 +154,11 @@ class SmartCache {
         return item.data;
     }
 
-    set(key, data, ttl = this.defaultTTL) {
+    set(key: string, data: unknown, ttl = this.defaultTTL) {
         // Evict oldest if at capacity
         if (this.cache.size >= this.maxSize) {
             const oldestKey = this.cache.keys().next().value;
-            this.cache.delete(oldestKey);
+            if (oldestKey) this.cache.delete(oldestKey);
         }
 
         this.cache.set(key, {
@@ -149,7 +168,7 @@ class SmartCache {
         });
     }
 
-    invalidate(pattern) {
+    invalidate(pattern: string | RegExp) {
         if (typeof pattern === 'string') {
             for (const key of this.cache.keys()) {
                 if (key.includes(pattern)) {
@@ -183,10 +202,69 @@ class SmartCache {
     }
 }
 
+interface RequestConfig {
+    url: string;
+    method: string;
+    headers: Record<string, string>;
+    body?: string;
+    [key: string]: unknown;
+}
+
+interface RequestOptions {
+    method?: string;
+    headers?: Record<string, string>;
+    body?: unknown;
+    params?: Record<string, unknown> | null;
+    cache?: boolean;
+    cacheTTL?: number;
+    retry?: boolean;
+    deduplicate?: boolean;
+    timeout?: number;
+    showError?: boolean;
+    [key: string]: unknown;
+}
+
+interface ExecuteOptions {
+    retry: boolean;
+    timeout: number;
+    showError: boolean;
+    cacheKey: string;
+    cacheTTL: number;
+    useCache: boolean;
+    method: string;
+}
+
+interface ApiCacheTTL {
+    short: number;
+    medium: number;
+    long: number;
+}
+
+interface ApiServiceConfig {
+    timeout: number;
+    retryAttempts: number;
+    retryDelay: number;
+    retryMultiplier: number;
+    cacheTTL: ApiCacheTTL;
+}
+
+type Interceptor<T> = (arg: T) => T | Promise<T>;
+
 /**
  * Main API Service Class
  */
 class ApiService {
+    baseURL: string;
+    cache: SmartCache;
+    queue: RequestQueue;
+    pendingRequests: Map<string, Promise<{ data: unknown; fromCache: boolean }>>;
+    interceptors: {
+        request: Interceptor<RequestConfig>[];
+        response: Array<(data: unknown, response: Response) => unknown | Promise<unknown>>;
+        error: Array<(error: unknown) => unknown | Promise<unknown>>;
+    };
+    config: ApiServiceConfig;
+
     constructor() {
         this.baseURL = API_URL_BASE_STRING;
         this.cache = new SmartCache();
@@ -217,7 +295,7 @@ class ApiService {
 
     setupDefaultInterceptors() {
         // Auth interceptor
-        this.addRequestInterceptor((config) => {
+        this.addRequestInterceptor((config: RequestConfig) => {
             const token = localStorage.getItem('access_token');
             if (token) {
                 config.headers = {
@@ -229,40 +307,41 @@ class ApiService {
         });
 
         // Error interceptor for auth errors
-        this.addErrorInterceptor(async (error) => {
-            if (error.status === 401) {
+        this.addErrorInterceptor(async (error: unknown) => {
+            const apiError = error as ApiError & { originalConfig?: RequestConfig };
+            if (apiError.status === 401) {
                 // Try to refresh token
                 const refreshed = await this.refreshToken();
-                if (refreshed) {
+                if (refreshed && apiError.originalConfig) {
                     // Retry original request
-                    return this.request(error.originalConfig);
+                    return this.request(apiError.originalConfig.url, apiError.originalConfig);
                 }
             }
             throw error;
         });
     }
 
-    addRequestInterceptor(fn) {
+    addRequestInterceptor(fn: Interceptor<RequestConfig>) {
         this.interceptors.request.push(fn);
     }
 
-    addResponseInterceptor(fn) {
+    addResponseInterceptor(fn: (data: unknown, response: Response) => unknown | Promise<unknown>) {
         this.interceptors.response.push(fn);
     }
 
-    addErrorInterceptor(fn) {
+    addErrorInterceptor(fn: (error: unknown) => unknown | Promise<unknown>) {
         this.interceptors.error.push(fn);
     }
 
     /**
      * Build full URL with query parameters
      */
-    buildURL(endpoint, params) {
+    buildURL(endpoint: string, params?: Record<string, unknown> | null): string {
         const url = new URL(endpoint, this.baseURL);
         if (params) {
             Object.entries(params).forEach(([key, value]) => {
                 if (value !== undefined && value !== null) {
-                    url.searchParams.append(key, value);
+                    url.searchParams.append(key, String(value));
                 }
             });
         }
@@ -272,7 +351,7 @@ class ApiService {
     /**
      * Main request method
      */
-    async request(endpoint, options = {}) {
+    async request(endpoint: string, options: RequestOptions = {}): Promise<{ data: unknown; fromCache: boolean }> {
         const {
             method = 'GET',
             headers = {},
@@ -307,7 +386,7 @@ class ApiService {
         }
 
         // Apply request interceptors
-        let config = {
+        let config: RequestConfig = {
             url,
             method,
             headers: {
@@ -324,12 +403,12 @@ class ApiService {
 
         // Create request promise
         const requestPromise = this.executeRequest(config, {
-            retry,
-            timeout,
-            showError,
+            retry: retry as boolean,
+            timeout: timeout as number,
+            showError: showError as boolean,
             cacheKey,
-            cacheTTL,
-            useCache,
+            cacheTTL: cacheTTL as number,
+            useCache: useCache as boolean,
             method,
         });
 
@@ -347,9 +426,9 @@ class ApiService {
     /**
      * Execute request with retry logic
      */
-    async executeRequest(config, options) {
+    async executeRequest(config: RequestConfig, options: ExecuteOptions): Promise<{ data: unknown; fromCache: boolean }> {
         const { retry, timeout, showError, cacheKey, cacheTTL, useCache, method } = options;
-        let lastError;
+        let lastError: unknown;
 
         for (let attempt = 0; attempt <= (retry ? this.config.retryAttempts : 0); attempt++) {
             try {
@@ -364,19 +443,19 @@ class ApiService {
                         },
                         timeout
                     )
-                );
+                ) as Response;
 
                 if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
+                    const errorData = await response.json().catch(() => ({})) as Record<string, unknown>;
                     throw new ApiError(
-                        errorData.message || errorData.error || `HTTP Error ${response.status}`,
+                        (errorData.message as string) || (errorData.error as string) || `HTTP Error ${response.status}`,
                         response.status,
-                        errorData.code || 'HTTP_ERROR',
+                        (errorData.code as string) || 'HTTP_ERROR',
                         errorData
                     );
                 }
 
-                let data;
+                let data: unknown;
                 const contentType = response.headers.get('content-type');
                 if (contentType?.includes('application/json')) {
                     data = await response.json();
@@ -399,7 +478,8 @@ class ApiService {
                 lastError = error;
 
                 // Don't retry certain errors
-                if (error.status === 401 || error.status === 403 || error.status === 404) {
+                const apiErr = error as ApiError;
+                if (apiErr.status === 401 || apiErr.status === 403 || apiErr.status === 404) {
                     break;
                 }
 
@@ -415,8 +495,8 @@ class ApiService {
         // Apply error interceptors
         for (const interceptor of this.interceptors.error) {
             try {
-                const result = await interceptor({ ...lastError, originalConfig: config });
-                if (result) return result;
+                const result = await interceptor({ ...(lastError as object), originalConfig: config });
+                if (result) return result as { data: unknown; fromCache: boolean };
             } catch (e) {
                 lastError = e;
             }
@@ -424,7 +504,8 @@ class ApiService {
 
         // Show error toast if enabled
         if (showError) {
-            toast.error(lastError.message || 'An error occurred');
+            const errMsg = lastError instanceof Error ? lastError.message : 'An error occurred';
+            toast.error(errMsg);
         }
 
         throw lastError;
@@ -433,7 +514,7 @@ class ApiService {
     /**
      * Fetch with timeout
      */
-    async fetchWithTimeout(url, options, timeout) {
+    async fetchWithTimeout(url: string, options: RequestInit, timeout: number): Promise<Response> {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -451,7 +532,7 @@ class ApiService {
     /**
      * Refresh access token (uses httpOnly cookie)
      */
-    async refreshToken() {
+    async refreshToken(): Promise<boolean> {
         try {
             const response = await fetch(`${this.baseURL}/api/auth/token/refresh/`, {
                 method: 'POST',
@@ -461,7 +542,7 @@ class ApiService {
             });
 
             if (response.ok) {
-                const data = await response.json();
+                const data = await response.json() as { access: string };
                 localStorage.setItem('access_token', data.access);
                 return true;
             }
@@ -474,7 +555,7 @@ class ApiService {
         return false;
     }
 
-    sleep(ms) {
+    sleep(ms: number): Promise<void> {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
@@ -482,30 +563,30 @@ class ApiService {
     // CONVENIENCE METHODS
     // =====================
 
-    async get(endpoint, options = {}) {
+    async get(endpoint: string, options: RequestOptions = {}) {
         return this.request(endpoint, { ...options, method: 'GET' });
     }
 
-    async post(endpoint, body, options = {}) {
+    async post(endpoint: string, body?: unknown, options: RequestOptions = {}) {
         const result = await this.request(endpoint, { ...options, method: 'POST', body });
         // Invalidate related cache
         this.cache.invalidate(endpoint.split('/')[0]);
         return result;
     }
 
-    async put(endpoint, body, options = {}) {
+    async put(endpoint: string, body?: unknown, options: RequestOptions = {}) {
         const result = await this.request(endpoint, { ...options, method: 'PUT', body });
         this.cache.invalidate(endpoint.split('/')[0]);
         return result;
     }
 
-    async patch(endpoint, body, options = {}) {
+    async patch(endpoint: string, body?: unknown, options: RequestOptions = {}) {
         const result = await this.request(endpoint, { ...options, method: 'PATCH', body });
         this.cache.invalidate(endpoint.split('/')[0]);
         return result;
     }
 
-    async delete(endpoint, options = {}) {
+    async delete(endpoint: string, options: RequestOptions = {}) {
         const result = await this.request(endpoint, { ...options, method: 'DELETE' });
         this.cache.invalidate(endpoint.split('/')[0]);
         return result;
@@ -517,37 +598,37 @@ class ApiService {
 
     // User APIs
     users = {
-        getProfile: (userId) => this.get(`/api/users/${userId}/`),
-        updateProfile: (userId, data) => this.patch(`/api/users/${userId}/`, data),
+        getProfile: (userId: string | number) => this.get(`/api/users/${userId}/`),
+        updateProfile: (userId: string | number, data: unknown) => this.patch(`/api/users/${userId}/`, data),
         getSettings: () => this.get('/api/users/settings/'),
-        updateSettings: (data) => this.patch('/api/users/settings/', data),
+        updateSettings: (data: unknown) => this.patch('/api/users/settings/', data),
         getFriends: () => this.get('/api/friends/list/', { cacheTTL: this.config.cacheTTL.short }),
-        sendFriendRequest: (userId) => this.post('/api/friends/send/', { user_id: userId }),
+        sendFriendRequest: (userId: string | number) => this.post('/api/friends/send/', { user_id: userId }),
         getBlocked: () => this.get('/api/blocks/list/'),
-        blockUser: (userId) => this.post('/api/blocks/block/', { user_id: userId }),
-        unblockUser: (userId) => this.post('/api/blocks/unblock/', { user_id: userId }),
+        blockUser: (userId: string | number) => this.post('/api/blocks/block/', { user_id: userId }),
+        unblockUser: (userId: string | number) => this.post('/api/blocks/unblock/', { user_id: userId }),
     };
 
     // Server APIs
     servers = {
         list: () => this.get('/api/servers/', { cacheTTL: this.config.cacheTTL.short }),
-        get: (serverId) => this.get(`/api/servers/${serverId}/`),
-        create: (data) => this.post('/api/servers/', data),
-        update: (serverId, data) => this.patch(`/api/servers/${serverId}/`, data),
-        delete: (serverId) => this.delete(`/api/servers/${serverId}/`),
-        getMembers: (serverId) => this.get(`/api/servers/${serverId}/members/`),
-        getRoles: (serverId) => this.get(`/api/servers/${serverId}/roles/`),
-        getBoostStats: (serverId) => this.get(`/api/servers/${serverId}/boost-stats/`),
+        get: (serverId: string | number) => this.get(`/api/servers/${serverId}/`),
+        create: (data: unknown) => this.post('/api/servers/', data),
+        update: (serverId: string | number, data: unknown) => this.patch(`/api/servers/${serverId}/`, data),
+        delete: (serverId: string | number) => this.delete(`/api/servers/${serverId}/`),
+        getMembers: (serverId: string | number) => this.get(`/api/servers/${serverId}/members/`),
+        getRoles: (serverId: string | number) => this.get(`/api/servers/${serverId}/roles/`),
+        getBoostStats: (serverId: string | number) => this.get(`/api/servers/${serverId}/boost-stats/`),
     };
 
     // Room/Channel APIs
     rooms = {
-        list: (serverId) => this.get(`/api/servers/${serverId}/rooms/`),
-        get: (roomId) => this.get(`/api/rooms/${roomId}/`),
-        create: (serverId, data) => this.post(`/api/servers/${serverId}/rooms/`, data),
-        update: (roomId, data) => this.patch(`/api/rooms/${roomId}/`, data),
-        delete: (roomId) => this.delete(`/api/rooms/${roomId}/`),
-        getMessages: (roomId, params) =>
+        list: (serverId: string | number) => this.get(`/api/servers/${serverId}/rooms/`),
+        get: (roomId: string | number) => this.get(`/api/rooms/${roomId}/`),
+        create: (serverId: string | number, data: unknown) => this.post(`/api/servers/${serverId}/rooms/`, data),
+        update: (roomId: string | number, data: unknown) => this.patch(`/api/rooms/${roomId}/`, data),
+        delete: (roomId: string | number) => this.delete(`/api/rooms/${roomId}/`),
+        getMessages: (roomId: string | number, params?: Record<string, unknown> | null) =>
             this.get(`/api/rooms/${roomId}/messages/`, {
                 params,
                 cacheTTL: this.config.cacheTTL.short,
@@ -556,45 +637,45 @@ class ApiService {
 
     // Message APIs
     messages = {
-        send: (roomId, data) => this.post(`/api/rooms/${roomId}/messages/`, data),
-        edit: (messageId, content) => this.patch(`/api/messages/${messageId}/edit/`, { content }),
-        delete: (messageId) => this.delete(`/api/messages/${messageId}/delete/`),
+        send: (roomId: string | number, data: unknown) => this.post(`/api/rooms/${roomId}/messages/`, data),
+        edit: (messageId: string | number, content: string) => this.patch(`/api/messages/${messageId}/edit/`, { content }),
+        delete: (messageId: string | number) => this.delete(`/api/messages/${messageId}/delete/`),
 
-        pin: (messageId) => this.post(`/api/messages/${messageId}/pin/`),
-        unpin: (messageId) => this.post(`/api/messages/${messageId}/unpin/`),
-        react: (messageId, emoji) => this.post(`/api/messages/${messageId}/react/`, { emoji }),
-        search: (params) => this.get('/api/messages/search/', { params }),
+        pin: (messageId: string | number) => this.post(`/api/messages/${messageId}/pin/`),
+        unpin: (messageId: string | number) => this.post(`/api/messages/${messageId}/unpin/`),
+        react: (messageId: string | number, emoji: string) => this.post(`/api/messages/${messageId}/react/`, { emoji }),
+        search: (params: Record<string, unknown>) => this.get('/api/messages/search/', { params }),
     };
 
     // Auth APIs
     auth = {
-        login: (credentials) => this.post('/api/auth/login/', credentials, { showError: false }),
-        register: (data) => this.post('/api/auth/register/', data),
+        login: (credentials: unknown) => this.post('/api/auth/login/', credentials, { showError: false }),
+        register: (data: unknown) => this.post('/api/auth/register/', data),
         logout: () => this.post('/api/auth/logout/'),
         refreshToken: () => this.refreshToken(),
-        verifyEmail: (token) => this.post(`/api/auth/verify-email/${token}/`),
-        resetPassword: (email) => this.post('/api/auth/request-password-reset/', { email }),
+        verifyEmail: (token: string) => this.post(`/api/auth/verify-email/${token}/`),
+        resetPassword: (email: string) => this.post('/api/auth/request-password-reset/', { email }),
         enable2FA: () => this.post('/api/auth/2fa/enable/'),
-        verify2FA: (code) => this.post('/api/auth/2fa/verify-login/', { code }),
+        verify2FA: (code: string) => this.post('/api/auth/2fa/verify-login/', { code }),
     };
 
     // Moderation APIs
     moderation = {
-        ban: (serverId, userId, reason) =>
+        ban: (serverId: string | number, userId: string | number, reason?: string) =>
             this.post(`/api/servers/${serverId}/bans/`, { user_id: userId, reason }),
-        unban: (serverId, banId) => this.delete(`/api/servers/${serverId}/bans/${banId}/`),
-        kick: (serverId, userId, reason) =>
+        unban: (serverId: string | number, banId: string | number) => this.delete(`/api/servers/${serverId}/bans/${banId}/`),
+        kick: (serverId: string | number, userId: string | number, reason?: string) =>
             this.post(`/api/servers/${serverId}/kicks/`, { user_id: userId, reason }),
-        warn: (serverId, userId, reason) =>
+        warn: (serverId: string | number, userId: string | number, reason?: string) =>
             this.post(`/api/servers/${serverId}/warnings/`, { user_id: userId, reason }),
-        getAuditLogs: (serverId, params) =>
+        getAuditLogs: (serverId: string | number, params?: Record<string, unknown>) =>
             this.get(`/api/servers/${serverId}/audit-logs/`, { params }),
     };
 
     // Premium/Payment APIs
     premium = {
         getPlans: () => this.get('/api/premium/plans/', { cacheTTL: this.config.cacheTTL.long }),
-        subscribe: (planId, paymentMethod) =>
+        subscribe: (planId: string | number, paymentMethod: string) =>
             this.post('/api/premium/subscribe/', {
                 plan_id: planId,
                 payment_method: paymentMethod,
@@ -605,9 +686,9 @@ class ApiService {
 
     // Analytics APIs
     analytics = {
-        getServerStats: (serverId) => this.get(`/api/servers/${serverId}/analytics/`),
+        getServerStats: (serverId: string | number) => this.get(`/api/servers/${serverId}/analytics/`),
         getUserActivity: () => this.get('/api/users/analytics/'),
-        trackEvent: (event, data) =>
+        trackEvent: (event: string, data: unknown) =>
             this.post('/api/analytics/track/', { event, data }, { showError: false }),
     };
 
@@ -620,7 +701,7 @@ class ApiService {
         this.cache.clear();
     }
 
-    invalidateCache(pattern) {
+    invalidateCache(pattern: string | RegExp) {
         this.cache.invalidate(pattern);
     }
 }

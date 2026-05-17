@@ -61,7 +61,7 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
         const level = voiceSettings.audio?.noiseSuppressionLevel || 'medium';
 
-        // Levelye göre parametreler - � DENGELİ GÜRÜLTÜ ENGELLEMİE (audio seviyesi korunur)
+        // Levelye göre parametreler — DENGELİ GÜRÜLTÜ ENGELLEME (audio seviyesi korunur)
         const levelSettings = {
             low: {
                 gateThreshold: -70,
@@ -125,7 +125,7 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
 
         // 🔥 CIZIRTIYI ÖNLE: Suspended context'i resume et
         if (audioContext.state === 'suspended') {
-            audioContext.resume().then(() => {});
+            audioContext.resume().then(() => {}).catch((err) => console.error('Failed to resume AudioContext:', err));
         }
 
         // Source stream

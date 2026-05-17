@@ -272,7 +272,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Message</label>
+                                <label>{t('e2ee.message', 'Message')}</label>
                                 <textarea
                                     placeholder={t('security.encryptedMessagePlaceholder', 'Your encrypted message...')}
                                     value={encryptedMessage}

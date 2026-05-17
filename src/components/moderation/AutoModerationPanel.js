@@ -309,7 +309,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                 <div className="panel-header">
                     <FaRobot className="header-icon" />
 
-                    <h2>Otomatik Moderasyon</h2>
+                    <h2>{t('advMod.title', 'Auto Moderation')}</h2>
 
                     <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
@@ -322,7 +322,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                         className="btn-create"
                         onClick={handleShowCreateRule}
                     >
-                        <FaPlus /> Yeni Kural
+                        <FaPlus /> {t('autoMod.newRule', 'New Rule')}
                     </button>
                 </div>
 
@@ -338,7 +338,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                             <div className="empty-state">
                                 <FaShieldAlt size={48} />
 
-                                <h3>Kural Yok</h3>
+                                <h3>{t('autoMod.noRules', 'No Rules')}</h3>
 
                                 <p>{t('autoMod.subtitle', 'Create automatic moderation rules')}</p>
                             </div>
@@ -449,7 +449,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Kural Tipi</label>
+                                    <label>{t('autoMod.ruleType', 'Rule Type')}</label>
 
                                     <select
                                         value={newRule.type}
@@ -464,12 +464,12 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
                                         <option value="links">Link</option>
 
-                                        <option value="mentions">Mention</option>
+                                        <option value="mentions">{t('autoMod.mentions', 'Mention')}</option>
                                     </select>
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Aksiyon</label>
+                                    <label>{t('autoMod.ruleAction', 'Action')}</label>
 
                                     <select
                                         value={newRule.action}
@@ -540,7 +540,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                                         className="btn-cancel"
                                         onClick={handleHideCreateRule}
                                     >
-                                        Cancel
+                                        {t('common.cancel', 'Cancel')}
                                     </button>
 
                                     <button
@@ -548,7 +548,7 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
                                         className="btn-save"
                                         onClick={createRule}
                                     >
-                                        Create
+                                        {t('common.create', 'Create')}
                                     </button>
                                 </div>
                             </div>

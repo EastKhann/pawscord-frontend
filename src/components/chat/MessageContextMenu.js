@@ -1,5 +1,5 @@
 // frontend/src/components/MessageContextMenu.js
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
@@ -31,7 +31,7 @@ const MessageContextMenu = ({
 }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const menuRef = useRef(null);
 
     useEffect(() => {

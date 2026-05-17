@@ -12,12 +12,13 @@ import logger from '../utils/logger';
  * ⚠️ Electron'da file:// protokolü Service Worker desteklemez
  */
 export const registerServiceWorker = async () => {
-    // Electron'da Service Worker devre dışı (file:// protokolü desteklenmiyor)
+    // 🔥 Electron veya file:// protokolü Service Worker desteklemez.
+    // UA-string ile Electron tespit etmiyoruz: Discord/Slack/Claude gibi Electron-tabanlı
+    // tarayıcılar uygulamanın web sürümünü açtığında SW gerekir, gereksiz devre dışı bırakma
+    // web push ve offline desteğini öldürür.
     const isElectron =
         typeof window !== 'undefined' &&
-        (window.process?.versions?.electron ||
-            window.navigator?.userAgent?.toLowerCase().includes('electron') ||
-            window.location?.protocol === 'file:');
+        (window.process?.versions?.electron || window.location?.protocol === 'file:');
 
     if (isElectron) {
         logger.info('⚠️ [PWA] Service Worker disabled in Electron (file:// protocol)');

@@ -1,5 +1,5 @@
 ﻿// frontend/src/components/ReportsViewer.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import toast from '../../utils/toast';
 import { FaTimes, FaExclamationTriangle, FaCheck, FaTrash } from 'react-icons/fa';

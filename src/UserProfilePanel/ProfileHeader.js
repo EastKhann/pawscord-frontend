@@ -54,14 +54,15 @@ const ProfileHeader = ({
                     ></div>
                 </div>
                 <div className="profile-header-info">
+                    {/* 🔥 FIX: tüm "?", "??", "?????" placeholder'lar (encoding bozulması) → uygun emoji */}
                     <h1 className="profile-username">
                         {formData?.username || 'User'}
-                        {premiumStatus?.is_premium && <span className="profile-badge">??</span>}
+                        {premiumStatus?.is_premium && <span className="profile-badge">👑</span>}
                         {Array.isArray(badges) && badges.includes('verified') && (
-                            <span className="profile-badge">?</span>
+                            <span className="profile-badge">✓</span>
                         )}
                         {Array.isArray(badges) && badges.includes('developer') && (
-                            <span className="profile-badge">?????</span>
+                            <span className="profile-badge">💻</span>
                         )}
                     </h1>
                     {formData?.status_message && (
@@ -69,23 +70,23 @@ const ProfileHeader = ({
                     )}
                     <div className="profile-stats-bar">
                         <div className="profile-stat-item">
-                            <span className="profile-stat-icon">?</span>
+                            <span className="profile-stat-icon">⭐</span>
                             <span className="profile-stat-value">
                                 {t('profile.level', 'Level')} {userStats?.level || 1}
                             </span>
                         </div>
                         <div className="profile-stat-item">
-                            <span className="profile-stat-icon">??</span>
+                            <span className="profile-stat-icon">⚡</span>
                             <span className="profile-stat-value">{userStats?.xp || 0}</span>
                             <span className="profile-stat-label">{t('profile.xp')}</span>
                         </div>
                         <div className="profile-stat-item">
-                            <span className="profile-stat-icon">??</span>
+                            <span className="profile-stat-icon">🪙</span>
                             <span className="profile-stat-value">{userStats?.coins || 0}</span>
                             <span className="profile-stat-label">{t('profile.coins')}</span>
                         </div>
                         <div className="profile-stat-item">
-                            <span className="profile-stat-icon">??</span>
+                            <span className="profile-stat-icon">👥</span>
                             <span className="profile-stat-value">
                                 {Array.isArray(friends) ? friends.length : 0}
                             </span>
@@ -94,7 +95,7 @@ const ProfileHeader = ({
                     </div>
                 </div>
                 <button style={_st1095} onClick={onClose} aria-label={t('profile.closeProfile')}>
-                    �
+                    ✕
                 </button>
             </div>
         </div>

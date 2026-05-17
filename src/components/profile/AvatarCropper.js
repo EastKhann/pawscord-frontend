@@ -32,7 +32,7 @@ const S = {
 const AvatarCropper = ({ onCropComplete, onCancel, imageFile }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [src, setSrc] = useState(null);
     const [crop, setCrop] = useState({
         unit: '%',

@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const e = useExportJobs(fetchWithAuth, apiBaseUrl);
     const h2Style = { margin: 0, fontSize: '20px' };
 
@@ -109,7 +109,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                                 </span>
                                                 {job.completed_at && (
                                                     <>
-                                                        <span className="m-0-8">�</span>
+                                                        <span className="m-0-8">·</span>
                                                         <span>
                                                             Completed:{' '}
                                                             {new Date(
@@ -145,7 +145,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                                     aria-label={t('exportJobs.download', 'Download export')}
                                                     onClick={() => e.downloadExport(job.id)}
                                                     style={styles.downloadBtn}
-                                                    title="Indir"
+                                                    title={t('exportJobs.download', 'Download')}
                                                 >
                                                     <FaDownload />
                                                 </button>
@@ -167,7 +167,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
                     <div style={styles.info}>
                         <p style={styles.infoText}>
-                            ?? Disa aktarmalar arka planda islenir ve birka� dakika s�rebilir
+                            ?? Disa aktarmalar arka planda islenir ve birkaç dakika sürebilir
                         </p>
                         <p style={styles.infoText}>
                             ?? Completed exports are available for 7 days before auto-deletion

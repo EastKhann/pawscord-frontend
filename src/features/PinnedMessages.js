@@ -1,7 +1,7 @@
 ﻿// frontend/src/PinnedMessages.js
-// 10/10 � Full-featured pinned messages panel with search, filter, jump-to, unpin, date grouping
+// 10/10 — Full-featured pinned messages panel with search, filter, jump-to, unpin, date grouping
 
-import React, { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Message from '../Message';
 
@@ -92,13 +92,13 @@ const PinnedMessages = ({
             >
                 {/* -- header -- */}
                 <div style={styles.header}>
-                    <h2 style={styles.title}>?? Pinned Messages ({messages.length})</h2>
+                    <h2 style={styles.title}>📌 Sabitlenen Mesajlar ({messages.length})</h2>
                     <button
                         style={styles.closeButton}
                         onClick={onClose}
                         aria-label={t('common.close')}
                     >
-                        �
+                        ×
                     </button>
                 </div>
 
@@ -166,11 +166,11 @@ const PinnedMessages = ({
                         ))
                     ) : (
                         <div style={styles.empty}>
-                            <span style={styles.emptyIcon}>??</span>
+                            <span style={styles.emptyIcon}>📌</span>
                             <p style={styles.emptyTitle}>
                                 {search || filter !== 'all'
-                                    ? 'No pinned messages match your filter'
-                                    : 'No pinned messages yet'}
+                                    ? 'Filtrene uyan sabit mesaj yok'
+                                    : 'Henüz sabit mesaj yok'}
                             </p>
                             <p style={styles.emptyHint}>
                                 {search || filter !== 'all'

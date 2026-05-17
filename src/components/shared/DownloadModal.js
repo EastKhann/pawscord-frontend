@@ -34,6 +34,15 @@ function detectOS() {
     return null;
 }
 
+// Precomputed inline style constants (static overrides on top of the `styles` object below)
+const S = {
+    dlIconMr8: { marginRight: 8 },
+    dlShieldMr5: { marginRight: 5 },
+    recommendedBadgeAndroid: { background: '#3ddc84', color: '#000', borderRadius: '8px', padding: '3px 10px', fontSize: '11px', fontWeight: 700, marginBottom: '6px' },
+    platformNameDisabled: { margin: '0', fontSize: '1.3em', fontWeight: 600, color: '#666' },
+    fileSizeDisabled: { color: '#4e5058', fontSize: '0.75em', marginBottom: '14px' },
+};
+
 const DownloadModal = ({ onClose, apiBaseUrl }) => {
     const { t } = useTranslation();
     const [downloadStarted, setDownloadStarted] = useState(null);
@@ -140,7 +149,7 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                                 </span>
                             ) : (
                                 <>
-                                    <FaDownload style={{ marginRight: 8 }} />{' '}
+                                    <FaDownload style={S.dlIconMr8} />{' '}
                                     {t('download.downloadExe')}
                                 </>
                             )}
@@ -151,7 +160,7 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                             aria-label={t('download.copyChecksum', 'Copy SHA-256')}
                             title={`SHA-256: ${CHECKSUMS.windows}`}
                         >
-                            <FaShieldAlt size={11} style={{ marginRight: 5 }} />
+                            <FaShieldAlt size={11} style={S.dlShieldMr5} />
                             {copiedChecksum === 'windows'
                                 ? t('download.checksumCopied', 'Copied!')
                                 : t('download.sha256', 'SHA-256')}
@@ -175,7 +184,7 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                         }}
                     >
                         {detectedOS === 'android' && (
-                            <span style={{ ...styles.recommendedBadge, background: '#3ddc84', color: '#000' }}>
+                            <span style={S.recommendedBadgeAndroid}>
                                 ⭐ {t('download.recommended', 'Recommended')}
                             </span>
                         )}
@@ -197,7 +206,7 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                                 </span>
                             ) : (
                                 <>
-                                    <FaDownload style={{ marginRight: 8 }} />{' '}
+                                    <FaDownload style={S.dlIconMr8} />{' '}
                                     {t('download.downloadApk')}
                                 </>
                             )}
@@ -208,7 +217,7 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                             aria-label={t('download.copyChecksum', 'Copy SHA-256')}
                             title={`SHA-256: ${CHECKSUMS.android}`}
                         >
-                            <FaShieldAlt size={11} style={{ marginRight: 5 }} />
+                            <FaShieldAlt size={11} style={S.dlShieldMr5} />
                             {copiedChecksum === 'android'
                                 ? t('download.checksumCopied', 'Copied!')
                                 : t('download.sha256', 'SHA-256')}
@@ -220,9 +229,9 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                         <div style={styles.iconWrapDisabled}>
                             <FaApple size={40} color="#666" />
                         </div>
-                        <h3 style={{ ...styles.platformName, color: '#666' }}>iOS</h3>
+                        <h3 style={S.platformNameDisabled}>iOS</h3>
                         <span style={styles.versionBadge}>iPhone & iPad</span>
-                        <span style={{ ...styles.fileSize, color: '#4e5058' }}>
+                        <span style={S.fileSizeDisabled}>
                             {t('download.comingSoon', 'Yakında')}
                         </span>
                         <button

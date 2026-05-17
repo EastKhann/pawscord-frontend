@@ -18,16 +18,23 @@ export interface ActiveChat {
     targetUser: string | null;
 }
 
+export interface TypingEntry {
+    username: string;
+    timestamp: number;
+}
+
 export interface ChatState {
     messages: Message[];
     encryptionKeys: Record<string, string>;
     activeChat: ActiveChat;
     unreadCounts: Record<string, number>;
     typingUsers: string[];
+    _typingEntries: TypingEntry[];
     onlineUsers: string[];
     voiceUsers: Record<number, unknown>;
     currentPermissions: ChatPermissions;
     selectedMessages: Set<number>;
+    connectionState: string;
 }
 
 export interface ChatActions {
@@ -37,17 +44,22 @@ export interface ChatActions {
         targetUser?: string | null
     ) => void;
     addMessage: (message: Message) => void;
+    addMessagesBatch: (messages: Message[]) => void;
     updateMessage: (id: number, updates: Partial<Message>) => void;
+    removeMessage: (id: number) => void;
     setMessages: (messages: Message[] | ((prev: Message[]) => Message[])) => void;
     prependMessages: (oldMessages: Message[]) => void;
     incrementUnread: (key: string) => void;
     setOnlineUsers: (users: string[]) => void;
+    updateUserStatus: (userId: unknown, status: unknown) => void;
     setTypingUser: (username: string, isTyping: boolean) => void;
     setVoiceUsers: (usersMap: Record<number, unknown>) => void;
     setVoiceUsersState: (usersMap: Record<number, unknown>) => void;
     setSelectedMessages: (val: Set<number> | ((prev: Set<number>) => Set<number>)) => void;
     setEncryptionKey: (chatId: string, key: string) => void;
     setPermissions: (perms: ChatPermissions | null) => void;
+    setConnectionState: (state: string) => void;
+    reset: () => void;
 }
 
 export type ChatStore = ChatState & ChatActions;
@@ -86,7 +98,7 @@ export interface ServerState {
     members: ServerMember[];
     roles: ServerRole[];
     serverSettings: Record<string, unknown>;
-    joinedServerIds: Set<number>;
+    joinedServerIds: number[];
 }
 
 export interface ServerActions {
@@ -134,6 +146,12 @@ export interface ContextMenu {
     data: unknown;
 }
 
+export interface ToastNotification {
+    id: number;
+    type: string;
+    message: string;
+}
+
 export interface UIState {
     modals: ModalState;
     modalData: Record<string, unknown>;
@@ -145,6 +163,10 @@ export interface UIState {
     contextMenu: ContextMenu | null;
     animationState: string;
     isConnected: boolean;
+    connectionStatus: 'disconnected' | 'connecting' | 'connected';
+    isLoading: boolean;
+    globalError: string | null;
+    toastNotifications: Array<{ id: number; type: string; message: string }>;
     updateStatusText: string;
     downloadProgress: number;
     isDownloading: boolean;
@@ -159,7 +181,7 @@ export interface UIActions {
     toggleModal: (modalName: string) => void;
     closeAllModals: () => void;
     getModalData: (modalName: string) => unknown;
-    togglePanel: (panelName: string) => void;
+    togglePanel: (panelName: keyof PanelState) => void;
     setTheme: (theme: 'dark' | 'light') => void;
     setAccentColor: (color: string) => void;
     toggleSidebar: () => void;
@@ -168,12 +190,20 @@ export interface UIActions {
     clearContextMenu: () => void;
     setAnimationState: (val: string | ((prev: string) => string)) => void;
     setIsConnected: (val: boolean | ((prev: boolean) => boolean)) => void;
+    setConnectionStatus: (status: 'disconnected' | 'connecting' | 'connected') => void;
+    setLoading: (val: boolean | ((prev: boolean) => boolean)) => void;
+    setError: (error: string | null) => void;
+    clearError: () => void;
+    addNotification: (notification: { type: string; message: string }) => void;
+    removeNotification: (id: number) => void;
+    clearNotifications: () => void;
     setUpdateStatusText: (val: string | ((prev: string) => string)) => void;
     setDownloadProgress: (val: number | ((prev: number) => number)) => void;
     setIsDownloading: (val: boolean | ((prev: boolean) => boolean)) => void;
     setSearchQuery: (val: string | ((prev: string) => string)) => void;
     setDropTarget: (val: unknown) => void;
     setUnreadNotifCount: (val: number) => void;
+    resetTransient: () => void;
 }
 
 export type UIStore = UIState & UIActions;
@@ -223,6 +253,7 @@ export interface UserActions {
     blockUser: (userId: number) => void;
     unblockUser: (userId: number) => void;
     updatePreferences: (prefs: Partial<UserPreferences>) => void;
+    reset: () => void;
 }
 
 export type UserStore = UserState & UserActions;
@@ -243,8 +274,8 @@ export type ConnectionQuality = 'excellent' | 'good' | 'fair' | 'poor';
 
 export interface VoiceState {
     isInVoiceChat: boolean;
-    currentVoiceRoom: number | null;
-    currentServerId: number | null;
+    currentVoiceRoom: number | string | null;
+    currentServerId: number | string | null;
     isMuted: boolean;
     isDeafened: boolean;
     isCameraOn: boolean;
@@ -266,7 +297,7 @@ export interface VoiceState {
 }
 
 export interface VoiceActions {
-    joinVoiceRoom: (roomId: number, serverId: number) => void;
+    joinVoiceRoom: (roomId: number | string, serverId: number | string) => void;
     leaveVoiceRoom: () => void;
     toggleMute: () => void;
     toggleDeafen: () => void;
@@ -288,6 +319,7 @@ export interface VoiceActions {
     setConnectionQuality: (quality: ConnectionQuality) => void;
     setLatency: (latency: number) => void;
     setPacketLoss: (loss: number) => void;
+    reset: () => void;
 }
 
 export type VoiceStore = VoiceState & VoiceActions;

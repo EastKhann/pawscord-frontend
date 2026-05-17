@@ -464,7 +464,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                                     className={`ai-message ${msg.role} ${msg.error ? 'error' : ''}`}
                                 >
                                     <div className="ai-message-avatar">
-                                        {msg.role === 'user' ? '??' : '??'}
+                                        {msg.role === 'user' ? '👤' : '🤖'}
                                     </div>
 
                                     <div className="ai-message-content">

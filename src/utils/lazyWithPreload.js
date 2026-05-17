@@ -17,6 +17,10 @@ export function lazyWithPreload(factory) {
             factoryPromise = factory().then((module) => {
                 LoadedComponent = module;
                 return module;
+            }).catch((err) => {
+                factoryPromise = null; // reset so next attempt can retry
+                console.error('[lazyWithPreload] Lazy load failed:', err);
+                throw err;
             });
         }
         return factoryPromise;
@@ -25,10 +29,16 @@ export function lazyWithPreload(factory) {
     // Add preload method to component
     LazyComponent.preload = () => {
         if (!factoryPromise) {
-            factoryPromise = factory().then((module) => {
-                LoadedComponent = module;
-                return module;
-            });
+            factoryPromise = factory()
+                .then((module) => {
+                    LoadedComponent = module;
+                    return module;
+                })
+                .catch((err) => {
+                    factoryPromise = null; // reset so next attempt can retry
+                    console.error('[lazyWithPreload] Preload failed:', err);
+                    throw err;
+                });
         }
         return factoryPromise;
     };
@@ -45,7 +55,11 @@ export function lazyWithPreload(factory) {
  */
 export function preloadComponents(components) {
     return Promise.all(
-        components.map((component) => (component.preload ? component.preload() : Promise.resolve()))
+        components.map((component) =>
+            (component.preload ? component.preload() : Promise.resolve()).catch((err) => {
+                console.error('[preloadComponents] Failed to preload component:', err);
+            })
+        )
     );
 }
 

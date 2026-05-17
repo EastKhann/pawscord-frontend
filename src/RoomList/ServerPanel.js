@@ -1,7 +1,7 @@
 ﻿/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 // frontend/src/RoomList/ServerPanel.js
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaChevronDown, FaPlus, FaCog, FaVolumeUp, FaUserPlus } from '../utils/iconOptimization';
@@ -83,7 +83,7 @@ const ServerPanel = ({
     }, [selectedServerId]); // INTENTIONAL: prefetch only depends on server change, not callback refs
 
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     if (!servers) return null;
 
     return (

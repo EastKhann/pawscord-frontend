@@ -17,6 +17,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                     placeholder={t('servernuz_hakkında_kısa_bir_aklama')}
                     rows="3"
                     maxLength={300}
+                    aria-label={t('community.serverDescription', 'Server Description')}
                 />
                 <span className="char-count">{settings.description?.length || 0}/300</span>
             </div>
@@ -31,6 +32,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                         onChange={(e) =>
                             setSettings((prev) => ({ ...prev, rules_channel_id: e.target.value }))
                         }
+                        aria-label={t('community.rulesChannel', 'Rules Channel')}
                     >
                         <option value="">{t('common.select', 'Select...')}</option>
                         {channels.map((ch) => (
@@ -52,6 +54,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                                 public_updates_channel_id: e.target.value,
                             }))
                         }
+                        aria-label={t('community.updatesChannel', 'Updates Channel')}
                     >
                         <option value="">{t('common.select', 'Select...')}</option>
                         {channels.map((ch) => (
@@ -74,6 +77,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                         onChange={(e) =>
                             setSettings((prev) => ({ ...prev, preferred_locale: e.target.value }))
                         }
+                        aria-label={t('tercih_edilen_dil')}
                     >
                         <option value="tr">🇹🇷 {t('lang.tr', 'Turkish')}</option>
                         <option value="en">🇬🇧 English</option>
@@ -93,6 +97,7 @@ const GeneralSettings = ({ settings, setSettings, channels }) => {
                                 default_notifications: e.target.value,
                             }))
                         }
+                        aria-label={t('community.defaultNotifications', 'Default Notifications')}
                     >
                         <option value="all">{t('community.allMessages', 'All Messages')}</option>
                         <option value="mentions">{t('sadece_tagler')}</option>

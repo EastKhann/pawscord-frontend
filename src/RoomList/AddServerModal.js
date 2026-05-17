@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import { FaServer, FaUserFriends, FaTimes, FaCompass } from '../utils/iconOptimization';
@@ -97,6 +97,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick, onDis
                         value={newServerName}
                         onChange={(e) => setNewServerName(e.target.value)}
                         style={styles.addRoomInput}
+                        data-testid="server-name-input"
                     />
 
                     <div style={_st5}>
@@ -115,6 +116,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick, onDis
                         aria-label={t('common.create', 'Create')}
                         type="submit"
                         style={styles.addRoomButton}
+                        data-testid="server-create-submit"
                     >
                         {t('common.create', 'Create')}
                     </button>
@@ -149,6 +151,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick, onDis
                     onClick={() => {
                         setIsCreatingServer(true);
                     }}
+                    data-testid="open-create-server-form"
                 >
                     <FaServer /> {t('server.createServer', 'Sunucu Oluştur')}
                 </button>

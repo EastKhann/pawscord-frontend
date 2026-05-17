@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAdminAPIContext } from '../AdminAPIContext';
 import {
     FaPlus,
@@ -8,7 +8,6 @@ import {
     FaUser,
     FaSearch,
     FaBookOpen,
-    FaBitcoin,
     FaKey,
 } from 'react-icons/fa';
 import styles from '../styles';
@@ -35,18 +34,13 @@ const S = {
     txt: { color: '#a0a8ff' },
 };
 
+// 🔥 REMOVED: access_crypto (Crypto modülü kaldırıldı). Sadece access_education kaldı.
 const FEATURE_KEYS = {
     access_education: {
         labelKey: 'admin.panel.englishLearning',
         fallback: '📚 English Learning',
         color: '#5865f2',
         icon: <FaBookOpen size={10} />,
-    },
-    access_crypto: {
-        labelKey: 'admin.panel.cryptoSignals',
-        fallback: '📈 Kripto Sinyaller',
-        color: '#f0b132',
-        icon: <FaBitcoin size={10} />,
     },
 };
 
@@ -58,7 +52,6 @@ const FeatureWhitelistTab = () => {
     const [addMode, setAddMode] = useState('username');
     const [inputValue, setInputValue] = useState('');
     const [accessEducation, setAccessEducation] = useState(true);
-    const [accessCrypto, setAccessCrypto] = useState(false);
     const [adding, setAdding] = useState(false);
     const [searchFilter, setSearchFilter] = useState('');
 
@@ -86,7 +79,7 @@ const FeatureWhitelistTab = () => {
     const handleAdd = async () => {
         const val = inputValue.trim();
         if (!val) return;
-        if (!accessEducation && !accessCrypto) {
+        if (!accessEducation) {
             toast.error(t('admin.panel.atLeastOneFeature'));
             return;
         }
@@ -96,7 +89,7 @@ const FeatureWhitelistTab = () => {
             const body = {
                 [addMode === 'username' ? 'username' : 'friend_code']: val,
                 access_education: accessEducation,
-                access_crypto: accessCrypto,
+                access_crypto: false, // 🔥 REMOVED: Crypto modülü kaldırıldı, her zaman false.
             };
 
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/feature-whitelist/add/`, {
@@ -109,7 +102,6 @@ const FeatureWhitelistTab = () => {
                 const data = await res.json();
                 const feats = [
                     data.access_education && t('admin.panel.englishLearning', '📚 İng. Öğrenme'),
-                    data.access_crypto && t('admin.panel.cryptoSignals', '📈 Kripto'),
                 ]
                     .filter(Boolean)
                     .join(', ');
@@ -243,9 +235,8 @@ const FeatureWhitelistTab = () => {
                 {/* Feature toggles */}
                 <div className="flex-gap-12-mb14">
                     {Object.entries(FEATURE_KEYS).map(([key, { labelKey, fallback, color }]) => {
-                        const checked = key === 'access_education' ? accessEducation : accessCrypto;
-                        const setFn =
-                            key === 'access_education' ? setAccessEducation : setAccessCrypto;
+                        const checked = accessEducation;
+                        const setFn = setAccessEducation;
                         return (
                             <label
                                 key={key}
@@ -285,16 +276,14 @@ const FeatureWhitelistTab = () => {
                 <button
                     aria-label={t('featureWhitelist.addUser', 'Add to feature whitelist')}
                     onClick={handleAdd}
-                    disabled={adding || !inputValue.trim() || (!accessEducation && !accessCrypto)}
+                    disabled={adding || !inputValue.trim() || !accessEducation}
                     style={{
                         ...styles.actionBtn('#23a559'),
                         padding: '10px 20px',
                         opacity:
-                            adding || !inputValue.trim() || (!accessEducation && !accessCrypto)
-                                ? 0.5
-                                : 1,
+                            adding || !inputValue.trim() || !accessEducation ? 0.5 : 1,
                         cursor:
-                            adding || !inputValue.trim() || (!accessEducation && !accessCrypto)
+                            adding || !inputValue.trim() || !accessEducation
                                 ? 'not-allowed'
                                 : 'pointer',
                     }}
@@ -330,14 +319,13 @@ const FeatureWhitelistTab = () => {
                             <th style={styles.th}>{t('friend_code')}</th>
                             <th style={styles.th}>{t('user')}</th>
                             <th style={styles.th}>{t('english_learning')}</th>
-                            <th style={styles.th}>{t('kripto')}</th>
                             <th style={styles.th}>{t('admin.panel.operation')}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filtered.length === 0 ? (
                             <tr>
-                                <td colSpan={6} className={css.tdCenter}>
+                                <td colSpan={5} className={css.tdCenter}>
                                     {searchFilter
                                         ? t('admin.panel.resultsNotFound')
                                         : t('admin.panel.featureWhitelistEmpty')}
@@ -366,17 +354,6 @@ const FeatureWhitelistTab = () => {
                                             )}
                                         >
                                             {entry.access_education
-                                                ? t('common.open', '✅ Açık')
-                                                : t('common.closed', '🔒 Kapalı')}
-                                        </span>
-                                    </td>
-                                    <td style={styles.td}>
-                                        <span
-                                            style={styles.badge(
-                                                entry.access_crypto ? '#f0b132' : '#333'
-                                            )}
-                                        >
-                                            {entry.access_crypto
                                                 ? t('common.open', '✅ Açık')
                                                 : t('common.closed', '🔒 Kapalı')}
                                         </span>

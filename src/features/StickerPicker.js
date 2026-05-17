@@ -1,7 +1,7 @@
 ﻿// frontend/src/StickerPicker.js
-// 10/10 � Full-featured sticker picker with search, categories, recents, hover preview
+// 10/10 — Full-featured sticker picker with search, categories, recents, hover preview
 
-import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { useTranslation } from 'react-i18next';
@@ -92,7 +92,7 @@ const StickerPicker = ({ categoryId, onSelect, onClose, fetchWithAuth, apiBaseUr
             <div style={styles.header}>
                 <span style={styles.headerTitle}>{t('sticker.title')}</span>
                 <button style={styles.closeBtn} onClick={onClose} aria-label={t('common.close')}>
-                    �
+                    ×
                 </button>
             </div>
 
@@ -156,7 +156,7 @@ const StickerPicker = ({ categoryId, onSelect, onClose, fetchWithAuth, apiBaseUr
                     ))
                 ) : (
                     <div style={styles.emptyWrap}>
-                        <span style={styles.emptyIcon}>??</span>
+                        <span style={styles.emptyIcon}>🎭</span>
                         <p style={styles.emptyText}>
                             {search
                                 ? t('sticker.noSearchResults')

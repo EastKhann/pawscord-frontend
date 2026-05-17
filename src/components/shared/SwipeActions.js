@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './SwipeActions.css';
 const _s = (o) => o;
@@ -8,8 +7,6 @@ const _s = (o) => o;
  */
 const SwipeActions = ({ children, leftActions = [], rightActions = [], onActionClick }) => {
     const [swipeX, setSwipeX] = React.useState(0);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [isDragging, setIsDragging] = React.useState(false);
     const startX = React.useRef(0);
     const currentX = React.useRef(0);
@@ -75,7 +72,7 @@ const SwipeActions = ({ children, leftActions = [], rightActions = [], onActionC
             <div
                 className="swipe-content"
                 style={_s({
-                    transform: `translateX(${swipeX}>px)`,
+                    transform: `translateX(${swipeX}px)`,
                     transition: isDragging ? 'none' : 'transform 0.3s ease',
                 })}
                 onTouchStart={handleTouchStart}

@@ -8,7 +8,7 @@ import './GiveawayPanel.css';
 
 const GiveawayPanel = ({ serverId, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         giveaways,
         loading,

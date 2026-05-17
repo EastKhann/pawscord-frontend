@@ -4,7 +4,16 @@
 import { useRef, useState, useCallback } from 'react';
 import logger from '../utils/logger';
 
-export const usePullToRefresh = (onRefresh, options = {}) => {
+interface PullToRefreshOptions {
+    threshold?: number;
+    resistance?: number;
+    enabled?: boolean;
+}
+
+export const usePullToRefresh = (
+    onRefresh: () => Promise<void>,
+    options: PullToRefreshOptions = {}
+) => {
     const { threshold = 80, resistance = 2.5, enabled = true } = options;
 
     const [pulling, setPulling] = useState(false);
@@ -16,7 +25,7 @@ export const usePullToRefresh = (onRefresh, options = {}) => {
     const isDragging = useRef(false);
 
     const handleTouchStart = useCallback(
-        (e) => {
+        (e: React.TouchEvent) => {
             if (!enabled || window.scrollY > 0) return;
 
             startY.current = e.touches[0].clientY;
@@ -26,7 +35,7 @@ export const usePullToRefresh = (onRefresh, options = {}) => {
     );
 
     const handleTouchMove = useCallback(
-        (e) => {
+        (e: React.TouchEvent) => {
             if (!isDragging.current || !enabled) return;
 
             currentY.current = e.touches[0].clientY;

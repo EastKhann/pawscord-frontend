@@ -2,7 +2,7 @@
  * ⋮ ToolbarMenu — Dropdown menu in chat header
  * Extracted from App.js inline JSX
  */
-import React, { useCallback, memo } from 'react';
+import { useCallback, memo } from 'react';
 import {
     FaLock,
     FaThumbtack,

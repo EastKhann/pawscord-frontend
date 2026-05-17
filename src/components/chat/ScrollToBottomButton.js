@@ -5,6 +5,7 @@
 import { useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import { FaChevronDown } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Floating action button to scroll to the bottom of the message list.
@@ -15,8 +16,9 @@ import { FaChevronDown } from 'react-icons/fa';
  * @param {boolean} [props.visible=true] - Whether the button is visible
  */
 const ScrollToBottomButton = ({ onClick, unreadCount = 0, visible = true }) => {
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     if (!visible) return null;
 
     return (
@@ -24,11 +26,11 @@ const ScrollToBottomButton = ({ onClick, unreadCount = 0, visible = true }) => {
             onClick={onClick}
             style={S.fab}
             className="scroll-to-bottom-fab"
-            title="En alta git"
+            title={t('chat.scrollToBottom', 'Scroll to bottom')}
             aria-label={
                 unreadCount > 0
-                    ? `Scroll to bottom (${unreadCount > 99 ? '99+' : unreadCount} unread messages)`
-                    : 'En alta git'
+                    ? t('chat.scrollToBottomUnread', 'Scroll to bottom ({{count}} unread messages)', { count: unreadCount > 99 ? '99+' : unreadCount })
+                    : t('chat.scrollToBottom', 'Scroll to bottom')
             }
         >
             {unreadCount > 0 && (

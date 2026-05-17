@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { useUIStore } from '../../stores/useUIStore';
 
 import PropTypes from 'prop-types';
@@ -18,7 +18,7 @@ const AppModalsStandard = React.lazy(() => import('../AppModals/AppModalsStandar
  */
 const AppModals = (props) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { modals, openModal, closeModal, toggleModal } = useUIStore();
     const shared = { ...props, modals, openModal, closeModal, toggleModal };
 

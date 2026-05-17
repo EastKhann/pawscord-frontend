@@ -6,6 +6,10 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import logger from '../../utils/logger';
 
+const S = {
+    btnBase: { fontSize: '1em', padding: '5px', display: 'flex', alignItems: 'center' },
+};
+
 /**
  * Toggle button for bookmarking a message.
  * @param {Object} props
@@ -51,11 +55,8 @@ export const BookmarkButton = memo(
             <button
                 aria-label={bookmarked ? t('bookmark.remove', 'Remove bookmark') : t('bookmark.add', 'Add bookmark')}
                 style={{
+                    ...S.btnBase,
                     cursor: loading ? 'wait' : 'pointer',
-                    fontSize: '1em',
-                    padding: '5px',
-                    display: 'flex',
-                    alignItems: 'center',
                     opacity: loading ? 0.5 : 1,
                 }}
                 title={bookmarked ? t('ui.bookmark_kaldir') : 'Bookmark add'}
@@ -112,11 +113,8 @@ export const StarButton = memo(
             <button
                 aria-label={starred ? t('bookmark.removeStar', 'Remove star') : t('bookmark.addStar', 'Star message')}
                 style={{
+                    ...S.btnBase,
                     cursor: loading ? 'wait' : 'pointer',
-                    fontSize: '1em',
-                    padding: '5px',
-                    display: 'flex',
-                    alignItems: 'center',
                     opacity: loading ? 0.5 : 1,
                 }}
                 title={starred ? t('ui.star_kaldir') : 'Star add'}
@@ -173,11 +171,8 @@ export const ReadLaterButton = memo(
             <button
                 aria-label={readLater ? t('bookmark.removeReadLater', 'Remove from read later') : t('bookmark.addReadLater', 'Read later')}
                 style={{
+                    ...S.btnBase,
                     cursor: loading ? 'wait' : 'pointer',
-                    fontSize: '1em',
-                    padding: '5px',
-                    display: 'flex',
-                    alignItems: 'center',
                     opacity: loading ? 0.5 : 1,
                 }}
                 title={readLater ? t('ui.sonra_oku_listsinden_cikar') : 'Sonra oku listesine ekle'}

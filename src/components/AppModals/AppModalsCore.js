@@ -20,7 +20,9 @@ const StickerPicker = React.lazy(() => import('../../features/StickerPicker'));
 const UserProfilePanel = React.lazy(() => import('../../UserProfilePanel'));
 const AdminAnalyticsPanel = React.lazy(() => import('../AdminAnalyticsPanel'));
 const AdminPanelModal = React.lazy(() => import('../AdminPanelModal'));
-const APIUsagePanel = React.lazy(() => import('../APIUsagePanel'));
+// 🔥 FIX: '../APIUsagePanel/index.js' boş stub (props mismatch + content yok).
+// Gerçek implementasyon ../bot/APIUsagePanel'da.
+const APIUsagePanel = React.lazy(() => import('../bot/APIUsagePanel'));
 const AutoModerationDashboard = React.lazy(() => import('../AutoModerationDashboard'));
 const AuditLogPanel = React.lazy(() => import('../admin/AuditLogPanel'));
 const BookmarkPanel = React.lazy(() => import('../BookmarkPanel'));
@@ -30,10 +32,12 @@ const ConnectionsPanel = React.lazy(() => import('../profile/ConnectionsPanel'))
 const CreateGroupModal = React.lazy(() => import('../shared/CreateGroupModal'));
 const CustomStatusModal = React.lazy(() => import('../profile/CustomStatusModal'));
 const DJModal = React.lazy(() => import('../media/DJModal'));
-const DailyRewardsModal = React.lazy(() => import('../DailyRewardsModal'));
+// 🔥 FIX: '../DailyRewardsModal/index.js' boş stub. Gerçek implementasyon ../premium/.
+const DailyRewardsModal = React.lazy(() => import('../premium/DailyRewardsModal'));
 const DownloadModal = React.lazy(() => import('../shared/DownloadModal'));
 const EncryptionKeyModal = React.lazy(() => import('../security/EncryptionKeyModal'));
-const ExportJobsPanel = React.lazy(() => import('../ExportJobsPanel'));
+// 🔥 FIX: '../ExportJobsPanel/index.js' boş stub. Gerçek impl ../social/.
+const ExportJobsPanel = React.lazy(() => import('../social/ExportJobsPanel'));
 const MentionsInboxPanel = React.lazy(() => import('../chat/MentionsInboxPanel'));
 const PasswordSetupModal = React.lazy(() => import('../security/PasswordSetupModal'));
 const PaymentPanel = React.lazy(() => import('../PaymentPanel'));
@@ -227,7 +231,11 @@ const AppModalsCore = ({
     return (
         <>
             <Suspense fallback={<LoadingSpinner size="medium" text={t('ui.modal_yukleniyor')} />}>
-                {modals.profilePanel && (
+                {/* 🔥 Guard: profil verisi yüklenmeden modal mount etmez —
+                    aksi halde UserProfilePanel null user ile mount oluyor, sessiz
+                    return ediyor (Profil tab'a tıklayan kullanıcıda hiçbir şey
+                    olmuyor görüntüsü) ve console'a 6 error spam'liyordu. */}
+                {modals.profilePanel && currentUserProfile && (
                     <UserProfilePanel
                         user={currentUserProfile}
                         onClose={closeProfilePanel}

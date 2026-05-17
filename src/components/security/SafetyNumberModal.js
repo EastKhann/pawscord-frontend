@@ -139,7 +139,7 @@ const SafetyNumberModal = ({ username, targetUser, apiBaseUrl, fetchWithAuth, on
                 </div>
 
                 <div style={styles.info}>
-                    <h3>Safety Number Nedir?</h3>
+                    <h3>{t('safetyNumber.whatIs', 'What is a Safety Number?')}</h3>
                     <p>
                         {t('e2ee.safetyNumberDesc', 'The safety number is the fingerprint of your and {{user}}&#x27;s encryption keys. By comparing this number you can verify identity keys.', { user: targetUser })}
                     </p>

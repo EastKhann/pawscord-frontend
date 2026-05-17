@@ -397,3 +397,64 @@
 .user-profile-content::-webkit-scrollbar-thumb:hover {
     background: rgba(88, 101, 242, 0.5);
 }
+
+/* 🔥 MOBILE LAYOUT FIX (audit): inline styles.js sidebar=240px sabit + content
+   flex:1 mobile'da içeriği viewport dışına atıyordu (avatar grid 377-684px geniş
+   img'ler). Sidebar icon-only (56px), content full-width, img'ler grid-fit. */
+@media (max-width: 768px) {
+    .user-profile-sidebar {
+        width: 56px !important;
+        padding: 8px 4px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .user-profile-sidebar .sidebar-btn {
+        padding: 12px 8px !important;
+        font-size: 0 !important; /* tab text label gizle */
+        min-height: 44px !important;
+        justify-content: center !important;
+        text-align: center !important;
+        border-left: none !important;
+    }
+
+    /* Section header'ları gizle (icon-only sidebar) */
+    .user-profile-sidebar > div > div:first-child {
+        display: none !important;
+    }
+
+    /* Content area: remaining space + clip horizontal overflow */
+    .user-profile-content {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        max-width: calc(100vw - 56px) !important;
+        overflow-x: hidden !important;
+        padding: 12px !important;
+    }
+
+    /* Avatar grid — fixed-size tiles, hardly stretches the panel */
+    .user-profile-content img[alt^="cat_"],
+    .user-profile-content img[alt^="dog_"] {
+        width: 64px !important;
+        height: 64px !important;
+        object-fit: cover !important;
+    }
+
+    /* Generic img safety net */
+    .user-profile-content img {
+        max-width: 100% !important;
+        height: auto;
+    }
+
+    /* Cards & their child rows wrap on mobile */
+    .user-profile-content .profile-card > div {
+        flex-wrap: wrap !important;
+        max-width: 100% !important;
+    }
+
+    /* All buttons inside the profile panel should be min 44×44 (touch-friendly) */
+    .user-profile-content button,
+    .profile-header-banner button,
+    .profile-header-content button {
+        min-height: 44px !important;
+    }
+}

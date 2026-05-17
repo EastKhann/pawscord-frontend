@@ -5,11 +5,32 @@ import styles from '../PaymentPanel/styles';
 import usePayment from '../PaymentPanel/hooks/usePayment';
 import BuyCoinsView from '../PaymentPanel/BuyCoinsView';
 import TransferView from '../PaymentPanel/TransferView';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const BALANCE_ICON_STYLE = { fontSize: '48px', color: '#f0b232' };
 
+const S = {
+    successOverlay: {
+        position: 'absolute',
+        inset: 0,
+        borderRadius: '8px',
+        background: 'rgba(10,20,10,0.92)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10,
+        gap: '16px',
+        animation: 'paySuccessIn 0.4s cubic-bezier(0.22,1,0.36,1) both',
+    },
+    coinSpinRow: { display: 'flex', alignItems: 'center', gap: '8px', animation: 'coinSpin 0.8s ease 0.3s both' },
+    successAmount: { fontSize: '28px', fontWeight: 800, color: '#23a559', letterSpacing: '-0.5px' },
+    successLabel: { color: '#b5bac1', fontSize: '15px' },
+};
+
 const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     const { t } = useTranslation();
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('payment.title', 'Ödeme Merkezi') });
     const {
         activeTab,
         setActiveTab,
@@ -34,51 +55,32 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     return (
         <div
             style={styles.overlay}
-            role="presentation"
-            onClick={onClose}
-            onKeyDown={(e) => e.key === 'Escape' && onClose()}
+            {...overlayProps}
         >
             <style>{`
                 @keyframes ppOverlayIn { from{opacity:0} to{opacity:1} }
                 @keyframes ppModalIn { from{opacity:0;transform:scale(0.94) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
             `}</style>
-            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
             <div
                 style={styles.modal}
-                role="dialog"
-                aria-modal="true"
-                aria-label={t('payment.title', 'Ödeme Merkezi')}
-                onClick={(event) => event.stopPropagation()}
-                onKeyDown={(e) => e.stopPropagation()}
+                {...dialogProps}
             >
                 {/* ── Success animation overlay ── */}
                 {successCoins && (
-                    <div style={{
-                        position: 'absolute',
-                        inset: 0,
-                        borderRadius: '8px',
-                        background: 'rgba(10,20,10,0.92)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        zIndex: 10,
-                        gap: '16px',
-                        animation: 'paySuccessIn 0.4s cubic-bezier(0.22,1,0.36,1) both',
-                    }}>
+                    <div style={S.successOverlay}>
                         <style>{`
                             @keyframes paySuccessIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
                             @keyframes checkBounce { 0%{transform:scale(0)} 60%{transform:scale(1.25)} 100%{transform:scale(1)} }
                             @keyframes coinSpin { from{transform:rotateY(0deg)} to{transform:rotateY(720deg)} }
                         `}</style>
                         <FaCheckCircle size={72} color="#23a559" style={{ animation: 'checkBounce 0.5s ease 0.1s both' }} />
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', animation: 'coinSpin 0.8s ease 0.3s both' }}>
+                        <div style={S.coinSpinRow}>
                             <FaCoins size={32} color="#f0b232" />
                         </div>
-                        <div style={{ fontSize: '28px', fontWeight: 800, color: '#23a559', letterSpacing: '-0.5px' }}>
+                        <div style={S.successAmount}>
                             +{successCoins.toLocaleString()} 💰
                         </div>
-                        <div style={{ color: '#b5bac1', fontSize: '15px' }}>
+                        <div style={S.successLabel}>
                             {t('payment.transferSuccess', 'Transfer successful!')}
                         </div>
                     </div>

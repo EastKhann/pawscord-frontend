@@ -63,7 +63,7 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaUsers className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Sunucu Bekleme Listesi</h2>
+                        <h2 style={styles.title}>{t('waitlist.title', 'Server Waitlist')}</h2>
                     </div>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
@@ -126,7 +126,7 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                                             </div>
                                         )}
                                         {entry.status === 'rejected' && (
-                                            <div style={styles.rejectedBadge}>Rejected</div>
+                                            <div style={styles.rejectedBadge}>{t('waitlist.rejected', 'Rejected')}</div>
                                         )}
                                     </div>
                                     {entry.status === 'pending' && (

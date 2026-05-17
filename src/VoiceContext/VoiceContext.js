@@ -188,6 +188,22 @@ export const VoiceProvider = ({ children }) => {
         globalAudioContextRef,
     });
 
+    // 🔥 Bridge VAD → WS: notify peers when local talking state flips.
+    // VAD has hysteresis + 200ms hangover so this fires at speech-event rate
+    // (a few Hz at most), not the 40Hz polling rate. Backend rebroadcasts to
+    // room peers as `user_state_update` so remote UIs light up the speaking
+    // indicator in real time.
+    useEffect(() => {
+        if (!isInVoice) return;
+        const ws = voiceWsRef.current;
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        try {
+            ws.send(JSON.stringify({ type: 'talking_state', is_talking: isTalking }));
+        } catch (e) {
+            logger.warn('[VAD→WS] talking_state send failed:', e);
+        }
+    }, [isTalking, isInVoice]);
+
     const initializeAudio = useCallback(() => {
         if (!audioContextRef.current) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;

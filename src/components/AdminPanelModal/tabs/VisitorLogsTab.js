@@ -216,6 +216,7 @@ export default function VisitorLogsTab() {
                     value={localIp}
                     onChange={(e) => setLocalIp(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    aria-label={t('admin.ipSearch', 'Filter by IP address')}
                 />
                 <input
                     style={s.input}
@@ -223,6 +224,7 @@ export default function VisitorLogsTab() {
                     value={localUser}
                     onChange={(e) => setLocalUser(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    aria-label={t('admin.userFilter', 'Filter by username')}
                 />
                 <input
                     className={css.inputW160}
@@ -230,6 +232,7 @@ export default function VisitorLogsTab() {
                     value={localPath}
                     onChange={(e) => setLocalPath(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    aria-label={t('admin.pathFilter', 'Filter by path')}
                 />
                 <button aria-label={t('common.search', 'Apply filters')} style={s.btn} onClick={applyFilters}>
                     <FaSearch size={11} /> {t('common.search', 'Filter')}

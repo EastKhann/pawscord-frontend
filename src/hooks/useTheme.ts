@@ -15,7 +15,7 @@ export const useTheme = (): UseThemeResult => {
     const [theme, setTheme] = useState<Theme>(() => {
         // LocalStorage'dan tema oku
         const savedTheme = localStorage.getItem('pawscord-theme');
-        return savedTheme || 'dark';
+        return (savedTheme === 'light' ? 'light' : 'dark') as Theme;
     });
 
     useEffect(() => {

@@ -139,6 +139,7 @@ const EditUserModal = ({
                                 }))
                             }
                             style={styles.searchInput}
+                            aria-label={t('admin.coins', 'Coins')}
                         />
                     </div>
 
@@ -157,6 +158,7 @@ const EditUserModal = ({
                                 }))
                             }
                             style={styles.searchInput}
+                            aria-label={t('admin.level', 'Level')}
                         />
                     </div>
 
@@ -175,6 +177,7 @@ const EditUserModal = ({
                                 }))
                             }
                             style={styles.searchInput}
+                            aria-label={t('admin.xp', 'XP')}
                         />
                     </div>
 
@@ -189,6 +192,7 @@ const EditUserModal = ({
                                 setEditUserForm((f) => ({ ...f, role: e.target.value }))
                             }
                             style={styles.searchInput}
+                            aria-label={t('admin.role', 'Role')}
                         >
                             <option value="member">{t('member')}</option>
 

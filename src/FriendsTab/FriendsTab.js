@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import React, { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FaUserFriends, FaPaperPlane, FaTimes, FaBell } from '../utils/iconOptimization';
 import useFriendsAPI from './useFriendsAPI';
@@ -24,7 +24,7 @@ const FriendsTab = ({
     const { t } = useTranslation();
     const api = useFriendsAPI({ fetchWithAuth, apiBaseUrl, onPendingCountChange });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const tabBarRef = useRef(null);
 
     const handleTabBarKeyDown = useCallback((e) => {
@@ -40,6 +40,17 @@ const FriendsTab = ({
             tabs[(idx - 1 + tabs.length) % tabs.length]?.focus();
         }
     }, []);
+
+    if (api.loading) {
+        return (
+            <div style={styles.container}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px', color: '#b5bac1', gap: '12px' }}>
+                    <div className="loading-spinner" role="status" aria-label={t('common.loading', 'Loading...')} style={{ width: 32, height: 32, border: '3px solid rgba(88,101,242,0.2)', borderTop: '3px solid #5865f2', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                    <span>{t('common.loading', 'Loading...')}</span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div style={styles.container}>
@@ -60,6 +71,8 @@ const FriendsTab = ({
                                 api.setActiveTab('all');
                                 api.setStatusMsg(null);
                             }}
+                            role="tab"
+                            aria-selected={api.activeTab === 'all'}
                         >
                             {t('friends.all', 'Hepsi')} ({api.friends.length})
                         </button>
@@ -72,6 +85,8 @@ const FriendsTab = ({
                                 api.setActiveTab('pending');
                                 api.setStatusMsg(null);
                             }}
+                            role="tab"
+                            aria-selected={api.activeTab === 'pending'}
                         >
                             {t('friends.pending', 'Bekleyenler')}
                             {api.requests.length > 0 && (
@@ -87,13 +102,15 @@ const FriendsTab = ({
                                 api.setActiveTab('add');
                                 api.setStatusMsg(null);
                             }}
+                            role="tab"
+                            aria-selected={api.activeTab === 'add'}
                         >
                             {t('friends.addFriend', 'Arkadaş Ekle')}
                         </button>
                     </div>
                 </div>
-                <button onClick={onClose} style={styles.closeHeaderBtn} title={t('common.close')}>
-                    <FaTimes />
+                <button onClick={onClose} style={styles.closeHeaderBtn} title={t('common.close')} aria-label={t('common.close', 'Close')}>
+                    <FaTimes aria-hidden="true" />
                 </button>
             </div>
 

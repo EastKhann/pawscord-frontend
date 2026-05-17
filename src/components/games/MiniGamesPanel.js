@@ -438,9 +438,9 @@ const GameRenderer = memo(({ game, onAction }) => {
 
     return (
         <div style={styles.gameArea}>
-            <h3>Oyun: {game_type}</h3>
+            <h3>{t('miniGamesPanel.game', 'Game')}: {game_type}</h3>
 
-            <p>Oyun devam ediyor...</p>
+            <p>{t('miniGamesPanel.inProgress', 'Game in progress...')}</p>
         </div>
     );
 });

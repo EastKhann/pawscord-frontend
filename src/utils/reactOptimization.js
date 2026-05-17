@@ -1,5 +1,4 @@
 /* eslint-disable no-duplicate-imports */
-import React from 'react';
 // ⚡ REACT OPTIMIZATION HOOKS
 // Custom hooks for automatic performance optimization
 

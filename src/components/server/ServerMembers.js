@@ -1,6 +1,6 @@
 ﻿// frontend/src/components/ServerMembers.js
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaCrown, FaUserShield, FaSearch, FaCheck } from 'react-icons/fa';
@@ -108,10 +108,14 @@ const ServerMembers = ({ members, roles, serverId, fetchWithAuth, apiBaseUrl, on
     };
 
     // Filternmiş member listsi
-    const filteredMembers = memberList.filter((member) => {
-        const username = member.username || member.user?.username || '';
-        return username.toLowerCase().includes(searchQuery.toLowerCase());
-    });
+    const filteredMembers = useMemo(
+        () =>
+            memberList.filter((member) => {
+                const username = member.username || member.user?.username || '';
+                return username.toLowerCase().includes(searchQuery.toLowerCase());
+            }),
+        [memberList, searchQuery]
+    );
 
     return (
         <div style={styles.container}>
@@ -177,7 +181,7 @@ const ServerMembers = ({ members, roles, serverId, fetchWithAuth, apiBaseUrl, on
                                             {isOwner && (
                                                 <FaCrown
                                                     style={styles.crownIcon}
-                                                    title="Sunucu Sahibi"
+                                                    title={t('serverMembers.serverOwner', 'Server Owner')}
                                                 />
                                             )}
                                         </div>
@@ -207,7 +211,7 @@ const ServerMembers = ({ members, roles, serverId, fetchWithAuth, apiBaseUrl, on
                                             style={styles.roleSelect}
                                             disabled={assigningMember === username}
                                         >
-                                            <option value="">Role Ata</option>
+                                            <option value="">{t('serverMembers.assignRole', 'Assign Role')}</option>
                                             {roles.map((role) => (
                                                 <option key={role.id} value={role.id}>
                                                     {role.name}

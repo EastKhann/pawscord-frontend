@@ -9,13 +9,30 @@ import { getApiBase } from '../utils/apiEndpoints';
 import { isElectron } from '../utils/constants';
 import logger from '../utils/logger';
 
+interface GameInfo {
+    name: string;
+    id: string;
+}
+
+// Extend Window to support optional Electron bridge
+declare global {
+    interface Window {
+        electron?: {
+            onGameDetected: (cb: (game: GameInfo) => void) => void;
+            detectGames: () => Promise<void> | void;
+            getRunningProcesses: () => Promise<GameInfo[]>;
+            getAppVersion: () => Promise<string>;
+        };
+    }
+}
+
 const useGamePresence = () => {
-    const [currentGame, setCurrentGame] = useState(null);
+    const [currentGame, setCurrentGame] = useState<GameInfo | null>(null);
     const [isDetecting, setIsDetecting] = useState(false);
-    const lastReportedGame = useRef(null);
+    const lastReportedGame = useRef<GameInfo | null>(null);
 
     // Report game activity to server
-    const reportGameActivity = useCallback(async (game) => {
+    const reportGameActivity = useCallback(async (game: GameInfo | null) => {
         if (!game) {
             // Game closed - clear activity
             if (lastReportedGame.current) {
@@ -67,22 +84,22 @@ const useGamePresence = () => {
             return;
         }
 
-        const handleGameDetected = (game) => {
+        const handleGameDetected = (game: GameInfo) => {
             setCurrentGame(game);
-            reportGameActivity(game);
+            reportGameActivity(game).catch(() => {});
         };
 
         // Listen for game detection events
         window.electron.onGameDetected(handleGameDetected);
 
         // Initial detection
-        window.electron.detectGames();
+        void window.electron.detectGames();
 
         // Cleanup on unmount
         return () => {
             // Report game closed when leaving
             if (lastReportedGame.current) {
-                reportGameActivity(null);
+                reportGameActivity(null).catch(() => {});
             }
         };
     }, [reportGameActivity]);
@@ -102,7 +119,7 @@ const useGamePresence = () => {
     }, []);
 
     // Get list of running processes (for custom game selection)
-    const getRunningProcesses = useCallback(async () => {
+    const getRunningProcesses = useCallback(async (): Promise<GameInfo[]> => {
         if (!isElectron || typeof window.electron === 'undefined') {
             return [];
         }
@@ -117,8 +134,8 @@ const useGamePresence = () => {
 
     // Set custom game activity
     const setCustomGame = useCallback(
-        async (gameName, gameId = null) => {
-            const game = {
+        async (gameName: string, gameId: string | null = null) => {
+            const game: GameInfo = {
                 name: gameName,
                 id: gameId || gameName.toLowerCase().replace(/\s+/g, '-'),
             };

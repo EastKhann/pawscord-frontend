@@ -39,7 +39,7 @@ const ConfirmModal = ({
     const { overlayProps, dialogProps } = useModalA11y({
         onClose: safeClose,
         isOpen,
-        label: 'Onmonth',
+        label: title,
     });
 
     useEffect(() => {

@@ -1,5 +1,4 @@
 ﻿import { useTranslation } from 'react-i18next';
-import React from 'react';
 import PropTypes from 'prop-types';
 import profileStyles from '../styles';
 const _s = (o) => o;
@@ -49,7 +48,7 @@ const InventoryTab = ({ equipItem, equippedItems: rawEq, inventory: rawInv, uneq
     const inventory = rawInv || [];
     const styles = profileStyles;
     const { t } = useTranslation();
-    const [error, setError] = React.useState(null);
+    const [_error, _setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (

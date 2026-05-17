@@ -163,7 +163,11 @@ const TwoFactorPanel = ({ onClose }) => {
                 <div className="two-factor-header">
                     <FaShieldAlt className="header-icon" />
                     <h2>{t('twoFactor.title')}</h2>
-                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
+                    <button
+                        aria-label={t('common.close', 'Close')}
+                        className="close-btn"
+                        onClick={onClose}
+                    >
                         ×
                     </button>
                 </div>
@@ -207,7 +211,10 @@ const TwoFactorPanel = ({ onClose }) => {
                                     <div className="code-box">
                                         <code>{secret}</code>
                                         <button
-                                            aria-label={t('twoFactor.copySecret', 'Copy secret key')}
+                                            aria-label={t(
+                                                'twoFactor.copySecret',
+                                                'Copy secret key'
+                                            )}
                                             onClick={() => copyToClipboard(secret)}
                                         >
                                             {copied ? <FaCheck /> : <FaCopy />}
@@ -233,7 +240,10 @@ const TwoFactorPanel = ({ onClose }) => {
                                     onKeyDown={(e) => e.key === 'Enter' && verifySetup()}
                                 />
                                 <button
-                                    aria-label={t('twoFactor.verifySetupBtn', 'Verify and enable 2FA')}
+                                    aria-label={t(
+                                        'twoFactor.verifySetupBtn',
+                                        'Verify and enable 2FA'
+                                    )}
                                     className="primary-btn"
                                     onClick={verifySetup}
                                     disabled={loading || verifyCode.length !== 6}
@@ -251,6 +261,13 @@ const TwoFactorPanel = ({ onClose }) => {
                             <div className="warning-box">
                                 <h3>⚠️ {t('twoFactor.backupCodesTitle')}</h3>
                                 <p>{t('twoFactor.backupCodesDesc')}</p>
+                                <p className="one-time-warning">
+                                    ⚠️{' '}
+                                    {t(
+                                        'twoFactor.backupCodesOneTime',
+                                        'These codes will not be shown again. Save them now!'
+                                    )}
+                                </p>
                             </div>
                             <div className="backup-codes">
                                 {backupCodes.map((code, index) => (
@@ -261,16 +278,37 @@ const TwoFactorPanel = ({ onClose }) => {
                             </div>
                             <div className="backup-actions">
                                 <button
-                                    aria-label={t('twoFactor.downloadBackupCodes', 'Download backup codes')}
+                                    aria-label={t(
+                                        'twoFactor.copyAllCodes',
+                                        'Copy all backup codes'
+                                    )}
+                                    className="secondary-btn"
+                                    onClick={() => copyToClipboard(backupCodes.join('\n'))}
+                                >
+                                    {copied ? <FaCheck /> : <FaCopy />}{' '}
+                                    {t('twoFactor.copyAll', 'Copy All')}
+                                </button>
+                                <button
+                                    aria-label={t(
+                                        'twoFactor.downloadBackupCodes',
+                                        'Download backup codes'
+                                    )}
                                     className="secondary-btn"
                                     onClick={downloadBackupCodes}
                                 >
                                     {t('twoFactor.download')}
                                 </button>
                                 <button
-                                    aria-label={t('twoFactor.saveAndContinueBtn', 'Save and continue')}
+                                    aria-label={t(
+                                        'twoFactor.saveAndContinueBtn',
+                                        'Save and continue'
+                                    )}
                                     className="primary-btn"
-                                    onClick={() => { setIsEnabled(true); }}
+                                    onClick={() => {
+                                        setIsEnabled(true);
+                                        setBackupCodes([]); // one-time display — clear from state
+                                        setStep('complete');
+                                    }}
                                 >
                                     {t('twoFactor.saveAndContinue')}
                                 </button>
@@ -310,7 +348,7 @@ const TwoFactorPanel = ({ onClose }) => {
                     )}
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 

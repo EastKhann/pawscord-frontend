@@ -38,27 +38,46 @@ messaging.onBackgroundMessage((payload) => {
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// Handle notification click
+// Handle notification click (iOS + Android deep link routing)
 self.addEventListener('notificationclick', (event) => {
-    console.log('Notification clicked:', event);
-
     event.notification.close();
 
-    const urlToOpen = event.notification.data?.url || '/';
+    const data = event.notification.data || {};
+
+    // Sanitize ID-like values (alphanumeric/dash/underscore only — prevent path injection)
+    const safeId = (v) => (typeof v === 'string' && /^[\w-]{1,64}$/.test(v) ? v : null);
+    // Validate URL: only relative paths starting with '/', no protocol, no '//' (protocol-relative)
+    const safeUrl = (v) => (typeof v === 'string' && /^\/[^/]/.test(v) && v.length < 256 ? v : null);
+
+    let hashRoute = '/';
+    const roomId = safeId(data.roomId);
+    const convId = safeId(data.conversationId);
+    const url = safeUrl(data.url);
+    if (roomId) hashRoute = `/room/${roomId}`;
+    else if (convId) hashRoute = `/dm/${convId}`;
+    else if (url) hashRoute = url;
+
+    const targetUrl = self.registration.scope.replace(/\/$/, '') + '/#' + hashRoute;
 
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-            // Check if app is already open
+            // If app already open, focus and navigate
             for (const client of clientList) {
-                if (client.url === urlToOpen && 'focus' in client) {
+                if ('focus' in client) {
+                    // Store pending route so the app can pick it up on focus
+                    client.postMessage({ type: 'NOTIFICATION_NAVIGATE', route: hashRoute });
                     return client.focus();
                 }
             }
 
-            // Open new window
-            if (clients.openWindow) {
-                return clients.openWindow(urlToOpen);
-            }
+            // App not open — store pending route in cache for app to read on load
+            // (localStorage not available in SW, use Cache API as bridge)
+            return caches.open('pawscord-sw-bridge').then((cache) => {
+                const pendingRoute = new Response(JSON.stringify({ route: hashRoute, ts: Date.now() }));
+                return cache.put('/sw-pending-route', pendingRoute);
+            }).then(() => {
+                if (clients.openWindow) return clients.openWindow(targetUrl);
+            });
         })
     );
 });

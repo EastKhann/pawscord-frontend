@@ -399,3 +399,10 @@
         flex-direction: column;
     }
 }
+
+
+.one-time-warning {
+    color: #ed4245;
+    font-weight: 600;
+    margin-top: 8px;
+}

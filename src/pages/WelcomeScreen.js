@@ -1,6 +1,6 @@
 ﻿// frontend/src/WelcomeScreen.js
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
@@ -99,7 +99,7 @@ const WelcomeScreen = ({
 
     const API_BASE_URL = getApiBase();
 
-    // Ortak G�ncelleme Butonu Bileseni
+    // Ortak Güncelleme Butonu Bileşeni
     const UpdateButtonComponent = () => {
         const { t } = useTranslation();
         if (!updateAvailable) return null;

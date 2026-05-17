@@ -14,10 +14,10 @@ interface UseAsyncErrorResult<T = unknown> {
 
 const useAsyncError = <T = unknown>(): UseAsyncErrorResult<T> => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [data, setData] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+    const [data, setData] = useState<T | null>(null);
 
-    const execute = useCallback(async (asyncFunction, ...args) => {
+    const execute = useCallback(async (asyncFunction: (...args: unknown[]) => Promise<T>, ...args: unknown[]) => {
         setLoading(true);
         setError(null);
 
@@ -26,7 +26,7 @@ const useAsyncError = <T = unknown>(): UseAsyncErrorResult<T> => {
             setData(result);
             return result;
         } catch (err) {
-            const errorMessage = err.message || 'An error occurred';
+            const errorMessage = (err instanceof Error ? err.message : null) || 'An error occurred';
             setError(errorMessage);
             logger.error('useAsyncError caught:', err);
             throw err; // Re-throw if caller wants to handle

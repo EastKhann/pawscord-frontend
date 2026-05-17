@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     FaBan,
     FaCheckCircle,
@@ -70,11 +69,13 @@ const UsersTab = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className={css.siMW300}
+                    aria-label={t('user_search')}
                 />
                 <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
                     className={css.siMW150}
+                    aria-label={t('admin.filterByStatus', 'Filter by status')}
                 >
                     <option value="all">{t('all')}</option>
                     <option value="online">{t('online')}</option>
@@ -86,6 +87,7 @@ const UsersTab = () => {
                     value={sortField}
                     onChange={(e) => setSortField(e.target.value)}
                     className={css.siMW150}
+                    aria-label={t('admin.sortBy', 'Sort by')}
                 >
                     <option value="created">{t('admin.panel.registrationDate')}</option>
                     <option value="username">{t('username')}</option>

@@ -14,7 +14,7 @@ const S = {
 
 const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         boosts,
         serverStats,
@@ -33,7 +33,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaRocket className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Sunucu Boost</h2>
+                        <h2 style={styles.title}>{t('serverBoostPanel.title', 'Server Boost')}</h2>
                     </div>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />

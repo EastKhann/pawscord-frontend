@@ -8,7 +8,7 @@ const GameMessage = ({ gameId, state, currentUser, onMove }) => {
     // state: { p1: 'user1', p2: 'user2', p1_move: null, p2_move: null, status: 'waiting' | 'finished', winner: null }
     const [myMove, setMyMove] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     const isPlayer = state.p1 === currentUser || state.p2 === currentUser;
     const isFinished = state.status === 'finished';
@@ -74,7 +74,7 @@ const GameMessage = ({ gameId, state, currentUser, onMove }) => {
                         aria-label={t('game.scissors', 'Scissors')}
                         onClick={() => handleMove('scissors')}
                         style={styles.moveBtn}
-                        title="Makas"
+                        title={t('ui.scissors', 'Scissors')}
                     >
                         ✂️
                     </button>

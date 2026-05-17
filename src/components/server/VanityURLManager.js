@@ -183,7 +183,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
 
                     {existingVanity && (
                         <div style={styles.existingSection}>
-                            <div style={styles.existingLabel}>📌 Mevcut Vanity URL:</div>
+                            <div style={styles.existingLabel}>📌 {t('vanityUrl.currentLabel', 'Current Vanity URL:')}</div>
 
                             <div style={styles.existingUrl}>
                                 <span style={styles.urlText}>

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
@@ -42,6 +41,7 @@ const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedP
 
                     placeholder={t('kendin_hakkında_bir_şeyler_yaz')}
 
+                    aria-label={t('profile.bio', 'Bio')}
 
                     maxLength={500}
 

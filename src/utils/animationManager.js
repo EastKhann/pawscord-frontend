@@ -1,4 +1,3 @@
-import React from 'react';
 // frontend/src/utils/animationManager.js
 
 /**
@@ -421,7 +420,9 @@ export const useAnimateOnMount = (animationType = 'fadeIn', options = {}) => {
 
     React.useEffect(() => {
         if (ref.current) {
-            animationManager[animationType](ref.current, options);
+            animationManager[animationType](ref.current, options).catch((err) =>
+                console.error('[useAnimateOnMount] Animation failed:', err)
+            );
         }
     }, [animationType, options]);
 

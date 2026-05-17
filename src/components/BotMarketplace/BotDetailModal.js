@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getToken } from '../../utils/tokenStorage';
 import PropTypes from 'prop-types';
 import { API_BASE_URL } from '../../utils/apiEndpoints';
@@ -20,10 +20,12 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
     const [servers, setServers] = useState([]);
     const [selectedServer, setSelectedServer] = useState(null);
     const [installing, setInstalling] = useState(false);
+    const [serversLoading, setServersLoading] = useState(false);
 
     const API_URL = API_BASE_URL;
 
     const loadServers = useCallback(async () => {
+        setServersLoading(true);
         try {
             const token = getToken();
             const response = await fetch(`${API_URL}/bots/my-servers/`, {
@@ -35,6 +37,8 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
             }
         } catch (e) {
             logger.error('Failed to load servers:', e);
+        } finally {
+            setServersLoading(false);
         }
     }, [API_URL]);
 
@@ -81,8 +85,8 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                     className="bot-modal-header"
                     style={{ backgroundImage: bot.banner ? `url(${bot.banner})` : undefined }}
                 >
-                    <button className="modal-close" onClick={onClose}>
-                        ×
+                    <button className="modal-close" onClick={onClose} aria-label={t('common.close', 'Close')}>
+                        <span aria-hidden="true">×</span>
                     </button>
                     <div className="bot-header-content">
                         <img
@@ -110,20 +114,26 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                 </div>
 
                 {/* Tabs */}
-                <div className="bot-modal-tabs">
+                <div className="bot-modal-tabs" role="tablist" aria-label={t('botDetail.tabs', 'Bot detail tabs')}>
                     <button
+                        role="tab"
+                        aria-selected={activeTab === 'overview'}
                         className={activeTab === 'overview' ? 'active' : ''}
                         onClick={() => setActiveTab('overview')}
                     >
                         {t('botDetail.overview', 'Overview')}
                     </button>
                     <button
+                        role="tab"
+                        aria-selected={activeTab === 'commands'}
                         className={activeTab === 'commands' ? 'active' : ''}
                         onClick={() => setActiveTab('commands')}
                     >
                         {t('botDetail.commands', 'Komutlar')}
                     </button>
                     <button
+                        role="tab"
+                        aria-selected={activeTab === 'reviews'}
                         className={activeTab === 'reviews' ? 'active' : ''}
                         onClick={() => setActiveTab('reviews')}
                     >
@@ -132,7 +142,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                 </div>
 
                 {/* Content */}
-                <div className="bot-modal-content">
+                <div className="bot-modal-content" role="tabpanel" aria-label={t(`botDetail.${activeTab}`, activeTab)}>
                     {activeTab === 'overview' && (
                         <div className="overview-tab">
                             <div className="description-section">
@@ -188,7 +198,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                     <div className="developer-info">
                                         <img
                                             src={bot.developer.avatar || '/default-avatar.png'}
-                                            alt=""
+                                            alt={bot.developer.username}
                                         />
                                         <span>{bot.developer.username}</span>
                                     </div>
@@ -229,7 +239,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                             <div className="review-header">
                                                 <img
                                                     src={review.avatar || '/default-avatar.png'}
-                                                    alt=""
+                                                    alt={review.user}
                                                 />
                                                 <span className="reviewer-name">{review.user}</span>
                                                 <span className="review-rating">
@@ -260,7 +270,11 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                             <p>{bot.name} bot — which server do you want to add it to?</p>
 
                             <div className="server-list">
-                                {servers.length === 0 ? (
+                                {serversLoading ? (
+                                    <div style={{ textAlign: 'center', padding: '20px', color: '#b5bac1' }} role="status" aria-label={t('common.loading', 'Loading...')}>
+                                        <div style={{ width: 24, height: 24, border: '3px solid rgba(88,101,242,0.2)', borderTop: '3px solid #5865f2', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto' }} />
+                                    </div>
+                                ) : servers.length === 0 ? (
                                     <p className="no-servers">
                                         {t('admin_olduğunuz_sunucu_not_found')}
                                     </p>
@@ -279,7 +293,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                         >
                                             <img
                                                 src={server.icon || '/default-server.png'}
-                                                alt=""
+                                                alt={server.name}
                                             />
                                             <span>{server.name}</span>
                                             <span className="member-count">

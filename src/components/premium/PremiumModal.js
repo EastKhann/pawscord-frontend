@@ -223,7 +223,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                 </button>
 
                 {/* Header */}
-                <h1 style={S.title}>{t('premium.title', 'Upgrade to Pawscord Premium! 💎')}</h1>
+                <h2 style={S.title}>{t('premium.title', 'Upgrade to Pawscord Premium! 💎')}</h2>
                 <p className="text-aaa-center-mb40">
                     {t('premium.subtitle', 'Privatize your profile and access premium features!')}
                 </p>
@@ -297,7 +297,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                             >
                                 {/* Current Badge */}
                                 {isCurrentTier && (
-                                    <div style={S.currentBadge}>✅ Mevcut Paketiniz</div>
+                                    <div style={S.currentBadge}>✅ {t('premium.currentPlan', 'Your Current Plan')}</div>
                                 )}
 
                                 {/* Icon */}

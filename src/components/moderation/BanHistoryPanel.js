@@ -28,8 +28,10 @@ import './BanHistoryPanel.css';
 
 import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../../utils/apiEndpoints';
+import useModalA11y from '../../hooks/useModalA11y';
 const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
     const { t } = useTranslation();
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('ui.ban_gecmisi', 'Ban History') });
     const [bans, setBans] = useState([]);
     const [filteredBans, setFilteredBans] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -184,7 +186,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
             case 'active':
                 return (
                     <span className="status-badge active">
-                        <FaBan /> Aktif Yasak
+                        <FaBan /> {t('ban.activeBan', 'Active Ban')}
                     </span>
                 );
             case 'expired':
@@ -221,17 +223,11 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
     return (
         <div
             className="banhistory-overlay"
-            role="button"
-            tabIndex={-1}
-            aria-label={t('common.close', 'Close')}
-            onClick={(e) => e.target.className === 'banhistory-overlay' && onClose()}
-            onKeyDown={handleKeyDown}
+            {...overlayProps}
         >
             <div
                 className="banhistory-panel"
-                role="dialog"
-                aria-modal="true"
-                aria-label={t('ui.ban_gecmisi')}
+                {...dialogProps}
             >
                 <div className="panel-header">
                     <h2>
@@ -304,13 +300,13 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                     </div>
                     <select value={filter} onChange={(e) => setFilter(e.target.value)}>
                         <option value="all">{t('ban.allBans', 'All Bans')}</option>
-                        <option value="active">Aktif</option>
+                        <option value="active">{t('ban.activeBan', 'Active')}</option>
                         <option value="expired">{t('admin.expired', 'Expired')}</option>
                         <option value="appealed">{t('ban.appealApproved', 'Appeal Approved')}</option>
                     </select>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                        <option value="newest">En Yeni</option>
-                        <option value="oldest">En Eski</option>
+                        <option value="newest">{t('ban.newest', 'Newest')}</option>
+                        <option value="oldest">{t('ban.oldest', 'Oldest')}</option>
                     </select>
                     <button
                         aria-label={t('common.export', 'Export')}

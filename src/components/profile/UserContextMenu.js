@@ -44,7 +44,7 @@ const UserContextMenu = ({
     const menuRef = useRef(null);
     const [showMoveSubmenu, setShowMoveSubmenu] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [focusedIndex, setFocusedIndex] = useState(0);
 
     // Friend durumunu kontrol et - FIX: Daha kapsamlı kontrol

@@ -47,19 +47,26 @@ const STAT_ITEMS = [
 ];
 
 const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
-    const { settings, setSettings, recentFlags, stats, saveSettings, handleAction } =
+    const { settings, setSettings, recentFlags, stats, isLoading, saveSettings, handleAction } =
         useAIModeration(serverSlug, token);
     const styles = getStyles(isMobile);
+
+    if (isLoading) {
+        return (
+            <div style={{ ...styles.container, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }} role="status" aria-label={t('common.loading')}>
+                <div style={{ width: 32, height: 32, border: '3px solid var(--accent, #5865f2)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+            </div>
+        );
+    }
 
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>
+                <h2 style={styles.title}>
                     <FaShieldAlt /> {t('aiModeration.title', 'YZ Moderasyon')}
-                </h1>
+                </h2>
                 <p style={styles.subtitle}>
                     {t(
                         'aiModeration.subtitle',
@@ -81,9 +88,9 @@ const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
             </div>
 
             <div style={styles.section}>
-                <h2 style={styles.sectionTitle}>
+                <h3 style={styles.sectionTitle}>
                     {t('aiModeration.detectionSettings', '⚙️ Detection Settings')}
-                </h2>
+                </h3>
                 {TOGGLES.map((toggle) => (
                     <div key={toggle.key} style={styles.setting}>
                         <div style={styles.settingInfo}>
@@ -142,10 +149,10 @@ const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
             </div>
 
             <div style={styles.section}>
-                <h2 style={styles.sectionTitle}>
+                <h3 style={styles.sectionTitle}>
                     <FaExclamationTriangle /> {t('aiModeration.recentFlags', 'Son İşaretlemeler')} (
                     {recentFlags.length})
-                </h2>
+                </h3>
                 {recentFlags.length === 0 ? (
                     <div style={S.txt}>
                         <FaCheckCircle size={48} />

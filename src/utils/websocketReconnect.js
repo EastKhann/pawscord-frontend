@@ -23,16 +23,16 @@ class WebSocketReconnectManager {
         this.reconnectAttempts = 0;
         this.reconnectTimer = null;
         this.isReconnecting = false;
-        this.listners = new Set();
+        this.listeners = new Set();
     }
 
     /**
-     * Reconnect event listner add
+     * Reconnect event listener add
      * @param {Function} callback - Callback fonksiyonu
      */
     onReconnect(callback) {
-        this.listners.add(callback);
-        return () => this.listners.delete(callback);
+        this.listeners.add(callback);
+        return () => this.listeners.delete(callback);
     }
 
     /**
@@ -41,7 +41,7 @@ class WebSocketReconnectManager {
      * @param {any} data - Event verisi
      */
     notify(event, data) {
-        this.listners.forEach((callback) => {
+        this.listeners.forEach((callback) => {
             try {
                 callback({ event, data });
             } catch (error) {

@@ -86,7 +86,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaLink className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Vanity URL</h2>
+                        <h2 style={styles.title}>{t('vanityURL.title', 'Vanity URL')}</h2>
                     </div>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
@@ -102,7 +102,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                     )}
 
                     <div style={styles.section}>
-                        <div style={styles.label}>Yeni Vanity URL Ayarla</div>
+                        <div style={styles.label}>{t('vanityURL.setNew', 'Set New Vanity URL')}</div>
                         <div style={styles.inputRow}>
                             <div style={styles.prefix}>pawscord.com/</div>
                             <input
@@ -119,12 +119,12 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                                 style={styles.input}
                                 maxLength={32}
                             />
-                            {checking && <div style={styles.checking}>Checking...</div>}
+                            {checking && <div style={styles.checking}>{t('vanityURL.checking', 'Checking...')}</div>}
                             {!checking && available === true && (
                                 <FaCheck className="icon-success" />
                             )}
                             {!checking && available === false && (
-                                <div style={styles.unavailable}>Unavailable</div>
+                                <div style={styles.unavailable}>{t('vanityURL.unavailable', 'Unavailable')}</div>
                             )}
                         </div>
                         <div style={styles.hint}>
@@ -136,7 +136,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                             disabled={!available}
                             style={setButtonStyle}
                         >
-                            Set Vanity URL
+                            {t('vanityURL.setVanity', 'Set Vanity URL')}
                         </button>
                     </div>
 

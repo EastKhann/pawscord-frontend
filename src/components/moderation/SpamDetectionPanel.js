@@ -10,8 +10,7 @@ import styles from '../SpamDetectionPanel/styles';
 import { useTranslation } from 'react-i18next';
 
 const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = false }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const api = useSpamDetection({ serverId, fetchWithAuth, apiBaseUrl });
 
@@ -32,7 +31,7 @@ const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = fal
                 <div style={styles.headerLeft}>
                     <FaShieldAlt size={24} color="#23a559" />
                     <div>
-                        <h2 style={styles.title}>Spam Koruma Sistemi</h2>
+                        <h2 style={styles.title}>{t('spamDetect.title', 'Spam Protection System')}</h2>
                         <p style={styles.subtitle}>{t('spamDetect.subtitle', 'ML-based intelligent spam detection')}</p>
                     </div>
                 </div>

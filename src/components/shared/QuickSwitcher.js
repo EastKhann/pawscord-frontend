@@ -1,7 +1,7 @@
 // components/QuickSwitcher.js
 // ⚡ Quick Switcher - Ctrl+K Feature
 
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaSearch, FaTimes, FaHashtag, FaAt, FaHistory } from 'react-icons/fa';
@@ -9,6 +9,12 @@ import './QuickSwitcher.css';
 
 const RECENT_KEY = 'pawscord_recent_searches';
 const MAX_RECENT = 10;
+
+const S = {
+    groupHeaderRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+    clearBtn: { background: 'none', border: 'none', color: '#949ba4', cursor: 'pointer', fontSize: '11px' },
+    iconMr6: { marginRight: 6, fontSize: '11px' },
+};
 
 function loadRecentSearches() {
     try {
@@ -32,7 +38,7 @@ function saveRecentSearch(item) {
 
 const QuickSwitcher = ({ onClose, onNavigate, channels = [], users = [], conversations = [] }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const [query, setQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -193,11 +199,11 @@ const QuickSwitcher = ({ onClose, onNavigate, channels = [], users = [], convers
                 <div className="quick-switcher-results" id="quick-switcher-results" role="group">
                     {!query.trim() && recentSearches.length > 0 && (
                         <>
-                            <div className="result-group-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span><FaHistory style={{ marginRight: 6, fontSize: '11px' }} />{t('search.recent', 'Recent')}</span>
+                            <div className="result-group-header" style={S.groupHeaderRow}>
+                                <span><FaHistory style={S.iconMr6} />{t('search.recent', 'Recent')}</span>
                                 <button
                                     onClick={clearRecent}
-                                    style={{ background: 'none', border: 'none', color: '#949ba4', cursor: 'pointer', fontSize: '11px' }}
+                                    style={S.clearBtn}
                                     aria-label={t('search.clearRecent', 'Clear recent')}
                                 >
                                     {t('search.clear', 'Clear')}
@@ -212,7 +218,7 @@ const QuickSwitcher = ({ onClose, onNavigate, channels = [], users = [], convers
                             {grouped.channels.length > 0 && (
                                 <>
                                     <div className="result-group-header">
-                                        <FaHashtag style={{ marginRight: 6, fontSize: '11px' }} />
+                                        <FaHashtag style={S.iconMr6} />
                                         {t('search.channels', 'Channels')}
                                     </div>
                                     {grouped.channels.map((item, i) => renderItem(item, i))}
@@ -221,7 +227,7 @@ const QuickSwitcher = ({ onClose, onNavigate, channels = [], users = [], convers
                             {grouped.users.length > 0 && (
                                 <>
                                     <div className="result-group-header">
-                                        <FaAt style={{ marginRight: 6, fontSize: '11px' }} />
+                                        <FaAt style={S.iconMr6} />
                                         {t('search.users', 'Users')}
                                     </div>
                                     {grouped.users.map((item, i) =>
@@ -232,7 +238,7 @@ const QuickSwitcher = ({ onClose, onNavigate, channels = [], users = [], convers
                             {grouped.dms.length > 0 && (
                                 <>
                                     <div className="result-group-header">
-                                        <FaAt style={{ marginRight: 6, fontSize: '11px' }} />
+                                        <FaAt style={S.iconMr6} />
                                         {t('search.directMessages', 'DMs')}
                                     </div>
                                     {grouped.dms.map((item, i) =>

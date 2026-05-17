@@ -22,7 +22,7 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     const [welcomeChannels, setWelcomeChannels] = useState(
         initialConfig?.channels || [{ channelId: null, description: 'Join the chat', emoji: '💬' }]

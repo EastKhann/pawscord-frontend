@@ -13,7 +13,7 @@ export const MessageReactions = memo(({ reactions, currentUser, onToggleReaction
     const [hoveredEmoji, setHoveredEmoji] = useState(null);
     const [popupAnchor, setPopupAnchor] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const hoverTimeoutRef = useRef(null);
 
     // Group reactions by emoji

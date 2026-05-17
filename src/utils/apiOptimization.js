@@ -1,4 +1,3 @@
-import React from 'react';
 import logger from '../utils/logger';
 // ⚡ API REQUEST OPTIMIZATION
 // Enhanced fetch with caching, deduplication, and retry logic

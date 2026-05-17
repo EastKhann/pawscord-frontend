@@ -57,7 +57,7 @@ export const MessageActions = memo(
         const { t } = useTranslation();
         const [showMore, setShowMore] = useState(false);
         const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
+        const [_error, _setError] = useState(null);
         const moreRef = useRef(null);
         const dangerMenuItemStyle = { ...styles.menuItem, color: '#f23f42' };
 
@@ -75,11 +75,15 @@ export const MessageActions = memo(
         const handleReport = useCallback(async () => {
             const reason = prompt('Rapor sebebi:');
             if (reason) {
-                await fetchWithAuth(`${absoluteHostUrl}/api/messages/report/`, {
-                    method: 'POST',
-                    body: JSON.stringify({ message_id: msg.id, reason }),
-                });
-                toast.success(t('messages.reported'));
+                try {
+                    await fetchWithAuth(`${absoluteHostUrl}/api/messages/report/`, {
+                        method: 'POST',
+                        body: JSON.stringify({ message_id: msg.id, reason }),
+                    });
+                    toast.success(t('messages.reported'));
+                } catch (err) {
+                    console.error('[MessageActions] Report failed:', err);
+                }
             }
         }, [msg.id, fetchWithAuth, absoluteHostUrl]);
 

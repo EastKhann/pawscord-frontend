@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const ProfileCustomization = ({ userId, fetchWithAuth, apiBaseUrl }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const {
         customization,

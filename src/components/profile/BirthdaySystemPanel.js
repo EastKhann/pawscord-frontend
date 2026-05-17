@@ -317,7 +317,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
                                             <div key={bd.user_id} className="upcoming-card">
                                                 <div className="upcoming-avatar">
                                                     {bd.user_avatar ? (
-                                                        <img src={bd.user_avatar} alt="" />
+                                                        <img src={bd.user_avatar} alt={bd.user_name} />
                                                     ) : (
                                                         <div className="default-avatar">👤</div>
                                                     )}

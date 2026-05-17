@@ -8,7 +8,7 @@ import TicketDetail from '../TicketSystemPanel/TicketDetail';
 
 const TicketSystemPanel = ({ serverId, onClose }) => {
     const { t: tl } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const t = useTicketSystem(serverId);
 
     return (

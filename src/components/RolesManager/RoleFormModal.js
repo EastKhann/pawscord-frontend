@@ -25,7 +25,7 @@ const RoleFormModal = ({ role, setRole, onSave, onCancel, title, saveLabel }) =>
                 </div>
 
                 <div className="form-group">
-                    <label>Rol Rengi</label>
+                    <label>{t('roles.roleColor', 'Role Color')}</label>
                     <div className="color-picker">
                         {COLOR_PRESETS.map((preset) => (
                             <button

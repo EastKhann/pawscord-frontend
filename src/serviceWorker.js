@@ -25,7 +25,7 @@ export function register(config) {
                 checkValidServiceWorker(swUrl, config);
                 navigator.serviceWorker.ready.then(() => {
                     logger.info('🔧 Service Worker running in localhost mode');
-                });
+                }).catch((err) => console.error('Service worker ready check failed:', err));
             } else {
                 registerValidSW(swUrl, config);
             }
@@ -82,8 +82,8 @@ function checkValidServiceWorker(swUrl, config) {
                 navigator.serviceWorker.ready.then((registration) => {
                     registration.unregister().then(() => {
                         window.location.reload();
-                    });
-                });
+                    }).catch((err) => console.error('Failed to unregister service worker:', err));
+                }).catch((err) => console.error('Failed to get service worker registration for unregister:', err));
             } else {
                 registerValidSW(swUrl, config);
             }

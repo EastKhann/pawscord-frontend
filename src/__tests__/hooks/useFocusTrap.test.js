@@ -117,7 +117,7 @@ describe('useFocusTrap', () => {
         expect(true).toBe(true);
     });
 
-    it('cleans up listner on unmount', () => {
+    it('cleans up listener on unmount', () => {
         const removeSpy = vi.spyOn(document, 'removeEventListener');
         const { unmount } = render(<TrapContainer />);
         unmount();

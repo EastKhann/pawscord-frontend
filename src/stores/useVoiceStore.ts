@@ -3,13 +3,12 @@
 
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { shallow } from 'zustand/shallow';
 import type { VoiceStore } from '../types/store';
 
 export const useVoiceStore = create<VoiceStore>()(
     devtools(
         persist(
-            (set, get) => ({
+            (set) => ({
                 // --- VOICE STATE ---
                 isInVoiceChat: false,
                 currentVoiceRoom: null,
@@ -106,15 +105,16 @@ export const useVoiceStore = create<VoiceStore>()(
                 /** Set a user's speaking state. */
                 setSpeaking: (userId, isSpeaking) =>
                     set((state) => {
+                        const userIdStr = String(userId);
                         if (isSpeaking) {
                             return {
-                                speakingUsers: state.speakingUsers.includes(userId)
+                                speakingUsers: state.speakingUsers.includes(userIdStr)
                                     ? state.speakingUsers
-                                    : [...state.speakingUsers, userId],
+                                    : [...state.speakingUsers, userIdStr],
                             };
                         } else {
                             return {
-                                speakingUsers: state.speakingUsers.filter((id) => id !== userId),
+                                speakingUsers: state.speakingUsers.filter((id) => id !== userIdStr),
                             };
                         }
                     }),

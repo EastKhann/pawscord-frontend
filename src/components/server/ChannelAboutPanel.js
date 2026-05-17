@@ -29,7 +29,7 @@ const ChannelAboutPanel = ({
     const { t } = useTranslation();
     const [tab, setTab] = useState('about');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     if (!channel) return null;
 

@@ -1,6 +1,10 @@
 // frontend/src/stores/index.ts
 // Central export for all Zustand stores
 
+import { useChatStore } from './useChatStore';
+import { useUIStore } from './useUIStore';
+import { useServerStore } from './useServerStore';
+
 export { useChatStore } from './useChatStore';
 export { useUIStore } from './useUIStore';
 export { useUserStore } from './useUserStore';

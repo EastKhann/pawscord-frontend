@@ -52,9 +52,9 @@ const EventCalendar = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
         const diffMs = date - now;
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-        if (diffDays === 0) return 'Bug�n';
+        if (diffDays === 0) return 'Bugün';
         if (diffDays === 1) return t('ui.yarin_3');
-        if (diffDays > 0 && diffDays < 7) return `${diffDays} g�n sonra`;
+        if (diffDays > 0 && diffDays < 7) return `${diffDays} gün sonra`;
 
         return date.toLocaleDateString('tr-TR', {
             day: 'numeric',
@@ -71,7 +71,7 @@ const EventCalendar = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
     };
 
     if (loading) {
-        return <div style={styles.loading}>Etkinlikler y�kleniyor...</div>;
+        return <div style={styles.loading}>Etkinlikler yükleniyor...</div>;
     }
 
     return (
@@ -92,8 +92,8 @@ const EventCalendar = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
             {events.length === 0 ? (
                 <div style={styles.empty}>
                     <FaCalendarAlt style={styles.emptyIcon} />
-                    <p>Hen�z etkinlik yok</p>
-                    <p style={styles.emptySubtext}>Ilk etkinligi sen olustur!</p>
+                    <p>{t('eventCalendar.noEvents', 'No events yet')}</p>
+                    <p style={styles.emptySubtext}>{t('eventCalendar.createFirst', 'Be the first to create an event!')}</p>
                 </div>
             ) : (
                 <div style={styles.eventsList}>

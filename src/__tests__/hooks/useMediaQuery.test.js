@@ -5,12 +5,12 @@ import { renderHook, act } from '@testing-library/react';
 import { useMediaQuery } from '../../hooks/useCustomHooks';
 
 describe('useMediaQuery', () => {
-    let listners;
+    let listeners;
     let mockMatchMedia;
     let mediaObjects;
 
     beforeEach(() => {
-        listners = {};
+        listeners = {};
         mediaObjects = {};
         mockMatchMedia = vi.fn().mockImplementation((query) => {
             // Return cached object so effect re-runs read the same (mutated) state
@@ -20,10 +20,10 @@ describe('useMediaQuery', () => {
                     media: query,
                     onchange: null,
                     addEventListener: vi.fn((event, handler) => {
-                        listners[query] = handler;
+                        listeners[query] = handler;
                     }),
                     removeEventListener: vi.fn((event, handler) => {
-                        delete listners[query];
+                        delete listeners[query];
                     }),
                     addListener: vi.fn(),
                     removeListener: vi.fn(),
@@ -56,7 +56,7 @@ describe('useMediaQuery', () => {
             matches: true,
             media: query,
             addEventListener: vi.fn((event, handler) => {
-                listners[query] = handler;
+                listeners[query] = handler;
             }),
             removeEventListener: vi.fn(),
         }));
@@ -74,17 +74,17 @@ describe('useMediaQuery', () => {
 
         // Simulate the media query starting to match
         act(() => {
-            if (listners[query]) {
+            if (listeners[query]) {
                 // Update the captured media object's matches in-place
                 // (the listener reads media.matches from its closure)
                 if (mediaObjects[query]) {
                     mediaObjects[query].matches = true;
                 }
-                listners[query]();
+                listeners[query]();
             }
         });
 
-        // After change listner fires, the hook should see the new matches value
+        // After change listener fires, the hook should see the new matches value
         expect(result.current).toBe(true);
     });
 
@@ -94,14 +94,14 @@ describe('useMediaQuery', () => {
         expect(mockMatchMedia).toHaveBeenCalledWith('(prefers-color-scheme: dark)');
     });
 
-    // ── 5. Cleans up event listner on unmount ──
-    it('should remove event listner on unmount', () => {
+    // ── 5. Cleans up event listener on unmount ──
+    it('should remove event listener on unmount', () => {
         const removeEventListener = vi.fn();
         mockMatchMedia.mockImplementation((query) => ({
             matches: false,
             media: query,
             addEventListener: vi.fn((event, handler) => {
-                listners[query] = handler;
+                listeners[query] = handler;
             }),
             removeEventListener,
         }));

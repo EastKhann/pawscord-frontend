@@ -23,7 +23,7 @@ const S = {
 const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const r = useRaidProtection(serverId, fetchWithAuth, apiBaseUrl);
 
     return (
@@ -80,7 +80,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                         <div style={styles.statValue}>
                             {r.protection.enabled ? 'ACTIVE' : 'OFF'}
                         </div>
-                        <div style={styles.statLabel}>Durum</div>
+                        <div style={styles.statLabel}>{t('common.status', 'Status')}</div>
                     </div>
                 </div>
 
@@ -167,15 +167,15 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                                 style={styles.select}
                                 disabled={!r.protection.enabled}
                             >
-                                <option value="low">Low</option>
-                                <option value="medium">Medium</option>
-                                <option value="high">High</option>
+                                <option value="low">{t('common.low', 'Low')}</option>
+                                <option value="medium">{t('common.medium', 'Medium')}</option>
+                                <option value="high">{t('common.high', 'High')}</option>
                             </select>
                         </div>
 
                         <div style={styles.setting}>
                             <div style={styles.settingInfo}>
-                                <div style={styles.settingLabel}>Auto-Kick Suspicious Accounts</div>
+                                <div style={styles.settingLabel}>{t('moderation.autoKickLabel', 'Auto-Kick Suspicious Accounts')}</div>
                                 <div style={styles.settingDesc}>
                                     {t('moderation.autoKickSuspicious', 'Automatically kick accounts marked as suspicious')}
                                 </div>

@@ -143,7 +143,7 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                     </p>
                 </div>
                 <button aria-label={t('apiKeys.createKey', 'Create API key')} onClick={createKey} style={S.flex}>
-                    <FaPlus /> Yeni Anahtar
+                    <FaPlus /> {t('apiKeys.newKey', 'New Key')}
                 </button>
             </div>
 

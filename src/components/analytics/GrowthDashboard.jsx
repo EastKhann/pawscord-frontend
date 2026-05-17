@@ -27,7 +27,9 @@ GrowthDashboard.propTypes = {};
 export default function GrowthDashboard() {
     const { t } = useTranslation();
     const [metrics, setMetrics] = useState([]);
-    const [totals, setTotals] = useState({});
+    // 🔥 Initial state defaults — empty {} causes NaN cascade (totals.users / 1000 = NaN)
+    // because all keys are undefined until API loads.
+    const [totals, setTotals] = useState({ users: 0, revenue: 0, waitlist: 0 });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -89,9 +91,14 @@ export default function GrowthDashboard() {
     }
 
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
-    const goalUsersFillStyle = { width: `${Math.min((totals.users / 1000) * 100, 100)}%` };
-    const goalRevFillStyle = { width: `${Math.min((totals.revenue / 12 / 250) * 100, 100)}%` };
-    const goalWaitlistFillStyle = { width: `${Math.min((totals.waitlist / 200) * 100, 100)}%` };
+    // 🔥 NaN guard'lar: totals.X undefined olduğunda 0 fallback
+    const goalUsersFillStyle = { width: `${Math.min(((totals.users || 0) / 1000) * 100, 100)}%` };
+    const goalRevFillStyle = {
+        width: `${Math.min(((totals.revenue || 0) / 12 / 250) * 100, 100)}%`,
+    };
+    const goalWaitlistFillStyle = {
+        width: `${Math.min(((totals.waitlist || 0) / 200) * 100, 100)}%`,
+    };
 
     return (
         <div aria-label={t('analytics.growthDashboard', 'Growth dashboard')} className="growth-dashboard">
@@ -120,17 +127,22 @@ export default function GrowthDashboard() {
                         {t('growth.avgDailyActive', 'Avg Daily Active')}
                     </div>
                     <div className="metric-change">
-                        {((avgActiveRate / totals.users) * 100).toFixed(1)}%{' '}
-                        {t('growth.rate', 'rate')}
+                        {/* 🔥 NaN guard: 0 user / 0 revenue durumunda 0/0 = NaN dashboardu kirletiyordu */}
+                        {totals.users > 0
+                            ? ((avgActiveRate / totals.users) * 100).toFixed(1)
+                            : '0.0'}
+                        % {t('growth.rate', 'rate')}
                     </div>
                 </div>
 
                 <div className="metric-card">
                     <div className="metric-icon">💰</div>
-                    <div className="metric-value">${totals.revenue?.toLocaleString()}</div>
+                    <div className="metric-value">
+                        ${(totals.revenue || 0).toLocaleString()}
+                    </div>
                     <div className="metric-label">{t('growth.totalRevenue', 'Total Revenue')}</div>
                     <div className="metric-change positive">
-                        {t('growth.mrr', 'MRR')}: ${(totals.revenue / 12).toFixed(2)}
+                        {t('growth.mrr', 'MRR')}: ${((totals.revenue || 0) / 12).toFixed(2)}
                     </div>
                 </div>
 
@@ -301,12 +313,16 @@ export default function GrowthDashboard() {
                 <table className="stats-table">
                     <thead>
                         <tr>
-                            <th>{t('date')}</th>
-                            <th>{t('new_users')}</th>
-                            <th>{t('active_users')}</th>
-                            <th>{t('premium')}</th>
-                            <th>{t('revenue')}</th>
-                            <th>{t('top_source')}</th>
+                            {/* 🔥 FIX: 'premium' top-level i18n key TR'de obje (nested) →
+                                t('premium') "key returned an object" warning + DOM'a hata
+                                yazısı düşüyordu. Belirgin scalar key'lere geçildi + her birine
+                                İngilizce fallback. */}
+                            <th>{t('common.date', 'Date')}</th>
+                            <th>{t('growth.newUsers', 'New Users')}</th>
+                            <th>{t('growth.activeUsers', 'Active Users')}</th>
+                            <th>{t('growth.premium', 'Premium')}</th>
+                            <th>{t('growth.revenue', 'Revenue')}</th>
+                            <th>{t('growth.topSource', 'Top Source')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -334,14 +350,15 @@ export default function GrowthDashboard() {
 
             {/* Goals Progress */}
             <div className="goals-card">
-                <h3>{t('🎯_launch_goals_jan_22_-_feb_5')}</h3>
+                <h3>🎯 {t('growth.launchGoals', 'Launch Goals')}</h3>
                 <div className="goal-item">
-                    <div className="goal-label">{t('1000_users')}</div>
+                    <div className="goal-label">{t('growth.goal1000Users', '1000 Users')}</div>
                     <div className="progress-bar">
                         <div className="progress-fill" style={goalUsersFillStyle} />
                     </div>
                     <div className="goal-value">
-                        {totals.users} / 1000 ({((totals.users / 1000) * 100).toFixed(1)}%)
+                        {totals.users || 0} / 1000 (
+                        {(((totals.users || 0) / 1000) * 100).toFixed(1)}%)
                     </div>
                 </div>
 
@@ -350,16 +367,19 @@ export default function GrowthDashboard() {
                     <div className="progress-bar">
                         <div className="progress-fill" style={goalRevFillStyle} />
                     </div>
-                    <div className="goal-value">${(totals.revenue / 12).toFixed(2)} / $250</div>
+                    <div className="goal-value">
+                        ${((totals.revenue || 0) / 12).toFixed(2)} / $250
+                    </div>
                 </div>
 
                 <div className="goal-item">
-                    <div className="goal-label">{t('200_waitlist')}</div>
+                    <div className="goal-label">{t('growth.goal200Waitlist', '200 Waitlist')}</div>
                     <div className="progress-bar">
                         <div className="progress-fill" style={goalWaitlistFillStyle} />
                     </div>
                     <div className="goal-value">
-                        {totals.waitlist} / 200 ({((totals.waitlist / 200) * 100).toFixed(1)}%)
+                        {totals.waitlist || 0} / 200 (
+                        {(((totals.waitlist || 0) / 200) * 100).toFixed(1)}%)
                     </div>
                 </div>
             </div>

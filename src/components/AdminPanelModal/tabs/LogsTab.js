@@ -1,6 +1,5 @@
 ﻿/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
 import { useAdminAPIContext } from '../AdminAPIContext';
 import { FaCode, FaDownload, FaSync, FaTimes } from 'react-icons/fa';
 import styles from '../styles';
@@ -86,6 +85,7 @@ const LogsTab = () => {
                         value={logType}
                         onChange={(e) => setLogType(e.target.value)}
                         className={css.siW120}
+                        aria-label={t('admin.logType', 'Log type')}
                     >
                         <option value="all">{t('🔄_all')}</option>
                         <option value="audit">{t('📝_audit')}</option>
@@ -99,6 +99,7 @@ const LogsTab = () => {
                         value={logSeverity}
                         onChange={(e) => setLogSeverity(e.target.value)}
                         className={css.siW100}
+                        aria-label={t('severity')}
                     >
                         <option value="">{t('severity')}</option>
                         <option value="info">{t('ℹ️_info')}</option>
@@ -112,6 +113,7 @@ const LogsTab = () => {
                         value={logSearch}
                         onChange={(e) => setLogSearch(e.target.value)}
                         className={css.siW150}
+                        aria-label={t('common.search', 'Search logs')}
                     />
                     <button
                         aria-label={t('admin.refreshLogs', 'Refresh system logs')}
@@ -148,6 +150,7 @@ const LogsTab = () => {
                     value={logDateFrom}
                     onChange={(e) => setLogDateFrom(e.target.value)}
                     className={css.siW140}
+                    aria-label={t('admin.dateFrom', 'Date from')}
                 />
                 <span className={css.textGray}>→</span>
                 <input
@@ -155,6 +158,7 @@ const LogsTab = () => {
                     value={logDateTo}
                     onChange={(e) => setLogDateTo(e.target.value)}
                     className={css.siW140}
+                    aria-label={t('admin.dateTo', 'Date to')}
                 />
                 {(logDateFrom || logDateTo) && (
                     <button

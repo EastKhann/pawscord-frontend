@@ -1,6 +1,6 @@
 ﻿// frontend/src/components/DJModal.js
 
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 const ReactPlayer = lazy(() => import('react-player'));
@@ -13,7 +13,7 @@ const DJModal = ({ onClose, ws, roomSlug }) => {
     const loadingStyle = { color: '#fff', padding: '20px', textAlign: 'center' };
     const [queue, setQueue] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [currentUrl, setCurrentUrl] = useState('');
     const [inputUrl, setInputUrl] = useState('');
     const [playing, setPlaying] = useState(false);

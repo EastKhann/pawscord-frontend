@@ -1,5 +1,4 @@
 ﻿// frontend/src/components/MessageInput/VoiceRecordingUI.js
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FaMicrophone, FaPaperPlane, FaTimes, FaTrash } from 'react-icons/fa';
 import styles from './styles';
@@ -160,6 +159,7 @@ const VoiceRecordingUI = ({
             title={t('send_enter')}
             aria-label={t('ui.mesaj_gonder')}
             disabled={disabled}
+            data-testid="message-send-btn"
         >
             <FaPaperPlane aria-hidden="true" />
         </button>

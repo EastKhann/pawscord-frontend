@@ -16,7 +16,7 @@ const S = {
 const ThemeStoreModal = ({ onClose, currentTheme, onThemeChange }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Theme Store' });
     return (
         <div style={styles.overlay} {...overlayProps}>

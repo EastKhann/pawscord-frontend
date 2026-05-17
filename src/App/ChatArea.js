@@ -1,10 +1,10 @@
 /**
- * ?? ChatArea � Main chat rendering section
+ * ?ChatArea — Main chat rendering section
  * Extracted from App.js: header, message list, drag overlay, input container
  */
-import React, { Suspense, memo, useCallback, useMemo, useState, useRef, useEffect } from 'react';
+import { Suspense, memo, useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FaBell, FaUsers, FaSearch, FaEllipsisV } from 'react-icons/fa';
+import { FaBell, FaUsers, FaSearch, FaEllipsisV, FaBars, FaArrowLeft } from 'react-icons/fa';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import ScrollToBottomButton from '../components/chat/ScrollToBottomButton';
 import MessageDateDivider from '../components/chat/MessageDateDivider';
@@ -191,7 +191,7 @@ const ChatArea = memo(function ChatArea({
         const handleViewportResize = () => {
             const newH = window.visualViewport.height;
             if (newH < prevH - 80) {
-                // Keyboard appeared � scroll message list to bottom
+                // Keyboard appeared — scroll message list to bottom
                 setTimeout(() => scrollToBottom('smooth'), 120);
             }
             prevH = newH;
@@ -499,14 +499,23 @@ const ChatArea = memo(function ChatArea({
             {/* CHAT HEADER */}
             <div style={_st1055} className="chat-header-elevated">
                 <div>
+                    {/* 🔥 FIX: önceden literal "?" placeholder vardı; uygun icon'lar eklendi */}
                     {isMobile && !isLeftSidebarVisible && (
-                        <button onClick={handleOpenLeftSidebar} style={_st1056}>
-                            ?
+                        <button
+                            onClick={handleOpenLeftSidebar}
+                            style={_st1056}
+                            aria-label={t('nav.openSidebar', 'Sidebar aç')}
+                        >
+                            <FaBars />
                         </button>
                     )}
                     {isMobile && (activeChat.type === 'dm' || activeChat.type === 'room') && (
-                        <button onClick={handleBackToWelcome} style={_st1057}>
-                            ?
+                        <button
+                            onClick={handleBackToWelcome}
+                            style={_st1057}
+                            aria-label={t('nav.back', 'Geri')}
+                        >
+                            <FaArrowLeft />
                         </button>
                     )}
                     <h2

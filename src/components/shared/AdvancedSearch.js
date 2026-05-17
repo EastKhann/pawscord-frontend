@@ -12,7 +12,7 @@ import './AdvancedSearch.css';
 const AdvancedSearch = memo(({ messages = [], onClose, onSelectMessage, allUsers = [] }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [filters, setFilters] = useState({
         user: '',

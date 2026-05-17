@@ -1,4 +1,4 @@
-﻿export const styles = {
+﻿const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -202,3 +202,6 @@
     infoContent: { color: '#fff', fontSize: '14px' },
     infoList: { margin: '8px 0 0 0', paddingLeft: '20px', color: '#b5bac1' },
 };
+
+export { styles };
+export default styles;

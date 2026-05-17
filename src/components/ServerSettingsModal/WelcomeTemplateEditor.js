@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaRobot } from 'react-icons/fa';
 import toast from '../../utils/toast';
@@ -244,7 +244,7 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
 
             {/* Channel Selector */}
             <div>
-                <label className={css.fieldLabel}>Welcome Channel</label>
+                <label className={css.fieldLabel}>{t('welcomeTemplate.channel', 'Welcome Channel')}</label>
                 <select
                     value={welcomeChannelId}
                     onChange={(e) => setWelcomeChannelId(e.target.value)}
@@ -268,7 +268,7 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
 
             {/* Template Editor */}
             <div>
-                <label className={css.fieldLabel}>Message Template</label>
+                <label className={css.fieldLabel}>{t('welcomeTemplate.messageTemplate', 'Message Template')}</label>
                 <textarea
                     value={template}
                     onChange={(e) => setTemplate(e.target.value)}
@@ -287,7 +287,7 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
 
             {/* Variables */}
             <div>
-                <label className={css.fieldLabel}>Available Variables</label>
+                <label className={css.fieldLabel}>{t('welcomeTemplate.variables', 'Available Variables')}</label>
                 <div className={css.flexWrapGap8}>
                     {variables.map((v) => (
                         <button
@@ -319,7 +319,7 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
             {/* Live Preview */}
             {preview && (
                 <div>
-                    <label className={css.fieldLabel}>Preview</label>
+                    <label className={css.fieldLabel}>{t('common.preview', 'Preview')}</label>
                     <div style={S.bg4}>{preview}</div>
                 </div>
             )}

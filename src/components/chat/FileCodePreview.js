@@ -271,7 +271,7 @@ const FileCodePreview = ({ fileUrl, fileName, fileSize, onDownload }) => {
                     (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
                 }
             >
-                <span style={styles.footerText}>Daralt</span>
+                <span style={styles.footerText}>{t('filePreview.collapse', 'Collapse')}</span>
             </div>
         )
     }

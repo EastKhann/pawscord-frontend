@@ -16,7 +16,7 @@ const MobileNav = ({ activeTab = 'chats', onTabChange }) => {
     const { t } = useTranslation();
     const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     useEffect(() => {
         // Hide navbar when keyboard is visible

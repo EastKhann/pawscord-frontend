@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     FaTimes,
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Live Stream' });
     const s = getStyles(isMobile);
     const stream = useLiveStream({ roomSlug, ws, onClose });
@@ -68,7 +68,7 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
                                 ) : (
                                     <div style={s.placeholder}>
                                         <FaVideo size={64} />
-                                        <p>Baslamak i�in "Yayini Baslat" butonuna tiklayin</p>
+                                        <p>Başlamak için "Yayını Başlat" butonuna tıklayın</p>
                                     </div>
                                 )}
                             </div>
@@ -110,7 +110,7 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
                                             ) : (
                                                 <FaMicrophone />
                                             )}
-                                            {stream.isMuted ? 'Sesi A�' : 'Sessize Al'}
+                                            {stream.isMuted ? 'Sesi Aç' : 'Sessize Al'}
                                         </button>
                                         <button
                                             aria-label={t('liveStream.stopStream', 'Stop stream')}

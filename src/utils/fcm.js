@@ -20,6 +20,32 @@ const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
 
 let firebaseApp;
 let messaging;
+let tokenRefreshTimer;
+
+const TOKEN_REFRESH_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
+
+// Refresh FCM token periodically
+const startTokenRefreshTimer = () => {
+    if (tokenRefreshTimer) clearInterval(tokenRefreshTimer);
+    tokenRefreshTimer = setInterval(() => {
+        refreshFCMToken();
+    }, TOKEN_REFRESH_INTERVAL);
+};
+
+// Refresh FCM token
+const refreshFCMToken = async () => {
+    try {
+        if (messaging && Notification.permission === 'granted') {
+            const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+            if (token) {
+                await registerTokenWithBackend(token);
+                logger.info('✅ FCM token refreshed');
+            }
+        }
+    } catch (error) {
+        logger.error('❌ Error refreshing FCM token:', error);
+    }
+};
 
 // Initialize Firebase
 export const initializeFCM = () => {
@@ -30,6 +56,21 @@ export const initializeFCM = () => {
 
         if ('serviceWorker' in navigator && 'PushManager' in window) {
             messaging = getMessaging(firebaseApp);
+
+            // Start token refresh timer
+            startTokenRefreshTimer();
+
+            // Handle Capacitor app resume (for mobile)
+            try {
+                const { App } = require('@capacitor/app');
+                App.addListener('resume', () => {
+                    logger.info('📱 App resumed, refreshing FCM token');
+                    refreshFCMToken();
+                });
+            } catch (e) {
+                // Not in Capacitor environment
+            }
+
             return true;
         } else {
             logger.warn('⚠️ Push notifications not supported in this browser');

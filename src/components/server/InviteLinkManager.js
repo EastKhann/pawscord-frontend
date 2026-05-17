@@ -41,7 +41,7 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
     const { t } = useTranslation();
     const [showCreate, setShowCreate] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [expiresIn, setExpiresIn] = useState(86400);
     const [maxUses, setMaxUses] = useState(0);
     const [copiedId, setCopiedId] = useState(null);
@@ -73,7 +73,7 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
         <div style={S.container}>
             <div style={S.header}>
                 <div>
-                    <h3 style={S.title}>Davet Linkleri</h3>
+                    <h3 style={S.title}>{t('inviteLinks.title', 'Invite Links')}</h3>
                     <span style={S.subtitle}>{serverName}</span>
                 </div>
                 <button
@@ -164,7 +164,7 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
                             <div style={S.inviteActions}>
                                 <button
                                     aria-label={t('inviteLinks.copyLink', 'Copy link')}
-                                    title="Kopyala"
+                                    title={t('common.copy', 'Copy')}
                                 >
                                     {copiedId === invite.id ? (
                                         <FaCheck className="icon-success" />

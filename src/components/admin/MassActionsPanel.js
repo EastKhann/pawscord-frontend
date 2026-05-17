@@ -133,22 +133,22 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
                             onChange={(e) => setActionType(e.target.value)}
                             style={styles.select}
                         >
-                            <option value="ban">🔨 Yasak (Ban)</option>
+                            <option value="ban">{t('admin.massActions.ban', '🔨 Ban')}</option>
 
-                            <option value="kick">💢 Kick (At)</option>
+                            <option value="kick">{t('admin.massActions.kick', '💢 Kick')}</option>
 
-                            <option value="mute">🔇 Mute (Mute)</option>
+                            <option value="mute">{t('admin.massActions.mute', '🔇 Mute')}</option>
 
-                            <option value="timeout">⏰ Timeout</option>
+                            <option value="timeout">{t('admin.massActions.timeout', '⏰ Timeout')}</option>
 
-                            <option value="warn">⚠️ Warn (Uyar)</option>
+                            <option value="warn">{t('admin.massActions.warn', '⚠️ Warn')}</option>
 
-                            <option value="delete_messages">🗑️ Delete Messages</option>
+                            <option value="delete_messages">{t('admin.massActions.deleteMessages', '🗑️ Delete Messages')}</option>
                         </select>
                     </div>
 
                     <div style={styles.field}>
-                        <label style={styles.label}>User IDs (one per line)</label>
+                        <label style={styles.label}>{t('admin.massActions.userIdsLabel', 'User IDs (one per line)')}</label>
 
                         <textarea
                             value={userIds}
@@ -187,7 +187,7 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
                     </div>
 
                     <div style={styles.warning}>
-                        ⚠️ Bu eylem{' '}
+                        {t('admin.massActions.warningPrefix', '⚠️ This action will affect')}{' '}
                         <strong>{userIds.split('\n').filter((id) => id.trim()).length}</strong>{' '}
                         {t('massActions.usersAffected', 'users will be affected!')}
                     </div>

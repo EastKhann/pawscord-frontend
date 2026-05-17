@@ -1,5 +1,4 @@
 // frontend/src/RoomList/VoiceControlBar.js
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
@@ -103,7 +102,7 @@ const VoiceControlBar = ({
                             fontSize: '8px',
                         }}
                     >
-                        {isMuted ? '??' : '??'}
+                        {isMuted ? '🔇' : '🎤'}
                     </div>
                 </div>
                 <div style={_st5}>

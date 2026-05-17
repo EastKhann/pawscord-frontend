@@ -92,7 +92,7 @@ const CinemaPlayer = () => {
                     </div>
                 )}
 
-                <Suspense fallback={<div>Oynatici y�kleniyor...</div>}>
+                <Suspense fallback={<div>Oynatıcı yükleniyor...</div>}>
                     <ReactPlayer
                         ref={playerRef}
                         url={url}

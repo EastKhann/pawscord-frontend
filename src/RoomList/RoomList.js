@@ -1,5 +1,5 @@
-﻿// frontend/src/RoomList.js — Orchestrator (refactored from 1961 lines)
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+// frontend/src/RoomList.js — Orchestrator (refactored from 1961 lines)
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FaCog } from '../utils/iconOptimization';
 import { useTranslation } from 'react-i18next';
@@ -162,7 +162,7 @@ const RoomList = ({
     // --- State ---
     const [selectedServerId, setSelectedServerId] = useState('home');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [collapsedCategories, setCollapsedCategories] = useState({});
     const [draggedServerId, setDraggedServerId] = useState(null);
     const [dropTargetIndex, setDropTargetIndex] = useState(null);
@@ -677,7 +677,11 @@ const RoomList = ({
             />
 
             {/* New independent Join Server modal */}
-            <JoinServerModal isOpen={showDiscovery} onClose={() => setShowDiscovery(false)} />
+            <JoinServerModal 
+                isOpen={showDiscovery} 
+                onClose={() => setShowDiscovery(false)} 
+                setSelectedServerId={setSelectedServerId}
+            />
         </div>
     );
 };

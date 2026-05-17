@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import logger from '../utils/logger';
@@ -23,7 +23,7 @@ const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers, isDeaf
             if (audioContext.state === 'suspended') {
                 audioContext.resume().then(() => {
                     logger.audio('AudioContext resumed successfully');
-                });
+                }).catch((err) => console.error('Failed to resume AudioContext:', err));
             }
 
             setGlobalAudioEnabled(true);

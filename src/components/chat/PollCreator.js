@@ -9,15 +9,21 @@ import { getApiBase } from '../../utils/apiEndpoints';
 import logger from '../../utils/logger';
 import './PollCreator.css';
 
+let _pollOptionId = 0;
+const newOptionId = () => ++_pollOptionId;
+
 const PollCreator = ({ roomSlug, onClose, onPollCreated, isMobile }) => {
     const { t } = useTranslation();
     const [question, setQuestion] = useState('');
-    const [options, setOptions] = useState(['', '']);
+    const [options, setOptions] = useState([
+        { id: newOptionId(), text: '' },
+        { id: newOptionId(), text: '' },
+    ]);
     const [duration, setDuration] = useState(24); // hours
     const [isCreating, setIsCreating] = useState(false);
 
     const addOption = () => {
-        if (options.length < 10) setOptions([...options, '']);
+        if (options.length < 10) setOptions([...options, { id: newOptionId(), text: '' }]);
     };
 
     const removeOption = (index) => {
@@ -26,7 +32,7 @@ const PollCreator = ({ roomSlug, onClose, onPollCreated, isMobile }) => {
 
     const updateOption = (index, value) => {
         const newOptions = [...options];
-        newOptions[index] = value;
+        newOptions[index] = { ...newOptions[index], text: value };
         setOptions(newOptions);
     };
 
@@ -35,7 +41,7 @@ const PollCreator = ({ roomSlug, onClose, onPollCreated, isMobile }) => {
             toast.error(t('poll.questionRequired'));
             return;
         }
-        const validOptions = options.filter((o) => o.trim());
+        const validOptions = options.map((o) => o.text).filter((t) => t.trim());
         if (validOptions.length < 2) {
             toast.error(t('poll.optionsRequired'));
             return;
@@ -106,10 +112,10 @@ const PollCreator = ({ roomSlug, onClose, onPollCreated, isMobile }) => {
                 <div className="poll-form-group">
                     <label className="poll-label">{t('poll.options', 'Options')} (2-10)</label>
                     {options.map((option, index) => (
-                        <div key={index} className="poll-option-container">
+                        <div key={option.id} className="poll-option-container">
                             <input
                                 type="text"
-                                value={option}
+                                value={option.text}
                                 onChange={(e) => updateOption(index, e.target.value)}
                                 placeholder={`Option ${index + 1}`}
                                 className="poll-option-input"

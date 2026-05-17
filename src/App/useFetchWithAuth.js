@@ -84,6 +84,24 @@ export default function useFetchWithAuth() {
                     else throw new Error('Unauthorized');
                 }
 
+                // 🔥 Centralized JSON guard: bazı durumlarda (Cloudflare under-attack,
+                // SW HTML fallback, backend catch-all view) sunucu 200 OK ama HTML body
+                // döndürür. response.json() çağrılınca SyntaxError fırlatıp 365+ callsite'da
+                // log spam'i yaratıyor. Bunun yerine response.json'ı sarmalayıp non-JSON
+                // 200 response'lar için sessizce {} dönüyoruz — caller'ın `data.x || []`
+                // pattern'leri güvenli şekilde fallback alır.
+                const originalJson = response.json.bind(response);
+                response.json = async () => {
+                    const ct = response.headers.get('content-type') || '';
+                    if (!ct.toLowerCase().includes('application/json')) {
+                        logger.warn(
+                            `[fetchWithAuth] Non-JSON response from ${url} (content-type: ${ct || 'empty'}); returning {} fallback`
+                        );
+                        return {};
+                    }
+                    return originalJson();
+                };
+
                 return response;
             } catch (err) {
                 if (err.message === 'Unauthorized') throw err;

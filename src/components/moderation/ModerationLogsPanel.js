@@ -144,7 +144,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
             mute: 'Sessize alma',
             warn: t('common.warning'),
             delete_messages: 'Message Deletion',
-            automod: 'AutoMod',
+            automod: t('moderation.automod', 'AutoMod'),
         };
         return labels[type] || type;
     };
@@ -233,11 +233,11 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                     <div className="stats-bar">
                         <div className="stat-item">
                             <span className="stat-value">{stats.total_actions}</span>
-                            <span className="stat-label">Toplam</span>
+                            <span className="stat-label">{t('common.total', 'Total')}</span>
                         </div>
                         <div className="stat-item">
                             <span className="stat-value">{stats.this_week}</span>
-                            <span className="stat-label">Bu Hafta</span>
+                            <span className="stat-label">{t('common.thisWeek', 'This Week')}</span>
                         </div>
                         <div className="stat-item ban">
                             <FaBan />
@@ -295,7 +295,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                     <option value="mute">{t('moderation.muteAction', 'Mute')}</option>
                                     <option value="warn">{t('moderation.warnAction', 'Warn')}</option>
                                     <option value="delete_messages">{t('moderation.deleteMessages', 'Delete Messages')}</option>
-                                    <option value="automod">AutoMod</option>
+                                    <option value="automod">{t('moderation.automod', 'AutoMod')}</option>
                                 </select>
                             </div>
                             <div className="filter-group">
@@ -470,7 +470,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                                         expandedLog === log.id ? null : log.id
                                                     )
                                                 }
-                                                title="Detaylar"
+                                                title={t('common.details', 'Details')}
                                             >
                                                 {expandedLog === log.id ? (
                                                     <FaChevronUp />
@@ -487,7 +487,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
                                                     aria-label={t('modLogs.revertAction', 'Revert action')}
                                                     className="revert-btn"
                                                     onClick={() => handleRevertAction(log.id)}
-                                                    title="Geri Al"
+                                                    title={t('common.revert', 'Undo')}
                                                 >
                                                     <FaUndo />
                                                 </button>

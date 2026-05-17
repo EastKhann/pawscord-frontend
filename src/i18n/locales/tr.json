@@ -1,13 +1,13 @@
 {
   "0_sınırsız": "0 = Sınırsız",
-  "0ms_anında": "0ms Aninda",
+  "0ms_anında": "0ms Anında",
   "10_saniyede_maksimum_message_sayısı": "10 saniyede maksimum mesaj sayısı",
   "150_hz_çok_agresif": "150 Hz Cok Agresif",
   "1_gün": "1 Gün",
   "1_qr_kodu_tarayın": "1. QR Kodu Tarayın",
-  "200ms_yumuşak": "200ms Yumusak",
-  "200ms_önerilen": "200ms Onerilen",
-  "20ms_yumuşak": "20ms Yumusak",
+  "200ms_yumuşak": "200ms Yumuşak",
+  "200ms_önerilen": "200ms Önerilen",
+  "20ms_yumuşak": "20ms Yumuşak",
   "256_kbps_çok_high": "256 Kbps = Çok Yüksek",
   "2_doğrulama_kodunu_girin": "2. Doğrulama Kodunu Girin",
   "2fa_aktif_-_hesabınız_korunuyor": "2FA Aktif — Hesabınız Korunuyor",
@@ -15,11 +15,11 @@
   "2fa_yı_etkinleştir": "2FA'yı Etkinleştir",
   "30_gün": "30 Gün",
   "3_yedek_kodlarınız": "3. Yedek Kodlarınız",
-  "48_khz_önerilen": "48 Khz Onerilen",
-  "50ms_hızlı": "50ms Hizli",
-  "5ms_hızlı": "5ms Hizli",
+  "48_khz_önerilen": "48 Khz Önerilen",
+  "50ms_hızlı": "50ms Hızlı",
+  "5ms_hızlı": "5ms Hızlı",
   "7_gün": "7 Gün",
-  "80_hz_önerilen": "80 Hz Onerilen",
+  "80_hz_önerilen": "80 Hz Önerilen",
   "about_system_bot": "Sistem botu hakkında",
   "access": "Erişim",
   "access_token": "Erişim tokeni",
@@ -127,7 +127,7 @@
     "sendBroadcast": "Duyuru gönder",
     "scheduleBroadcast": "Duyuru zamanla",
     "schedule": "Zamanla",
-    "broadcast": "Yayinlar",
+    "broadcast": "Yayınlar",
     "refreshDashboard": "Paneli yenile",
     "refreshLogs": "Sistem loglarını yenile",
     "exportCsv": "Logları CSV olarak dışa aktar",
@@ -194,7 +194,8 @@
       "anErrorOccurred": "Bir hata oluştu",
       "applied": "{{count}} kullanıcıya {{action}} işlemi uygulandı",
       "enterUserIds": "Kullanıcı ID'lerini girin",
-      "operationFailed": "İşlem başarısız"
+      "operationFailed": "İşlem başarısız",
+      "userIdsLabel": "Kullanıcı ID'leri (her satıra bir tane)"
     },
     "mod": {
       "auditLog": "Denetim Kaydı",
@@ -223,7 +224,6 @@
       "cacheCleared": "🧹 Önbelleğ temizlendi!",
       "connectedCount": "Bağlı",
       "consoleTodo": "Konsol — yakında",
-      "cryptoSignals": "Kripto Sinyalleri",
       "dashboard": "Kontrol Paneli",
       "database": "Veritabanı Yönetimi",
       "dbConnections": "DB Bağlantısı",
@@ -238,6 +238,7 @@
       "featureWhitelistDesc": "Bu liste, ücretsiz kullanıcılara Premium gerektirmeden seçili bölümlere erişim sağlar.",
       "featureWhitelistEmpty": "Özellik whitelist boş",
       "featureWhitelistLoadError": "Özellik whitelist yüklenemedi",
+      "whitelist": "Beyaz Liste",
       "fileCount": "Dosya Sayısı",
       "fileStats": "Dosya İstatistikleri",
       "filteredRecords": "Filtredeki Kayıt",
@@ -319,10 +320,10 @@
     },
     "reports": "Raporlar",
     "restart": "Yeniden Başlat",
-    "security": "Guvenlik",
+    "security": "Güvenlik",
     "serverSideOnly": "Bu özellik güvenlik nedeniyle sunucu tarafında yapılmalıdır",
     "servers": "Sunucular",
-    "systemHealth": "Sistem sagligi",
+    "systemHealth": "Sistem sağlığı",
     "totalMessages": "Toplam Mesajlar",
     "totalServers": "Toplam Sunucular",
     "totalUsers": "Toplam Kullanıcılar",
@@ -410,22 +411,22 @@
     "webhookDelete": "Webhook Silme",
     "emojiCreate": "Emoji Ekleme",
     "emojiDelete": "Emoji Silme",
-    "statsCard": "Istatistik karti",
+    "statsCard": "İstatistik karti",
     "overviewTab": "Genel bakis sekmesi",
     "premiumTab": "Premium sekmesi",
     "serversTab": "Sunucular sekmesi",
-    "usersTab": "Kullanicilar sekmesi",
+    "usersTab": "Kullanıcılar sekmesi",
     "deleteConfirmModal": "Silme onayi",
     "serverDetailModal": "Sunucu detayi",
-    "userDetailModal": "Kullanici detayi",
-    "database": "Veritabani",
+    "userDetailModal": "Kullanıcı detayi",
+    "database": "Veritabanı",
     "moderation": "Moderasyon",
-    "quickActions": "Hizli islemler",
-    "tools": "Araclar",
-    "quickActionsTab": "Hizli islemler sekmesi",
-    "systemHealthTab": "Sistem sagligi sekmesi",
-    "toolsTab": "Araclar sekmesi",
-    "inputValue": "Giris degeri"
+    "quickActions": "Hızlı işlemler",
+    "tools": "Araçlar",
+    "quickActionsTab": "Hızlı işlemler sekmesi",
+    "systemHealthTab": "Sistem sağlığı sekmesi",
+    "toolsTab": "Araçlar sekmesi",
+    "inputValue": "Giris değeri"
   },
   "adminActions": {
     "actionConfirm": "İşlem Onayı",
@@ -510,7 +511,7 @@
     "toxicityDesc": "Toksik içerik için hassasiyet seviyesi",
     "toxicityThreshold": "Toksisite Eşiği",
     "flagCard": "Bayrak karti",
-    "saveSettings": "Ayarlari kaydet"
+    "saveSettings": "Ayarları kaydet"
   },
   "ai_powered": "Yapay Zeka destekli",
   "algılama_kalıpları": "Algılama Kalıpları",
@@ -563,9 +564,9 @@
     "chartsSection": "Grafikler bolumu",
     "overviewCards": "Genel bakis kartlari",
     "simpleChart": "Grafik",
-    "dashboard": "Gelismis analitik paneli",
-    "growthDashboard": "Buyume paneli",
-    "growthMetrics": "Buyume metrikleri paneli"
+    "dashboard": "Gelişmiş analitik paneli",
+    "growthDashboard": "Büyüme paneli",
+    "growthMetrics": "Büyüme metrikleri paneli"
   },
   "analyzing_activity_patterns": "Aktivite desenleri analiz ediliyor...",
   "analyzing_conversation": "Konuşma analiz ediliyor...",
@@ -611,6 +612,7 @@
     "securityDesc": "API anahtarlarınızı gizli tutun! Anahtarınıza sahip olan herkes hesabınıza erişebilir.",
     "securityDesc2": "Artık ihtiyacınız olmayan anahtarları hemen iptal edin.",
     "createKey": "API anahtarı oluştur",
+    "newKey": "Yeni Anahtar",
     "toggleVisibility": "Anahtar görünürlüğünü değiştir",
     "copyKey": "API anahtarını kopyala",
     "deleteKey": "API anahtarını sil"
@@ -625,7 +627,20 @@
   "apiUsage": {
     "title": "API Kullanım Analitiği",
     "rateLimitStatus": "İstek Sınırı Durumu",
-    "recentActivity": "Son Aktiviteler"
+    "recentActivity": "Son Aktiviteler",
+    "loading": "Analitik yükleniyor...",
+    "totalRequests": "Toplam İstekler",
+    "successRate": "Başarı Oranı",
+    "avgResponseTime": "Ort. Yanıt Süresi",
+    "errors": "Hatalar",
+    "requestsUsed": "istek kullanıldı",
+    "resettingIn": "Sıfırlanıyor:",
+    "topEndpoints": "En Çok Kullanılan Uç Noktalar",
+    "noEndpointData": "Uç nokta verisi yok",
+    "requests": "istek",
+    "avg": "ort.",
+    "error": "hata",
+    "noRecentActivity": "Son aktivite yok"
   },
   "ara": "Ara",
   "archive": {
@@ -790,10 +805,10 @@
     "triggerRequired": "❌ Lütfen tetikleyici ve yanıt girin",
     "useRegex": "Regex Kullan",
     "uses": "Kullanım",
-    "create": "Otomatik yanitlayici olustur",
-    "delete": "Otomatik yanitlayiciyi sil"
+    "create": "Otomatik yanıtlayıcı oluştur",
+    "delete": "Otomatik yanıtlayıcıyı sil"
   },
-  "autoResponder.deleteConfirm": "Bu otomatik yanitlayiciyi silmek istediginizden emin misiniz?",
+  "autoResponder.deleteConfirm": "Bu otomatik yanıtlayıcıyı silmek istediğinizden emin misiniz?",
   "autoRole": {
     "active": "✅ Otomatik rol aktif",
     "connectionError": "❌ Bağlantı hatası",
@@ -812,11 +827,11 @@
     "savePreset": "Tasarımı Kaydet",
     "title": "Avatar Stüdyosu",
     "updated": "🎨 Avatar güncellendi!",
-    "randomize": "Avatari rastgele olustur",
+    "randomize": "Avatari rastgele oluştur",
     "saveAvatar": "Avatari kaydet",
     "switchCategory": "Kategori degistir",
     "purchaseItem": "Esyayi satin al",
-    "loadPreset": "On ayari yukle"
+    "loadPreset": "On ayarı yükle"
   },
   "avatarStudio": {
     "presetSaveFailed": "❌ Hazır ayar kaydedilemedi",
@@ -826,7 +841,7 @@
     "randomized": "✅ Rastgeleleştirildi!",
     "saveFailed": "❌ Kaydetme başarısız",
     "saved": "✅ Avatar kaydedildi!",
-    "noPresets": "Henuz kayitli on ayar yok",
+    "noPresets": "Henuz kayıtlı on ayar yok",
     "preview": "Avatar onizleme"
   },
   "average": "Ortalama",
@@ -874,7 +889,7 @@
   },
   "bit_hızı_bitrate": "Bit Hızı (Bitrate)",
   "bitiş": "Bitiş",
-  "blockList.blockFailed": "Kullanici engellenemedi",
+  "blockList.blockFailed": "Kullanıcı engellenemedi",
   "bookmarkpanel.title": "Yer İmleri",
   "bookmarks.deleteError": "Yer imi silinemedi",
   "bookmarks.deleted": "Yer imi silindi",
@@ -928,10 +943,15 @@
     "showToken": "Token göster",
     "webhookUrl": "Webhook URL",
     "webhookUrlPlaceholder": "https://your-server.com/webhook",
-    "noBotsBack": "Bot listesine dön"
+    "noBotsBack": "Bot listesine dön",
+    "botNameRequired": "Bot Adı *",
+    "webhookUrlRequired": "Webhook URL *",
+    "servers": "sunucu",
+    "token": "Token",
+    "analytics": "Analitik"
   },
-  "bot.added": "Bot basariyla eklendi!",
-  "bot.deleteConfirm": "Bu botu silmek istediginizden emin misiniz?",
+  "bot.added": "Bot başarıyla eklendi!",
+  "bot.deleteConfirm": "Bu botu silmek istediğinizden emin misiniz?",
   "bot_bilgforwardni_al": "Bot bilgisi al",
   "bot_response_here": "Bot yanıtı burada",
   "botunuz_ne_yapar": "Botunuz ne yapar?",
@@ -960,11 +980,13 @@
   "change_your_server_s_display_name": "Sunucunuzun görünen adını değiştirin",
   "channel": {
     "permissions": "İzinler",
+    "general": "Genel",
     "generalTab": "Genel ayarlar",
     "permissionsTab": "İzin ayarları",
     "integrationsTab": "Entegrasyon ayarları",
     "integrations": "Entegrasyonlar",
-    "advancedTab": "Gelişmiş ayarlar"
+    "advancedTab": "Gelişmiş ayarlar",
+    "settingsTabs": "Kanal ayar sekmeleri"
   },
   "channelPerms": {
     "addFailed": "❌ İzin eklenemedi! Hata: {{error}}",
@@ -1013,7 +1035,7 @@
     "joinFailed": "Sunucuya katılınamadı",
     "joinedServer": "Sunucuya katıldınız!",
     "learnEnglish": "İngilizce Öğren",
-    "loadingMessages": "Mesajlar yukleniyor...",
+    "loadingMessages": "Mesajlar yükleniyor...",
     "loadingOlderMessages": "Eski mesajlar yükleniyor...",
     "messageDeleted": "Mesaj silindi",
     "messageEdited": "Mesaj düzenlendi",
@@ -1075,7 +1097,7 @@
     "slashCommandList": "Slash komutlari",
     "messageList": "Mesaj listesi",
     "readReceipt": "Okundu bilgisi",
-    "spoiler": "Spoiler icerik",
+    "spoiler": "Spoiler içerik",
     "toggleReaction": "Reaksiyonu degistir"
   },
   "chat.confirmAdminDelete": "⚠️ ADMIN: Bu sohbeti her iki taraf için de kalıcı olarak silmek istediğinizden emin misiniz?\\n\\nBu işlem GERİ ALINAMAZ!",
@@ -1430,8 +1452,8 @@
     "minutes": "dakika",
     "loadingParen": "(Yükleniyor...)",
     "previousPage": "Önceki sayfa",
-    "downloadApp": "Uygulamayi indir",
-    "openMembersPanel": "Uye panelini ac"
+    "downloadApp": "Uygulamayı indir",
+    "openMembersPanel": "Üye panelini aç"
   },
   "common.comingSoon": "Bu özellik yakında geliyor",
   "common.connectionError": "Bağlantı hatası",
@@ -1466,11 +1488,11 @@
     "socialMedia": "Sosyal Medya",
     "title": "Bağlantılar",
     "connected": "Bağlı",
-    "disconnect": "Baglantıyı kes",
+    "disconnect": "Bağlantıyı kes",
     "connect": "Baglan"
   },
   "connections.checking": "{{platform}} bağlantısı kontrol ediliyor...",
-  "connections.disconnectConfirm": "{{platform}} baglantisini kesmek istediginizden emin misiniz?",
+  "connections.disconnectConfirm": "{{platform}} bağlantısını kesmek istediğinizden emin misiniz?",
   "connections.disconnected": "{{platform}} bağlantısı kesildi",
   "connections.loadTimeout": "Bağlantılar yüklenemedi (zaman aşımı)",
   "connections.popupBlocked": "Açılır pencere engellendi. Lütfen tarayıcınızda açılır pencerelere izin verin.",
@@ -1779,8 +1801,8 @@
   "drafts.allDeleteFailed": "Tüm taslaklar silinemedi",
   "drafts.allDeleted": "Tüm taslaklar silindi",
   "drafts.deleteAll": "Tümünü Sil",
-  "drafts.deleteAllConfirm": "Tum {{count}} taslagi sil?",
-  "drafts.deleteConfirm": "Bu taslagi sil?",
+  "drafts.deleteAllConfirm": "Tüm {{count}} taslağı sil?",
+  "drafts.deleteConfirm": "Bu taslağı sil?",
   "drafts.deleteFailed": "Taslak silinemedi",
   "drafts.deleted": "Taslak silindi",
   "drafts.empty": "Kaydedilmiş taslak yok",
@@ -1922,14 +1944,14 @@
   "feedback_type": "Geri bildirim türü",
   "field_change_history": "Alan değişiklik geçmişi",
   "fileUpload.imagePasted": "Gorsel yapistirild!",
-  "fileUpload.uploading": "{{count}} dosya yukleniyor...",
+  "fileUpload.uploading": "{{count}} dosya yükleniyor...",
   "file_add": "Dosya ekle",
   "filter": "Filtre",
   "flags": "Bayraklar",
   "format": "Format",
   "forum": {
     "newForum": "Yeni Forum",
-    "createForum": "Forum olustur",
+    "createForum": "Forum oluştur",
     "backToForums": "Forumlara geri dön",
     "newPost": "Yeni Gönderi",
     "createPost": "Yeni gönderi oluştur",
@@ -1982,7 +2004,8 @@
     "remove": "Kaldır",
     "sent": "Gönderildi",
     "friendCode": "Arkadaş Kodu",
-    "copyFriendCode": "Arkadaş kodunu kopyala"
+    "copyFriendCode": "Arkadaş kodunu kopyala",
+    "searchFriends": "Arkadaş ara"
   },
   "games": {
     "leaderboard": "Sıralama",
@@ -2051,7 +2074,7 @@
   },
   "growth_metrics": "Büyüme metrikleri",
   "hakkımda": "Hakkımda",
-  "hassasiyet_ayarları": "Hassasiyet Ayarlari",
+  "hassasiyet_ayarları": "Hassasiyet Ayarları",
   "hatırlatma": "Hatırlatma",
   "her_day": "Her gün",
   "her_month": "Her ay",
@@ -2060,7 +2083,7 @@
   "hesabınızı_ekstra_bir_güvenlik_katmanıyla_koruyun": "Hesabınızı ekstra bir güvenlik katmanıyla koruyun",
   "high": "Yüksek",
   "high_256_kbps": "Yüksek (256 kbps)",
-  "high_önerilen": "High Onerilen",
+  "high_önerilen": "High Önerilen",
   "highlights.historyCleared": "Geçmiş temizlendi",
   "highlights.saveError": "Kaydetme hatası",
   "highlights.wordAlreadyAdded": "Bu kelime zaten ekli",
@@ -2147,14 +2170,16 @@
     "revoked": "İptal edildi",
     "expired": "Süresi doldu",
     "active": "Aktif",
-    "notFound2": "Davet bulunamadı"
+    "notFound2": "Davet bulunamadı",
+    "success": "Başarılı!",
+    "redirecting": "Ana sayfaya yönlendiriliyor..."
   },
   "invite.copied": "Davet linki kopyalandı!",
   "invite.createError": "Link oluşturulurken hata",
   "invite.createFailed": "Link oluşturulamadı",
   "invite.created": "Yeni davet linki oluşturuldu!",
   "invite.linkCopied": "Link kopyalandi! {{user}} ile paylasabilirsiniz.",
-  "invite.sent": "{{user}} kullanicisina davet gonderildi!",
+  "invite.sent": "{{user}} kullanıcısına davet gönderildi!",
   "ip": "IP",
   "ip_adresi_beyaz_listesi": "IP Adresi Beyaz Listesi",
   "ip_adresi_örn_192_168_1_1": "IP Adresi (Örn: 192.168.1.1)",
@@ -2445,14 +2470,13 @@
     "goToReply": "Yanıtlanan mesaja git",
     "loadingGame": "Oyun yükleniyor...",
     "quoteFailed": "Mesaj alıntılanamadı",
-    "transcribe": "Ses mesajını metne çevir",
+    "transcribe": "Metne Çevir",
     "convertToText": "📝 Metne dönüştür",
     "converting": "⏳ Dönüştürülüyor...",
     "quoted": "Mesaj alıntılandı!",
     "transcriptionEmpty": "Çeviri boş döndü",
     "transcriptionError": "Çeviri hatası",
     "transcriptionFailed": "Ses metne dönüştürülemedi",
-    "transcribe": "Metne Çevir",
     "searchConversation": "Sohbet ara (#kanal veya @kullanıcı)...",
     "delivered": "İletildi",
     "unpin": "Sabitlemeyi kaldır",
@@ -2462,10 +2486,10 @@
     "header": "Mesaj basligi",
     "reactions": "Mesaj reaksiyonlari",
     "editHistory": "Duzenleme gecmisi",
-    "contextMenu": "Mesaj islemleri menusu",
-    "actionsMenu": "Mesaj islemleri",
+    "contextMenu": "Mesaj işlemleri menüsü",
+    "actionsMenu": "Mesaj işlemleri",
     "showChart": "Fiyat grafikini goster",
-    "editContent": "Icerik"
+    "editContent": "İçerik"
   },
   "message.audioConvertFailed": "Ses metne dönüştürülemedi.",
   "message.quoteFailed": "Mesaj alıntılanamadı",
@@ -2518,7 +2542,7 @@
   "mikrofonu_test_et": "Mikrofonu test et",
   "minLength": "Min. uzunluk",
   "miniGames.actionFailed": "Islem basarisiz",
-  "miniGames.createFailed": "Oyun olusturulamadi",
+  "miniGames.createFailed": "Oyun oluşturulamadı",
   "miniGames.gameOver": "Oyun bitti! {{winners}} {{reward}} coin kazandi!",
   "miniGames.started": "Oyun basladi!",
   "mode": "Mod",
@@ -2620,7 +2644,7 @@
     "days30": "30 Gün",
     "permanent": "Kalıcı"
   },
-  "moderation.deleteRuleConfirm": "Bu kurali silmek istediginizden emin misiniz?",
+  "moderation.deleteRuleConfirm": "Bu kurali silmek istediğinizden emin misiniz?",
   "moderationLogs.actionUndone": "İşlem geri alındı",
   "moderationLogs.exportFailed": "Dışa aktarma başarısız",
   "moderationLogs.logsDownloaded": "Loglar indirildi",
@@ -2631,7 +2655,7 @@
   "moderatorNotes.deleted": "Not silindi",
   "moderatorNotes.loadFailed": "Notlar yüklenemedi",
   "moderatorTools.noteAdded": "Not eklendi",
-  "moderatorTools.userNoteRequired": "Kullanici ve not gerekli",
+  "moderatorTools.userNoteRequired": "Kullanıcı ve not gerekli",
   "moderator_notes": "Moderatör notları",
   "moderatorler": "Moderatörler",
   "monthly": "Aylık",
@@ -2783,8 +2807,8 @@
   "oauthApps.botsLoadFailed": "Botlar yüklenemedi",
   "oauthApps.copied": "{{label}} panoya kopyalandı",
   "oauthApps.credentials": "Client ID: {{clientId}}\nClient Secret: {{clientSecret}}\n\nBu kimlik bilgilerini güvenli bir yerde saklayın. Secret bir daha gösterilmeyecektir.",
-  "oauthApps.deleteAppConfirm": "Bu uygulamayi silmek istediginizden emin misiniz? Bu islem geri alinamaz.",
-  "oauthApps.deleteBotConfirm": "Bu botu silmek istediginizden emin misiniz? Bu islem geri alinamaz.",
+  "oauthApps.deleteAppConfirm": "Bu uygulamayi silmek istediğinizden emin misiniz? Bu islem geri alinamaz.",
+  "oauthApps.deleteBotConfirm": "Bu botu silmek istediğinizden emin misiniz? Bu islem geri alinamaz.",
   "oauthApps.nameRequired": "Uygulama adı gereklidir",
   "offline": "Çevrimdışı",
   "onayla": "Onayla",
@@ -2934,7 +2958,7 @@
     "uploading": "Yükleniyor...",
     "voiceRecording": "Ses Kaydı"
   },
-  "passkey.deleteConfirm": "{{name}} anahtarini kaldirmak istediginizden emin misiniz?",
+  "passkey.deleteConfirm": "{{name}} anahtarini kaldirmak istediğinizden emin misiniz?",
   "password": {
     "confirmPassword": "Şifre Tekrar",
     "confirmPasswordPlaceholder": "Şifreyi tekrar girin",
@@ -2966,7 +2990,7 @@
     "alreadyProcessed": "💰 Ödeme zaten işlendi! Bakiye: {{balance}} jeton",
     "balance": "Bakiye",
     "btcEthUsdc": "Bitcoin, Ethereum, USDC",
-    "buyCoins": "Coin satin al",
+    "buyCoins": "Coin satın al",
     "cancelled": "❌ Ödeme iptal edildi.",
     "coinsAdded": "🎉 {{coins}} jeton hesabınıza eklendi! Yeni bakiye: {{balance}} jeton",
     "confirmed": "🎉 {{coins}} jeton satın alma onaylandı!",
@@ -3167,10 +3191,10 @@
     "free": "ÜCRETSİZ",
     "prototypeNotice": "⚠️ Bu bir prototip - gerçek ödeme entegrasyonu yapılmamıştır"
   },
-  "premium.activated": "Basariyla aktiflestirildi!",
+  "premium.activated": "Başarıyla aktiflestirildi!",
   "premium.error": "Bir hata oluştu",
   "premium.membershipStarted": "{{tier}} uyeligi basladi!",
-  "premium.planActivated": "{{name}} basariyla aktif edildi!",
+  "premium.planActivated": "{{name}} başarıyla aktif edildi!",
   "premium.purchaseFailed": "Satın alma başarısız. Lütfen tekrar deneyin.",
   "premium.purchasing": "{{name}} - {{cycle}} plani satin aliniyor",
   "premium.upgradeFailed": "Yukseltilemedi",
@@ -3180,7 +3204,81 @@
   "preview": "Önizleme",
   "priority": "Öncelik",
   "privacy": {
-    "removeWord": "Engellenen kelimeyi kaldır"
+    "removeWord": "Engellenen kelimeyi kaldır",
+    "title": "Gizlilik Politikası",
+    "lastUpdated": "Son Güncelleme: 9 Mayıs 2026",
+    "quickSummaryLabel": "Kısaca",
+    "quickSummary": "Hesap, mesaj ve kullanım verilerinizi yalnızca Pawscord hizmetini sunmak ve geliştirmek için kullanırız. Verinizi üçüncü taraflara satmıyoruz.",
+    "section1Title": "1. Topladığımız Bilgiler",
+    "section1Intro": "Hizmeti sağlamak için aşağıdaki kategorilerde veri toplarız:",
+    "personalInfo": "Kişisel Bilgiler",
+    "accountData": "Hesap Verisi",
+    "accountDataDesc": "Kullanıcı adı, e-posta, şifre hash'i, profil fotoğrafı.",
+    "profileInfo": "Profil Bilgisi",
+    "profileInfoDesc": "Görüntüleme adı, biyografi, durum mesajı, sosyal bağlantılar.",
+    "userId": "Kullanıcı Kimliği",
+    "userIdDesc": "Sistemimizde sizi benzersiz şekilde tanımlayan kullanıcı kimliği ve arkadaş kodu.",
+    "commData": "İletişim Verisi",
+    "messages": "Mesajlar",
+    "messagesDesc": "Sohbet odaları ve DM'lerde gönderdiğiniz/aldığınız mesajlar.",
+    "mediaFiles": "Medya Dosyaları",
+    "mediaFilesDesc": "Yüklediğiniz görsel, ses, video ve diğer dosyalar.",
+    "voiceMessages": "Sesli Mesajlar",
+    "voiceMessagesDesc": "Kaydettiğiniz sesli mesajlar (yalnızca alıcıya iletilir).",
+    "techData": "Teknik Veri",
+    "techDataDesc": "IP adresi, tarayıcı/cihaz bilgisi, oturum tokenları.",
+    "deviceIds": "Cihaz Tanımlayıcıları",
+    "deviceIdsDesc": "Mobil ve masaüstü uygulamalarda push bildirimleri için anonim cihaz kimlikleri.",
+    "activityData": "Aktivite Verisi",
+    "activityDataDesc": "Hangi sunuculara/odalara katıldığınız, çevrimiçi durumunuz.",
+    "appInteractions": "Uygulama Etkileşimleri",
+    "appInteractionsDesc": "Hangi özellikleri kullandığınız (analitik amaçlı, anonim).",
+    "section2Title": "2. Bilgileri Nasıl Kullanırız",
+    "section2Intro": "Topladığımız verileri şu amaçlarla kullanırız:",
+    "use1": "Pawscord hesabınızı oluşturmak ve sürdürmek.",
+    "use2": "Mesajlarınızı doğru alıcıya iletmek.",
+    "use3": "Servisi geliştirmek ve hata ayıklamak.",
+    "use4": "Topluluk kurallarını ihlal eden davranışları tespit etmek.",
+    "use5": "Önemli güncellemeler için sizinle iletişim kurmak.",
+    "use6": "Yasal yükümlülükleri yerine getirmek.",
+    "section3Title": "3. Bilgileri Kimlerle Paylaşırız",
+    "section3Intro": "Verilerinizi yalnızca aşağıdaki durumlarda paylaşırız:",
+    "withOtherUsers": "Diğer Kullanıcılarla",
+    "withOtherUsersDesc": "Profil bilgileriniz ve mesajlarınız iletişim kurduğunuz kişilere görünür.",
+    "serviceProviders": "Hizmet Sağlayıcılarla",
+    "serviceProvidersDesc": "Sunucu (Railway, Cloudflare), depolama (R2), bildirim (FCM) gibi altyapı sağlayıcıları.",
+    "legalReqs": "Yasal Zorunluluk",
+    "legalReqsDesc": "Mahkeme kararı veya yasal süreç gerektirdiğinde.",
+    "noSell": "Verilerinizi üçüncü taraflara SATMIYORUZ.",
+    "section4Title": "4. Haklarınız",
+    "section4Intro": "GDPR ve KVKK kapsamında haklarınız:",
+    "right1": "Verilerinize erişim talep etme.",
+    "right2": "Yanlış verilerin düzeltilmesini isteme.",
+    "right3": "Hesabınızı ve verilerinizi silme.",
+    "right4": "Veri taşınabilirliği (verilerinizi indirme).",
+    "right5": "Veri işlemeye itiraz etme.",
+    "section5Title": "5. Bizimle İletişim",
+    "section5Intro": "Gizlilik soruları veya talepleri için:",
+    "howToDelete": "Hesap Silme Adımları",
+    "deleteStep1": "Ayarlar → Hesabım → Hesabı Sil'e gidin.",
+    "deleteStep2": "Şifrenizi onaylayın.",
+    "deleteStep3": "Silme isteğinizi gönderin.",
+    "deleteStep4": "30 gün bekleme süresi içinde geri alma seçeneği sunulur.",
+    "deleteStep5": "30 gün sonra tüm verileriniz kalıcı olarak silinir.",
+    "contactTitle": "İletişim",
+    "contactIntro": "Sorularınız için bize ulaşın:",
+    "email": "E-posta",
+    "website": "Web Sitesi",
+    "inApp": "Uygulama İçi",
+    "inAppDesc": "Ayarlar → Destek bölümünden bize yazın.",
+    "deviceInfo": "Cihaz Bilgisi",
+    "usageInfo": "Kullanım Bilgisi",
+    "sec1": "İletişim",
+    "sec2": "Veri",
+    "sec3": "Güvenlik",
+    "sec4": "Üçüncü Taraflar",
+    "footerTagline": "Pawscord — Topluluğunla bağlan, güvenle.",
+    "copyright": "© 2026 Pawscord. Tüm hakları saklıdır."
   },
   "privacy.connectionError": "❌ Bağlantı hatası",
   "privacy.exportFailed": "❌ İstek gönderilemedi",
@@ -3339,7 +3437,7 @@
     "manageConnections": "Bağlantıları Yönet",
     "steamId": "Steam ID",
     "spotifyUsername": "Spotify Kullanıcı Adı",
-    "instagram": "Instagram kullanici adi",
+    "instagram": "Instagram kullanıcı adi",
     "xUsername": "X (Twitter) kullanıcı adı",
     "xboxGamertag": "Xbox Gamertag",
     "resendEmail": "Doğrulama e-postasını yeniden gönder",
@@ -3352,16 +3450,16 @@
     "noActivity": "Aktivite verisi bulunamadı",
     "pronouns": "Zamir",
     "location": "Konum",
-    "twitter": "Twitter kullanici adi",
-    "github": "GitHub kullanici adi",
+    "twitter": "Twitter kullanıcı adi",
+    "github": "GitHub kullanıcı adi",
     "youtube": "YouTube kanal URL",
-    "twitch": "Twitch kullanici adi",
+    "twitch": "Twitch kullanıcı adi",
     "website": "Web sitesi URL",
     "editMode": "Düzenleme modu",
     "previewMode": "Önizleme modu",
     "saveCustomization": "Özelleştirmeyi kaydet",
     "uploadBanner": "Kapak resmi yükle",
-    "enhancedProfile": "Gelismis profil",
+    "enhancedProfile": "Gelişmiş profil",
     "phonePlaceholder": "+90 555 123 4567",
     "steamIdPlaceholder": "76561198012345678",
     "spotifyPlaceholder": "spotify_kullanicisi",
@@ -3402,7 +3500,7 @@
     "setStatus": "Durum Ayarla",
     "summarizeChannel": "Kanalı Özetle",
     "translateMessage": "Mesajı Çevir",
-    "action": "Hizli islem"
+    "action": "Hızlı islem"
   },
   "quick_reactions": "Hızlı tepkiler",
   "quiz": {
@@ -3435,7 +3533,7 @@
   "raidprotectionpanel.title": "Raid Koruması",
   "rapor_et": "Şikayet et",
   "rate": "Oran",
-  "rateLimiter.tooMany": "Cok fazla istek! Lutfen tekrar deneyin.",
+  "rateLimiter.tooMany": "Cok fazla istek! Lütfen tekrar deneyin.",
   "reaction": {
     "andMore": "ve {{count}} kişi daha...",
     "you": "sen"
@@ -3471,12 +3569,12 @@
     "networkError": "Ağ hatası: ",
     "removeError": "Yer imi kaldırılamadı: ",
     "tagRemoveError": "Etiket kaldırılamadı: ",
-    "showTagModal": "Yeni etiket olustur",
-    "filterByTag": "Etikete gore filtrele",
+    "showTagModal": "Yeni etiket oluştur",
+    "filterByTag": "Etikete göre filtrele",
     "removeBookmark": "Yer imini kaldir",
-    "createTagDialog": "Etiket olustur",
+    "createTagDialog": "Etiket oluştur",
     "selectColor": "Renk sec",
-    "createTagBtn": "Etiket olustur"
+    "createTagBtn": "Etiket oluştur"
   },
   "read_bilgisi": "Okundu bilgisi",
   "read_işaretle": "Okundu Olarak İşaretle",
@@ -3502,7 +3600,7 @@
     "copied": "Kopyalandı!",
     "copy": "Kopyala",
     "copyLink": "Davet linkini kopyala",
-    "referralLink": "Davet baglantisi",
+    "referralLink": "Davet bağlantısı",
     "fiveFriends": "5 Arkadaş",
     "friendsReferred": "Davet Edilen Arkadaşlar",
     "gold": "Altın",
@@ -3661,7 +3759,7 @@
   "sadece_mention_lar": "Sadece mentionlar",
   "sadece_taglemeler": "Sadece etiketlemeler",
   "sadece_tagler": "Sadece etiketler",
-  "safetyNumber.verified": "Guvenlik numarasi dogrulandi!",
+  "safetyNumber.verified": "Güvenlik numarası doğrulandı!",
   "save": "Kaydet",
   "sayfa": "Sayfa",
   "schedule_new_announcement": "Yeni duyuru zamanla",
@@ -3824,9 +3922,9 @@
   },
   "security.2faEnableFailed": "2FA etkinlestirilemedi",
   "security.ipAddFailed": "IP eklenemedi",
-  "security.revokeAllSessionsConfirm": "Bu, bu cihaz disindaki tum cihazlardan cikis yapacak. Devam edilsin mi?",
-  "security.revokeSessionConfirm": "Bu cihazdan cikis yapmak istediginizden emin misiniz?",
-  "security.terminateSessionConfirm": "Bu oturumu sonlandirmak istediginizden emin misiniz?",
+  "security.revokeAllSessionsConfirm": "Bu, bu cihaz dışındaki tüm cihazlardan çıkış yapacak. Devam edilsin mi?",
+  "security.revokeSessionConfirm": "Bu cihazdan çıkış yapmak istediğinizden emin misiniz?",
+  "security.terminateSessionConfirm": "Bu oturumu sonlandirmak istediğinizden emin misiniz?",
   "select": "Seç",
   "select_channel": "Kanal seç",
   "select_coin_package": "Koin paketi seç",
@@ -3946,9 +4044,9 @@
     "categoryLabel": "Kategori"
   },
   "server.joined": "{{name}} sunucusuna katildiniz!",
-  "server.madePrivate": "Sunucu ozel yapildi!",
+  "server.madePrivate": "Sunucu özel yapildi!",
   "server.madePublic": "Sunucu herkese acik yapildi!",
-  "serverClone.created": "Sunucu basariyla olusturuldu!",
+  "serverClone.created": "Sunucu başarıyla oluşturuldu!",
   "serverDiscovery.joined": "Sunucuya katıldınız!",
   "serverEvents.operationFailed": "İşlem başarısız",
   "serverLabel": "Sunucu",
@@ -3987,7 +4085,7 @@
     "saveServerName": "Sunucu adini kaydet",
     "serverDescription": "Sunucu aciklamasi",
     "saveDescription": "Sunucu aciklamasini kaydet",
-    "uploadIcon": "Sunucu simgesini yukle",
+    "uploadIcon": "Sunucu simgesini yükle",
     "defaultChannelSelect": "Varsayilan kanal sec",
     "saveDefaultChannel": "Varsayilan kanali kaydet",
     "deleteConfirmInput": "Silmeyi onaylamak icin sunucu adini yazin",
@@ -4084,8 +4182,17 @@
     "schedule": "Sahne zamanlaması",
     "approveRequest": "Konusma isteğini onayla",
     "inviteToSpeak": "Konusmaya davet et",
-    "unmute": "Sesi ac",
-    "mute": "Sessize al"
+    "unmute": "Sesi aç",
+    "mute": "Sessize al",
+    "listenersLabel": "Dinleyiciler",
+    "moderatorBadge": "Moderatör",
+    "confirm": "Onayla",
+    "a11y": {
+      "handRaised": "Konuşma isteği gönderildi",
+      "requestCancelled": "Konuşma isteği iptal edildi",
+      "muted": "Mikrofon kapatıldı",
+      "unmuted": "Mikrofon açıldı"
+    }
   },
   "settings": {
     "about": "Hakkında",
@@ -4241,7 +4348,7 @@
     "section": "Ayar bolumu",
     "toggleSwitch": "Anahtar dugmesi",
     "activityTab": "Aktivite sekmesi",
-    "advancedTab": "Gelismis sekmesi",
+    "advancedTab": "Gelişmiş sekmesi",
     "keybindsTab": "Tuslar sekmesi",
     "languageTab": "Dil sekmesi",
     "notificationsTab": "Bildirimler sekmesi",
@@ -4456,10 +4563,7 @@
     "claimFailed": "Ödül alınamadı.",
     "coinStore": "Coin Mağaza",
     "coins": "Coin",
-    "comingSoon": {
-      "title": "Çok Yakında!",
-      "desc": "Mağaza özelliği şu anda geliştirme aşamasında. Yakında muhteşem kozmetik ürünler, rozetler ve özel itemler ile karşınızda olacağız!"
-    },
+    "comingSoon": "Yakında",
     "currentBalance": "Mevcut Bakiye",
     "dailyClaimed": "{{coins}} coin aldın! Yeni bakiye: {{balance}}.",
     "dailyCooldown": "Günlük ödül için bekle: {{seconds}} sn",
@@ -4473,7 +4577,7 @@
       "txidPlaceholder": "İşlem ID'sini buraya yapıştırın",
       "verifyAndClaim": "Doğrula ve Coin Al"
     },
-    "elite": "👑 Elite",
+    "elite": "Elite",
     "emptyInventory": "Henüz bir şey satın almadın",
     "emptyStore": "Mağazada ürün yok",
     "equip": "Kuşan",
@@ -4499,6 +4603,8 @@
     "shop": "Mağaza",
     "streak": "Seri",
     "title": "Pawscord Mağaza",
+    "subtitle": "Coinlerini özel ürünler için harca",
+    "categories": "Kategoriler",
     "empty": {
       "title": "Henüz ürün yok",
       "desc": "Bu kategoriye yakında yeni ürünler eklenecek."
@@ -4525,7 +4631,7 @@
   "store.membershipRequired": "❌ {{tier}} üyelik gerekli!",
   "store.purchaseFailed": "Satın alma başarısız",
   "store.purchaseSuccess": "✅ {{name}} satın alındı!",
-  "store.purchased": "{{name}} basariyla satin alindi!",
+  "store.purchased": "{{name}} başarıyla satin alindi!",
   "storeAPI.insufficientCoins": "Yetersiz coin!",
   "storeAPI.purchaseFailed": "Satın alma başarısız",
   "strateji": "Strateji",
@@ -4574,7 +4680,13 @@
     "maxMessages": "Maks. Mesaj Sayısı",
     "currentSummary": "Oluşturulan Özet",
     "lastSummary": "Son Özet",
-    "history": "Özet Geçmişi"
+    "history": "Özet Geçmişi",
+    "last1h": "Son 1 Saat",
+    "last6h": "Son 6 Saat",
+    "last24h": "Son 24 Saat",
+    "copy": "Kopyala",
+    "export": "Aktar",
+    "keywords": "Anahtar Kelimeler:"
   },
   "support": {
     "buyCoffee": "Kahve Ismarla ☕",
@@ -4695,7 +4807,7 @@
   "total_price": "Toplam fiyat",
   "total_reactions": "Toplam tepki",
   "tournament.joined": "Turnuvaya katıldınız!",
-  "tournament.leaveConfirm": "Turnuvadan ayrilmak istediginizden emin misiniz?",
+  "tournament.leaveConfirm": "Turnuvadan ayrilmak istediğinizden emin misiniz?",
   "toxic_language": "Toksik dil",
   "track_channel_performance_and_engagement": "Kanal performansını ve etkileşimini takip edin",
   "transcript_channelı": "Transkript Kanalı",
@@ -4714,11 +4826,14 @@
   "twoFactor": {
     "useAuthenticator": "Kimlik doğrulayıcı kodu kullan",
     "useBackupCode": "Yedek kod kullan",
-    "code": "000000"
+    "code": "000000",
+    "backupCodesOneTime": "Bu kodlar bir daha gösterilmeyecek. Şimdi kaydedin!",
+    "copyAll": "Tümünü Kopyala",
+    "copyAllCodes": "Tüm yedek kodları kopyala"
   },
   "type": "Tür",
   "type_server_name_to_delete": "Silmek için sunucu adını yazın",
-  "tüm_audio_settingsını_varsailan_değerlerine_döndürür": "Tum Audio Settingsini Varsailan Degerlerine Dondurur",
+  "tüm_audio_settingsını_varsailan_değerlerine_döndürür": "Tüm Audio Settingsini Varsayılan Değerlerine Döndürür",
   "tüm_entegrasyonlar_zaten_bağlı": "Tüm entegrasyonlar zaten bağlı",
   "tüm_mesajlar": "Tüm Mesajlar",
   "ui": {
@@ -4823,7 +4938,7 @@
     "clearme_hatasi": "❌ Clearme hatası",
     "clickToReveal": "Görmek için tıkla",
     "coin_bakiyeni_gor": "Coin bakiyeni gör",
-    "coin_gonder_transfer_kullanici_miktar": "Coin gönder (/transfer @kullanici miktar)",
+    "coin_gonder_transfer_kullanici_miktar": "Coin gönder (/transfer @kullanıcı miktar)",
     "confirmation_failed": "❌ Confirmma başarısız",
     "connectti": "Bağla",
     "copy": "Kopyala",
@@ -5301,7 +5416,7 @@
     "takip_linki_hatasi": "Takip linki hatası:",
     "takip_linki_olusturulamadi": "Takip linki oluşturulamadı",
     "tas": "Taş",
-    "tas_kagit_makas_oyna_kullanici": "Taş Kağıt Makas oyna (@kullanici)",
+    "tas_kagit_makas_oyna_kullanici": "Taş Kağıt Makas oyna (@kullanıcı)",
     "tercih_load_hatasi": "Tercih load hatası:",
     "this_feature_guvenlik_nedeniyle_sunucu_u": "🔄 This feature güvenlik nedeniyle sunucu üzerinden yapılmalıdır",
     "thread_adi": "Thread adı...",
@@ -5467,7 +5582,7 @@
     "copyUrl": "URL kopyala",
     "delete": "Vanity URL sil",
     "pathInput": "Vanity URL yolu",
-    "create": "Vanity URL olustur",
+    "create": "Vanity URL oluştur",
     "slug": "sunucum"
   },
   "veri_yok": "Veri Yok",
@@ -5630,7 +5745,7 @@
     "mute": "Sessize al",
     "unmute": "Sesi ac",
     "syncVideo": "Videoyu senkronize et",
-    "toggleSettings": "Ayarlari goster/gizle",
+    "toggleSettings": "Ayarları goster/gizle",
     "exitFullscreen": "Tam ekrandan cik",
     "enterFullscreen": "Tam ekrana gec",
     "sendReaction": "Tepki gonder",
@@ -5642,11 +5757,11 @@
   "web_sitesi_url": "Web sitesi URL",
   "webauthn.registrationCancelled": "Parola anahtarı kaydı iptal edildi",
   "webhookManager.created": "Webhook oluşturuldu!",
-  "webhookManager.deleteConfirm": "Bu webhook'u silmek istediginizden emin misiniz?",
+  "webhookManager.deleteConfirm": "Bu webhook'u silmek istediğinizden emin misiniz?",
   "webhookManager.nameUrlRequired": "Ad ve URL gereklidir",
   "webhook_name": "Webhook adı",
   "webhooks.created": "Webhook oluşturuldu",
-  "webhooks.deleteConfirm": "Bu webhook'u silmek istediginizden emin misiniz?",
+  "webhooks.deleteConfirm": "Bu webhook'u silmek istediğinizden emin misiniz?",
   "webhooks.deleteFailed": "Webhook silinemedi",
   "webhooks.deleted": "Webhook silindi",
   "webhooks.urlCopied": "URL kopyalandı",
@@ -5666,7 +5781,7 @@
   "welcome_user": "Hoş geldin, {user}!",
   "what": "Ne?",
   "what_s_on_your_mind": "Ne düşünüyorsun?",
-  "whitelist.removeConfirm": "{{code}} kullaniciyi beyaz listeden cikar?",
+  "whitelist.removeConfirm": "{{code}} kullanıcıyı beyaz listeden cikar?",
   "who_can_access": "Kimler erişebilir",
   "win_rate": "Kazanma Oranı",
   "write_a_short_description_about_your_server": "Sunucunuz hakkında kısa açıklama yazın",
@@ -5738,7 +5853,7 @@
   "📁_file_depolama": "Dosya Depolama",
   "📄_path": "Yol",
   "📅_date": "Tarih",
-  "📅_kayıt": "Kayit",
+  "📅_kayıt": "Kayıt",
   "📈_user_growth": "Kullanıcı Büyümesi",
   "📊_en_çok_ziyaret_edilen_sayfalar_last_30_days": "En Çok Ziyaret Edilen Sayfalar",
   "📋_gelişmiş_sistem_logları": "Gelişmiş Sistem Logları",
@@ -5751,7 +5866,7 @@
   "📨_günlük_mesaj_sayısı_last_30_days": "Günlük Mesaj Sayısı",
   "📱_cihaz_dağılımı_last_7_days": "Cihaz Dağılımı",
   "🔄_all": "Tümü",
-  "🔄_ayarları_sıfırla": "Ayarlari Sifirla",
+  "🔄_ayarları_sıfırla": "Ayarları Sifirla",
   "🔊_default_hoparlör": "Default Hoparlor",
   "🔍_ip_search": "IP Ara",
   "🔍_search": "Ara",
@@ -5835,7 +5950,7 @@
     "loadingLocal": "Yerel koleksiyon yükleniyor...",
     "gridView": "Izgara gorunumu",
     "listView": "Liste gorunumu",
-    "allCategories": "Tum kategoriler",
+    "allCategories": "Tüm kategoriler",
     "toggleFavorite": "Favori ekle/kaldir"
   },
   "pins": {
@@ -6125,11 +6240,11 @@
   "slash": {
     "rollDiceDesc": "1-100 arasında zar at",
     "coinFlipDesc": "Yazı tura at",
-    "rpsDesc": "Taş Kağıt Makas oyna (@kullanici)",
+    "rpsDesc": "Taş Kağıt Makas oyna (@kullanıcı)",
     "tttDesc": "XOX oyunu başlat",
     "chooseDesc": "Seçeneklerden birini seç (/sec a b c)",
     "walletDesc": "Coin bakiyeni gör",
-    "transferDesc": "Coin gönder (/transfer @kullanici miktar)",
+    "transferDesc": "Coin gönder (/transfer @kullanıcı miktar)",
     "kanbanDesc": "Kanban panosunu aç",
     "runCodeDesc": "Python kodu çalıştır",
     "aiImageDesc": "Yapay Zeka ile görsel çiz",
@@ -6158,7 +6273,8 @@
     "onNewMessage": "Yeni mesaj gönderildiğinde",
     "onReaction": "Tepki eklendiğinde",
     "onMemberJoin": "Üye sunucuya katıldığında",
-    "onVoiceState": "Ses durumu değiştiğinde"
+    "onVoiceState": "Ses durumu değiştiğinde",
+    "jsNodejs": "JavaScript (Node.js)"
   },
   "verif": {
     "none": "Yok",
@@ -6301,7 +6417,7 @@
     "extracting": "Çıkarılıyor...",
     "extractText": "Metni Çıkar",
     "extractedText": "Çıkarılan Metin",
-    "fileInput": "OCR icin dosya yukle"
+    "fileInput": "OCR icin dosya yükle"
   },
   "soundboard": {
     "searchPlaceholder": "Ses ara...",
@@ -6353,7 +6469,7 @@
     "typeToConfirm": "Devam etmek için",
     "toContinue": "yazın:",
     "textMismatch": "Metin eşleşmiyor",
-    "confirm": "Islemi onayla"
+    "confirm": "İşlemi onayla"
   },
   "tournament": {
     "createNew": "Yeni Turnuva Oluştur",
@@ -6366,7 +6482,8 @@
     "leave": "Ayrıl",
     "card": "Turnuva karti",
     "detailModal": "Turnuva detayi",
-    "joinTournament": "Turnuvaya katil"
+    "joinTournament": "Turnuvaya katil",
+    "noBracket": "Bracket verisi mevcut değil."
   },
   "watchTogether": {
     "title": "📺 Birlikte İzle",
@@ -6471,7 +6588,7 @@
     "presets": "Hazır Temalar",
     "createCustom": "Özel Tema Oluştur",
     "secondaryColor": "Ikincil renk",
-    "saveTheme": "Ozel temayı kaydet",
+    "saveTheme": "Özel temayı kaydet",
     "themeName": "Tema Adi",
     "primaryColor": "Ana renk",
     "backgroundColor": "Arkaplan rengi",
@@ -6536,14 +6653,18 @@
     "servers": "sunucu",
     "comments": "yorum",
     "website": "🌐 Web Sitesi",
-    "supportServer": "💬 Destek Sunucusu"
+    "supportServer": "💬 Destek Sunucusu",
+    "tabs": "Bot detay sekmeleri"
   },
   "highlights": {
     "keywordInput": "Yeni anahtar kelime",
     "addKeywordBtn": "Anahtar kelime ekle",
     "saveConfig": "Vurgu ayarlarini kaydet",
     "clearHighlights": "Vurgulari temizle",
-    "addKeyword": "Kelime ekle..."
+    "addKeyword": "Kelime ekle...",
+    "title": "Highlight Sistemi",
+    "settings": "Ayarlar",
+    "save": "Kaydet"
   },
   "customStatus": {
     "emojiInput": "Durum emojisi",
@@ -6624,7 +6745,7 @@
     "viewAuditLogs": "Denetim gunluklerini goruntule",
     "configSlowMode": "Yavas modu yapilandir",
     "lockServer": "Sunucuyu kilitle",
-    "clearMessages": "Tum mesajlari temizle"
+    "clearMessages": "Tüm mesajları temizle"
   },
   "changelog": {
     "allModels": "Tüm Modeller",
@@ -6651,7 +6772,7 @@
     "remove": "Çıkar",
     "equip": "Eşyayı donat",
     "equipBtn": "Esyayi giy",
-    "filterBtn": "Kategoriye gore filtrele",
+    "filterBtn": "Kategoriye göre filtrele",
     "unequipBtn": "Esyayı cikar",
     "useBtn": "Esyayi kullan"
   },
@@ -6679,7 +6800,7 @@
   },
   "massActions": {
     "usersAffected": "kullanıcıyı etkileyecek!",
-    "userIds": "Kullanici IDleri (her satira bir tane)",
+    "userIds": "Kullanıcı IDleri (her satira bir tane)",
     "duration": "Sure dakika olarak",
     "reason": "Spam, kural ihlali, vb."
   },
@@ -6717,12 +6838,12 @@
     "nsfwHint": "Yetişkin içerik uyarısı gösterilir.",
     "lockHint": "Kimse mesaj gönderemez (geçici kilitleme).",
     "maxUsersHint": "Max kişi sayısı (0 = limitsiz)",
-    "privateToggle": "Ozel kanali etkinlestir",
+    "privateToggle": "Özel kanali etkinlestir",
     "roleAccess": "Rolun erisimi var",
     "nsfwToggle": "NSFW kanali etkinlestir",
     "lockToggle": "Kilitli kanali etkinlestir",
     "readOnlyToggle": "Salt okunur kanali etkinlestir",
-    "userLimit": "Kullanici limiti (0 = sinirsiz)",
+    "userLimit": "Kullanıcı limiti (0 = sinirsiz)",
     "deleteChannel": "Kanali sil",
     "saveSettings": "Kanal ayarlarini kaydet"
   },
@@ -6785,9 +6906,9 @@
     "title": "Katılma/Ayrılma Günlükleri",
     "loading": "Loglar yükleniyor...",
     "noLogs": "Log bulunamadı",
-    "filterAll": "Tum gunlukler",
+    "filterAll": "Tüm gunlukler",
     "filterJoined": "Sadece girisler",
-    "filterLeft": "Sadece cikislar",
+    "filterLeft": "Sadece çıkışlar",
     "exportLogs": "Gunlukleri disa aktar",
     "filter": "Gunlukleri filtrele"
   },
@@ -6807,7 +6928,9 @@
   "emojiMgmt": {
     "title": "Emoji Yönetimi",
     "noEmoji": "Henüz özel emoji yok",
-    "suggestedBy": "Öneren"
+    "suggestedBy": "Öneren",
+    "trending": "Trend Olanlar",
+    "suggestions": "Öneriler"
   },
   "mentions": {
     "refresh": "Bahsetmeleri yenile",
@@ -6854,7 +6977,8 @@
   "reportSystem": {
     "reportedUser": "Şikayet Edilen Kullanıcı",
     "title": "Rapor Sistemi",
-    "totalReports": "Toplam Rapor"
+    "totalReports": "Toplam Rapor",
+    "reportedBy": "Gönderen"
   },
   "adminUser": {
     "unban": "Yasağı Kaldır",
@@ -6955,8 +7079,8 @@
     "bannerUrl": "Banner URL",
     "bannerColor": "Banner rengi",
     "bioInput": "Biyografi",
-    "linkName": "Baglanti adi (opsiyonel)",
-    "linkUrl": "Baglanti URL",
+    "linkName": "Bağlantı adi (opsiyonel)",
+    "linkUrl": "Bağlantı URL",
     "backgroundUrl": "https://...",
     "badgeName": "Ad (opsiyonel)",
     "badgeUrl": "URL"
@@ -7092,7 +7216,8 @@
     "template": "Şablon (Ctrl+T)"
   },
   "pendingFiles": {
-    "removeAll": "Hepsini Kaldır"
+    "removeAll": "Hepsini Kaldır",
+    "waiting": "{{count}} dosya bekliyor"
   },
   "notifPrefs": {
     "dndHours": "Rahatsız Etme Saatleri"
@@ -7159,9 +7284,6 @@
   "warnings": {
     "removeConfirm": "Bu uyarıyı kaldırmak istediğinizden emin misiniz?"
   },
-  "cryptoSignals": {
-    "winRate": "Kazan Oranı"
-  },
   "voiceIsland": {
     "title": "SES SOHBETİ"
   },
@@ -7176,9 +7298,6 @@
   },
   "msgContextMenu": {
     "deleteConfirm": "Bu mesajı silmek istediğinizden emin misiniz?"
-  },
-  "englishHub": {
-    "spacedRep": "Kelimeleri kalıcı öğrenmek için akıllı tekrar algoritması"
   },
   "bookmarksTab": {
     "noBookmarks": "Henüz yer imi yok"
@@ -7220,7 +7339,7 @@
     "questionInput": "Anket sorusu",
     "removeOption": "Secenegi kaldir",
     "selectDuration": "Sure sec",
-    "createPollBtn": "Anket olustur",
+    "createPollBtn": "Anket oluştur",
     "card": "Anket kartı",
     "newPoll": "Yeni anket",
     "vote": "Secenegi oyla"
@@ -7230,7 +7349,7 @@
     "zoomIn": "Yakinlastir",
     "rotate": "Resmi dondur",
     "reset": "Gorunumu sifirla",
-    "prevImage": "Onceki resim",
+    "prevImage": "Önceki resim",
     "nextImage": "Sonraki resim"
   },
   "notifCenter": {
@@ -7243,8 +7362,8 @@
     "list": "Bildirim ogeler"
   },
   "serverBackup": {
-    "createBtn": "Yedek olustur",
-    "restore": "Yedegi geri yukle",
+    "createBtn": "Yedek oluştur",
+    "restore": "Yedegi geri yükle",
     "download": "Yedegi indir",
     "delete": "Yedegi sil"
   },
@@ -7282,7 +7401,9 @@
     "resetDefaults": "Varsayılanlara sıfırla",
     "saveSettings": "Ayarları kaydet",
     "effectsTab": "Efektler sekmesi",
-    "pushToTalkKey": "Konusmak icin bas tusu"
+    "pushToTalkKey": "Konuşmak için bas tuşu",
+    "micTestStarted": "Mikrofon testi başladı",
+    "micTestStopped": "Mikrofon testi durduruldu"
   },
   "voiceTranscripts": {
     "searchInput": "Transkriptleri ara",
@@ -7409,7 +7530,11 @@
     "unsubscribe": "Konudan aboneliği kaldır",
     "sendMessage": "Konuya mesaj gönder",
     "createThread": "Konu oluştur",
-    "pinThread": "Konuyu sabitle"
+    "pinThread": "Konuyu sabitle",
+    "noThreads": "Henüz konu yok",
+    "subscribers": "{{count}} abone",
+    "subscribeToThread": "Abone Ol",
+    "newThread": "Yeni Konu"
   },
   "game": {
     "rock": "Taş",
@@ -7451,7 +7576,7 @@
   },
   "codeSnippet": {
     "submit": "Kod parçacığını gönder",
-    "title": "Baslik (Opsiyonel)"
+    "title": "Başlık (Opsiyonel)"
   },
   "extraFeaturesPanel": {
     "panel": "Ekstra özellikler paneli"
@@ -7489,8 +7614,8 @@
     "showMultiple": "Coklu bildirim goster",
     "showLongDuration": "Uzun sureli bildirim goster",
     "showLongMessage": "Uzun mesajli bildirim goster",
-    "customMessage": "Ozel mesaj girisi",
-    "toastType": "Bildirim turu",
+    "customMessage": "Özel mesaj girisi",
+    "toastType": "Bildirim türü",
     "showToast": "Bildirimi goster",
     "messagePlaceholder": "Mesajinizi buraya yazin..."
   },
@@ -7526,7 +7651,7 @@
     "pendingFiles": "Bekleyen dosyalar"
   },
   "userPresence": {
-    "panel": "Kullanici varligi icgozlem paneli"
+    "panel": "Kullanıcı varligi icgozlem paneli"
   },
   "videoStreaming": {
     "dashPlayer": "Video oynatici",
@@ -7547,14 +7672,14 @@
     "previewTheme": "Temayı onizle"
   },
   "logoutModal": {
-    "confirm": "Cikisi onayla"
+    "confirm": "Çıkışı onayla"
   },
   "quickSwitcher": {
     "clear": "Aramayı temizle"
   },
   "channelSettings": {
     "deleteHistory": "Mesaj gecmisini sil",
-    "createWebhook": "Webhook olustur",
+    "createWebhook": "Webhook oluştur",
     "addPermission": "Izin ekle"
   },
   "emojiPicker": {
@@ -7608,7 +7733,6 @@
     "messageEditForm": "Mesajı Düzenle",
     "summaryModal": "Yapay Zeka Özeti",
     "voiceAudioController": "Ses Kontrolcüsü",
-    "grammarQuizPage": "Dilbilgisi Sınavı",
     "videoMessage": "Video Mesajı",
     "messageContextMenu": "Mesaj Menüsü",
     "analyticsDashboard": "Analitik Paneli",
@@ -7619,7 +7743,6 @@
     "pawIcon": "Pati",
     "scoreArc": "Puan",
     "spotifyCallback": "Spotify Bağlantısı",
-    "srsReview": "Tekrar Kartları",
     "roomContextMenu": "Kanal Menüsü",
     "userProfilePanel": "Kullanıcı Profili",
     "activityTab": "Etkinlik",
@@ -7651,8 +7774,7 @@
     "userOverlay": "Kullanıcı Durumu",
     "connectionQuality": "Bağlantı Kalitesi",
     "loadingSpinner": "Yükleniyor",
-    "errorBoundary": "Hata",
-    "englishVoicePractice": "İngilizce Ses Pratiği"
+    "errorBoundary": "Hata"
   },
   "toast": {
     "dismiss": "Bildirimi Kapat"
@@ -7675,5 +7797,67 @@
     "enlargedAttachment": "Büyütülmüş Dosya Eki",
     "attachment": "Dosya Eki",
     "logo": "Logo"
-  }
+  },
+  "messageOCR": {
+    "noText": "Bu mesajda OCR metni yok"
+  },
+  "richTextEditor": {
+    "placeholder": "Bir mesaj yaz..."
+  },
+  "webhooks.loading": "Webhook'lar yükleniyor...",
+  "webhooks.management": "Webhook Yönetimi",
+  "webhooks.createNew": "Yeni Webhook Oluştur",
+  "webhooks.newWebhook": "Yeni Webhook",
+  "webhooks.webhookNameRequired": "Webhook Adı *",
+  "webhooks.channelRequired": "Kanal *",
+  "webhooks.avatarUrlOptional": "Avatar URL (İsteğe Bağlı)",
+  "webhooks.channel": "Kanal",
+  "webhooks.avatarUrl": "Avatar URL",
+  "webhooks.logs": "Kayıtlar",
+  "webhooks.totalCalls": "Toplam Çağrı:",
+  "webhooks.successful": "Başarılı:",
+  "webhooks.failed": "Başarısız:",
+  "webhooks.lastCall": "Son Çağrı:",
+  "webhooks.noWebhooksYet": "Henüz webhook yok",
+  "webhooks.createToReceive": "Dış uygulamalardan mesaj almak için webhook oluşturun",
+  "webhooks.webhookLogs": "Webhook Kayıtları",
+  "webhooks.noLogsYet": "Henüz kayıt yok",
+  "webhooks.subscribeEvents": "Abone Olunacak Olaylar",
+  "webhooks.noChannelWebhooks": "Bu kanal için webhook yapılandırılmamış",
+  "webhooks.recentDeliveries": "Son Teslimatlar",
+  "webhooks.noDeliveries": "Henüz teslimat yok",
+  "webhooks.noWebhooksCreated": "Henüz webhook oluşturulmadı",
+  "stage.stageChannels": "Sahne Kanalları",
+  "stage.noActiveStages": "Aktif sahne yok",
+  "stage.createFirst": "İlk sahneyi oluştur",
+  "stage.topicLabel": "Konu Başlığı *",
+  "stage.maxListeners": "Maks. Dinleyici",
+  "stage.publicStage": "Herkese Açık",
+  "backup.includeRoles": "🎭 Rolleri dahil et",
+  "backup.includeEmojis": "😀 Emojileri dahil et",
+  "backup.existingBackups": "Mevcut Yedekler",
+  "backup.backupLabel": "Yedek",
+  "serverBackup.title": "Sunucu Yedekleme",
+  "serverBoost.currentTier": "Mevcut Seviye",
+  "serverBoost.beFirstBooster": "Destekleyen ilk siz olun!",
+  "vanityUrl.currentLabel": "Mevcut Vanity URL:",
+  "appearance.theme": "Tema",
+  "appearance.accentColor": "Vurgu Rengi",
+  "appearance.messageMode": "Mesaj Modu",
+  "appearance.messageModeDesc": "Mesajların nasıl görüntülendiğini seçin",
+  "appearance.appLanguage": "Uygulama dili",
+  "themeMarket.title": "Tema Pazaryeri",
+  "admin.errorReporting": "Hata Bildirimi",
+  "admin.category": "Kategori",
+  "admin.bugReport": "🐛 Hata (Bug)",
+  "admin.performance": "⚡ Performans",
+  "admin.priorityMedium": "🟡 Orta",
+  "admin.priorityCritical": "🔴 Kritik",
+  "admin.systemInfo": "Sistem Bilgileri",
+  "admin.massActions.ban": "🔨 Yasakla (Ban)",
+  "admin.massActions.kick": "💢 Kickle (At)",
+  "admin.massActions.mute": "🔇 Sessize Al (Mute)",
+  "admin.massActions.warn": "⚠️ Uyar (Warn)",
+  "analytics.hourlyActivity": "Saatlik Aktivite",
+  "boost.serverBoost": "Sunucu Boost"
 }

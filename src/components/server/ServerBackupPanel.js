@@ -159,7 +159,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="backup-header">
-                    <h2>💾 Server Yedekleme</h2>
+                    <h2>💾 {t('serverBackup.title', 'Server Backup')}</h2>
                     <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
                     </button>
@@ -193,7 +193,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                                         })
                                     }
                                 />
-                                <span>🎭 Rolleri dahil et</span>
+                                <span>{t('backup.includeRoles', '🎭 Include roles')}</span>
                             </label>
                             <label className="option-label">
                                 <input
@@ -232,7 +232,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                                         })
                                     }
                                 />
-                                <span>😀 Emojforward dahil et</span>
+                                <span>{t('backup.includeEmojis', '😀 Include emojis')}</span>
                             </label>
                         </div>
                         <button
@@ -257,14 +257,14 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                         </div>
                     ) : (
                         <div className="backups-list">
-                            <h3>Mevcut Yedekler ({backups.length})</h3>
+                            <h3>{t('backup.existingBackups', 'Existing Backups')} ({backups.length})</h3>
                             {backups.map((backup) => {
                                 const badge = getStatusBadge(backup.status);
                                 return (
                                     <div key={backup.id} className="backup-card">
                                         <div className="backup-info">
                                             <div className="backup-main">
-                                                <h4>Yedek #{backup.id}</h4>
+                                                <h4>{t('backup.backupLabel', 'Backup')} #{backup.id}</h4>
                                                 <div className="backup-meta">
                                                     <span>
                                                         📅{' '}
@@ -285,27 +285,27 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                                                 <div className="backup-includes">
                                                     {backup.includes_channels && (
                                                         <span className="include-badge">
-                                                            📁 Kanallar
+                                                            📁 {t('server.channels', 'Channels')}
                                                         </span>
                                                     )}
                                                     {backup.includes_roles && (
                                                         <span className="include-badge">
-                                                            🎭 Roller
+                                                            🎭 {t('server.roles', 'Roles')}
                                                         </span>
                                                     )}
                                                     {backup.includes_messages && (
                                                         <span className="include-badge">
-                                                            💬 Mesajlar
+                                                            💬 {t('analytics.messages', 'Messages')}
                                                         </span>
                                                     )}
                                                     {backup.includes_settings && (
                                                         <span className="include-badge">
-                                                            ⚙️ Ayarlar
+                                                            ⚙️ {t('server.settings', 'Settings')}
                                                         </span>
                                                     )}
                                                     {backup.includes_emojis && (
                                                         <span className="include-badge">
-                                                            😀 Emojiler
+                                                            😀 {t('server.emojis', 'Emojis')}
                                                         </span>
                                                     )}
                                                 </div>
@@ -318,7 +318,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
                                                     className="restore-btn"
                                                     onClick={() => restoreBackup(backup.id)}
                                                 >
-                                                    🔄 Geri Upload
+                                                    🔄 {t('serverBackup.restore', 'Restore Backup')}
                                                 </button>
                                                 <button
                                                     aria-label={t('serverBackup.download', 'Download backup')}

@@ -23,7 +23,7 @@ export const MessageHeader = memo(
     ({ msg, isAdmin, isAIMessage, onViewProfile, messageEditHistoryUrl, fetchWithAuth }) => {
         const { t } = useTranslation();
         const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState(null);
+        const [_error, _setError] = useState(null);
         return (
             <div aria-label={t('message.header', 'Message header')} style={styles.messageHeader}>
                 <span

@@ -24,12 +24,14 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
 
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Turnuva Detmonth' });
     const [bracket, setBracket] = useState(null);
+    const [bracketLoading, setBracketLoading] = useState(true);
 
     useEffect(() => {
         loadBracket();
     }, [tournament.id]);
 
     const loadBracket = async () => {
+        setBracketLoading(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/tournaments/${tournament.id}/bracket/`);
             if (res.ok) {
@@ -38,6 +40,8 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
             }
         } catch (error) {
             logger.error('Bracket load error:', error);
+        } finally {
+            setBracketLoading(false);
         }
     };
 
@@ -164,12 +168,18 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
                         </div>
                     )}
 
-                    {bracket && (
-                        <div style={styles.detailSection}>
-                            <h4>{t('tournament.matches', 'Matches')}</h4>
-                            {renderBracket()}
-                        </div>
-                    )}
+                    <div style={styles.detailSection}>
+                        <h4>{t('tournament.matches', 'Matches')}</h4>
+                        {bracketLoading ? (
+                            <div style={{ textAlign: 'center', padding: '20px', color: '#b5bac1' }} role="status" aria-label={t('common.loading', 'Loading...')}>
+                                <div style={{ width: 24, height: 24, border: '3px solid rgba(88,101,242,0.2)', borderTop: '3px solid #5865f2', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto' }} />
+                            </div>
+                        ) : bracket ? (
+                            renderBracket()
+                        ) : (
+                            <p style={{ color: '#b5bac1', fontSize: '0.9em' }}>{t('tournament.noBracket', 'No bracket data available.')}</p>
+                        )}
+                    </div>
 
                     <div style={styles.detailSection}>
                         <h4>{t('tournament.participantsTitle', 'Participants')}</h4>

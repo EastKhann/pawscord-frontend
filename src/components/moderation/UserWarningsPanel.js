@@ -39,7 +39,7 @@ const getSeverityColor = (severity) => {
 const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [showAddWarning, setShowAddWarning] = useState(false);
 
     const { warnings, users, loading, stats, addWarning, removeWarning, banUser } = useWarnings(

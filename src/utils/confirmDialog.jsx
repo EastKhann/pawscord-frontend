@@ -6,6 +6,7 @@
 //           const ok = await confirmDialog({ title: '...', message: '...', type: 'danger' });
 
 import { createRoot } from 'react-dom/client';
+import i18n from '../i18n';
 import {
     FaExclamationTriangle,
     FaTimes,
@@ -170,13 +171,13 @@ export function confirmDialog(options) {
                 >
                     {/* Header */}
                     <div
-                        style={_s({
+                        style={{
                             background: tc.gradient,
                             padding: '20px 24px',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '12px',
-                        })}
+                        }}
                     >
                         <div style={_st3}>{tc.icon}</div>
                         <h3 id="confirm-dialog-title" style={_st4}>
@@ -203,10 +204,10 @@ export function confirmDialog(options) {
                         {/* Details */}
                         {details && details.length > 0 && (
                             <div style={_st8}>
-                                <div style={_st9}>⚠️ {t('confirmDialog.thisAction','This action:')}</div>
+                                <div style={_st9}>⚠️ {i18n.t('confirmDialog.thisAction','This action:')}</div>
                                 {details.map((d, i) => (
                                     <div key={`item-${i}`} style={_st10}>
-                                        <span style={_s({ color: tc.color })}>•</span>
+                                        <span style={{ color: tc.color }}>•</span>
                                         <span>{d}</span>
                                     </div>
                                 ))}
@@ -235,7 +236,7 @@ export function confirmDialog(options) {
                             className="confirm-btn"
                             onClick={() => cleanup(true)}
                             autoFocus
-                            style={_s({
+                            style={{
                                 background: tc.btnColor,
                                 border: 'none',
                                 color: '#fff',
@@ -246,7 +247,7 @@ export function confirmDialog(options) {
                                 fontWeight: 600,
                                 transition: 'all 0.15s',
                                 boxShadow: `0 2px 8px ${tc.btnColor}40`,
-                            })}
+                            }}
                         >
                             {confirmText}
                         </button>

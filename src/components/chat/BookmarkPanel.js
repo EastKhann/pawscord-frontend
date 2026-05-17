@@ -74,7 +74,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                 <div style={styles.header}>
                     <div className="flex-align-10">
                         <FaBookmark className="icon-warning" />
-                        <h2 className="m-0">Kaydedilenler</h2>
+                        <h2 className="m-0">{t('bookmarksPanel.title', 'Bookmarks')}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
                 </div>

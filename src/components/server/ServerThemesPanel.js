@@ -250,7 +250,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                             />
                             <div style={styles.colorGrid}>
                                 <div style={styles.colorField}>
-                                    <label>Ana Renk</label>
+                                    <label>{t('serverThemes.primaryColor', 'Primary Color')}</label>
                                     <input
                                         type="color"
                                         value={customTheme.primary_color}

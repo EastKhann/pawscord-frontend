@@ -473,10 +473,13 @@ export default defineConfig({
       '/api': {
         target: 'http://127.0.0.1:8888',
         changeOrigin: true,
+        secure: false,
       },
       '/ws': {
         target: 'ws://127.0.0.1:8888',
         ws: true,
+        changeOrigin: true,
+        secure: false,
       },
     },
   },

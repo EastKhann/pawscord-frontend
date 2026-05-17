@@ -2,7 +2,7 @@
 // Passkey / WebAuthn (FIDO2) management UI.
 // Allows users to register biometric keys (Touch ID, Windows Hello, YubiKey).
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useWebAuthn from './useWebAuthn';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';

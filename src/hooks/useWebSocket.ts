@@ -2,7 +2,7 @@
 // 🔌 Advanced WebSocket Hook with automatic connection management
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { wsService, WS_STATES, MESSAGE_TYPES } from '../services/WebSocketService';
+import { wsService, WS_STATES, MESSAGE_TYPES, WSState } from '../services/WebSocketService';
 
 export interface UseWebSocketOptions {
     autoConnect?: boolean;
@@ -15,7 +15,7 @@ export interface UseWebSocketOptions {
 }
 
 export interface UseWebSocketResult {
-    state: string;
+    state: WSState;
     isConnected: boolean;
     isConnecting: boolean;
     lastMessage: Record<string, unknown> | null;
@@ -41,13 +41,13 @@ export function useWebSocket(
         onConnect,
         onDisconnect,
         onError,
-        reconnectOnMount = true,
+        // reconnectOnMount kept for API compatibility but not used internally
     } = options;
 
-    const [state, setState] = useState(WS_STATES.DISCONNECTED);
-    const [lastMessage, setLastMessage] = useState(null);
-    const [error, setError] = useState(null);
-    const unsubscribeRef = useRef(null);
+    const [state, setState] = useState<WSState>(WS_STATES.DISCONNECTED);
+    const [lastMessage, setLastMessage] = useState<Record<string, unknown> | null>(null);
+    const [error, setError] = useState<Error | null>(null);
+    const unsubscribeRef = useRef<(() => void) | null>(null);
     const mountedRef = useRef(true);
 
     // Connect to channel
@@ -58,7 +58,9 @@ export function useWebSocket(
         setError(null);
 
         try {
-            await wsService.connect(channel, options);
+            // Extract only the WSConnectOptions-compatible fields
+            const { disconnectOnUnmount: _d, autoConnect: _a, onMessage: _m, onConnect: _oc, onDisconnect: _od, onError: _oe, reconnectOnMount: _r, ...connectOptions } = options;
+            await wsService.connect(channel, connectOptions);
             if (mountedRef.current) {
                 setState(WS_STATES.CONNECTED);
                 onConnect?.();
@@ -66,8 +68,9 @@ export function useWebSocket(
         } catch (err) {
             if (mountedRef.current) {
                 setState(WS_STATES.ERROR);
-                setError(err);
-                onError?.(err);
+                const error = err instanceof Error ? err : new Error(String(err));
+                setError(error);
+                onError?.(error);
             }
         }
     }, [channel, options, onConnect, onError]);
@@ -80,7 +83,7 @@ export function useWebSocket(
 
     // Send message
     const send = useCallback(
-        (type, payload, sendOptions = {}) => {
+        (type: string, payload: Record<string, unknown>, sendOptions: Record<string, unknown> = {}) => {
             return wsService.send(channel, type, payload, sendOptions);
         },
         [channel]
@@ -88,8 +91,8 @@ export function useWebSocket(
 
     // Send chat message
     const sendMessage = useCallback(
-        (content, options = {}) => {
-            return wsService.send(channel, MESSAGE_TYPES.CHAT, { content, ...options });
+        (content: string, msgOptions: Record<string, unknown> = {}) => {
+            return wsService.send(channel, MESSAGE_TYPES.CHAT, { content, ...msgOptions });
         },
         [channel]
     );
@@ -107,7 +110,7 @@ export function useWebSocket(
         mountedRef.current = true;
 
         // Register message handler
-        unsubscribeRef.current = wsService.on(channel, (data) => {
+        unsubscribeRef.current = wsService.on(channel, (data: Record<string, unknown>) => {
             if (!mountedRef.current) return;
             setLastMessage(data);
             onMessage?.(data);
@@ -131,23 +134,26 @@ export function useWebSocket(
 
     // Listen to WebSocket events
     useEffect(() => {
-        const handleConnect = (e) => {
-            if (e.detail.channel === channel && mountedRef.current) {
+        const handleConnect = (e: Event) => {
+            const detail = (e as CustomEvent<{ channel: string }>).detail;
+            if (detail.channel === channel && mountedRef.current) {
                 setState(WS_STATES.CONNECTED);
             }
         };
 
-        const handleDisconnect = (e) => {
-            if (e.detail.channel === channel && mountedRef.current) {
+        const handleDisconnect = (e: Event) => {
+            const detail = (e as CustomEvent<{ channel: string } & Record<string, unknown>>).detail;
+            if (detail.channel === channel && mountedRef.current) {
                 setState(WS_STATES.DISCONNECTED);
-                onDisconnect?.(e.detail);
+                onDisconnect?.(detail);
             }
         };
 
-        const handleError = (e) => {
-            if (e.detail.channel === channel && mountedRef.current) {
+        const handleError = (e: Event) => {
+            const detail = (e as CustomEvent<{ channel: string; error: Error }>).detail;
+            if (detail.channel === channel && mountedRef.current) {
                 setState(WS_STATES.ERROR);
-                setError(e.detail.error);
+                setError(detail.error);
             }
         };
 
@@ -176,17 +182,44 @@ export function useWebSocket(
     };
 }
 
+// ─── Specialized hook option interfaces ────────────────────────────────────
+
+interface ChatRoomOptions extends UseWebSocketOptions {
+    onNewMessage?: (data: Record<string, unknown>) => void;
+    onTyping?: (data: Record<string, unknown>) => void;
+    onReaction?: (data: Record<string, unknown>) => void;
+}
+
+interface VoiceChannelOptions extends UseWebSocketOptions {
+    onUserJoin?: (user: Record<string, unknown>) => void;
+    onUserLeave?: (userId: unknown) => void;
+    onSignal?: (data: Record<string, unknown>) => void;
+}
+
+interface PresenceOptions extends UseWebSocketOptions {
+    onStatusChange?: (data: Record<string, unknown>) => void;
+}
+
+interface NotificationsOptions extends UseWebSocketOptions {
+    onNotification?: (data: Record<string, unknown>) => void;
+}
+
+interface TypingUser {
+    username: string;
+    timestamp: number;
+}
+
 /**
  * useChatRoom - Specialized hook for chat rooms
  */
-export function useChatRoom(roomId, options = {}) {
+export function useChatRoom(roomId: string | number, options: ChatRoomOptions = {}) {
     const { onNewMessage, onTyping, onReaction, ...restOptions } = options;
 
-    const typingUsers = useRef(new Map());
-    const [typing, setTyping] = useState([]);
+    const typingUsers = useRef(new Map<unknown, TypingUser>());
+    const [typing, setTyping] = useState<string[]>([]);
 
     const handleMessage = useCallback(
-        (data) => {
+        (data: Record<string, unknown>) => {
             switch (data.type) {
                 case MESSAGE_TYPES.CHAT:
                     onNewMessage?.(data);
@@ -194,7 +227,7 @@ export function useChatRoom(roomId, options = {}) {
                 case MESSAGE_TYPES.TYPING:
                     if (data.typing) {
                         typingUsers.current.set(data.user_id, {
-                            username: data.username,
+                            username: data.username as string,
                             timestamp: Date.now(),
                         });
                     } else {
@@ -238,7 +271,7 @@ export function useChatRoom(roomId, options = {}) {
     });
 
     const sendReaction = useCallback(
-        (messageId, emoji) => {
+        (messageId: string | number, emoji: string) => {
             return ws.send(MESSAGE_TYPES.REACTION, { message_id: messageId, emoji });
         },
         [ws]
@@ -254,20 +287,22 @@ export function useChatRoom(roomId, options = {}) {
 /**
  * useVoiceChannel - Specialized hook for voice channels
  */
-export function useVoiceChannel(roomId, options = {}) {
+export function useVoiceChannel(roomId: string | number, options: VoiceChannelOptions = {}) {
     const { onUserJoin, onUserLeave, onSignal, ...restOptions } = options;
 
-    const [participants, setParticipants] = useState([]);
+    const [participants, setParticipants] = useState<Record<string, unknown>[]>([]);
 
     const handleMessage = useCallback(
-        (data) => {
+        (data: Record<string, unknown>) => {
             switch (data.type) {
                 case 'user_joined':
-                    setParticipants((prev) => [...prev, data.user]);
-                    onUserJoin?.(data.user);
+                    setParticipants((prev) => [...prev, data.user as Record<string, unknown>]);
+                    onUserJoin?.(data.user as Record<string, unknown>);
                     break;
                 case 'user_left':
-                    setParticipants((prev) => prev.filter((u) => u.id !== data.user_id));
+                    setParticipants((prev) =>
+                        prev.filter((u) => u.id !== data.user_id)
+                    );
                     onUserLeave?.(data.user_id);
                     break;
                 case MESSAGE_TYPES.VOICE_SIGNAL:
@@ -286,7 +321,7 @@ export function useVoiceChannel(roomId, options = {}) {
     });
 
     const sendSignal = useCallback(
-        (targetUserId, signal) => {
+        (targetUserId: string | number, signal: Record<string, unknown>) => {
             return ws.send(MESSAGE_TYPES.VOICE_SIGNAL, {
                 target_user_id: targetUserId,
                 signal,
@@ -305,13 +340,13 @@ export function useVoiceChannel(roomId, options = {}) {
 /**
  * usePresence - Hook for user presence/status
  */
-export function usePresence(options = {}) {
+export function usePresence(options: PresenceOptions = {}) {
     const { onStatusChange, ...restOptions } = options;
 
-    const [onlineUsers, setOnlineUsers] = useState(new Map());
+    const [onlineUsers, setOnlineUsers] = useState(new Map<unknown, { status: unknown; activity: unknown; lastSeen: number }>());
 
     const handleMessage = useCallback(
-        (data) => {
+        (data: Record<string, unknown>) => {
             if (data.type === MESSAGE_TYPES.PRESENCE) {
                 setOnlineUsers((prev) => {
                     const newMap = new Map(prev);
@@ -334,8 +369,8 @@ export function usePresence(options = {}) {
     });
 
     const setStatus = useCallback(
-        (status, activity = null) => {
-            return ws.send(MESSAGE_TYPES.PRESENCE, { status, activity });
+        (status: string, activity: string | null = null) => {
+            return ws.send(MESSAGE_TYPES.PRESENCE, { status, activity: activity ?? undefined });
         },
         [ws]
     );
@@ -355,14 +390,14 @@ export function usePresence(options = {}) {
 /**
  * useNotifications - Hook for real-time notifications
  */
-export function useNotifications(options = {}) {
+export function useNotifications(options: NotificationsOptions = {}) {
     const { onNotification, ...restOptions } = options;
 
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState<Record<string, unknown>[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
 
     const handleMessage = useCallback(
-        (data) => {
+        (data: Record<string, unknown>) => {
             if (data.type === MESSAGE_TYPES.NOTIFICATION) {
                 setNotifications((prev) => [data, ...prev].slice(0, 100));
                 if (!data.read) {
@@ -372,10 +407,10 @@ export function useNotifications(options = {}) {
 
                 // Browser notification
                 if (Notification.permission === 'granted' && document.hidden) {
-                    new Notification(data.title || 'Yeni Bildirim', {
-                        body: data.body,
+                    new Notification((data.title as string) || 'Yeni Bildirim', {
+                        body: data.body as string | undefined,
                         icon: '/logo192.png',
-                        tag: data.id,
+                        tag: data.id as string | undefined,
                     });
                 }
             }
@@ -389,13 +424,12 @@ export function useNotifications(options = {}) {
     });
 
     const markAsRead = useCallback(
-        (notificationId) => {
+        (notificationId: unknown) => {
             setNotifications((prev) =>
                 prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n))
             );
             setUnreadCount((prev) => Math.max(0, prev - 1));
-            // Optionally send to server
-            ws.send('mark_read', { notification_id: notificationId });
+            ws.send('mark_read', { notification_id: notificationId as string });
         },
         [ws]
     );

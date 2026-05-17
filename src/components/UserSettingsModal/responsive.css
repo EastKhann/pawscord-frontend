@@ -1,0 +1,80 @@
+/* User Settings Modal — mobile responsive overrides.
+   Inline styles in styles.js use desktop-first sizing (220px sidebar +
+   95vw modal). On mobile this pushes form content past the viewport.
+   These rules collapse the sidebar to icon-only and let content fill. */
+
+@media (max-width: 768px) {
+    .pawscord-settings-modal {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        border-radius: 0 !important;
+    }
+
+    .pawscord-settings-sidebar {
+        width: 64px !important;
+    }
+
+    /* Hide tab text labels — show icons only */
+    .pawscord-settings-sidebar button > span:not(.pawscord-settings-tab-icon) {
+        display: none !important;
+    }
+
+    /* Hide section headers ("UYGULAMA AYARLARI" etc.) */
+    .pawscord-settings-section-label {
+        display: none !important;
+    }
+
+    /* Center the icons inside the narrow sidebar */
+    .pawscord-settings-sidebar button {
+        justify-content: center !important;
+        padding: 12px 8px !important;
+        min-height: 44px !important;
+    }
+
+    /* Tighter content header padding so close button doesn't crowd the title */
+    .pawscord-settings-content-header {
+        padding: 12px 14px !important;
+    }
+
+    .pawscord-settings-content-header h2 {
+        font-size: 17px !important;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Content body should be scroll-safe and not push past viewport.
+       max-width = (100vw - sidebar 64px) so flex-grow content cannot win
+       over min-content children (form rows, inputs) and bust the modal. */
+    .pawscord-settings-content {
+        min-width: 0 !important;
+        max-width: calc(100vw - 64px) !important;
+        flex: 1 1 0 !important;
+    }
+
+    .pawscord-settings-content-body {
+        padding: 16px 14px !important;
+        overflow-x: hidden !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Form fields/inputs/labels in account/privacy tabs commonly use fixed
+       widths or rigid flex layouts — make them reflow on small screens. */
+    .pawscord-settings-content-body input,
+    .pawscord-settings-content-body select,
+    .pawscord-settings-content-body textarea {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .pawscord-settings-content-body > div,
+    .pawscord-settings-content-body > section {
+        max-width: 100% !important;
+        flex-wrap: wrap !important;
+        overflow-x: hidden !important;
+    }
+}

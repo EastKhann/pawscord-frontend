@@ -1,7 +1,6 @@
 // frontend/src/VoiceChatPanel/EchoWarning.js
 // ⚠️ Echo detection warning banner
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 

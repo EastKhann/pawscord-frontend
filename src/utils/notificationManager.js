@@ -1,4 +1,3 @@
-import React from 'react';
 import logger from '../utils/logger';
 // frontend/src/utils/notificationManager.js
 
@@ -181,7 +180,7 @@ class NotificationManager {
       ${notification.closeButton ? '<button class="notification__close" aria-label={t("common.close")}>&times;</button>' : ''}
     `;
 
-        // Event listners
+        // Event listeners
         if (notification.onClick) {
             element.addEventListener('click', (e) => {
                 if (

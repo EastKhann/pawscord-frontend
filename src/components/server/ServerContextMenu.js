@@ -1,5 +1,5 @@
 ﻿// frontend/src/components/ServerContextMenu.js
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
@@ -40,7 +40,7 @@ const ServerContextMenu = ({
     isMuted = false,
 }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const menuRef = useRef(null);
     const { t } = useTranslation();
 

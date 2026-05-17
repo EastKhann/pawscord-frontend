@@ -127,7 +127,7 @@ const ChatAutocomplete = ({
     const { t } = useTranslation();
     const [type, setType] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null); // 'mention' | 'channel' | 'emoji' | null
+    const [_error, _setError] = useState(null); // 'mention' | 'channel' | 'emoji' | null
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -376,12 +376,12 @@ const ChatAutocomplete = ({
             <div style={S.header}>
                 {type === 'mention' && (
                     <>
-                        <FaAt className="icon-primary" /> <span>Users</span>
+                        <FaAt className="icon-primary" /> <span>{t('chat.autocompleteUsers', 'Users')}</span>
                     </>
                 )}
                 {type === 'channel' && (
                     <>
-                        <FaHashtag className="icon-primary" /> <span>Kanallar</span>
+                        <FaHashtag className="icon-primary" /> <span>{t('chat.autocompleteChannels', 'Channels')}</span>
                     </>
                 )}
                 {type === 'emoji' && (

@@ -6,10 +6,29 @@ import i18n, { SUPPORTED_LANGUAGES } from '../i18n';
 import api from '../api';
 import logger from '../utils/logger';
 
-const LanguageContext = createContext();
+interface LanguageInfo {
+    code: string;
+    name: string;
+    native_name: string;
+    flag: string;
+    direction: string;
+}
+
+interface LanguageContextValue {
+    currentLanguage: string;
+    languages: LanguageInfo[];
+    translations: Record<string, string>;
+    loading: boolean;
+    direction: string;
+    t: (key: string, params?: Record<string, string>) => string;
+    changeLanguage: (langCode: string) => Promise<void>;
+    getLanguageInfo: (code: string) => LanguageInfo | undefined;
+}
+
+const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
 // Default translations (English fallback)
-const defaultTranslations = {
+const defaultTranslations: Record<string, string> = {
     'common.save': 'Save',
     'common.cancel': 'Cancel',
     'common.loading': 'Loading...',
@@ -17,11 +36,11 @@ const defaultTranslations = {
     'common.success': 'Success',
 };
 
-export const LanguageProvider = ({ children }) => {
+export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
     // Use i18next's detected language (browser-first) as initial
     const [currentLanguage, setCurrentLanguage] = useState(i18n.language || 'en');
-    const [translations, setTranslations] = useState(defaultTranslations);
-    const [languages, setLanguages] = useState(
+    const [translations, setTranslations] = useState<Record<string, string>>(defaultTranslations);
+    const [languages, setLanguages] = useState<LanguageInfo[]>(
         SUPPORTED_LANGUAGES.map((l) => ({
             code: l.code,
             name: l.name,
@@ -69,10 +88,11 @@ export const LanguageProvider = ({ children }) => {
             setLoading(false);
         };
         loadUserLanguage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Load translations for a language
-    const loadTranslations = async (langCode) => {
+    const loadTranslations = async (langCode: string) => {
         try {
             const response = await api.get(`/i18n/translations/${langCode}/`);
             setTranslations(response.data.translations);
@@ -89,7 +109,7 @@ export const LanguageProvider = ({ children }) => {
     };
 
     // Change language
-    const changeLanguage = useCallback(async (langCode) => {
+    const changeLanguage = useCallback(async (langCode: string) => {
         setCurrentLanguage(langCode);
         localStorage.setItem('language', langCode);
         localStorage.setItem('pawscord_language', langCode);
@@ -102,12 +122,13 @@ export const LanguageProvider = ({ children }) => {
         } catch {
             // Not logged in, that's fine
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Translation function with interpolation + i18next fallback
     const t = useCallback(
-        (key, params = {}) => {
-            let text = translations[key];
+        (key: string, params: Record<string, string> = {}) => {
+            let text: string | undefined = translations[key];
 
             // Fallback to i18next bundled translations if API translation missing
             if (!text || text === key) {
@@ -122,7 +143,7 @@ export const LanguageProvider = ({ children }) => {
 
             // Handle interpolation {param}
             Object.entries(params).forEach(([param, value]) => {
-                text = text.replace(new RegExp(`\\{${param}\\}`, 'g'), value);
+                text = text!.replace(new RegExp(`\\{${param}\\}`, 'g'), value);
             });
 
             return text;
@@ -132,13 +153,13 @@ export const LanguageProvider = ({ children }) => {
 
     // Get language info
     const getLanguageInfo = useCallback(
-        (code) => {
+        (code: string) => {
             return languages.find((l) => l.code === code);
         },
         [languages]
     );
 
-    const value = {
+    const value: LanguageContextValue = {
         currentLanguage,
         languages,
         translations,

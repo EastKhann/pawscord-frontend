@@ -8,7 +8,7 @@ const LogoutModal = ({ isOpen, onClose, onConfirm, username }) => {
     const { t } = useTranslation();
     const { overlayProps, dialogProps } = useModalA11y({ isOpen, onClose, label: 'Logout' });
     const [isLoggingOut, setIsLoggingOut] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     if (!isOpen) return null;
 

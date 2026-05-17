@@ -14,7 +14,7 @@ const ReactionUsersPopup = ({ emoji, users = [], count, hasCurrentUser, onToggle
     const { t } = useTranslation();
     const [showPopup, setShowPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [popupPos, setPopupPos] = useState({ top: 0, left: 0 });
     const btnRef = useRef(null);
     const timerRef = useRef(null);

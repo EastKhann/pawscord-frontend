@@ -2,7 +2,7 @@
 // Enterprise-grade WebSocket Service
 // Advanced WebSocket manager with auto-reconnect, heartbeat, and message queuing
 
-import { WS_PROTOCOL, API_HOST } from '../utils/constants';
+import { WS_PROTOCOL, API_HOST, API_BASE_URL } from '../utils/constants';
 import logger from '../utils/logger';
 
 /**
@@ -34,22 +34,62 @@ export const MESSAGE_TYPES = {
 } as const;
 
 /**
+ * Connection object stored per channel
+ */
+interface WSConnection {
+    ws: WebSocket;
+    channel: string;
+    state: WSState;
+    reconnectAttempts: number;
+    lastActivity: number;
+    heartbeatTimer: ReturnType<typeof setInterval> | null;
+    options: WSConnectOptions;
+}
+
+interface WSConnectOptions {
+    allowAnonymous?: boolean;
+    username?: string;
+    params?: Record<string, string>;
+    queue?: boolean;
+}
+
+interface WSServiceStats {
+    messagesSent: number;
+    messagesReceived: number;
+    reconnects: number;
+    errors: number;
+}
+
+interface WSServiceConfig {
+    reconnectAttempts: number;
+    reconnectDelay: number;
+    reconnectMultiplier: number;
+    maxReconnectDelay: number;
+    heartbeatInterval: number;
+    messageTimeout: number;
+    queueMaxSize: number;
+}
+
+/**
  * WebSocket Manager Class
  */
 type MessageHandler = (data: Record<string, unknown>) => void;
 
 class WebSocketService {
-    connections: Map<string, WebSocket>;
+    connections: Map<string, WSConnection>;
     messageQueue: Map<string, Array<Record<string, unknown>>>;
-    handlers: Map<string, Set<MessageHandler>>;
+    handlers: Map<string, MessageHandler[]>;
     globalHandlers: MessageHandler[];
-    config: Record<string, unknown>;
+    config: WSServiceConfig;
+    stats: WSServiceStats;
+    private _visibilityHandler: (() => void) | null;
 
     constructor() {
         this.connections = new Map();
         this.messageQueue = new Map();
         this.handlers = new Map();
         this.globalHandlers = [];
+        this._visibilityHandler = null;
 
         this.config = {
             reconnectAttempts: 10,
@@ -98,7 +138,7 @@ class WebSocketService {
             this._visibilityHandler = null;
         }
         // Close all connections
-        this.connections.forEach((conn, channel) => {
+        this.connections.forEach((_conn, channel) => {
             this.disconnect(channel);
         });
         this.handlers.clear();
@@ -109,9 +149,9 @@ class WebSocketService {
     /**
      * Connect to a WebSocket channel
      */
-    connect(channel, options = {}) {
+    connect(channel: string, options: WSConnectOptions = {}): Promise<WSConnection> {
         if (this.connections.has(channel)) {
-            const existing = this.connections.get(channel);
+            const existing = this.connections.get(channel)!;
             if (existing.state === WS_STATES.CONNECTED) {
                 return Promise.resolve(existing);
             }
@@ -127,7 +167,7 @@ class WebSocketService {
             const url = this.buildURL(channel, token, options);
             const ws = new WebSocket(url);
 
-            const connection = {
+            const connection: WSConnection = {
                 ws,
                 channel,
                 state: WS_STATES.CONNECTING,
@@ -148,14 +188,22 @@ class WebSocketService {
                 resolve(connection);
             };
 
-            ws.onmessage = (event) => {
+            ws.onmessage = (event: MessageEvent) => {
                 this.handleMessage(channel, event);
             };
 
-            ws.onclose = (event) => {
+            ws.onclose = (event: CloseEvent) => {
                 connection.state = WS_STATES.DISCONNECTED;
                 this.stopHeartbeat(channel);
                 this.emit('disconnect', { channel, code: event.code });
+
+                // Auth-rejection codes: do not burn reconnect budget with
+                // an already-expired token — refresh first, then reconnect.
+                const AUTH_REJECTION_CODES = [4001, 4003, 4004];
+                if (AUTH_REJECTION_CODES.includes(event.code)) {
+                    this.refreshTokenThenReconnect(channel);
+                    return;
+                }
 
                 // Auto-reconnect if not intentional close
                 if (event.code !== 1000 && event.code !== 1001) {
@@ -163,7 +211,7 @@ class WebSocketService {
                 }
             };
 
-            ws.onerror = (error) => {
+            ws.onerror = (error: Event) => {
                 logger.error(`🔌 [WS] Error: ${channel}`, error);
                 connection.state = WS_STATES.ERROR;
                 this.stats.errors++;
@@ -176,7 +224,7 @@ class WebSocketService {
     /**
      * Build WebSocket URL
      */
-    buildURL(channel, token, options = {}) {
+    buildURL(channel: string, token: string | null, options: WSConnectOptions = {}): string {
         const params = new URLSearchParams();
         if (token) params.append('token', token);
         if (options.username) params.append('username', options.username);
@@ -190,9 +238,9 @@ class WebSocketService {
     /**
      * Handle incoming message
      */
-    handleMessage(channel, event) {
+    handleMessage(channel: string, event: MessageEvent) {
         try {
-            const data = JSON.parse(event.data);
+            const data = JSON.parse(event.data) as Record<string, unknown>;
             this.stats.messagesReceived++;
 
             const connection = this.connections.get(channel);
@@ -209,7 +257,7 @@ class WebSocketService {
             const channelHandlers = this.handlers.get(channel) || [];
             channelHandlers.forEach((handler) => {
                 try {
-                    handler(data, channel);
+                    handler(data);
                 } catch (e) {
                     logger.error('Handler error:', e);
                 }
@@ -218,7 +266,7 @@ class WebSocketService {
             // Call global handlers
             this.globalHandlers.forEach((handler) => {
                 try {
-                    handler(data, channel);
+                    handler(data);
                 } catch (e) {
                     logger.error('Global handler error:', e);
                 }
@@ -234,9 +282,9 @@ class WebSocketService {
     /**
      * Send message through WebSocket
      */
-    send(channel, type, payload, options = {}) {
+    send(channel: string, type: string, payload: Record<string, unknown>, options: WSConnectOptions = {}): boolean {
         const connection = this.connections.get(channel);
-        const message = {
+        const message: Record<string, unknown> = {
             type,
             ...payload,
             timestamp: Date.now(),
@@ -267,13 +315,13 @@ class WebSocketService {
     /**
      * Queue message for later delivery
      */
-    queueMessage(channel, message) {
+    queueMessage(channel: string, message: Record<string, unknown>) {
         if (!this.messageQueue.has(channel)) {
             this.messageQueue.set(channel, []);
         }
 
-        const queue = this.messageQueue.get(channel);
-        if (queue.length < this.config.queueMaxSize) {
+        const queue = this.messageQueue.get(channel)!;
+        if (queue.length < (this.config.queueMaxSize as number)) {
             queue.push(message);
         }
     }
@@ -281,7 +329,7 @@ class WebSocketService {
     /**
      * Flush queued messages
      */
-    flushQueue(channel) {
+    flushQueue(channel: string) {
         const queue = this.messageQueue.get(channel);
         if (!queue || queue.length === 0) return;
 
@@ -294,7 +342,7 @@ class WebSocketService {
                 connection.ws.send(JSON.stringify(message));
                 this.stats.messagesSent++;
             } catch (error) {
-                queue.unshift(message);
+                if (message) queue.unshift(message);
                 break;
             }
         }
@@ -303,7 +351,7 @@ class WebSocketService {
     /**
      * Start heartbeat for connection
      */
-    startHeartbeat(channel) {
+    startHeartbeat(channel: string) {
         const connection = this.connections.get(channel);
         if (!connection) return;
 
@@ -319,7 +367,7 @@ class WebSocketService {
     /**
      * Stop heartbeat for connection
      */
-    stopHeartbeat(channel) {
+    stopHeartbeat(channel: string) {
         const connection = this.connections.get(channel);
         if (connection?.heartbeatTimer) {
             clearInterval(connection.heartbeatTimer);
@@ -328,9 +376,54 @@ class WebSocketService {
     }
 
     /**
+     * Attempt a token refresh, then reconnect on success.
+     * Called when the server closes the socket with an auth-rejection code
+     * (4001 unauthorized, 4003 forbidden, 4004 not found/disconnected).
+     * Does NOT increment reconnectAttempts — the expired token is not a
+     * transient network failure, so the reconnect budget is preserved.
+     */
+    async refreshTokenThenReconnect(channel: string): Promise<void> {
+        const connection = this.connections.get(channel);
+        if (!connection) return;
+
+        logger.debug(`[WebSocket] Auth rejection on "${channel}" — attempting token refresh`);
+
+        try {
+            const refreshToken = localStorage.getItem('refresh_token');
+            if (!refreshToken) {
+                throw new Error('No refresh token available');
+            }
+
+            const response = await fetch(`${API_BASE_URL}/auth/token/refresh/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refresh: refreshToken }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Token refresh failed with status ${response.status}`);
+            }
+
+            const data = await response.json() as { access?: string };
+            if (data.access) {
+                localStorage.setItem('access_token', data.access);
+                logger.debug(`[WebSocket] Token refreshed — reconnecting "${channel}"`);
+                // Reset attempts so the fresh connection gets a full budget
+                connection.reconnectAttempts = 0;
+                await this.reconnect(channel);
+            } else {
+                throw new Error('Token refresh response missing access field');
+            }
+        } catch (err) {
+            logger.error(`[WebSocket] Token refresh failed for "${channel}" — emitting authError`, err);
+            this.emit('authError', { channel, error: (err as Error).message });
+        }
+    }
+
+    /**
      * Schedule reconnection
      */
-    scheduleReconnect(channel) {
+    scheduleReconnect(channel: string) {
         const connection = this.connections.get(channel);
         if (!connection) return;
 
@@ -357,7 +450,7 @@ class WebSocketService {
     /**
      * Reconnect to channel
      */
-    async reconnect(channel) {
+    async reconnect(channel: string) {
         const connection = this.connections.get(channel);
         if (!connection) return;
 
@@ -366,7 +459,7 @@ class WebSocketService {
             try {
                 connection.ws.close();
             } catch (e) {
-                logger.debug('[WebSocket] Close during reconnect:', e.message);
+                logger.debug('[WebSocket] Close during reconnect:', (e as Error).message);
             }
         }
 
@@ -381,7 +474,7 @@ class WebSocketService {
     /**
      * Disconnect from channel
      */
-    disconnect(channel, code = 1000) {
+    disconnect(channel: string, code = 1000) {
         const connection = this.connections.get(channel);
         if (!connection) return;
 
@@ -408,11 +501,11 @@ class WebSocketService {
     /**
      * Register message handler for channel
      */
-    on(channel, handler) {
+    on(channel: string, handler: MessageHandler): () => void {
         if (!this.handlers.has(channel)) {
             this.handlers.set(channel, []);
         }
-        this.handlers.get(channel).push(handler);
+        this.handlers.get(channel)!.push(handler);
 
         // Return unsubscribe function
         return () => {
@@ -427,7 +520,7 @@ class WebSocketService {
     /**
      * Register global message handler
      */
-    onGlobal(handler) {
+    onGlobal(handler: MessageHandler): () => void {
         this.globalHandlers.push(handler);
         return () => {
             const index = this.globalHandlers.indexOf(handler);
@@ -438,7 +531,7 @@ class WebSocketService {
     /**
      * Event emitter
      */
-    emit(event, data) {
+    emit(event: string, data: Record<string, unknown>) {
         const customEvent = new CustomEvent(`ws:${event}`, { detail: data });
         window.dispatchEvent(customEvent);
     }
@@ -446,14 +539,14 @@ class WebSocketService {
     /**
      * Generate unique message ID
      */
-    generateMessageId() {
+    generateMessageId(): string {
         return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     }
 
     /**
      * Get connection state
      */
-    getState(channel) {
+    getState(channel: string): WSState {
         const connection = this.connections.get(channel);
         return connection?.state || WS_STATES.DISCONNECTED;
     }
@@ -461,8 +554,8 @@ class WebSocketService {
     /**
      * Get all active connections
      */
-    getConnections() {
-        const result = {};
+    getConnections(): Record<string, { state: WSState; lastActivity: number; reconnectAttempts: number }> {
+        const result: Record<string, { state: WSState; lastActivity: number; reconnectAttempts: number }> = {};
         this.connections.forEach((conn, channel) => {
             result[channel] = {
                 state: conn.state,
@@ -476,7 +569,7 @@ class WebSocketService {
     /**
      * Get statistics
      */
-    getStats() {
+    getStats(): WSServiceStats {
         return { ...this.stats };
     }
 
@@ -487,25 +580,25 @@ class WebSocketService {
     /**
      * Connect to chat room
      */
-    connectToRoom(roomId) {
+    connectToRoom(roomId: string | number) {
         return this.connect(`chat/${roomId}`, {
-            params: { room_id: roomId },
+            params: { room_id: String(roomId) },
         });
     }
 
     /**
      * Connect to voice channel
      */
-    connectToVoice(roomId) {
+    connectToVoice(roomId: string | number) {
         return this.connect(`voice/${roomId}`, {
-            params: { room_id: roomId },
+            params: { room_id: String(roomId) },
         });
     }
 
     /**
      * Connect to user presence/status
      */
-    connectToStatus(username) {
+    connectToStatus(username: string) {
         return this.connect('status', {
             username,
             params: { username },
@@ -522,7 +615,7 @@ class WebSocketService {
     /**
      * Send chat message
      */
-    sendChatMessage(roomId, content, options = {}) {
+    sendChatMessage(roomId: string | number, content: string, options: Record<string, unknown> = {}) {
         return this.send(`chat/${roomId}`, MESSAGE_TYPES.CHAT, {
             content,
             ...options,
@@ -532,7 +625,7 @@ class WebSocketService {
     /**
      * Send typing indicator
      */
-    sendTyping(roomId, isTyping = true) {
+    sendTyping(roomId: string | number, isTyping = true) {
         return this.send(`chat/${roomId}`, MESSAGE_TYPES.TYPING, {
             typing: isTyping,
         });
@@ -541,17 +634,17 @@ class WebSocketService {
     /**
      * Send presence update
      */
-    sendPresence(status, activity = null) {
+    sendPresence(status: string, activity: string | null = null) {
         return this.send('status', MESSAGE_TYPES.PRESENCE, {
             status,
-            activity,
+            activity: activity ?? undefined,
         });
     }
 
     /**
      * Send reaction
      */
-    sendReaction(roomId, messageId, emoji) {
+    sendReaction(roomId: string | number, messageId: string | number, emoji: string) {
         return this.send(`chat/${roomId}`, MESSAGE_TYPES.REACTION, {
             message_id: messageId,
             emoji,

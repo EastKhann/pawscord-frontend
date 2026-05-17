@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 // frontend/src/components/NotificationDropdown.js
-import { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, useRef, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import { FaBell, FaTimes, FaCheck, FaCheckDouble, FaTrash } from 'react-icons/fa';
 import confirmDialog from '../../utils/confirmDialog';
@@ -145,7 +145,10 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
         return date.toLocaleDateString();
     };
 
-    const unreadCount = notifications.filter((n) => !n.is_read).length;
+    const unreadCount = useMemo(
+        () => notifications.filter((n) => !n.is_read).length,
+        [notifications]
+    );
 
     return (
         <div

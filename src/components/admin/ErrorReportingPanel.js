@@ -7,9 +7,11 @@ import PropTypes from 'prop-types';
 import toast from '../../utils/toast';
 import logger from '../../utils/logger';
 import './ErrorReportingPanel.css';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('admin.errorReporting', 'Error Reporting') });
     const [errorReport, setErrorReport] = useState({
         title: '',
         description: '',
@@ -110,20 +112,14 @@ const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
     return (
         <div
             className="error-reporting-overlay"
-            role="button"
-            tabIndex={0}
-            onClick={onClose}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            {...overlayProps}
         >
             <div
                 className="error-reporting-panel"
-                role="button"
-                tabIndex={0}
-                onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+                {...dialogProps}
             >
                 <div className="error-reporting-header">
-                    <h2>🐛 Error Reportimi</h2>
+                    <h2>🐛 {t('admin.errorReporting', 'Error Reporting')}</h2>
                     <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                         ✕
                     </button>
@@ -151,7 +147,7 @@ const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Kategori</label>
+                                <label>{t('admin.category', 'Category')}</label>
                                 <select
                                     className="form-select"
                                     value={errorReport.category}
@@ -159,9 +155,9 @@ const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
                                         setErrorReport({ ...errorReport, category: e.target.value })
                                     }
                                 >
-                                    <option value="bug">🐛 Hata (Bug)</option>
+                                    <option value="bug">{t('admin.bugReport', '🐛 Bug')}</option>
                                     <option value="feature">{t('admin.featureRequest', '✨ Feature Request')}</option>
-                                    <option value="performance">⚡ Performans</option>
+                                    <option value="performance">{t('admin.performance', '⚡ Performance')}</option>
                                     <option value="ui">{t('admin.uiIssue', '🎨 UI/UX Issue')}</option>
                                     <option value="crash">{t('admin.crash', '💥 Crash')}</option>
                                 </select>
@@ -177,9 +173,9 @@ const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
                                     }
                                 >
                                     <option value="low">{t('admin.priorityLow', '🟢 Low')}</option>
-                                    <option value="medium">🟡 Orta</option>
+                                    <option value="medium">{t('admin.priorityMedium', '🟡 Medium')}</option>
                                     <option value="high">{t('admin.priorityHigh', '🟠 High')}</option>
-                                    <option value="critical">🔴 Kritik</option>
+                                    <option value="critical">{t('admin.priorityCritical', '🔴 Critical')}</option>
                                 </select>
                             </div>
                         </div>
@@ -248,17 +244,17 @@ const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
                         </div>
 
                         <div className="system-info">
-                            <h4>📊 Sistem Bilgileri</h4>
+                            <h3>📊 {t('admin.systemInfo', 'System Information')}</h3>
                             <div className="info-grid">
                                 <div className="info-item">
-                                    <span className="info-label">Browser:</span>
+                                    <span className="info-label">{t('admin.panel.browser', 'Browser')}:</span>
                                     <span className="info-value">
                                         {navigator.userAgent.split('(')[1]?.split(')')[0] ||
-                                            'Unknown'}
+                                            t('common.unknown', 'Unknown')}
                                     </span>
                                 </div>
                                 <div className="info-item">
-                                    <span className="info-label">Ekran:</span>
+                                    <span className="info-label">{t('errorReport.screen', 'Screen')}:</span>
                                     <span className="info-value">
                                         {errorReport.screen_resolution}
                                     </span>
@@ -278,7 +274,7 @@ const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
                         </div>
 
                         <div className="preview-section">
-                            <h4>{t('admin.preview', '👁️ Preview')}</h4>
+                            <h3>{t('admin.preview', '👁️ Preview')}</h3>
                             <div className="error-preview">
                                 <div className="preview-header">
                                     <span className="preview-icon">

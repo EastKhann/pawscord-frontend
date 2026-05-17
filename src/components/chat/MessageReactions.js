@@ -1,5 +1,5 @@
 ﻿// frontend/src/components/MessageReactions.js
-import React, { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FaPlus } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ const MessageReactions = ({
     const { t } = useTranslation();
     const [showPicker, setShowPicker] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     // 🎯 Reaction'ları grupla ve say
     const groupedReactions = useMemo(() => {
@@ -91,9 +91,9 @@ const MessageReactions = ({
     return (
         <div style={styles.container}>
             {/* Mevcut Reactions */}
-            {groupedReactions.map((reactionGroup, index) => (
+            {groupedReactions.map((reactionGroup) => (
                 <button
-                    key={index}
+                    key={reactionGroup.emoji}
                     aria-label={reactionGroup.emoji ? `${t('msgReactions.react', 'React with')} ${reactionGroup.emoji}` : t('msgReactions.react', 'React')}
                     style={{
                         ...styles.reactionButton,
@@ -112,7 +112,7 @@ const MessageReactions = ({
                 aria-label={t('msgReactions.addReaction', 'Add reaction')}
                 onClick={() => setShowPicker(!showPicker)}
                 style={styles.addButton}
-                title="Tepki ekle"
+                title={t('msgReactions.addReaction', 'Add reaction')}
             >
                 <FaPlus className="fs-10" />
             </button>

@@ -15,7 +15,7 @@ import logger from '../../utils/logger';
  * - Thread olusturma
  * - Thread'lere abone olma
  * - Thread pinleme
- * - Thread mesajlari g�r�nt�leme
+ * - Thread mesajları görüntüleme
  */
 
 const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) => {
@@ -42,7 +42,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
             }
         } catch (error) {
             logger.error(t('ui.thread_load_hatasi'), error);
-            toast.error(t('threads.couldNotLoad', 'Konular y�klenemedi'));
+            toast.error(t('threads.couldNotLoad', 'Konular yüklenemedi'));
         } finally {
             setLoading(false);
         }
@@ -181,7 +181,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                     ) : threads.length === 0 ? (
                         <div style={styles.empty}>
                             <FaComments className="icon-lg" />
-                            <p>Hen�z konu yok</p>
+                            <p>{t('threads.noThreads')}</p>
                         </div>
                     ) : (
                         threads.map((thread) => (
@@ -193,8 +193,8 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                                     <div style={styles.threadName}>{thread.name}</div>
                                     <div style={styles.threadMeta}>
                                         <span>{thread.message_count || 0} message</span>
-                                        <span>�</span>
-                                        <span>{thread.subscriber_count || 0} abone</span>
+                                        <span>·</span>
+                                        <span>{t('threads.subscribers', { count: thread.subscriber_count || 0 })}</span>
                                     </div>
                                 </div>
                                 <div style={styles.threadActions}>
@@ -205,8 +205,8 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                                         style={styles.actionBtn}
                                         title={
                                             thread.is_subscribed
-                                                ? 'Subscriptionten Exit'
-                                                : 'Abone Ol'
+                                                ? t('threads.unsubscribe')
+                                                : t('threads.subscribeToThread')
                                         }
                                     >
                                         {thread.is_subscribed ? <FaBellSlash /> : <FaBell />}
@@ -216,7 +216,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                                             aria-label={t('threads.pinThread', 'Pin thread')}
                                             onClick={() => pinThread(thread.id)}
                                             style={styles.actionBtn}
-                                            title="Sabitle"
+                                            title={t('threads.pinThread')}
                                         >
                                             <FaThumbtack />
                                         </button>

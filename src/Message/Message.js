@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { getToken } from '../utils/tokenStorage';
 // frontend/src/Message.js
-import React, {
+import {
     useState,
     useMemo,
     useEffect,

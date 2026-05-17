@@ -88,7 +88,7 @@ const NotificationSoundSettings = ({ settings, onSave }) => {
     const { t } = useTranslation();
     const [masterVolume, setMasterVolume] = useState(settings?.masterVolume ?? 80);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [masterEnabled, setMasterEnabled] = useState(settings?.masterEnabled !== false);
     const [eventSettings, setEventSettings] = useState(
         settings?.events ||

@@ -1,10 +1,10 @@
-﻿// frontend/src/GifPicker.js (Mutlak URL with �alisan cutin ��z�m)
+﻿// frontend/src/GifPicker.js (Mutlak URL with çalışan çözüm)
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import logger from '../utils/logger';
 import { useTranslation } from 'react-i18next';
-// <<< D�ZELTME: absoluteHostUrl prop'u added >>>
+// <<< DÜZELTME: absoluteHostUrl prop'u added >>>
 const GifPicker = ({ onSelect, onClose, localGifListUrl, absoluteHostUrl, fetchWithAuth }) => {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
@@ -30,7 +30,7 @@ const GifPicker = ({ onSelect, onClose, localGifListUrl, absoluteHostUrl, fetchW
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [onClose]);
 
-    // 1. Yerel GIF'leri API'den �ek
+    // 1. Yerel GIF'leri API'den çek
     useEffect(() => {
         const fetchLocalGifs = async () => {
             setIsLoading(true);
@@ -127,7 +127,7 @@ const GifPicker = ({ onSelect, onClose, localGifListUrl, absoluteHostUrl, fetchW
                                 }
                             >
                                 <img
-                                    // KRITIK D�ZELTME: Mutlak URL kullanarak resmi �ek
+                                    // KRİTİK DÜZELTME: Mutlak URL kullanarak resmi çek
                                     src={getAbsoluteGifUrl(url)}
                                     alt={url.substring(url.lastIndexOf('/') + 1)}
                                     style={styles.gifImage}

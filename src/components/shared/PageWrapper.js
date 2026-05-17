@@ -6,7 +6,7 @@ import { Capacitor } from '@capacitor/core';
 const PageWrapper = ({ children }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const isNative = Capacitor.isNativePlatform();
 
     return (

@@ -39,7 +39,7 @@ const pulse = `
 
 const LoadingSkeleton = ({ label }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const displayLabel = label || t('common.loading', 'Loading...');
     return (
         <>

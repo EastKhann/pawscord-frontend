@@ -11,7 +11,7 @@ import './SecuritySettingsPanel.css';
 const SecuritySettingsPanel = ({ onClose }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const api = useSecurityAPI();
 
     return (

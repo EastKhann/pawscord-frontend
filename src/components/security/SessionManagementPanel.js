@@ -95,7 +95,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaLaptop className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Aktif Oturumlar</h2>
+                        <h2 style={styles.title}>{t('sessionManager.title', 'Active Sessions')}</h2>
                     </div>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
@@ -111,7 +111,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         onClick={revokeAllSessions}
                         style={styles.revokeAllButton}
                     >
-                        Sign Out All Other Devices
+                        {t('sessions.revokeAll', 'Sign Out All Other Devices')}
                     </button>
                 </div>
 
@@ -132,7 +132,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                             {session.device_name || 'Unknown Device'}
                                             {session.is_current && (
                                                 <span style={styles.currentBadge}>
-                                                    Mevcut Oturum
+                                                    {t('sessions.currentSession', 'Current Session')}
                                                 </span>
                                             )}
                                         </div>
@@ -157,7 +157,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                                         <button
                                             aria-label={t('sessions.revokeSession', 'Revoke session')}
                                     style={styles.revokeButton}
-                                    title="Oturumu Kapat"
+                                    title={t('sessions.revokeSession', 'Close Session')}
                                         >
                                     <FaTrash />
                                 </button>

@@ -86,7 +86,7 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div style={styles.header}>
-                    <h2 style={styles.title}>?? Webhook Y�netimi</h2>
+                    <h2 style={styles.title}>🔗 {t('webhooks.management', 'Webhook Management')}</h2>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
                     </button>
@@ -99,7 +99,7 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                             onClick={() => setShowCreate(true)}
                             style={styles.createButton}
                         >
-                            <FaPlus /> Yeni Webhook
+                            <FaPlus /> {t('webhooks.createNew', 'Create New Webhook')}
                         </button>
                     )}
 
@@ -129,7 +129,7 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                                     onClick={handleCreate}
                                     style={styles.submitButton}
                                 >
-                                    Olustur
+                                    {t('common.create', 'Create')}
                                 </button>
                                 <button
                                     aria-label={t('common.create')}
@@ -145,7 +145,7 @@ const WebhookManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId }) => {
                     {loading ? (
                         <div style={styles.loading}>{t('common.loading')}</div>
                     ) : webhooks.length === 0 ? (
-                        <div style={styles.empty}>Hen�z webhook olusturulmadi</div>
+                        <div style={styles.empty}>{t('webhooks.noWebhooksCreated', 'No webhooks created yet')}</div>
                     ) : (
                         <div style={styles.webhookList}>
                             {webhooks.map((webhook) => (

@@ -12,7 +12,7 @@ const S = {
 
 const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         responders,
         loading,
@@ -167,7 +167,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
                                             aria-label={t('autoResponder.delete', 'Delete auto-responder')}
                                             onClick={() => deleteResponder(resp.id)}
                                             style={styles.deleteButton}
-                                            title="Sil"
+                                            title={t('common.delete', 'Delete')}
                                         >
                                             <FaTrash />
                                         </button>

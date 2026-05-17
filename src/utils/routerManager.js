@@ -16,7 +16,7 @@ class RouterManager {
         this.scrollBehavior = options.scrollBehavior || 'smooth';
         this.transitionDuration = options.transitionDuration || 300;
 
-        this.listners = new Map();
+        this.listeners = new Map();
         this.prefetchedRoutes = new Set();
         this.moduleCache = new Map();
 
@@ -342,16 +342,16 @@ class RouterManager {
      * Event emitter
      */
     on(event, callback) {
-        if (!this.listners.has(event)) {
-            this.listners.set(event, []);
+        if (!this.listeners.has(event)) {
+            this.listeners.set(event, []);
         }
-        this.listners.get(event).push(callback);
+        this.listeners.get(event).push(callback);
     }
 
     off(event, callback) {
-        if (!this.listners.has(event)) return;
+        if (!this.listeners.has(event)) return;
 
-        const callbacks = this.listners.get(event);
+        const callbacks = this.listeners.get(event);
         const index = callbacks.indexOf(callback);
 
         if (index > -1) {
@@ -360,10 +360,10 @@ class RouterManager {
     }
 
     async emit(event, data) {
-        if (!this.listners.has(event)) return true;
+        if (!this.listeners.has(event)) return true;
 
         const results = [];
-        for (const callback of this.listners.get(event)) {
+        for (const callback of this.listeners.get(event)) {
             const result = await callback(data);
             results.push(result);
         }

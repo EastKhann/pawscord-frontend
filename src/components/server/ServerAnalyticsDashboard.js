@@ -20,7 +20,7 @@ const ServerAnalyticsDashboard = ({
     fetchWithAuth,
     apiBaseUrl,
 }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const { analytics, comparison, loading, period, setThuiod, fetchAnalytics } =
         useServerAnalytics({ serverId, fetchWithAuth, apiBaseUrl });
@@ -108,7 +108,7 @@ const ServerAnalyticsDashboard = ({
 
                             <div style={styles.chartsRow}>
                                 <div style={styles.chartCard}>
-                                    <h3 style={styles.chartTitle}>📈 Mesaj Aktivitesi</h3>
+                                    <h3 style={styles.chartTitle}>📈 {t('analytics.totalMessages', 'Message Activity')}</h3>
                                     <div style={styles.barChart}>
                                         {analytics.message_stats?.daily?.slice(-14).map((d, i) => {
                                             const maxCount = Math.max(
@@ -136,7 +136,7 @@ const ServerAnalyticsDashboard = ({
                                 </div>
 
                                 <div style={styles.chartCard}>
-                                    <h3 style={styles.chartTitle}>⏰ Saatlik Aktivite</h3>
+                                    <h3 style={styles.chartTitle}>⏰ {t('analytics.hourlyActivity', 'Hourly Activity')}</h3>
                                     <div style={styles.hourlyChart}>
                                         {analytics.peak_hours?.hourly?.map((count, hour) => {
                                             const maxCount = Math.max(
@@ -182,7 +182,7 @@ const ServerAnalyticsDashboard = ({
                                             ))}
                                         {(!analytics.popular_channels ||
                                             analytics.popular_channels.length === 0) && (
-                                                <div style={styles.emptyList}>Veri yok</div>
+                                                <div style={styles.emptyList}>{t('common.noData', 'No data')}</div>
                                             )}
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@ const ServerAnalyticsDashboard = ({
                                             ))}
                                         {(!analytics.active_users?.top_users ||
                                             analytics.active_users.top_users.length === 0) && (
-                                                <div style={styles.emptyList}>Veri yok</div>
+                                                <div style={styles.emptyList}>{t('common.noData', 'No data')}</div>
                                             )}
                                     </div>
                                 </div>

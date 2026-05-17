@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import React from 'react';
 import PropTypes from 'prop-types';
 import profileStyles from '../styles';
 
@@ -28,7 +27,7 @@ const ActivityTab = ({ userActivity: rawUA }) => {
   const { t } = useTranslation();
     const userActivity = rawUA || [];
     const styles = profileStyles;
-    const [error, setError] = React.useState(null);
+    const [_error, _setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (

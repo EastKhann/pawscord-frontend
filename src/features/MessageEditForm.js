@@ -1,6 +1,6 @@
 ﻿// frontend/src/MessageEditForm.js (ENTER TUŞU FİXLENDİ)
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 

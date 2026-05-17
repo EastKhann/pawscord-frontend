@@ -3,15 +3,35 @@ import { useEffect, useCallback, useState } from 'react';
 import notificationManager from '../utils/notifications';
 import logger from '../utils/logger';
 
-const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
-    const [notificationsEnabled, setNotificationsEnabled] = useState(notificationManager.enabled);
+/** Typed facade over the JS-authored NotificationManager singleton. */
+interface NotificationManagerLike {
+    enabled: boolean;
+    isSupported?: () => boolean;
+    isGranted?: () => boolean;
+    requestPermission: () => Promise<boolean>;
+    show?: (title: string, options?: Record<string, unknown>) => Notification | null;
+    showMention?: (username: string, content: string, avatar: string, room: string, id: string) => void;
+    showDM?: (username: string, content: string, avatar: string, id: string) => void;
+    showMessage?: (username: string, content: string, avatar: string, room: string, id: string) => void;
+    showVoiceCall?: (username: string, avatar: string, room: string) => void;
+}
+
+const nm = notificationManager as unknown as NotificationManagerLike;
+
+const useNotifications = (
+    ws: WebSocket | null | undefined,
+    currentUser: string | null | undefined,
+    currentRoom: string | null | undefined,
+    isWindowFocused: boolean
+) => {
+    const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(nm.enabled ?? false);
 
     // Request permission on mount
     useEffect(() => {
-        if (notificationManager.isSupported() && !notificationManager.isGranted()) {
+        if (nm.isSupported?.() && !nm.isGranted?.()) {
             // Auto-request after 10 seconds
             const timeout = setTimeout(async () => {
-                const granted = await notificationManager.requestPermission();
+                const granted = await nm.requestPermission();
                 setNotificationsEnabled(granted);
             }, 10000);
 
@@ -23,9 +43,9 @@ const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
     useEffect(() => {
         if (!ws || !notificationsEnabled) return;
 
-        const handleMessage = (event) => {
+        const handleMessage = (event: MessageEvent) => {
             try {
-                const data = JSON.parse(event.data);
+                const data = JSON.parse(event.data as string);
 
                 // Don't show notifications if window is focused
                 if (isWindowFocused) return;
@@ -44,19 +64,19 @@ const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
                     const isDM = room && room.startsWith('dm-');
 
                     if (isMention) {
-                        notificationManager.showMention(username, content, avatar, room, id);
+                        nm.showMention?.(username, content, avatar, room, id);
                     } else if (isDM) {
-                        notificationManager.showDM(username, content, avatar, id);
+                        nm.showDM?.(username, content, avatar, id);
                     } else if (room === currentRoom) {
                         // Only notify for current room messages (optional)
-                        notificationManager.showMessage(username, content, avatar, room, id);
+                        nm.showMessage?.(username, content, avatar, room, id);
                     }
                 }
 
                 // Voice call notification
                 if (data.type === 'voice_call') {
                     const { username, avatar, room } = data;
-                    notificationManager.showVoiceCall(username, avatar, room);
+                    nm.showVoiceCall?.(username, avatar, room);
                 }
             } catch (error) {
                 logger.error('Notification error:', error);
@@ -72,13 +92,13 @@ const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
 
     // Manual enable/disable
     const enableNotifications = useCallback(async () => {
-        const granted = await notificationManager.requestPermission();
+        const granted = await nm.requestPermission();
         setNotificationsEnabled(granted);
-        return granted;
+        return granted as boolean;
     }, []);
 
     const testNotification = useCallback(() => {
-        notificationManager.show('PAWSCORD', {
+        nm.show?.('PAWSCORD', {
             body: 'Desktop notifications enabled! 🔔',
             icon: '/logo192.png',
         });
@@ -88,7 +108,7 @@ const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
         notificationsEnabled,
         enableNotifications,
         testNotification,
-        isSupported: notificationManager.isSupported(),
+        isSupported: nm.isSupported?.() ?? false,
     };
 };
 

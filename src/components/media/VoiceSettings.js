@@ -30,6 +30,7 @@ const VoiceSettings = ({ userId, onClose }) => {
     const [inputLevel, setInputLevel] = useState(0);
     const [settings, setSettings] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [statusAnnouncement, setStatusAnnouncement] = useState('');
 
     useEffect(() => {
         fetchDevices();
@@ -114,6 +115,7 @@ const VoiceSettings = ({ userId, onClose }) => {
 
     const testMicrophone = async () => {
         setTesting(true);
+        setStatusAnnouncement(t('voiceSettings.micTestStarted', 'Microphone test started'));
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: {
@@ -157,7 +159,8 @@ const VoiceSettings = ({ userId, onClose }) => {
     const stopTesting = useCallback(() => {
         setTesting(false);
         setInputLevel(0);
-    }, []);
+        setStatusAnnouncement(t('voiceSettings.micTestStopped', 'Microphone test stopped'));
+    }, [t]);
 
     const resetToDefaults = async () => {
         if (!await confirmDialog(t('voice.resetConfirm', 'Reset all audio settings to defaults?'))) return;
@@ -185,7 +188,8 @@ const VoiceSettings = ({ userId, onClose }) => {
         }
     };
 
-    const showToast = (message, type = 'success') => {
+    const showToast = (message, _type = 'success') => {
+        setStatusAnnouncement(message);
     };
 
     if (loading) {
@@ -201,9 +205,13 @@ const VoiceSettings = ({ userId, onClose }) => {
 
     return (
         <div className="voice-settings-overlay">
+            {/* Screen-reader live region for settings save/test status */}
+            <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+                {statusAnnouncement}
+            </div>
             <div className="voice-settings-panel">
                 <div className="panel-header">
-                    <h2><FaMicrophone /> Voice & Video Settings</h2>
+                    <h2><FaMicrophone /> {t('voice.title', 'Voice & Video Settings')}</h2>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} className="btn-close">
                         <FaTimes />
                     </button>
@@ -215,9 +223,9 @@ const VoiceSettings = ({ userId, onClose }) => {
                         <h3><FaMicrophone /> {t('voice.inputDevice', 'Input Device')}</h3>
 
                         <div className="form-group">
-                            <label>Mikrofon</label>
+                            <label>{t('voiceSettings.microphone', 'Microphone')}</label>
                             <select value={selectedInput} onChange={(e) => setSelectedInput(e.target.value)}>
-                                <option value="">Default</option>
+                                <option value="">{t('voiceSettings.default', 'Default')}</option>
                                 {devices.input.map(device => (
                                     <option key={device.deviceId} value={device.deviceId}>
                                         {device.label || `Microphone ${device.deviceId.slice(0, 8)}`}
@@ -258,7 +266,7 @@ const VoiceSettings = ({ userId, onClose }) => {
                         <div className="form-group">
                             <label>Speakers/Headphones</label>
                             <select value={selectedOutput} onChange={(e) => setSelectedOutput(e.target.value)}>
-                                <option value="">Default</option>
+                                <option value="">{t('voiceSettings.default', 'Default')}</option>
                                 {devices.output.map(device => (
                                     <option key={device.deviceId} value={device.deviceId}>
                                         {device.label || `Speaker ${device.deviceId.slice(0, 8)}`}
@@ -285,9 +293,9 @@ const VoiceSettings = ({ userId, onClose }) => {
                         <h3><FaVideo /> {t('voice.videoDevice', 'Video Device')}</h3>
 
                         <div className="form-group">
-                            <label>Kamera</label>
+                            <label>{t('voiceSettings.camera', 'Camera')}</label>
                             <select value={selectedVideo} onChange={(e) => setSelectedVideo(e.target.value)}>
-                                <option value="">Kamera Yok</option>
+                                <option value="">{t('voiceSettings.noCamera', 'No Camera')}</option>
                                 {devices.video.map(device => (
                                     <option key={device.deviceId} value={device.deviceId}>
                                         {device.label || `Camera ${device.deviceId.slice(0, 8)}`}
@@ -298,7 +306,7 @@ const VoiceSettings = ({ userId, onClose }) => {
 
                         <div className="video-settings-grid">
                             <div className="form-group">
-                                <label>Video Kalitesi</label>
+                                <label>{t('voiceSettings.videoQuality', 'Video Quality')}</label>
                                 <select value={videoQuality} onChange={(e) => setVideoQuality(e.target.value)}>
                                     <option value="480p">480p</option>
                                     <option value="720p">720p (HD)</option>
@@ -380,7 +388,7 @@ const VoiceSettings = ({ userId, onClose }) => {
                             <div className="toggle-item">
                                 <div>
                                     <h4>{t('voice.autoGainTitle', '📊 Auto Gain Control')}</h4>
-                                    <p>Ses seviyesini otomatik olarak ayarla</p>
+                                    <p>{t('voiceSettings.autoGainDesc', 'Automatically adjust volume level')}</p>
                                 </div>
                                 <label className="toggle">
                                     <input

@@ -1,4 +1,3 @@
-import React from 'react';
 import { ABSOLUTE_HOST_URL, API_BASE_URL } from '../../config/api';
 const FeatureHubModal = React.lazy(() => import('../social/FeatureHubModal'));
 

@@ -18,19 +18,19 @@ const useDragDrop = (onFilesDropped?: (files: File[]) => void): UseDragDropResul
     const [isDragging, setIsDragging] = useState(false);
     const dragCounter = useRef(0);
 
-    const handleDragEnter = useCallback((e) => {
+    const handleDragEnter = useCallback((e: DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
         dragCounter.current++;
         setIsDragging(true);
     }, []);
 
-    const handleDragOver = useCallback((e) => {
+    const handleDragOver = useCallback((e: DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
     }, []);
 
-    const handleDragLeave = useCallback((e) => {
+    const handleDragLeave = useCallback((e: DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
         dragCounter.current--;
@@ -40,13 +40,13 @@ const useDragDrop = (onFilesDropped?: (files: File[]) => void): UseDragDropResul
     }, []);
 
     const handleDrop = useCallback(
-        (e) => {
+        (e: DragEvent) => {
             e.preventDefault();
             e.stopPropagation();
             dragCounter.current = 0;
             setIsDragging(false);
 
-            const files = Array.from(e.dataTransfer?.files || []);
+            const files = Array.from(e.dataTransfer?.files ?? []) as File[];
             if (files.length > 0 && onFilesDropped) {
                 onFilesDropped(files);
             }

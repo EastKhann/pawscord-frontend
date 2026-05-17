@@ -13,7 +13,7 @@ export const useSafeAPI = () => {
     const { execute, loading, error, data, reset } = useAsyncError();
 
     const safeFetch = useCallback(
-        async (url, options = {}) => {
+        async (url: string, options: RequestInit = {}) => {
             try {
                 const result = await execute(async () => {
                     logger.log('🌐 API Call:', url);
@@ -21,7 +21,7 @@ export const useSafeAPI = () => {
                     const response = await fetch(url, {
                         headers: {
                             'Content-Type': 'application/json',
-                            ...options.headers,
+                            ...(options.headers as Record<string, string>),
                         },
                         ...options,
                     });
@@ -30,9 +30,9 @@ export const useSafeAPI = () => {
                         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     }
 
-                    const data = await response.json();
-                    logger.log('✅ API Response:', url, data);
-                    return data;
+                    const responseData = await response.json();
+                    logger.log('✅ API Response:', url, responseData);
+                    return responseData;
                 });
 
                 return result;
@@ -45,7 +45,7 @@ export const useSafeAPI = () => {
     );
 
     const safePost = useCallback(
-        async (url, body, options = {}) => {
+        async (url: string, body: unknown, options: RequestInit = {}) => {
             return safeFetch(url, {
                 method: 'POST',
                 body: JSON.stringify(body),
@@ -56,7 +56,7 @@ export const useSafeAPI = () => {
     );
 
     const safePut = useCallback(
-        async (url, body, options = {}) => {
+        async (url: string, body: unknown, options: RequestInit = {}) => {
             return safeFetch(url, {
                 method: 'PUT',
                 body: JSON.stringify(body),
@@ -67,7 +67,7 @@ export const useSafeAPI = () => {
     );
 
     const safeDelete = useCallback(
-        async (url, options = {}) => {
+        async (url: string, options: RequestInit = {}) => {
             return safeFetch(url, {
                 method: 'DELETE',
                 ...options,

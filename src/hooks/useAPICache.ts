@@ -5,13 +5,44 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import logger from '../utils/logger';
 
+interface CacheEntry<T> {
+    data: T;
+    timestamp: number;
+    expiry: number;
+}
+
+interface CacheState<T> {
+    data: T | null;
+    error: unknown;
+    loading: boolean;
+    isValidating: boolean;
+}
+
+interface CacheConfig {
+    staleTime: number;
+    cacheTime: number;
+    retryCount: number;
+    retryDelay: number;
+    revalidateOnFocus: boolean;
+    revalidateOnReconnect: boolean;
+    dedupingInterval: number;
+    initialData?: unknown;
+}
+
+interface MutationOptions<TData, TVariables> {
+    onMutate?: (variables: TVariables) => void;
+    invalidateKeys?: string[];
+    onSuccess?: (data: TData, variables: TVariables) => void;
+    onError?: (error: unknown, variables: TVariables) => void;
+}
+
 // Global cache storage
-const globalCache = new Map();
-const pendingRequests = new Map();
-const subscribers = new Map();
+const globalCache = new Map<string, CacheEntry<unknown>>();
+const pendingRequests = new Map<string, { promise: Promise<unknown>; timestamp: number }>();
+const subscribers = new Map<string, Set<(state: Partial<CacheState<unknown>>) => void>>();
 
 // Cache configuration
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG: CacheConfig = {
     // How long data stays fresh (5 minutes)
     staleTime: 5 * 60 * 1000,
     // How long to keep in cache (30 minutes)
@@ -43,13 +74,17 @@ const DEFAULT_CONFIG = {
  * @param {Object} options - Configuration options
  * @returns {Object} { data, error, loading, isValidating, mutate, refresh }
  */
-export function useAPICache(key, fetcher, options = {}) {
-    const config = useMemo(() => ({ ...DEFAULT_CONFIG, ...options }), [options]);
+export function useAPICache<T = unknown>(
+    key: string,
+    fetcher: (() => Promise<T>) | null | undefined,
+    options: Partial<CacheConfig> = {}
+) {
+    const config = useMemo<CacheConfig>(() => ({ ...DEFAULT_CONFIG, ...options }), [options]);
 
-    const [state, setState] = useState(() => {
-        const cached = globalCache.get(key);
+    const [state, setState] = useState<CacheState<T>>(() => {
+        const cached = globalCache.get(key) as CacheEntry<T> | undefined;
         return {
-            data: cached?.data ?? options.initialData ?? null,
+            data: cached?.data ?? (options.initialData as T | undefined) ?? null,
             error: null,
             loading: !cached?.data && !options.initialData,
             isValidating: false,
@@ -65,10 +100,10 @@ export function useAPICache(key, fetcher, options = {}) {
         if (!subscribers.has(key)) {
             subscribers.set(key, new Set());
         }
-        const subs = subscribers.get(key);
-        const callback = (newState) => {
+        const subs = subscribers.get(key)!;
+        const callback = (newState: Partial<CacheState<unknown>>) => {
             if (mountedRef.current) {
-                setState((prev) => ({ ...prev, ...newState }));
+                setState((prev) => ({ ...prev, ...(newState as Partial<CacheState<T>>) }));
             }
         };
         subs.add(callback);
@@ -83,7 +118,7 @@ export function useAPICache(key, fetcher, options = {}) {
 
     // Broadcast state updates to all subscribers
     const broadcast = useCallback(
-        (newState) => {
+        (newState: Partial<CacheState<unknown>>) => {
             const subs = subscribers.get(key);
             if (subs) {
                 subs.forEach((cb) => cb(newState));
@@ -94,15 +129,15 @@ export function useAPICache(key, fetcher, options = {}) {
 
     // Core fetch function with retry logic
     const fetchData = useCallback(
-        async (isRevalidation = false) => {
+        async (isRevalidation = false): Promise<T | undefined> => {
             // Check if request is already pending (deduplication)
             const pending = pendingRequests.get(key);
             if (pending && Date.now() - pending.timestamp < config.dedupingInterval) {
-                return pending.promise;
+                return pending.promise as Promise<T>;
             }
 
             // Check if cache is still fresh
-            const cached = globalCache.get(key);
+            const cached = globalCache.get(key) as CacheEntry<T> | undefined;
             if (cached && !isRevalidation) {
                 const isFresh = Date.now() - cached.timestamp < config.staleTime;
                 if (isFresh) {
@@ -120,11 +155,13 @@ export function useAPICache(key, fetcher, options = {}) {
             }
             broadcast({ isValidating: true });
 
-            let lastError;
+            let lastError: unknown;
             for (let attempt = 0; attempt < config.retryCount; attempt++) {
                 try {
-                    const fetchPromise = fetcherRef.current();
-                    pendingRequests.set(key, { promise: fetchPromise, timestamp: Date.now() });
+                    const fn = fetcherRef.current;
+                    if (!fn) return undefined;
+                    const fetchPromise = fn();
+                    pendingRequests.set(key, { promise: fetchPromise as Promise<unknown>, timestamp: Date.now() });
 
                     const data = await fetchPromise;
 
@@ -140,8 +177,8 @@ export function useAPICache(key, fetcher, options = {}) {
 
                     // Schedule cache cleanup
                     setTimeout(() => {
-                        const cached = globalCache.get(key);
-                        if (cached && Date.now() > cached.expiry) {
+                        const entry = globalCache.get(key);
+                        if (entry && Date.now() > entry.expiry) {
                             globalCache.delete(key);
                         }
                     }, config.cacheTime);
@@ -168,12 +205,12 @@ export function useAPICache(key, fetcher, options = {}) {
     useEffect(() => {
         mountedRef.current = true;
         if (key && fetcher) {
-            fetchData();
+            fetchData().catch(() => {});
         }
         return () => {
             mountedRef.current = false;
         };
-    }, [key, fetchData]);
+    }, [key, fetchData, fetcher]);
 
     // Revalidate on focus
     useEffect(() => {
@@ -182,7 +219,7 @@ export function useAPICache(key, fetcher, options = {}) {
         const handleFocus = () => {
             const cached = globalCache.get(key);
             if (cached && Date.now() - cached.timestamp > config.staleTime) {
-                fetchData(true);
+                fetchData(true).catch(() => {});
             }
         };
 
@@ -195,7 +232,7 @@ export function useAPICache(key, fetcher, options = {}) {
         if (!config.revalidateOnReconnect) return;
 
         const handleOnline = () => {
-            fetchData(true);
+            fetchData(true).catch(() => {});
         };
 
         window.addEventListener('online', handleOnline);
@@ -204,19 +241,22 @@ export function useAPICache(key, fetcher, options = {}) {
 
     // Manual mutate function (optimistic updates)
     const mutate = useCallback(
-        (newData, shouldRevalidate = true) => {
+        (newData: T | ((prev: T | null) => T), shouldRevalidate = true) => {
+            let resolved: T;
             if (typeof newData === 'function') {
-                const cached = globalCache.get(key);
-                newData = newData(cached?.data);
+                const cached = globalCache.get(key) as CacheEntry<T> | undefined;
+                resolved = (newData as (prev: T | null) => T)(cached?.data ?? null);
+            } else {
+                resolved = newData;
             }
 
             globalCache.set(key, {
-                data: newData,
+                data: resolved,
                 timestamp: Date.now(),
                 expiry: Date.now() + config.cacheTime,
             });
 
-            broadcast({ data: newData });
+            broadcast({ data: resolved });
 
             if (shouldRevalidate) {
                 // Revalidate in background
@@ -244,13 +284,13 @@ export function useAPICache(key, fetcher, options = {}) {
  */
 export const cacheUtils = {
     // Invalidate specific key
-    invalidate: (key) => {
+    invalidate: (key: string) => {
         globalCache.delete(key);
         pendingRequests.delete(key);
     },
 
     // Invalidate keys matching pattern
-    invalidatePattern: (pattern) => {
+    invalidatePattern: (pattern: string) => {
         const regex = new RegExp(pattern);
         for (const key of globalCache.keys()) {
             if (regex.test(key)) {
@@ -273,7 +313,7 @@ export const cacheUtils = {
     }),
 
     // Prefetch data
-    prefetch: async (key, fetcher) => {
+    prefetch: async <T = unknown>(key: string, fetcher: () => Promise<T>): Promise<T | null> => {
         try {
             const data = await fetcher();
             globalCache.set(key, {
@@ -292,13 +332,17 @@ export const cacheUtils = {
 /**
  * 🔗 Hook for paginated/infinite data
  */
-export function useInfiniteAPICache(key, fetcher, options = {}) {
-    const [pages, setPages] = useState([]);
+export function useInfiniteAPICache<T = unknown>(
+    key: string,
+    fetcher: (page: number) => Promise<T>,
+    options: Partial<CacheConfig> = {}
+) {
+    const [pages, setPages] = useState<T[]>([]);
     const [hasMore, setHasMore] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
     const pageRef = useRef(1);
 
-    const { data, error, loading, refresh } = useAPICache(key, () => fetcher(1), options);
+    const { data, error, loading, refresh } = useAPICache<T>(key, () => fetcher(1), options);
 
     useEffect(() => {
         if (data) {
@@ -349,15 +393,22 @@ export function useInfiniteAPICache(key, fetcher, options = {}) {
 /**
  * 🎯 Hook for mutations with optimistic updates
  */
-export function useMutation(mutationFn, options = {}) {
-    const [state, setState] = useState({
+export function useMutation<TData = unknown, TVariables = unknown>(
+    mutationFn: (variables: TVariables) => Promise<TData>,
+    options: MutationOptions<TData, TVariables> = {}
+) {
+    const [state, setState] = useState<{
+        data: TData | null;
+        error: unknown;
+        loading: boolean;
+    }>({
         data: null,
         error: null,
         loading: false,
     });
 
     const mutate = useCallback(
-        async (variables) => {
+        async (variables: TVariables) => {
             setState({ data: null, error: null, loading: true });
 
             // Optimistic update

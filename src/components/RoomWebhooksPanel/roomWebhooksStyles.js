@@ -1,4 +1,4 @@
-﻿export const styles = {
+﻿const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -254,3 +254,6 @@
         alignItems: 'center',
     },
 };
+
+export { styles };
+export default styles;

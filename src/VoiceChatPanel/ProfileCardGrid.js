@@ -1,7 +1,6 @@
 // frontend/src/VoiceChatPanel/ProfileCardGrid.js
 // ?? Profile card grid — shown when no active streams (voice-only users)
 
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { getDeterministicAvatarFallback } from './avatarUtils';
 import ConnectionQualityIndicator from '../VoiceUserList/ConnectionQualityIndicator';

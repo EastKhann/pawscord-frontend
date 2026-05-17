@@ -25,10 +25,17 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
     const [transferNote, setTransferNote] = useState('');
     const [successCoins, setSuccessCoins] = useState(null);
 
+    // 🔥 Guard: server might return HTML (Cloudflare under-attack, SW fallback,
+    // proxy mismatch) with 200 OK → response.json() throws SyntaxError.
+    const isJsonResponse = (response) => {
+        const ct = response.headers.get('content-type') || '';
+        return ct.toLowerCase().includes('application/json');
+    };
+
     const loadBalance = useCallback(async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/users/balance/`);
-            if (!response.ok) {
+            if (!response.ok || !isJsonResponse(response)) {
                 setBalance(0);
                 return;
             }
@@ -44,7 +51,7 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
     const loadTransactions = useCallback(async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/payments/history/`);
-            if (!response.ok) return;
+            if (!response.ok || !isJsonResponse(response)) return;
             const data = await response.json();
             setTransactions(data.transactions || []);
         } catch (error) {

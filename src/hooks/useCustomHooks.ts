@@ -5,27 +5,27 @@
  * Thuformance ve UX için optimize edilmiş hooklar
  */
 
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import logger from '../utils/logger';
 
 /**
  * 1. useIntersectionObserver - Viewport tracking
  */
-export const useIntersectionObserver = (options = {}) => {
+export const useIntersectionObserver = (options: IntersectionObserverInit = {}) => {
     const { threshold = 0.1, rootMargin = '0px', root = null } = options;
 
     const [isIntersecting, setIsIntersecting] = useState(false);
-    const [entry, setEntry] = useState(null);
-    const targetRef = useRef(null);
+    const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null);
+    const targetRef = useRef<Element | null>(null);
 
     useEffect(() => {
         const target = targetRef.current;
         if (!target) return;
 
         const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsIntersecting(entry.isIntersecting);
-                setEntry(entry);
+            ([e]) => {
+                setIsIntersecting(e.isIntersecting);
+                setEntry(e);
             },
             { threshold, rootMargin, root }
         );
@@ -37,7 +37,7 @@ export const useIntersectionObserver = (options = {}) => {
         };
     }, [threshold, rootMargin, root]);
 
-    return [targetRef, isIntersecting, entry];
+    return [targetRef, isIntersecting, entry] as const;
 };
 
 /**
@@ -45,8 +45,8 @@ export const useIntersectionObserver = (options = {}) => {
  */
 export const useNetworkStatus = () => {
     const [isOnline, setIsOnline] = useState(navigator.onLine);
-    const [effectiveType, setEffectiveType] = useState(null);
-    const [downlink, setDownlink] = useState(null);
+    const [effectiveType, setEffectiveType] = useState<string | null>(null);
+    const [downlink, setDownlink] = useState<number | null>(null);
 
     useEffect(() => {
         const handleOnline = () => setIsOnline(true);
@@ -57,8 +57,13 @@ export const useNetworkStatus = () => {
 
         // Network Information API (if available)
         if ('connection' in navigator) {
-            const connection =
-                navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            interface NetworkInformationNavigator extends Navigator {
+                connection?: { effectiveType: string; downlink: number; addEventListener: (type: string, cb: () => void) => void; removeEventListener: (type: string, cb: () => void) => void };
+                mozConnection?: NetworkInformationNavigator['connection'];
+                webkitConnection?: NetworkInformationNavigator['connection'];
+            }
+            const nav = navigator as NetworkInformationNavigator;
+            const connection = nav.connection ?? nav.mozConnection ?? nav.webkitConnection;
 
             const updateConnectionInfo = () => {
                 setEffectiveType(connection.effectiveType);
@@ -87,8 +92,8 @@ export const useNetworkStatus = () => {
 /**
  * 3. useDebounce - Debounced value
  */
-export const useDebounce = (value, delay = 300) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
+export const useDebounce = <T>(value: T, delay = 300): T => {
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -104,8 +109,8 @@ export const useDebounce = (value, delay = 300) => {
 /**
  * 4. useThrottle - Throttled value
  */
-export const useThrottle = (value, delay = 300) => {
-    const [throttledValue, setThrottledValue] = useState(value);
+export const useThrottle = <T>(value: T, delay = 300): T => {
+    const [throttledValue, setThrottledValue] = useState<T>(value);
     const lastRan = useRef(Date.now());
 
     useEffect(() => {
@@ -128,11 +133,11 @@ export const useThrottle = (value, delay = 300) => {
 /**
  * 5. useLocalStorage - Type-safe localStorage
  */
-export const useLocalStorage = (key, initialValue) => {
-    const [storedValue, setStoredValue] = useState(() => {
+export const useLocalStorage = <T>(key: string, initialValue: T) => {
+    const [storedValue, setStoredValue] = useState<T>(() => {
         try {
             const item = window.localStorage.getItem(key);
-            return item ? JSON.parse(item) : initialValue;
+            return item ? (JSON.parse(item) as T) : initialValue;
         } catch (error) {
             logger.error(`Error loading localStorage key "${key}":`, error);
             return initialValue;
@@ -140,7 +145,7 @@ export const useLocalStorage = (key, initialValue) => {
     });
 
     const setValue = useCallback(
-        (value) => {
+        (value: T | ((prev: T) => T)) => {
             try {
                 const valueToStore = value instanceof Function ? value(storedValue) : value;
                 setStoredValue(valueToStore);
@@ -161,7 +166,7 @@ export const useLocalStorage = (key, initialValue) => {
         }
     }, [key, initialValue]);
 
-    return [storedValue, setValue, removeValue];
+    return [storedValue, setValue, removeValue] as const;
 };
 
 /**
@@ -191,7 +196,7 @@ export const useWindowSize = () => {
 /**
  * 7. useMediaQuery - Responsive media queries
  */
-export const useMediaQuery = (query) => {
+export const useMediaQuery = (query: string): boolean => {
     const [matches, setMatches] = useState(false);
 
     useEffect(() => {
@@ -215,7 +220,7 @@ export const useMediaQuery = (query) => {
  */
 export const useHover = () => {
     const [isHovered, setIsHovered] = useState(false);
-    const hoverRef = useRef(null);
+    const hoverRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
         const node = hoverRef.current;
@@ -233,18 +238,18 @@ export const useHover = () => {
         };
     }, []);
 
-    return [hoverRef, isHovered];
+    return [hoverRef, isHovered] as const;
 };
 
 /**
  * 9. useClickOutside - Click outside detection
  */
-export const useClickOutside = (callback) => {
-    const ref = useRef(null);
+export const useClickOutside = (callback: () => void) => {
+    const ref = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
-        const handleClick = (event) => {
-            if (ref.current && !ref.current.contains(event.target)) {
+        const handleClick = (event: MouseEvent) => {
+            if (ref.current && !ref.current.contains(event.target as Node)) {
                 callback();
             }
         };
@@ -259,8 +264,8 @@ export const useClickOutside = (callback) => {
 /**
  * 10. usePrevious - Previous value
  */
-export const usePrevious = (value) => {
-    const ref = useRef();
+export const usePrevious = <T>(value: T): T | undefined => {
+    const ref = useRef<T | undefined>(undefined);
 
     useEffect(() => {
         ref.current = value;
@@ -272,8 +277,8 @@ export const usePrevious = (value) => {
 /**
  * 11. useInterval - Declarative interval
  */
-export const useInterval = (callback, delay) => {
-    const savedCallback = useRef();
+export const useInterval = (callback: () => void, delay: number | null) => {
+    const savedCallback = useRef<(() => void) | null>(null);
 
     useEffect(() => {
         savedCallback.current = callback;
@@ -282,7 +287,9 @@ export const useInterval = (callback, delay) => {
     useEffect(() => {
         if (delay === null) return;
 
-        const tick = () => savedCallback.current();
+        const tick = () => {
+            if (savedCallback.current) savedCallback.current();
+        };
         const id = setInterval(tick, delay);
 
         return () => clearInterval(id);
@@ -292,8 +299,8 @@ export const useInterval = (callback, delay) => {
 /**
  * 12. useTimeout - Declarative timeout
  */
-export const useTimeout = (callback, delay) => {
-    const savedCallback = useRef();
+export const useTimeout = (callback: () => void, delay: number | null) => {
+    const savedCallback = useRef<(() => void) | null>(null);
 
     useEffect(() => {
         savedCallback.current = callback;
@@ -302,7 +309,9 @@ export const useTimeout = (callback, delay) => {
     useEffect(() => {
         if (delay === null) return;
 
-        const id = setTimeout(() => savedCallback.current(), delay);
+        const id = setTimeout(() => {
+            if (savedCallback.current) savedCallback.current();
+        }, delay);
         return () => clearTimeout(id);
     }, [delay]);
 };
@@ -310,17 +319,17 @@ export const useTimeout = (callback, delay) => {
 /**
  * 13. useKeyPress - Keyboard key detection
  */
-export const useKeyPress = (targetKey) => {
+export const useKeyPress = (targetKey: string): boolean => {
     const [keyPressed, setKeyPressed] = useState(false);
 
     useEffect(() => {
-        const downHandler = ({ key }) => {
+        const downHandler = ({ key }: KeyboardEvent) => {
             if (key === targetKey) {
                 setKeyPressed(true);
             }
         };
 
-        const upHandler = ({ key }) => {
+        const upHandler = ({ key }: KeyboardEvent) => {
             if (key === targetKey) {
                 setKeyPressed(false);
             }
@@ -342,9 +351,9 @@ export const useKeyPress = (targetKey) => {
  * 14. useClipboard - Clipboard operations
  */
 export const useClipboard = () => {
-    const [copiedText, setCopiedText] = useState(null);
+    const [copiedText, setCopiedText] = useState<string | null>(null);
 
-    const copy = useCallback(async (text) => {
+    const copy = useCallback(async (text: string) => {
         try {
             await navigator.clipboard.writeText(text);
             setCopiedText(text);
@@ -362,7 +371,7 @@ export const useClipboard = () => {
 /**
  * 15. useToggle - Boolean toggle
  */
-export const useToggle = (initialValue = false) => {
+export const useToggle = (initialValue = false): [boolean, () => void, React.Dispatch<React.SetStateAction<boolean>>] => {
     const [value, setValue] = useState(initialValue);
 
     const toggle = useCallback(() => {
@@ -375,15 +384,19 @@ export const useToggle = (initialValue = false) => {
 /**
  * 16. useAsyncState - Async state management
  */
-export const useAsyncState = (asyncFunction) => {
-    const [state, setState] = useState({
+export const useAsyncState = <T = unknown>(asyncFunction: (...args: unknown[]) => Promise<T>) => {
+    const [state, setState] = useState<{
+        loading: boolean;
+        data: T | null;
+        error: unknown;
+    }>({
         loading: false,
         data: null,
         error: null,
     });
 
     const execute = useCallback(
-        async (...args) => {
+        async (...args: unknown[]) => {
             setState({ loading: true, data: null, error: null });
 
             try {
@@ -404,7 +417,7 @@ export const useAsyncState = (asyncFunction) => {
 /**
  * 17. useUpdateEffect - useEffect but skip first render
  */
-export const useUpdateEffect = (effect, deps) => {
+export const useUpdateEffect = (effect: () => void | (() => void), deps: React.DependencyList) => {
     const isFirstRender = useRef(true);
 
     useEffect(() => {
@@ -414,13 +427,14 @@ export const useUpdateEffect = (effect, deps) => {
         }
 
         return effect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, deps);
 };
 
 /**
  * 18. useMountedState - Check if component is mounted
  */
-export const useMountedState = () => {
+export const useMountedState = (): (() => boolean) => {
     const mountedRef = useRef(false);
     const isMounted = useCallback(() => mountedRef.current, []);
 

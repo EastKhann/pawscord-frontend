@@ -1,5 +1,4 @@
 // frontend/src/RoomList/QuickAccessButtons.js
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
@@ -63,14 +62,16 @@ const buttonDefs = [
 ];
 
 const btnStyle = (gradient) => ({
-    minWidth: '36px',
-    width: '36px',
-    height: '36px',
+    // 🔥 44×44 minimum (WCAG 2.5.5 / iOS HIG / Android M3 touch target).
+    // Önceki 36×36 mobile audit'te yetersiz çıktı.
+    minWidth: '44px',
+    width: '44px',
+    height: '44px',
     padding: '0',
     background: gradient,
     border: 'none',
-    borderRadius: '8px',
-    fontSize: '18px',
+    borderRadius: '10px',
+    fontSize: '20px',
     cursor: 'pointer',
     transition: 'all 0.2s',
     display: 'flex',

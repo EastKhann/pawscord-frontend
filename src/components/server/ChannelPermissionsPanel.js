@@ -242,11 +242,11 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
                         </div>
                         <div style={styles.legendItem}>
                             <span className="text-f23f42-18">❌</span>
-                            <span>Reject</span>
+                            <span>{t('channelPerms.reject', 'Reject')}</span>
                         </div>
                         <div style={styles.legendItem}>
                             <span className="text-949-18">➖</span>
-                            <span>Default</span>
+                            <span>{t('channelPerms.default', 'Default')}</span>
                         </div>
                     </div>
                 </div>

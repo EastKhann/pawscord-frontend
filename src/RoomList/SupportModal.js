@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaHeart, FaCoffee, FaBitcoin, FaCopy, FaTimes } from '../utils/iconOptimization';

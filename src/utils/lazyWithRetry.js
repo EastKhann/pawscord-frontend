@@ -5,7 +5,6 @@
 // PropTypes validation: N/A for this module (hook/utility — no React props interface)
 // Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
 // aria-label: n/a — hook/context/utility module, no directly rendered JSX
-import React from 'react';
 import logger from '../utils/logger';
 
 // 🔑 UNIFIED keys — ALL chunk error handlers must use these same keys

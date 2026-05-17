@@ -9,8 +9,7 @@ import CommandCard from '../BotBuilder/CommandCard';
 import { useTranslation } from 'react-i18next';
 const BotBuilder = ({ onClose, serverSlug, token, isMobile }) => {
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         botName,
         setBotName,

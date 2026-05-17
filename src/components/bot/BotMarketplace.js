@@ -7,7 +7,7 @@ import useBotMarketplace from '../BotMarketplace/useBotMarketplace';
 import './BotMarketplace.css';
 
 const BotMarketplace = ({ onClose }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const {
         bots,
@@ -44,7 +44,7 @@ const BotMarketplace = ({ onClose }) => {
         <div className="bot-marketplace">
             <div className="marketplace-header">
                 <div className="header-content">
-                    <h1>🤖 Bot Marketplace</h1>
+                    <h1>🤖 {t('botMarket.title', 'Bot Marketplace')}</h1>
                     <p>{t('botMarket.subtitle', 'Discover thousands of bots to enhance your server')}</p>
                 </div>
                 {onClose && (
@@ -79,7 +79,7 @@ const BotMarketplace = ({ onClose }) => {
                     </select>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                         <option value="popular">{t('botMarket.popular', 'Popular')}</option>
-                        <option value="new">Yeni</option>
+                        <option value="new">{t('botMarket.newest', 'Newest')}</option>
                         <option value="rated">{t('botMarket.topRated', 'Top Rated')}</option>
                     </select>
                 </div>
@@ -111,10 +111,10 @@ const BotMarketplace = ({ onClose }) => {
                 <section className="all-bots-section">
                     <h2>
                         {selectedCategory
-                            ? categories.find((c) => c.slug === selectedCategory)?.name || 'Botlar'
+                            ? categories.find((c) => c.slug === selectedCategory)?.name || t('botMarket.bots', 'Bots')
                             : searchQuery
-                                ? `"${searchQuery}" for resultlar`
-                                : t('ui.tum_botlar')}
+                                ? t('botMarket.resultsFor', '"{{query}}" results', { query: searchQuery })
+                                : t('botMarket.allBots', 'All Bots')}
                     </h2>
                     {bots.length === 0 ? (
                         <div className="no-results">
@@ -137,14 +137,14 @@ const BotMarketplace = ({ onClose }) => {
                                         ← {t('common.previous', 'Previous')}
                                     </button>
                                     <span>
-                                        Sayfa {page} / {totalPages}
+                                        {t('botMarket.pageOf', 'Page {{page}} / {{total}}', { page, total: totalPages })}
                                     </span>
                                     <button
                                         aria-label={t('botMarketplace.nextPage', 'Next page')}
                                         disabled={page >= totalPages}
                                         onClick={() => setPage((p) => p + 1)}
                                     >
-                                        Sonraki →
+                                        {t('common.next', 'Next')} →
                                     </button>
                                 </div>
                             )}

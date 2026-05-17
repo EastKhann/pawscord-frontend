@@ -30,7 +30,7 @@ const CollaborativeCodeEditor = ({
     onClose,
 }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const {
         code,
@@ -74,7 +74,7 @@ const CollaborativeCodeEditor = ({
                         aria-label={t('codeEditor.copyCode', 'Copy code')}
                         onClick={copyCode}
                         style={styles.actionButton}
-                        title="Kopyala"
+                        title={t('common.copy', 'Copy')}
                     >
                         <FaCopy />
                     </button>
@@ -91,7 +91,7 @@ const CollaborativeCodeEditor = ({
                         onClick={saveCode}
                         disabled={saving}
                         style={S.el}
-                        title="Kaydet"
+                        title={t('common.save', 'Save')}
                     >
                         <FaSave />
                     </button>
@@ -114,7 +114,7 @@ const CollaborativeCodeEditor = ({
             {output && (
                 <div style={styles.outputPanel}>
                     <div style={styles.outputHeader}>
-                        <span>Output</span>
+                        <span>{t('codeEditor.output', 'Output')}</span>
                     </div>
                     <pre style={styles.outputContent}>{output}</pre>
                 </div>

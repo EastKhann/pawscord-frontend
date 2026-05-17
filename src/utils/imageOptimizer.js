@@ -406,7 +406,7 @@ export const useProgressiveImage = (src, placeholder) => {
         imageOptimizer.preload(src).then(() => {
             setCurrentSrc(src);
             setLoading(false);
-        });
+        }).catch((err) => console.error('Failed to preload progressive image:', err));
     }, [src]);
 
     return { src: currentSrc, loading };

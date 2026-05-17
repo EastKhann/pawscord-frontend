@@ -1,6 +1,6 @@
 import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/AchievementsPanel.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import toast from '../../utils/toast';
 import './AchievementsPanel.css';
@@ -58,28 +58,33 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
         }
     };
 
-    const filteredAchievements = achievements.filter((achievement) => {
-        const matchesFilter =
-            filter === 'all' ||
-            (filter === 'unlocked' && achievement.unlocked) ||
-            (filter === 'locked' && !achievement.unlocked);
+    const filteredAchievements = useMemo(
+        () =>
+            achievements.filter((achievement) => {
+                const matchesFilter =
+                    filter === 'all' ||
+                    (filter === 'unlocked' && achievement.unlocked) ||
+                    (filter === 'locked' && !achievement.unlocked);
 
-        const matchesCategory = category === 'all' || achievement.category === category;
+                const matchesCategory = category === 'all' || achievement.category === category;
 
-        return matchesFilter && matchesCategory;
-    });
+                return matchesFilter && matchesCategory;
+            }),
+        [achievements, filter, category]
+    );
 
-    const stats = {
-        total: achievements.length,
-        unlocked: achievements.filter((a) => a.unlocked).length,
-        locked: achievements.filter((a) => !a.unlocked).length,
-        progress:
-            achievements.length > 0
-                ? Math.round(
-                    (achievements.filter((a) => a.unlocked).length / achievements.length) * 100
-                )
-                : 0,
-    };
+    const stats = useMemo(() => {
+        const unlocked = achievements.filter((a) => a.unlocked).length;
+        return {
+            total: achievements.length,
+            unlocked,
+            locked: achievements.length - unlocked,
+            progress:
+                achievements.length > 0
+                    ? Math.round((unlocked / achievements.length) * 100)
+                    : 0,
+        };
+    }, [achievements]);
 
     const getRarityColor = (rarity) => {
         const colors = {

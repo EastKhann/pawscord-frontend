@@ -177,7 +177,7 @@ const WatchPartyEnhanced = ({
                                             style={styles.syncButton}
                                         >
                                             <FaSync size={16} />
-                                            <span>Senkronize Et</span>
+                                            <span>{t('watchParty.syncVideo', 'Sync')}</span>
                                         </button>
                                     )}
                                     <button
@@ -271,7 +271,7 @@ const WatchPartyEnhanced = ({
                         </select>
                     </div>
                     <div style={styles.settingItem}>
-                        <label>Kalite</label>
+                        <label>{t('watchParty.quality', 'Quality')}</label>
                         <select
                             value={quality}
                             onChange={(e) => setQuality(e.target.value)}

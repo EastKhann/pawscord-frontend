@@ -22,6 +22,7 @@ const CreateRuleModal = ({ newRule, setNewRule, onClose, onCreateRule }) => {
                         value={newRule.rule_type}
                         onChange={(e) => setNewRule({ ...newRule, rule_type: e.target.value })}
                         style={styles.select}
+                        aria-label={t('rule_type')}
                     >
                         <option value="toxic">{t('toxic_language')}</option>
                         <option value="spam">{t('spam_detection')}</option>
@@ -37,6 +38,7 @@ const CreateRuleModal = ({ newRule, setNewRule, onClose, onCreateRule }) => {
                         value={newRule.action}
                         onChange={(e) => setNewRule({ ...newRule, action: e.target.value })}
                         style={styles.select}
+                        aria-label={t('action')}
                     >
                         <option value="warn">{t('warn_user')}</option>
                         <option value="delete">{t('delete_message')}</option>
@@ -61,6 +63,7 @@ const CreateRuleModal = ({ newRule, setNewRule, onClose, onCreateRule }) => {
                                 setNewRule({ ...newRule, threshold: parseFloat(e.target.value) })
                             }
                             style={styles.slider}
+                            aria-label={t('automod.aiThreshold', 'AI detection threshold')}
                         />
                     </div>
                 )}
@@ -78,6 +81,7 @@ const CreateRuleModal = ({ newRule, setNewRule, onClose, onCreateRule }) => {
                                 })
                             }
                             style={styles.input}
+                            aria-label={t('keywords_comma_separated')}
                         />
                     </div>
                 )}

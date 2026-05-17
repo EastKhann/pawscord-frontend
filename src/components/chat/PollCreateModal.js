@@ -215,7 +215,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                         <option value="3600">1 Saat</option>
                         <option value="86400">24 Saat</option>
                         <option value="604800">1 Hafta</option>
-                        <option value="">Permanent</option>
+                        <option value="">{t('pollCreator.permanent', 'Permanent')}</option>
                     </select>
                 </div>
 

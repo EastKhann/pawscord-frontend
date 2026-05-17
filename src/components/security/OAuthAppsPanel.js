@@ -32,7 +32,7 @@ const _st1162 = {
 
 const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const o = useOAuthApps(fetchWithAuth, apiBaseUrl);
 
     return (

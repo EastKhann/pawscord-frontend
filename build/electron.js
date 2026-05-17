@@ -624,6 +624,15 @@ ipcMain.on('minimize-window', () => {
   if (mainWindow && !mainWindow.isMinimized()) mainWindow.minimize();
 });
 
+// 🪟 Focus the main window (renderer asks for this after deep-link auth completes)
+ipcMain.on('focus-window', () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.show();
+    mainWindow.focus();
+  }
+});
+
 // � SECURITY: HTTP/2 enabled, certificate validation enforced
 // Removed: app.commandLine.appendSwitch('disable-http2');
 // Removed: app.commandLine.appendSwitch('ignore-certificate-errors');

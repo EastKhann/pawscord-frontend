@@ -78,7 +78,7 @@ const PollSettingsPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => 
                 <div className="polls-list">
                   {activePolls.map(poll => (
                     <div key={poll.id} className={`poll-item ${poll.status}`}>
-                      <div className="poll-status">{poll.status === 'active' ? <span className="status-badge active"><span className="pulse"></span>Aktif</span> : <span className="status-badge ended">Bitti</span>}</div>
+                      <div className="poll-status">{poll.status === 'active' ? <span className="status-badge active"><span className="pulse"></span>{t('poll.active', 'Active')}</span> : <span className="status-badge ended">{t('poll.ended', 'Ended')}</span>}</div>
                       <div className="poll-info"><h4>{poll.question}</h4><div className="poll-meta"><span><FaUsers /> {poll.votes} oy</span><span><FaClock /> {formatTimeRemaining(poll.end_time)}</span></div></div>
                       <div className="poll-actions"><button
                         aria-label={t('poll.viewPoll', 'View poll')} className="view-btn">{t('poll.view', 'View')}</button>{poll.status === 'active' && <button
@@ -86,7 +86,7 @@ const PollSettingsPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => 
                     </div>
                   ))}
                 </div>
-              ) : <div className="empty-state">Aktif anket yok</div>}
+              ) : <div className="empty-state">{t('poll.noActivePolls', 'No active polls')}</div>}
             </div>
           )}
         </div>

@@ -164,7 +164,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                                 setConfig({ ...config, channel_id: e.target.value })
                                             }
                                         >
-                                            <option value="">Selectin</option>
+                                            <option value="">{t('common.selectOption', 'Select...')}</option>
                                             {channels.map((ch) => (
                                                 <option key={ch.id} value={ch.id}>
                                                     {ch.name}
@@ -233,7 +233,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                                     })
                                                 }
                                             />
-                                            <span>NSFW kanallardan izin ver</span>
+                                            <span>{t('starboard.allowNsfw', 'Allow from NSFW channels')}</span>
                                         </label>
                                     </div>
                                 </div>
@@ -261,7 +261,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                                 <div className="star-header">
                                                     <div className="star-author">
                                                         {star.author_avatar ? (
-                                                            <img src={star.author_avatar} alt="" />
+                                                            <img src={star.author_avatar} alt={star.author_name} />
                                                         ) : (
                                                             <div className="default-avatar">👤</div>
                                                         )}
@@ -283,7 +283,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                                                                         <img
                                                                             key={`item-${idx}`}
                                                                             src={att}
-                                                                            alt=""
+                                                                            alt={`Attachment ${idx + 1}`}
                                                                         />
                                                                     )
                                                                 )}

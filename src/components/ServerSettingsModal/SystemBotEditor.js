@@ -1,6 +1,6 @@
 ﻿/* eslint-disable no-undef */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaRobot } from 'react-icons/fa';
 import toast from '../../utils/toast';
@@ -204,7 +204,7 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
 
             {/* Bot Avatar */}
             <div>
-                <label className={css.labelUppercaseBlock}>Bot Profile Picture</label>
+                <label className={css.labelUppercaseBlock}>{t('systemBot.profilePicture', 'Bot Profile Picture')}</label>
                 <div style={S.flex}>
                     <div
                         style={S.flex2}
@@ -235,7 +235,7 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
                         ) : (
                             <span className="fs-32">🤖</span>
                         )}
-                        <div style={S.abs}>Change</div>
+                        <div style={S.abs}>{t('common.change', 'Change')}</div>
                     </div>
                     <div className={css.flex1}>
                         <div className={css.dbdBold15}>{botName}</div>
@@ -263,7 +263,7 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
 
             {/* Bot Name */}
             <div>
-                <label className={css.fieldLabel}>Bot Name</label>
+                <label className={css.fieldLabel}>{t('systemBot.botName', 'Bot Name')}</label>
                 <input
                     value={botName}
                     onChange={(e) => setBotName(e.target.value)}
@@ -282,7 +282,7 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
 
             {/* Preview */}
             <div>
-                <label className={css.fieldLabel}>Preview</label>
+                <label className={css.fieldLabel}>{t('common.preview', 'Preview')}</label>
                 <div className={css.previewBox}>
                     <div className={css.flexStartGap12}>
                         <div style={S.flex3}>
@@ -315,7 +315,7 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
 
             {/* Kullanım Alanları */}
             <div>
-                <label className={css.fieldLabel}>Where Is This Bot Used?</label>
+                <label className={css.fieldLabel}>{t('systemBot.whereUsed', 'Where Is This Bot Used?')}</label>
                 <div className={css.flexColGap6}>
                     {[
                         { icon: '👋', text: 'Welcome messages' },

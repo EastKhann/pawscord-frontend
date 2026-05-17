@@ -204,9 +204,7 @@ export const preloadRouteComponents = (route) => {
                 priority: 10,
             },
         ],
-        '/crypto': [
-            { name: 'CryptoDashboard', importFn: () => import('../CryptoDashboard'), priority: 10 },
-        ],
+        // 🔥 REMOVED: '/crypto' (Crypto modülü kaldırıldı)
     };
 
     const components = routeMap[route];

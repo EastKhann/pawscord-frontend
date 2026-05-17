@@ -23,16 +23,12 @@ export const RouteChunks = {
     analyticsMain: () => import('../pages/AnalyticsDashboard'),
 
     // Special features
-    crypto: () => import('../features/CryptoChartModal'),
-    cryptoDashboard: () => import('../CryptoDashboard'),
-    englishLearn: () => import('../EnglishLearningPage'),
-    englishHub: () => import('../pages/EnglishHub'),
+    // 🔥 REMOVED: crypto/cryptoDashboard/englishLearn/englishHub/cryptoStore (English/Crypto modülleri kaldırıldı)
     kanban: () => import('../components/moderation/KanbanBoard'),
 
     // Premium
     premiumStore: () => import('../components/premium/PremiumStoreModal'),
     themeStore: () => import('../components/premium/ThemeStoreModal'),
-    cryptoStore: () => import('../components/premium/CryptoStoreModal'),
 };
 
 /**
@@ -76,11 +72,23 @@ export const ComponentChunks = {
     screenShare: () => import('../components/media/ScreenShare'),
 };
 
+// 🔒 Bu chunk'ların hepsi yalnızca login sonrası açılan UI'da kullanılıyor.
+// Login ekranındaki anonim ziyaretçi için indirmek bandwith ve bellek israfı.
+const isAuthenticated = () => {
+    try {
+        return !!localStorage.getItem('access_token');
+    } catch {
+        return false;
+    }
+};
+
 /**
  * Preloading strategy
  * 🚀 User etkleşiminden ÖNCE en çok kullanılan chunk'ları upload
  */
 export const preloadCriticalChunks = () => {
+    // 🔒 Anonim kullanıcı için bu modülleri yükleme — login ekranı sade kalsın.
+    if (!isAuthenticated()) return;
     // En sık openılan bileşenler — hemen preload et (500ms sonra çağrılıyor)
     const criticalChunks = [
         ComponentChunks.userProfile,
@@ -103,6 +111,8 @@ export const preloadCriticalChunks = () => {
  * Idle time'da gelecek chunks'ı prefetch et
  */
 export const prefetchNextChunks = () => {
+    // 🔒 Hepsi authenticated kullanıcı UI'ı için — login ekranında prefetch etme.
+    if (!isAuthenticated()) return;
     const secondaryChunks = [
         ComponentChunks.gifPicker,
         ComponentChunks.stickerPicker,
@@ -127,6 +137,8 @@ export const prefetchNextChunks = () => {
  * Admin kullanıcıları for ek chunk'ları prefetch et
  */
 export const prefetchAdminChunks = () => {
+    // 🔒 Admin tool'ları sadece admin yetkisi olanlar için. Önce login zorunlu.
+    if (!isAuthenticated()) return;
     const adminChunks = [
         ComponentChunks.adminPanel,
         ComponentChunks.adminAnalytics,

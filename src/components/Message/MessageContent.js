@@ -1,7 +1,7 @@
 ﻿// frontend/src/components/Message/MessageContent.js
 // 📝 MESSAGE CONTENT - Text, Markdown, Code blocks
 
-import React, { memo, lazy, Suspense, useState } from 'react';
+import { memo, lazy, Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
@@ -24,7 +24,7 @@ export const MessageContent = memo(({
 }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     // Kod snippet'i varsa
     if (snippetData && snippetData.type !== 'game_xox') {
         return (

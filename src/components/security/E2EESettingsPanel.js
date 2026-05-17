@@ -164,7 +164,7 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
             <div style={styles.container}>
                 <div style={styles.header}>
                     <FaLock size={24} />
-                    <h3 style={styles.title}>End-to-End Encryption</h3>
+                    <h3 style={styles.title}>{t('e2ee.title', 'End-to-End Encryption')}</h3>
                 </div>
 
                 <div style={styles.disabledState}>

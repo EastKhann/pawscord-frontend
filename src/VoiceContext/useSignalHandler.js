@@ -273,7 +273,7 @@ export function useSignalHandler({
                     toast.info(t('signal.stageEnded', { user: senderUsername }), 3000);
                 }
 
-                // Propagate stage updates to parent (if listners exist)
+                // Propagate stage updates to parent (if listeners exist)
                 setConnectedUsers((prev) => {
                     if (action === 'grant_speak') {
                         return prev.map((u) =>
@@ -286,6 +286,29 @@ export function useSignalHandler({
                     }
                     return prev;
                 });
+                return;
+            }
+
+            // 🔥 PER-ROOM USER STATE UPDATE
+            // Backend voice consumer broadcasts this to room peers whenever a user's
+            // mic/deafen/talking/camera/screen state changes. Lights up the speaking
+            // ring (is_talking) and mute/deafen icons in the in-room voice panel UI
+            // without waiting for the throttled GLOBAL_STATUS_GROUP broadcast.
+            if (data.type === 'user_state_update') {
+                const senderUsername = data.from || data.username;
+                if (!senderUsername || senderUsername === username) return;
+                setConnectedUsers((prev) =>
+                    prev.map((u) => {
+                        if (u.username !== senderUsername) return u;
+                        const next = { ...u };
+                        if ('is_mic_off' in data) next.isMuted = data.is_mic_off;
+                        if ('is_deafened' in data) next.isDeafened = data.is_deafened;
+                        if ('is_talking' in data) next.isTalking = data.is_talking;
+                        if ('is_camera_on' in data) next.isCameraOn = data.is_camera_on;
+                        if ('is_sharing' in data) next.isScreenSharing = data.is_sharing;
+                        return next;
+                    })
+                );
                 return;
             }
 

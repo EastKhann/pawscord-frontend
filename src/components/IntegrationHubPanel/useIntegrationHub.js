@@ -128,7 +128,7 @@ const useIntegrationHub = (serverId) => {
                         }
                     };
                     window.addEventListener('message', handleMessage);
-                    // Fallback: clean up listner after 5 minutes
+                    // Fallback: clean up listener after 5 minutes
                     setTimeout(() => window.removeEventListener('message', handleMessage), 300000);
                 } else {
                     toast.success(t('integrations.started', { id: integrationId }));

@@ -185,7 +185,7 @@ const MutualsPanel = ({ userId, username, onClose, onNavigateToUser, onNavigateT
                                     >
                                         <div className="friend-avatar">
                                             {friend.avatar ? (
-                                                <img src={friend.avatar} alt="" />
+                                                <img src={friend.avatar} alt={friend.username} />
                                             ) : (
                                                 <FaUser />
                                             )}
@@ -245,7 +245,7 @@ const MutualsPanel = ({ userId, username, onClose, onNavigateToUser, onNavigateT
                                     >
                                         <div className="server-icon">
                                             {server.icon ? (
-                                                <img src={server.icon} alt="" />
+                                                <img src={server.icon} alt={server.name} />
                                             ) : (
                                                 <span>{server.name.charAt(0)}</span>
                                             )}

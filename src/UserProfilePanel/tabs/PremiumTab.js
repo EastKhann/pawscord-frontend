@@ -52,7 +52,7 @@ const _st15 = { fontSize: '16px', color: '#b5bac1' };
 const PremiumTab = ({ premiumStatus }) => {
     const { t } = useTranslation();
     const styles = profileStyles;
-    const [error, setError] = React.useState(null);
+    const [_error, _setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     const activeFeatures = [

@@ -32,7 +32,7 @@ const TABS = [
 const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const state = useCommunitySettings(apiBaseUrl, serverId);
 
     if (state.loading) {

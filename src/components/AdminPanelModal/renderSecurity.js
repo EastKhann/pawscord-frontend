@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-undef */
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaCheckCircle, FaLock, FaUnlock } from 'react-icons/fa';
 import css from './tabs/AdminTabs.module.css';

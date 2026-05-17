@@ -70,7 +70,7 @@ const ScreenShareModal = ({
                         <button
                             onClick={toggleFullscreen}
                             style={styles.headerButton}
-                            title="Tam ekran"
+                            title={t('screenShare.fullscreen', 'Fullscreen')}
                             aria-label={t('screenShare.fullscreen', 'Fullscreen')}
                         >
                             {isFullscreen ? <FaCompress /> : <FaExpand />}

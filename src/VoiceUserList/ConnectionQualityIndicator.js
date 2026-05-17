@@ -1,5 +1,4 @@
 ﻿// frontend/src/VoiceUserList/ConnectionQualityIndicator.js
-import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from '../i18n';
 

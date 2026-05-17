@@ -232,7 +232,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
 
                     <div className="form-grid">
                         <div className="form-group full-width">
-                            <label>Channel</label>
+                            <label>{t('reactionRole.channel', 'Channel')}</label>
                             <select
                                 value={newReactionRole.channel_id}
                                 onChange={(e) =>
@@ -333,7 +333,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                         </div>
 
                         <div className="form-group full-width">
-                            <label>Description</label>
+                            <label>{t('reactionRole.description', 'Description')}</label>
                             <input
                                 type="text"
                                 placeholder={t('ui.role_description_optional')}

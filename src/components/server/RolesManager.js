@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const RolesManager = ({ serverId, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const s = useRolesManager(serverId);
 
     if (s.loading) {
@@ -37,7 +37,7 @@ const RolesManager = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="roles-manager-header">
-                    <h2>?? {t('roles.title')}</h2>
+                    <h2>🛡️ {t('roles.title')}</h2>
                     <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ?
                     </button>
@@ -54,14 +54,14 @@ const RolesManager = ({ serverId, onClose }) => {
                         </button>
                         <div className="roles-info">
                             <span>{t('roles.rolesCount', { count: s.roles.length })}</span>
-                            <span className="info-tip">?? {t('roles.dragToReorder')}</span>
+                            <span className="info-tip">💡 {t('roles.dragToReorder')}</span>
                         </div>
                     </div>
 
                     <div className="roles-list">
                         {s.roles.length === 0 ? (
                             <div className="empty-state">
-                                <div className="empty-icon">??</div>
+                                <div className="empty-icon">🛡️</div>
                                 <h3>{t('roles.noRolesYet')}</h3>
                                 <p>{t('roles.createRolesDesc')}</p>
                             </div>
@@ -75,7 +75,7 @@ const RolesManager = ({ serverId, onClose }) => {
                                     onDragOver={s.handleDragOver}
                                     onDrop={(e) => s.handleDrop(e, role)}
                                 >
-                                    <div className="role-drag-handle">?</div>
+                                    <div className="role-drag-handle">⠿</div>
                                     <div
                                         className="role-color-badge"
                                         style={{ backgroundColor: role.color }}

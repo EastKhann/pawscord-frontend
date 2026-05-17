@@ -25,9 +25,10 @@ const useGlobalKeyboardShortcuts = (callbacks: ShortcutCallbacks = {}): void => 
     } = callbacks;
 
     const handleKeyDown = useCallback(
-        (e) => {
+        (e: KeyboardEvent) => {
             // Check if user is typing in an input
-            const isTyping = ['INPUT', 'TEXTAREA'].includes(e.target.tagName);
+            const target = e.target as HTMLElement | null;
+            const isTyping = target ? ['INPUT', 'TEXTAREA'].includes(target.tagName) : false;
 
             const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
             const ctrlKey = isMac ? e.metaKey : e.ctrlKey;

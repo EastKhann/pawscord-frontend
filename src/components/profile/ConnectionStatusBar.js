@@ -16,7 +16,7 @@ const ConnectionStatusBar = () => {
     const { t } = useTranslation();
     const [status, setStatus] = useState('online');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null); // online | offline | reconnecting
+    const [_error, _setError] = useState(null); // online | offline | reconnecting
     const [visible, setVisible] = useState(false);
     const [fadeOut, setFadeOut] = useState(false);
 

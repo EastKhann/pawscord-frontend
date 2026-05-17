@@ -1,4 +1,3 @@
-import React from 'react';
 // frontend/src/utils/memoizationCache.js
 
 /**
@@ -291,7 +290,7 @@ export const useMemoizeAsync = (fn, deps = []) => {
             cacheRef.current.set(key, data);
             setResult(data);
             setLoading(false);
-        });
+        }).catch((err) => console.error('Failed to fetch cached async data:', err));
     }, deps);
 
     return { result, loading };

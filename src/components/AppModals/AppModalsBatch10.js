@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { BATCH10_MODALS } from './batch10Config';
 
 import PropTypes from 'prop-types';

@@ -135,6 +135,7 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
                             onChange={(e) => setReason(e.target.value)}
                             className="form-input"
                             maxLength={200}
+                            aria-label={t('ban.appealReason', 'Appeal Reason')}
                         />
                         <div className="char-count">{reason.length}/200</div>
                     </div>
@@ -147,6 +148,7 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
                             className="form-textarea"
                             rows={5}
                             maxLength={1000}
+                            aria-label={t('ban.additionalInfo', 'Additional information')}
                         />
                         <div className="char-count">{details.length}/1000</div>
                     </div>

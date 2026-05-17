@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const CustomCommandsPanel = ({ serverId, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         commands,
         creating,
@@ -66,15 +66,15 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
                         <div className="stats-overview">
                             <div className="stat-card">
                                 <span className="stat-value">{stats.total_commands || 0}</span>
-                                <span className="stat-label">Toplam Komutlar</span>
+                                <span className="stat-label">{t('customCmds.totalCommands', 'Total Commands')}</span>
                             </div>
                             <div className="stat-card">
                                 <span className="stat-value">{stats.enabled_commands || 0}</span>
-                                <span className="stat-label">Active</span>
+                                <span className="stat-label">{t('customCmds.active', 'Active')}</span>
                             </div>
                             <div className="stat-card">
                                 <span className="stat-value">{stats.total_uses || 0}</span>
-                                <span className="stat-label">Usage</span>
+                                <span className="stat-label">{t('customCmds.usage', 'Usage')}</span>
                             </div>
                         </div>
                     )}

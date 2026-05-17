@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaCog, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';

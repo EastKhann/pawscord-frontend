@@ -1,4 +1,3 @@
-import React from 'react';
 import logger from '../utils/logger';
 // frontend/src/utils/serviceWorkerManager.js
 
@@ -14,7 +13,7 @@ class ServiceWorkerManager {
         this.updateInterval = options.updateInterval || 60 * 60 * 1000; // 1 hour
         this.registration = null;
         this.updateCheckInterval = null;
-        this.listners = new Map();
+        this.listeners = new Map();
     }
 
     /**
@@ -42,7 +41,7 @@ class ServiceWorkerManager {
     }
 
     /**
-     * Setup event listners
+     * Setup event listeners
      */
     setupListeners() {
         if (!this.registration) return;
@@ -187,16 +186,16 @@ class ServiceWorkerManager {
      * Event emitter
      */
     on(event, callback) {
-        if (!this.listners.has(event)) {
-            this.listners.set(event, []);
+        if (!this.listeners.has(event)) {
+            this.listeners.set(event, []);
         }
-        this.listners.get(event).push(callback);
+        this.listeners.get(event).push(callback);
     }
 
     off(event, callback) {
-        if (!this.listners.has(event)) return;
+        if (!this.listeners.has(event)) return;
 
-        const callbacks = this.listners.get(event);
+        const callbacks = this.listeners.get(event);
         const index = callbacks.indexOf(callback);
 
         if (index > -1) {
@@ -205,9 +204,9 @@ class ServiceWorkerManager {
     }
 
     emit(event, data) {
-        if (!this.listners.has(event)) return;
+        if (!this.listeners.has(event)) return;
 
-        this.listners.get(event).forEach((callback) => {
+        this.listeners.get(event).forEach((callback) => {
             callback(data);
         });
     }
@@ -254,7 +253,7 @@ export const useServiceWorker = (options = {}) => {
             serviceWorkerManager.register().then((reg) => {
                 setRegistration(reg);
                 setState(serviceWorkerManager.getState());
-            });
+            }).catch((err) => console.error('Failed to register service worker:', err));
         }
 
         return () => {

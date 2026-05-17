@@ -178,7 +178,7 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
                                             </div>
                                             <div className="flex-gap-10">
                                                 {t.is_global && (
-                                                    <span style={badgeStyle}>Global</span>
+                                                    <span style={badgeStyle}>{t('msgTemplate.global', 'Global')}</span>
                                                 )}
                                                 <button
                                                     aria-label={t('common.delete')}

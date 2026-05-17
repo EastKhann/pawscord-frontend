@@ -1,5 +1,5 @@
 // frontend/src/components/APIUsagePanel.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
@@ -17,7 +17,7 @@ import useAPIUsage from '../APIUsagePanel/useAPIUsage';
 
 const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         safeStats,
         endpoints,
@@ -56,9 +56,9 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             onChange={(e) => setTimeRange(e.target.value)}
                             style={styles.timeRangeSelect}
                         >
-                            <option value="24h">Son 24 Saat</option>
-                            <option value="7d">Son 7 G�n</option>
-                            <option value="30d">Son 30 G�n</option>
+                            <option value="24h">{t('common.last24h', 'Last 24 Hours')}</option>
+                            <option value="7d">{t('common.last7days', 'Last 7 Days')}</option>
+                            <option value="30d">{t('common.last30days', 'Last 30 Days')}</option>
                         </select>
                         <button aria-label={t('common.close')} onClick={onClose} style={styles.closeBtn}>
                             <FaTimes />
@@ -68,7 +68,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>Analitik y�kleniyor...</div>
+                        <div style={styles.loading}>{t('apiUsage.loading', 'Loading analytics...')}</div>
                     ) : (
                         <>
                             <div style={styles.statsGrid}>
@@ -80,7 +80,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                         <div style={styles.statValue}>
                                             {(safeStats.requests_made || 0).toLocaleString()}
                                         </div>
-                                        <div style={styles.statLabel}>Toplam Istekler</div>
+                                        <div style={styles.statLabel}>{t('apiUsage.totalRequests', 'Total Requests')}</div>
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
@@ -93,7 +93,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                 ? `${safeStats.success_rate.toFixed(1)}%`
                                                 : '0%'}
                                         </div>
-                                        <div style={styles.statLabel}>Basari Orani</div>
+                                        <div style={styles.statLabel}>{t('apiUsage.successRate', 'Success Rate')}</div>
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
@@ -106,7 +106,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                 ? `${safeStats.avg_response_time}ms`
                                                 : '0ms'}
                                         </div>
-                                        <div style={styles.statLabel}>Ort. Yanit S�resi</div>
+                                        <div style={styles.statLabel}>{t('apiUsage.avgResponseTime', 'Avg. Response Time')}</div>
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
@@ -115,7 +115,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>{safeStats.errors || 0}</div>
-                                        <div style={styles.statLabel}>Hatalar</div>
+                                        <div style={styles.statLabel}>{t('apiUsage.errors', 'Errors')}</div>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     <div style={styles.rateLimitInfo}>
                                         <div style={styles.rateLimitText}>
                                             {safeStats.requests_made || 0} /{' '}
-                                            {safeStats.rate_limit || 10000} istek kullanildi
+                                            {safeStats.rate_limit || 10000} {t('apiUsage.requestsUsed', 'requests used')}
                                         </div>
                                         <div>{rateLimitStatus.text}</div>
                                     </div>
@@ -141,7 +141,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     </div>
                                     {safeStats.reset_at && (
                                         <div style={styles.rateLimitReset}>
-                                            Sifirlaniyor:{' '}
+                                            {t('apiUsage.resettingIn', 'Resetting in:')}{' '}
                                             {calculateTimeUntilReset(safeStats.reset_at)}
                                         </div>
                                     )}
@@ -149,10 +149,10 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                             </div>
 
                             <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>En �ok Kullanilan U� Noktalar</h3>
+                                <h3 style={styles.sectionTitle}>{t('apiUsage.topEndpoints', 'Most Used Endpoints')}</h3>
                                 <div style={styles.endpointsList}>
                                     {endpoints.length === 0 ? (
-                                        <div style={styles.empty}>U� nokta verisi yok</div>
+                                        <div style={styles.empty}>{t('apiUsage.noEndpointData', 'No endpoint data')}</div>
                                     ) : (
                                         endpoints.slice(0, 10).map((endpoint, idx) => (
                                             <div
@@ -175,16 +175,16 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                         {endpoint.path}
                                                     </div>
                                                     <div style={styles.endpointStats}>
-                                                        <span>{endpoint.count} istek</span>
-                                                        <span className="divider-text">�</span>
-                                                        <span>{endpoint.avg_time}ms ort.</span>
+                                                        <span>{endpoint.count} {t('apiUsage.requests', 'requests')}</span>
+                                                        <span className="divider-text">·</span>
+                                                        <span>{endpoint.avg_time}ms {t('apiUsage.avg', 'avg.')}</span>
                                                         {endpoint.error_rate > 0 && (
                                                             <>
                                                                 <span className="divider-text">
-                                                                    �
+                                                                    ·
                                                                 </span>
                                                                 <span className="icon-danger">
-                                                                    {endpoint.error_rate}% hata
+                                                                    {endpoint.error_rate}% {t('apiUsage.error', 'error')}
                                                                 </span>
                                                             </>
                                                         )}
@@ -212,7 +212,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                 <h3 style={styles.sectionTitle}>{t('apiUsage.recentActivity', 'Son Aktiviteler')}</h3>
                                 <div style={styles.timeline}>
                                     {timeline.length === 0 ? (
-                                        <div style={styles.empty}>Son aktivite yok</div>
+                                        <div style={styles.empty}>{t('apiUsage.noRecentActivity', 'No recent activity')}</div>
                                     ) : (
                                         timeline.slice(0, 20).map((event, idx) => (
                                             <div key={`item-${idx}`} style={styles.timelineItem}>
@@ -249,9 +249,9 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                         >
                                                             {event.status}
                                                         </span>
-                                                        <span className="divider-text">�</span>
+                                                        <span className="divider-text">·</span>
                                                         <span>{event.response_time}ms</span>
-                                                        <span className="divider-text">�</span>
+                                                        <span className="divider-text">·</span>
                                                         <span>
                                                             {new Date(
                                                                 event.timestamp

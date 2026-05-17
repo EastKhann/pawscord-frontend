@@ -77,8 +77,8 @@ describe('useWindowWidth', () => {
         expect(result.current.isMobile).toBe(true);
     });
 
-    // ── 7. Cleans up resize listner on unmount ──
-    it('should remove resize listner on unmount', () => {
+    // ── 7. Cleans up resize listener on unmount ──
+    it('should remove resize listener on unmount', () => {
         const spy = vi.spyOn(window, 'removeEventListener');
         const { unmount } = renderHook(() => useWindowWidth());
         unmount();

@@ -1,5 +1,5 @@
 ﻿// frontend/src/components/SavedMessagesModal.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes, FaBookmark, FaStar, FaClock, FaTrash } from 'react-icons/fa';
 import useModalA11y from '../../hooks/useModalA11y';
@@ -120,7 +120,7 @@ const SavedMessagesModal = ({
                                                 onClose();
                                             }}
                                             style={styles.actionButton}
-                                            title="Mesaja git"
+                                            title={t('savedMessages.goToMessage', 'Go to message')}
                                         >
                                             →
                                         </button>

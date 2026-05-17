@@ -1,7 +1,7 @@
 // frontend/src/VoiceChatPanel/FullscreenView.js
 // 🎨 Fullscreen expanded-user view for voice chat
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import VideoFeed from './VideoFeed';
@@ -65,7 +65,7 @@ const FullscreenView = React.memo(
     }) => {
         const [isLoading, setIsLoading] = useState(false);
         const { t } = useTranslation();
-        const [error, setError] = useState(null);
+        const [_error, _setError] = useState(null);
         const streamKey =
             expandedUser.streamType === 'screen'
                 ? `${expandedUser.username}_screen`

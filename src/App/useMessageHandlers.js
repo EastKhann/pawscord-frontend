@@ -694,7 +694,7 @@ export default function useMessageHandlers({
         [fetchWithAuth, username]
     );
 
-    // --- � PREFETCH MESSAGES (hover üzerinde ön belleğe al) ---
+    // --- PREFETCH MESSAGES (hover üzerinde ön belleğe al) ---
     const prefetchInflightRef = useRef(new Set());
     const prefetchMessages = useCallback(
         async (type, id) => {
@@ -730,7 +730,7 @@ export default function useMessageHandlers({
         [fetchWithAuth, MESSAGE_HISTORY_ROOM_URL, MESSAGE_HISTORY_DM_URL]
     );
 
-    // --- � PREFETCH ALL CHANNELS IN A SERVER (triggered on server click) ---
+    // --- PREFETCH ALL CHANNELS IN A SERVER (triggered on server click) ---
     const prefetchServerChannels = useCallback(
         (channels) => {
             if (!channels || channels.length === 0) return;

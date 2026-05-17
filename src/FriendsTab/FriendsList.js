@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useMemo, useRef, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaCommentDots, FaTimes, FaSearch } from 'react-icons/fa';
@@ -185,6 +185,7 @@ const FriendsList = ({
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={t('common.search')}
+                        aria-label={t('friends.searchFriends', 'Search friends')}
                         style={{ background: 'transparent', border: 'none', outline: 'none', color: '#dbdee1', fontSize: '13px', width: '100%' }}
                     />
                 </div>

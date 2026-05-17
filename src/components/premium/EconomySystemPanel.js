@@ -113,7 +113,7 @@ function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
                 <div className="balance-card">
                     <FaWallet className="balance-icon" />
                     <div className="balance-info">
-                        <div className="balance-label">Bakiyeniz</div>
+                        <div className="balance-label">{t('economy.yourBalance', 'Your Balance')}</div>
                         <div className="balance-amount">
                             <FaCoins className="coin-icon" />
                             {formatCoins(balance)}

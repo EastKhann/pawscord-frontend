@@ -325,7 +325,7 @@ const PremiumManagementPanel = ({ onClose }) => {
                                     <span className="tier-icon">{getTierIcon(tierKey)}</span>
                                     <h3>{tier.name}</h3>
                                     {isCurrentTier && (
-                                        <span className="current-badge">Mevcut Plan</span>
+                                        <span className="current-badge">{t('premiumMgmt.currentPlan', 'Current Plan')}</span>
                                     )}
                                 </div>
 

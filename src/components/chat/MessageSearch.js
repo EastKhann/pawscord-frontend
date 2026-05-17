@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/MessageSearch.js
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FaSearch, FaTimes, FaFilter } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ const MessageSearch = ({ messages, onResultClick, onClose }) => {
     const { t } = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [results, setResults] = useState([]);
     const [filters, setFilters] = useState({
         from: '',

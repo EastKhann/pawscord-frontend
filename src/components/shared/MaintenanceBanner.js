@@ -33,7 +33,7 @@ const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
     const { t } = useTranslation();
     const [timeLeft, setTimeLeft] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     useEffect(() => {
         if (!endTime) return;

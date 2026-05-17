@@ -181,12 +181,12 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const getRoleIcon = (role) => {
         const icons = {
-            host: '??',
-            moderator: '???',
-            speaker: '???',
-            listner: '??',
+            host: '🎙️',
+            moderator: '🛡️',
+            speaker: '🗣️',
+            listener: '👂',
         };
-        return icons[role] || '??';
+        return icons[role] || '👤';
     };
 
     const getRoleColor = (role) => {
@@ -194,7 +194,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
             host: '#f0b232',
             moderator: '#5865f2',
             speaker: '#23a559',
-            listner: '#949ba4',
+            listener: '#949ba4',
         };
         return colors[role] || '#949ba4';
     };
@@ -241,8 +241,9 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
+                {/* 🔥 FIX: tüm "?" emoji placeholder + Türkçe encoding bozulması düzeltildi */}
                 <div className="stage-header">
-                    <h2>??? Stage Channellari</h2>
+                    <h2>🎤 {t('stage.stageChannels', 'Stage Channels')}</h2>
                     <div className="header-actions">
                         {roomId && (
                             <>
@@ -251,19 +252,19 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                     className={`view-toggle ${view === 'list' ? 'active' : ''}`}
                                     onClick={() => setView('list')}
                                 >
-                                    ?? Active Stage'ler
+                                    🎙️ {t('stage.tabActive', 'Active Stages')}
                                 </button>
                                 <button
                                     aria-label={t('stage.openCreate', 'Create stage')}
                                     className={`view-toggle ${view === 'create' ? 'active' : ''}`}
                                     onClick={() => setView('create')}
                                 >
-                                    ? Create
+                                    ➕ {t('stage.create', 'Create')}
                                 </button>
                             </>
                         )}
                         <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
-                            ?
+                            ✕
                         </button>
                     </div>
                 </div>
@@ -275,7 +276,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                 activeStages.map((stage) => (
                                     <div key={stage.id} className="stage-card">
                                         <div className="stage-info">
-                                            <div className="stage-icon">???</div>
+                                            <div className="stage-icon">🎤</div>
                                             <div className="stage-details">
                                                 <h3>{stage.topic}</h3>
                                                 {stage.description && (
@@ -284,12 +285,12 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                                     </p>
                                                 )}
                                                 <div className="stage-meta">
-                                                    <span>?? Host: {stage.host_username}</span>
+                                                    <span>👤 Host: {stage.host_username}</span>
                                                     <span>
-                                                        ??? {stage.speakers_count || 0} konusmaci
+                                                        🎙️ {stage.speakers_count || 0} {t('stage.speakers', 'speakers')}
                                                     </span>
                                                     <span>
-                                                        ?? {stage.audience_count || 0} dinleyici
+                                                        👥 {stage.audience_count || 0} {t('stage.listeners', 'listeners')}
                                                     </span>
                                                 </div>
                                             </div>
@@ -297,7 +298,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
                                         {stage.speakers && stage.speakers.length > 0 && (
                                             <div className="speakers-list">
-                                                <h4>Konusmacilar</h4>
+                                                <h4>{t('stage.speakersLabel', 'Speakers')}</h4>
                                                 <div className="speakers-grid">
                                                     {stage.speakers
                                                         .slice(0, 6)
@@ -337,7 +338,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                                     className="join-stage-btn"
                                                     onClick={() => handleJoinStage(stage.id)}
                                                 >
-                                                    ?? Dinle
+                                                    🎧 {t('stage.joinStage', 'Join Stage')}
                                                 </button>
                                             ) : (
                                                 <>
@@ -346,9 +347,9 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                                         className="leave-stage-btn"
                                                         onClick={() => handleLeaveStage(stage.id)}
                                                     >
-                                                        ?? Leave
+                                                        🚪 {t('stage.leaveStage', 'Leave Stage')}
                                                     </button>
-                                                    {stage.user_role === 'listner' && (
+                                                    {stage.user_role === 'listener' && (
                                                         <button
                                                             aria-label={t('stage.requestToSpeak', 'Request to speak')}
                                                             className="request-speak-btn"
@@ -356,7 +357,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                                                 handleRequestToSpeak(stage.id)
                                                             }
                                                         >
-                                                            ? Konusmak Isticomment
+                                                            🙋 {t('stage.requestToSpeak', 'Request to Speak')}
                                                         </button>
                                                     )}
                                                 </>
@@ -366,13 +367,13 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                 ))
                             ) : (
                                 <div className="no-stages">
-                                    <p>?? Aktif sahne yok</p>
+                                    <p>🎭 {t('stage.noActiveStages', 'No active stages')}</p>
                                     {roomId && (
                                         <button
                                             aria-label={t('common.create')}
                                             onClick={() => setView('create')}
                                         >
-                                            Ilk stage'i olustur
+                                            {t('stage.createFirst', 'Create the first stage')}
                                         </button>
                                     )}
                                 </div>
@@ -380,10 +381,10 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                         </div>
                     ) : (
                         <div className="create-stage-form">
-                            <h3>??? Yeni Stage Create</h3>
+                            <h3>🎤 {t('stage.openCreate', 'Create New Stage')}</h3>
 
                             <div className="form-group">
-                                <label>Konu Basligi *</label>
+                                <label>{t('stage.topicLabel', 'Topic *')}</label>
                                 <input
                                     type="text"
                                     placeholder={t('ui.konusma_konusu')}
@@ -396,7 +397,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                             </div>
 
                             <div className="form-group">
-                                <label>Description</label>
+                                <label>{t('stage.description', 'Description')}</label>
                                 <textarea
                                     placeholder={t('ui.stage_hakkinda_detaillar')}
                                     value={newStage.description}
@@ -409,7 +410,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Maks. Konusmaci (1-10)</label>
+                                    <label>{t('stage.maxSpeakers', 'Max Speakers')} (1-10)</label>
                                     <input
                                         type="number"
                                         value={newStage.max_speakers}
@@ -428,7 +429,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Maks. Dinleyici</label>
+                                    <label>{t('stage.maxListeners', 'Max Listeners')}</label>
                                     <input
                                         type="number"
                                         value={newStage.max_audience}
@@ -459,7 +460,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                             })
                                         }
                                     />
-                                    <span>?? Public</span>
+                                    <span>🌐 {t('stage.publicStage', 'Public')}</span>
                                 </label>
                             </div>
 

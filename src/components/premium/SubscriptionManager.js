@@ -307,9 +307,9 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                         <thead>
                                             <tr>
                                                 <th style={styles.th}>Date</th>
-                                                <th style={styles.th}>Description</th>
+                                                <th style={styles.th}>{t('subManager.description', 'Description')}</th>
                                                 <th style={styles.th}>{t('premium.amount', 'Amount')}</th>
-                                                <th style={styles.th}>Status</th>
+                                                <th style={styles.th}>{t('subManager.status', 'Status')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -342,7 +342,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                                     Son kullanma: 12/28
                                                 </div>
                                             </div>
-                                            <span style={styles.defaultBadge}>Default</span>
+                                            <span style={styles.defaultBadge}>{t('subManager.default', 'Default')}</span>
                                         </div>
                                     </div>
                                     <button aria-label={t('premium.addPaymentMethod', 'Add New Payment Method')} style={styles.addPaymentBtn}>

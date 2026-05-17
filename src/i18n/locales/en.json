@@ -182,7 +182,8 @@
       "anErrorOccurred": "An error occurred",
       "applied": "{{count}} users {{action}} action applied",
       "enterUserIds": "Enter User IDs",
-      "operationFailed": "Operation failed"
+      "operationFailed": "Operation failed",
+      "userIdsLabel": "User IDs (one per line)"
     },
     "mod": {
       "auditLog": "Audit Log",
@@ -209,7 +210,6 @@
       "cacheCleared": "🧹 Cache cleared!",
       "connectedCount": "Connected",
       "consoleTodo": "Console — coming soon",
-      "cryptoSignals": "Crypto Signals",
       "dashboard": "Dashboard",
       "database": "Database Management",
       "dbConnections": "DB Connections",
@@ -583,6 +583,7 @@
     "securityDesc": "Keep your API keys secret! Anyone with your key can access your account.",
     "securityDesc2": "Revoke keys you no longer need immediately.",
     "createKey": "Create API key",
+    "newKey": "New Key",
     "toggleVisibility": "Toggle key visibility",
     "copyKey": "Copy API key",
     "deleteKey": "Delete API key"
@@ -866,7 +867,12 @@
     "showToken": "Show token",
     "webhookUrl": "Webhook URL",
     "webhookUrlPlaceholder": "https://your-server.com/webhook",
-    "noBotsBack": "View bot list"
+    "noBotsBack": "View bot list",
+    "botNameRequired": "Bot Name *",
+    "webhookUrlRequired": "Webhook URL *",
+    "servers": "servers",
+    "token": "Token",
+    "analytics": "Analytics"
   },
   "bot.added": "Bot added successfully!",
   "bot.deleteConfirm": "Are you sure you want to delete this bot?",
@@ -1805,7 +1811,8 @@
     "remove": "Remove",
     "sent": "Sent",
     "friendCode": "Friend Code",
-    "copyFriendCode": "Copy friend code"
+    "copyFriendCode": "Copy friend code",
+    "searchFriends": "Search friends"
   },
   "games": {
     "leaderboard": "Leaderboard",
@@ -1933,7 +1940,9 @@
     "revoked": "Revoked",
     "expired": "Expired",
     "active": "Active",
-    "notFound2": "Invitation not found"
+    "notFound2": "Invitation not found",
+    "success": "Successful!",
+    "redirecting": "Redirecting to homepage..."
   },
   "invite.copied": "Invite link copied!",
   "invite.createError": "Error while creating link",
@@ -2165,14 +2174,13 @@
     "goToReply": "Go to replied message",
     "loadingGame": "Loading game...",
     "quoteFailed": "Failed to quote message",
-    "transcribe": "Transcribe voice message",
+    "transcribe": "Transcribe",
     "convertToText": "📝 Convert to text",
     "converting": "⏳ Converting...",
     "quoted": "Message quoted!",
     "transcriptionEmpty": "Transcription returned empty",
     "transcriptionError": "Transcription error",
     "transcriptionFailed": "Could not convert audio to text",
-    "transcribe": "Transcribe",
     "searchConversation": "Search conversations...",
     "delivered": "Delivered",
     "unpin": "Remove pin",
@@ -2795,7 +2803,81 @@
   "premium.purchasing": "Purchasing {{name}} - {{cycle}} plan",
   "premium.upgradeFailed": "Could not be upgraded",
   "privacy": {
-    "removeWord": "Remove blocked word"
+    "removeWord": "Remove blocked word",
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated: May 9, 2026",
+    "quickSummaryLabel": "In Short",
+    "quickSummary": "We use your account, message, and usage data only to provide and improve the Pawscord service. We do not sell your data to third parties.",
+    "section1Title": "1. Information We Collect",
+    "section1Intro": "To provide the service, we collect data in the following categories:",
+    "personalInfo": "Personal Information",
+    "accountData": "Account Data",
+    "accountDataDesc": "Username, email, password hash, profile photo.",
+    "profileInfo": "Profile Info",
+    "profileInfoDesc": "Display name, bio, status message, social links.",
+    "userId": "User Identifier",
+    "userIdDesc": "Unique user ID and friend code identifying you in our system.",
+    "commData": "Communication Data",
+    "messages": "Messages",
+    "messagesDesc": "Messages you send/receive in chat rooms and DMs.",
+    "mediaFiles": "Media Files",
+    "mediaFilesDesc": "Images, audio, video, and other files you upload.",
+    "voiceMessages": "Voice Messages",
+    "voiceMessagesDesc": "Voice messages you record (delivered only to recipient).",
+    "techData": "Technical Data",
+    "techDataDesc": "IP address, browser/device info, session tokens.",
+    "deviceIds": "Device Identifiers",
+    "deviceIdsDesc": "Anonymous device IDs for push notifications on mobile/desktop apps.",
+    "activityData": "Activity Data",
+    "activityDataDesc": "Which servers/rooms you join, your online status.",
+    "appInteractions": "App Interactions",
+    "appInteractionsDesc": "Which features you use (anonymous, for analytics).",
+    "section2Title": "2. How We Use Information",
+    "section2Intro": "We use the data we collect to:",
+    "use1": "Create and maintain your Pawscord account.",
+    "use2": "Deliver your messages to the correct recipient.",
+    "use3": "Improve the service and debug issues.",
+    "use4": "Detect behavior that violates community guidelines.",
+    "use5": "Contact you about important updates.",
+    "use6": "Comply with legal obligations.",
+    "section3Title": "3. Who We Share Information With",
+    "section3Intro": "We share your data only in the following cases:",
+    "withOtherUsers": "With Other Users",
+    "withOtherUsersDesc": "Your profile info and messages are visible to people you communicate with.",
+    "serviceProviders": "With Service Providers",
+    "serviceProvidersDesc": "Infrastructure providers like hosting (Railway, Cloudflare), storage (R2), and notifications (FCM).",
+    "legalReqs": "Legal Requirements",
+    "legalReqsDesc": "When required by court order or legal process.",
+    "noSell": "We DO NOT sell your data to third parties.",
+    "section4Title": "4. Your Rights",
+    "section4Intro": "Under GDPR and KVKK, your rights:",
+    "right1": "Request access to your data.",
+    "right2": "Request correction of inaccurate data.",
+    "right3": "Delete your account and data.",
+    "right4": "Data portability (export your data).",
+    "right5": "Object to data processing.",
+    "section5Title": "5. Contact Us",
+    "section5Intro": "For privacy questions or requests:",
+    "howToDelete": "How to Delete Your Account",
+    "deleteStep1": "Go to Settings → My Account → Delete Account.",
+    "deleteStep2": "Confirm your password.",
+    "deleteStep3": "Submit your deletion request.",
+    "deleteStep4": "30-day grace period during which you can recover.",
+    "deleteStep5": "After 30 days, all your data is permanently deleted.",
+    "contactTitle": "Contact",
+    "contactIntro": "Reach us with your questions:",
+    "email": "Email",
+    "website": "Website",
+    "inApp": "In-App",
+    "inAppDesc": "Write to us via Settings → Support.",
+    "deviceInfo": "Device Info",
+    "usageInfo": "Usage Info",
+    "sec1": "Communication",
+    "sec2": "Data",
+    "sec3": "Security",
+    "sec4": "Third Parties",
+    "footerTagline": "Pawscord — Connect with your community, securely.",
+    "copyright": "© 2026 Pawscord. All rights reserved."
   },
   "privacy.connectionError": "❌ Connection error",
   "privacy.exportFailed": "❌ Request could not be sent",
@@ -3577,7 +3659,16 @@
     "approveRequest": "Approve speak request",
     "inviteToSpeak": "Invite to speak",
     "unmute": "Unmute",
-    "mute": "Mute"
+    "mute": "Mute",
+    "listenersLabel": "Listeners",
+    "moderatorBadge": "Moderator",
+    "confirm": "Confirm",
+    "a11y": {
+      "handRaised": "Speak request sent",
+      "requestCancelled": "Speak request cancelled",
+      "muted": "Microphone muted",
+      "unmuted": "Microphone unmuted"
+    }
   },
   "settings": {
     "about": "About",
@@ -4039,7 +4130,13 @@
     "maxMessages": "Max Messages",
     "currentSummary": "Generated Summary",
     "lastSummary": "Last Summary",
-    "history": "Summary History"
+    "history": "Summary History",
+    "last1h": "Last 1 Hour",
+    "last6h": "Last 6 Hours",
+    "last24h": "Last 24 Hours",
+    "copy": "Copy",
+    "export": "Export",
+    "keywords": "Keywords:"
   },
   "support": {
     "buyCoffee": "Buy a Coffee ☕",
@@ -4139,7 +4236,10 @@
   "twoFactor": {
     "useAuthenticator": "Use authenticator code",
     "useBackupCode": "Use backup code",
-    "code": "000000"
+    "code": "000000",
+    "backupCodesOneTime": "These codes will not be shown again. Save them now!",
+    "copyAll": "Copy All",
+    "copyAllCodes": "Copy all backup codes"
   },
   "type_server_name_to_delete": "Type the server name to delete",
   "tüm_audio_settingsını_varsailan_değerlerine_döndürür": "All Audio Settingsini Varsailan Degerlerine Dondurur",
@@ -5163,7 +5263,20 @@
   "apiUsage": {
     "title": "API Usage Analytics",
     "rateLimitStatus": "Rate Limit Status",
-    "recentActivity": "Recent Activity"
+    "recentActivity": "Recent Activity",
+    "loading": "Loading analytics...",
+    "totalRequests": "Total Requests",
+    "successRate": "Success Rate",
+    "avgResponseTime": "Avg. Response Time",
+    "errors": "Errors",
+    "requestsUsed": "requests used",
+    "resettingIn": "Resetting in:",
+    "topEndpoints": "Most Used Endpoints",
+    "noEndpointData": "No endpoint data",
+    "requests": "requests",
+    "avg": "avg.",
+    "error": "error",
+    "noRecentActivity": "No recent activity"
   },
   "ara": "Ara",
   "attack_duration": "Attack Duration",
@@ -5211,11 +5324,13 @@
   "change_your_server_s_display_name": "Change Your Server S Display Name",
   "channel": {
     "permissions": "Permissions",
+    "general": "General",
     "generalTab": "General settings",
     "permissionsTab": "Permissions settings",
     "integrationsTab": "Integration settings",
     "integrations": "Integrations",
-    "advancedTab": "Advanced settings"
+    "advancedTab": "Advanced settings",
+    "settingsTabs": "Channel settings tabs"
   },
   "channel_analytics": "Channel Analytics",
   "channel_create": "Channel Create",
@@ -6186,7 +6301,8 @@
     "onNewMessage": "When a new message is sent",
     "onReaction": "When a reaction is added",
     "onMemberJoin": "When a member joins the server",
-    "onVoiceState": "When voice state changes"
+    "onVoiceState": "When voice state changes",
+    "jsNodejs": "JavaScript (Node.js)"
   },
   "verif": {
     "none": "None",
@@ -6394,7 +6510,8 @@
     "leave": "Leave",
     "card": "Tournament card",
     "detailModal": "Tournament detail",
-    "joinTournament": "Join tournament"
+    "joinTournament": "Join tournament",
+    "noBracket": "No bracket data available."
   },
   "watchTogether": {
     "title": "📺 Watch Together",
@@ -6564,14 +6681,18 @@
     "servers": "server(s)",
     "comments": "review(s)",
     "website": "🌐 Website",
-    "supportServer": "💬 Support Server"
+    "supportServer": "💬 Support Server",
+    "tabs": "Bot detail tabs"
   },
   "highlights": {
     "keywordInput": "New keyword",
     "addKeywordBtn": "Add keyword",
     "saveConfig": "Save highlight settings",
     "clearHighlights": "Clear highlights",
-    "addKeyword": "Add keyword..."
+    "addKeyword": "Add keyword...",
+    "title": "Highlight System",
+    "settings": "Settings",
+    "save": "Save"
   },
   "customStatus": {
     "emojiInput": "Status emoji",
@@ -6835,7 +6956,9 @@
   "emojiMgmt": {
     "title": "Emoji Management",
     "noEmoji": "No custom emoji yet",
-    "suggestedBy": "Suggested by"
+    "suggestedBy": "Suggested by",
+    "trending": "Trending",
+    "suggestions": "Suggestions"
   },
   "mentions": {
     "refresh": "Refresh mentions",
@@ -6882,7 +7005,8 @@
   "reportSystem": {
     "reportedUser": "Reported User",
     "title": "Report System",
-    "totalReports": "Total Reports"
+    "totalReports": "Total Reports",
+    "reportedBy": "By"
   },
   "adminUser": {
     "unban": "Unban",
@@ -7120,7 +7244,8 @@
     "template": "Template (Ctrl+T)"
   },
   "pendingFiles": {
-    "removeAll": "Remove All"
+    "removeAll": "Remove All",
+    "waiting": "{{count}} files pending"
   },
   "notifPrefs": {
     "dndHours": "Do Not Disturb Hours"
@@ -7187,9 +7312,6 @@
   "warnings": {
     "removeConfirm": "Are you sure you want to remove this warning?"
   },
-  "cryptoSignals": {
-    "winRate": "Win Rate"
-  },
   "voiceIsland": {
     "title": "VOICE CHAT"
   },
@@ -7204,9 +7326,6 @@
   },
   "msgContextMenu": {
     "deleteConfirm": "Are you sure you want to delete this message?"
-  },
-  "englishHub": {
-    "spacedRep": "Smart spaced repetition algorithm for permanent vocabulary learning"
   },
   "bookmarksTab": {
     "noBookmarks": "No bookmarks yet"
@@ -7310,7 +7429,9 @@
     "resetDefaults": "Reset to defaults",
     "saveSettings": "Save settings",
     "effectsTab": "Effects tab",
-    "pushToTalkKey": "Push-to-talk key"
+    "pushToTalkKey": "Push-to-talk key",
+    "micTestStarted": "Microphone test started",
+    "micTestStopped": "Microphone test stopped"
   },
   "voiceTranscripts": {
     "searchInput": "Search transcripts",
@@ -7437,7 +7558,11 @@
     "unsubscribe": "Unsubscribe from thread",
     "sendMessage": "Send thread message",
     "createThread": "Create thread",
-    "pinThread": "Pin thread"
+    "pinThread": "Pin thread",
+    "noThreads": "No threads yet",
+    "subscribers": "{{count}} subscribers",
+    "subscribeToThread": "Subscribe",
+    "newThread": "New Thread"
   },
   "game": {
     "rock": "Rock",
@@ -7636,7 +7761,6 @@
     "messageEditForm": "Edit Message",
     "summaryModal": "AI Summary",
     "voiceAudioController": "Voice Audio",
-    "grammarQuizPage": "Grammar Quiz",
     "videoMessage": "Video Message",
     "messageContextMenu": "Message Menu",
     "analyticsDashboard": "Analytics Dashboard",
@@ -7647,7 +7771,6 @@
     "pawIcon": "Paw",
     "scoreArc": "Score",
     "spotifyCallback": "Spotify Connection",
-    "srsReview": "SRS Review",
     "roomContextMenu": "Room Menu",
     "userProfilePanel": "User Profile",
     "activityTab": "Activity",
@@ -7679,8 +7802,7 @@
     "userOverlay": "User Status",
     "connectionQuality": "Connection Quality",
     "loadingSpinner": "Loading",
-    "errorBoundary": "Error",
-    "englishVoicePractice": "English Voice Practice"
+    "errorBoundary": "Error"
   },
   "toast": {
     "dismiss": "Dismiss notification"
@@ -7703,5 +7825,136 @@
     "enlargedAttachment": "Enlarged Attachment",
     "attachment": "Attachment",
     "logo": "Logo"
-  }
+  },
+  "messageOCR": {
+    "noText": "No OCR text in this message"
+  },
+  "richTextEditor": {
+    "placeholder": "Write a message..."
+  },
+  "webhooks.loading": "Loading webhooks...",
+  "webhooks.management": "Webhook Management",
+  "webhooks.createNew": "Create New Webhook",
+  "webhooks.newWebhook": "New Webhook",
+  "webhooks.webhookNameRequired": "Webhook Name *",
+  "webhooks.channelRequired": "Channel *",
+  "webhooks.avatarUrlOptional": "Avatar URL (Optional)",
+  "webhooks.channel": "Channel",
+  "webhooks.avatarUrl": "Avatar URL",
+  "webhooks.logs": "Logs",
+  "webhooks.totalCalls": "Total Calls:",
+  "webhooks.successful": "Successful:",
+  "webhooks.failed": "Failed:",
+  "webhooks.lastCall": "Last Call:",
+  "webhooks.noWebhooksYet": "No webhooks yet",
+  "webhooks.createToReceive": "Create a webhook to receive messages from external apps",
+  "webhooks.webhookLogs": "Webhook Logs",
+  "webhooks.noLogsYet": "No logs yet",
+  "webhooks.subscribeEvents": "Events to Subscribe",
+  "webhooks.noChannelWebhooks": "No webhooks configured for this channel",
+  "webhooks.recentDeliveries": "Recent Deliveries",
+  "webhooks.noDeliveries": "No deliveries yet",
+  "webhooks.noWebhooksCreated": "No webhooks created yet",
+  "stage.stageChannels": "Stage Channels",
+  "stage.noActiveStages": "No active stages",
+  "stage.createFirst": "Create the first stage",
+  "stage.topicLabel": "Topic *",
+  "stage.maxListeners": "Max Listeners",
+  "stage.publicStage": "Public",
+  "backup.includeRoles": "🎭 Include roles",
+  "backup.includeEmojis": "😀 Include emojis",
+  "backup.existingBackups": "Existing Backups",
+  "backup.backupLabel": "Backup",
+  "serverBackup.title": "Server Backup",
+  "serverBoost.currentTier": "Current Tier",
+  "serverBoost.beFirstBooster": "Be the first to support!",
+  "vanityUrl.currentLabel": "Current Vanity URL:",
+  "appearance.theme": "Theme",
+  "appearance.accentColor": "Accent Color",
+  "appearance.messageMode": "Message Mode",
+  "appearance.messageModeDesc": "Choose how messages are displayed",
+  "appearance.appLanguage": "Application language",
+  "themeMarket.title": "Theme Marketplace",
+  "admin.errorReporting": "Error Reporting",
+  "admin.category": "Category",
+  "admin.bugReport": "🐛 Bug",
+  "admin.performance": "⚡ Performance",
+  "admin.priorityMedium": "🟡 Medium",
+  "admin.priorityCritical": "🔴 Critical",
+  "admin.systemInfo": "System Information",
+  "admin.massActions.ban": "🔨 Ban",
+  "admin.massActions.kick": "💢 Kick",
+  "admin.massActions.mute": "🔇 Mute",
+  "admin.massActions.warn": "⚠️ Warn",
+  "analytics.hourlyActivity": "Hourly Activity",
+  "boost.serverBoost": "Server Boost",
+  "admin.massActions.timeout": "⏰ Timeout",
+  "admin.massActions.deleteMessages": "🗑️ Delete Messages",
+  "admin.massActions.warningPrefix": "⚠️ This action will affect",
+  "admin.noDescription": "No description",
+  "admin.overviewTab": "Overview",
+  "admin.usersTab": "Users",
+  "admin.premiumTab": "Premium",
+  "admin.serversTab": "Servers",
+  "common.justNow": "Just now",
+  "common.minutesAgo": "minutes ago",
+  "common.hoursAgo": "hours ago",
+  "common.daysAgo": "days ago",
+  "common.last24h": "Last 24 Hours",
+  "common.messages": "Messages",
+  "common.server": "Server",
+  "common.roles": "Roles",
+  "common.channels": "Channels",
+  "common.other": "Other",
+  "common.message": "Message",
+  "common.error": "Error",
+  "integrations.hub": "Integration Hub",
+  "integrations.webhooksTab": "Webhooks",
+  "webhooks.payloadUrl": "Payload URL",
+  "webhooks.deliverySuccess": "Success",
+  "webhooks.deliveryFailed": "Failed",
+  "webhooks.event": "Event",
+  "webhooks.responseCode": "Response Code",
+  "webhooks.retry": "Retry",
+  "webhooks.allEvents": "All events",
+  "webhooks.test": "Test",
+  "webhooks.webhookUrl": "Webhook URL",
+  "webhooks.viewDeliveries": "View deliveries",
+  "webhooks.deleteWebhook": "Delete webhook",
+  "bot.noDescription": "No description",
+  "bot.commands": "commands",
+  "bot.totalServers": "Total Servers",
+  "bot.events": "Events",
+  "botMarket.title": "Bot Marketplace",
+  "botMarket.newest": "Newest",
+  "botMarket.allBots": "All Bots",
+  "botMarket.bots": "Bots",
+  "botMarket.resultsFor": "\"{{query}}\" results",
+  "botMarket.pageOf": "Page {{page}} / {{total}}",
+  "inviteAudit.title": "Invite Audit Log",
+  "reports.reporter": "Reporter",
+  "reports.reported": "Reported",
+  "reports.ban": "Ban",
+  "reports.warn": "Warn",
+  "reports.reject": "Reject",
+  "reports.rejectReport": "Reject Report",
+  "analytics.growthMetricsTitle": "Growth Metrics",
+  "analytics.loadingMetrics": "Loading metrics...",
+  "analytics.noMetrics": "No metrics available",
+  "analytics.totalMembers": "Total Members",
+  "analytics.activeMembers": "Active Members",
+  "analytics.messagesSent": "Messages Sent",
+  "analytics.newJoins": "New Joins",
+  "analytics.dailyActivity": "Daily Activity",
+  "analytics.topContributors": "Top Contributors",
+  "analytics.thisPeriod": "this period",
+  "analytics.ofTotal": "of total",
+  "analytics.retention": "retention",
+  "analytics.messages": "messages",
+  "growth.launchGoals": "Launch Goals",
+  "growth.goal1000Users": "1000 Users",
+  "growth.goal200Waitlist": "200 Waitlist",
+  "errorReport.screen": "Screen",
+  "errReport.descPreview": "Description preview will appear here...",
+  "common.next": "Next"
 }

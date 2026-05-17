@@ -4,9 +4,13 @@
         "es2021": true,
         "node": true
     },
+    "globals": {
+        "React": "readonly"
+    },
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
         "plugin:react-hooks/recommended",
         "plugin:jsx-a11y/recommended",
         "plugin:prettier/recommended"
@@ -30,6 +34,7 @@
     },
     "rules": {
         "react/react-in-jsx-scope": "off",
+        "react/jsx-no-undef": ["error", { "allowGlobals": true }],
         "react/prop-types": "off",
         "react/display-name": "off",
         "no-unused-vars": [
@@ -40,7 +45,8 @@
                 "destructuredArrayIgnorePattern": "^_"
             }
         ],
-        "no-console": "warn",
+        "no-console": ["warn", { "allow": ["error", "warn"] }],
+        "react/jsx-key": "error",
         "no-debugger": "error",
         "no-alert": "warn",
         "no-duplicate-imports": "error",

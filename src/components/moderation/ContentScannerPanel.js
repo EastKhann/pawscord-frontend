@@ -19,7 +19,7 @@ const FILTERS = [
 
 const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         scanResults,
         filteredResults,

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -38,7 +37,7 @@ const _st14 = { color: '#fff' };
 const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
     const { t } = useTranslation();
     const styles = profileStyles;
-    const [error, setError] = React.useState(null);
+    const [_error, _setError] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(false);
 
     return (

@@ -67,7 +67,7 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
             </div>
 
             <div className="card-avatar">
-                <img src={profile.avatar || '/default-avatar.png'} alt="" />
+                <img src={profile.avatar || '/default-avatar.png'} alt={profile.username} />
                 {profile.status_text && (
                     <div className="status-indicator" title={profile.status_text}>
                         {profile.status_text.slice(0, 1)}
@@ -101,7 +101,7 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
                 <div className="card-stats">
                     <div className="stat">
                         <span className="stat-value">Lv.{profile.level}</span>
-                        <span className="stat-label">Level</span>
+                        <span className="stat-label">{t('profileCard.level', 'Level')}</span>
                     </div>
                     <div className="stat">
                         <span className="stat-value">{profile.xp?.toLocaleString()}</span>

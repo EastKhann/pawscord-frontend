@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 // frontend/src/ReactionPicker.js
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import i18n from '../i18n';
 

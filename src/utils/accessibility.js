@@ -2,7 +2,6 @@
 // ♿ ACCESSIBILITY (a11y) UTILITIES
 // Comprehensive accessibility helpers for PAWSCORD
 
-import React from 'react';
 
 /**
  * ♿ Accessibility Utilities
@@ -232,7 +231,7 @@ export const createRovingTabIndex = (elements, options = {}) => {
         }
     };
 
-    // Attach event listners
+    // Attach event listeners
     elements.forEach((el) => {
         el.addEventListener('keydown', handleKeyDown);
     });

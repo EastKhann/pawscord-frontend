@@ -24,7 +24,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     const [description, setDescription] = useState(card.description || '');
 
@@ -315,7 +315,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
 
                         <div>
                             <div className="flex-align-10-mb10">
-                                <FaCheckSquare /> <h3 className="m0-fs1em">Kontrol Listesi</h3>
+                                <FaCheckSquare /> <h3 className="m0-fs1em">{t('kanban.checklist', 'Checklist')}</h3>
                             </div>
 
                             {/* Progress Bar */}
@@ -402,7 +402,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                     {/* SIDEBAR ACTIONS */}
 
                     <div style={S.sidebar}>
-                        <h4 className="text-949-08em-mb5">KARTA EKLE</h4>
+                        <h4 className="text-949-08em-mb5">{t('kanban.addToCard', 'ADD TO CARD')}</h4>
 
                         {/* Label Picker (Simplified) */}
 

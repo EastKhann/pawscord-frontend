@@ -1,5 +1,5 @@
 // frontend/src/VoiceUserList.js
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useGlobalWebSocket } from '../GlobalWebSocketContext';
 import SparkMD5 from 'spark-md5';
@@ -42,10 +42,10 @@ const VoiceUserList = ({
     useEffect(() => {
         if (contextMenu) {
             // 🔥 FIX: Check if click was inside the context menu before closing.
-            // Previously, the window click listner closed the menu on ANY click,
+            // Previously, the window click listener closed the menu on ANY click,
             // including clicks on the volume slider inside the portal. React portal
             // event delegation can't always prevent native events from reaching
-            // window listners, causing the slider to feel "non-functional" because
+            // window listeners, causing the slider to feel "non-functional" because
             // the menu vanished on every slider interaction.
             const handleClick = (e) => {
                 const menuEl = e.target.closest('[role="menu"]');

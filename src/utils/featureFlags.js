@@ -1,4 +1,3 @@
-import React from 'react';
 // frontend/src/utils/featureFlags.js
 import PropTypes from 'prop-types';
 import logger from '../utils/logger';

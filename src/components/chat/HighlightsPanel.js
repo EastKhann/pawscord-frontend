@@ -141,7 +141,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="highlights-header">
-                    <h2>✨ Highlight Sistemi</h2>
+                    <h2>✨ {t('highlights.title')}</h2>
 
                     <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
                         ×
@@ -159,7 +159,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                         <>
                             <div className="config-section">
                                 <div className="section-header">
-                                    <h3>⚙ Ayarlar</h3>
+                                    <h3>⚙ {t('highlights.settings')}</h3>
 
                                     <label className="toggle-switch">
                                         <input
@@ -232,7 +232,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                                     </div>
 
                                     <div className="form-group">
-                                        <label>Vurgu Rengi</label>
+                                        <label>{t('highlights.highlightColor', 'Highlight Color')}</label>
 
                                         <input
                                             type="color"
@@ -252,7 +252,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                                     className="save-btn"
                                     onClick={saveConfig}
                                 >
-                                    💾 Kaydet
+                                    💾 {t('highlights.save')}
                                 </button>
                             </div>
 

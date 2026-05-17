@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaPlug, FaTimes, FaLink, FaPlus, FaBell, FaSearch } from 'react-icons/fa';
 import './IntegrationHubPanel.css';
@@ -15,7 +15,7 @@ import ConfigurationModal from '../IntegrationHubPanel/ConfigurationModal';
 import { useTranslation } from 'react-i18next';
 const IntegrationHubPanel = ({ serverId, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         activeTab,
         setActiveTab,
@@ -44,7 +44,7 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
             <div className="integration-hub-panel">
                 <div className="panel-header">
                     <h2>
-                        <FaPlug /> Entegrasyon Merkezi
+                        <FaPlug /> {t('integrations.hub', 'Integration Hub')}
                     </h2>
                     <button aria-label={t('common.close')} className="close-btn" onClick={onClose}>
                         <FaTimes />
@@ -72,7 +72,7 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
                             className={`tab ${activeTab === 'webhooks' ? 'active' : ''}`}
                             onClick={() => setActiveTab('webhooks')}
                         >
-                            <FaBell /> Webhooks
+                            <FaBell /> {t('integrations.webhooksTab', 'Webhooks')}
                         </button>
                     </div>
                 </div>

@@ -1,7 +1,6 @@
 // components/ErrorBoundary.js
 // 🛡️ Error Boundary - Crash Prevention
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from '../../i18n';
 import { isChunkLoadError, handleChunkErrorInBoundary } from '../../utils/lazyWithRetry';

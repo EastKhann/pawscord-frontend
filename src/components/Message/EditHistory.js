@@ -46,6 +46,11 @@ export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAu
         <div aria-label={t('message.editHistory', 'Edit history')} style={S.rel} ref={historyRef}>
             <span
                 onClick={(e) => { e.stopPropagation(); setShowHistory(!showHistory); }}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setShowHistory(!showHistory); } }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={showHistory}
+                aria-label={t('message.editHistoryToggle', 'Show edit history')}
                 style={styles.editedLabel}>
                 (editndi)
             </span>

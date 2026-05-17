@@ -1,5 +1,4 @@
 /* eslint-disable no-prototype-builtins */
-import React from 'react';
 import logger from '../utils/logger';
 // frontend/src/utils/statePersistence.js
 
@@ -413,7 +412,7 @@ export const usePersistedStateDB = (key, initialValue, options = {}) => {
         statePersistence.getDB(key, initialValue).then((value) => {
             setState(value);
             setLoading(false);
-        });
+        }).catch((err) => console.error('Failed to load persisted state from DB:', err));
     }, [key, initialValue]);
 
     React.useEffect(() => {

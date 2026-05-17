@@ -178,7 +178,8 @@ export default function useAppCallbacks({
             .then((data) => {
                 setActiveChat('dm', data.conversation_id, targetUser);
                 if (isMobile) setIsLeftSidebarVisible(false);
-            });
+            })
+            .catch((err) => console.error('Failed to open DM conversation:', err));
     };
 
     const navigateToPath = useCallback(

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
@@ -145,9 +145,9 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
         );
     };
 
-    const liveStages = stages.filter((s) => s.status === 'live');
-    const scheduledStages = stages.filter((s) => s.status === 'scheduled');
-    const pastStages = stages.filter((s) => s.status === 'ended');
+    const liveStages = useMemo(() => stages.filter((s) => s.status === 'live'), [stages]);
+    const scheduledStages = useMemo(() => stages.filter((s) => s.status === 'scheduled'), [stages]);
+    const pastStages = useMemo(() => stages.filter((s) => s.status === 'ended'), [stages]);
 
     const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
     const handleOpenCreateModal = useCallback(() => setShowCreateModal(true), []);
@@ -295,7 +295,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                             e.currentTarget.click()
                                         }
                                     >
-                                        <div className="stage-status scheduled">SCHEDULED</div>
+                                        <div className="stage-status scheduled">{t('stage.scheduled', 'SCHEDULED')}</div>
                                         <h4>{stage.topic}</h4>
                                         <div className="stage-meta">
                                             <span>
@@ -317,7 +317,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                             {activeTab === 'past' &&
                                 pastStages.map((stage) => (
                                     <div key={stage.id} className="stage-item past">
-                                        <div className="stage-status ended">ENDED</div>
+                                        <div className="stage-status ended">{t('stage.ended', 'ENDED')}</div>
                                         <h4>{stage.topic}</h4>
                                         <div className="stage-meta">
                                             <span>Peak: {stage.peak_audience} viewers</span>
@@ -349,13 +349,13 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                 <div className="stage-stats">
                                     <div className="stat">
                                         <span className="stat-value">{activeStage.audience}</span>
-                                        <span className="stat-label">Audience</span>
+                                        <span className="stat-label">{t('stage.audience', 'Audience')}</span>
                                     </div>
                                     <div className="stat">
                                         <span className="stat-value">
                                             {activeStage.speakers.length}
                                         </span>
-                                        <span className="stat-label">Speakers</span>
+                                        <span className="stat-label">{t('stage.speakers', 'Speakers')}</span>
                                     </div>
                                     <div className="stat">
                                         <span className="stat-value">
@@ -367,7 +367,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                         <span className="stat-value">
                                             {getDuration(activeStage.started_at)}
                                         </span>
-                                        <span className="stat-label">Duration</span>
+                                        <span className="stat-label">{t('stage.duration', 'Duration')}</span>
                                     </div>
                                 </div>
 
@@ -541,10 +541,10 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                 </div>
                                 <div className="form-row">
                                     <div className="form-group">
-                                        <label>Zamanla</label>
+                                        <label>{t('stage.schedule', 'Schedule')}</label>
                                         <select aria-label={t('stage.schedule', 'Stage schedule')}>
                                             <option value="now">{t('stage.startNow', 'Start Now')}</option>
-                                            <option value="later">Sonraya Zamanla</option>
+                                            <option value="later">{t('stage.scheduleLater', 'Schedule for Later')}</option>
                                         </select>
                                     </div>
                                     <div className="form-group">

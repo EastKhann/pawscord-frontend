@@ -1,6 +1,6 @@
 ﻿// frontend/src/FloatingVoiceIsland.js
 
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import { ResizableBox } from 'react-resizable';

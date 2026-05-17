@@ -13,7 +13,7 @@ import styles from './LoadingSpinner.module.css';
  * @param {boolean} [props.fullscreen=false] - Whether to render as a fullscreen overlay
  */
 const LoadingSpinner = ({ size = 'medium', text = 'Loading...', fullscreen = false }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const sizes = {
         small: { spinner: 24, text: '12px' },
         medium: { spinner: 40, text: '14px' },

@@ -31,7 +31,7 @@ const MessageMedia = ({
     absoluteHostUrl,
 }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     return (
         <>
             {/* Signal Button */}

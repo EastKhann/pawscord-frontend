@@ -100,9 +100,9 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
                         className="filter-select"
                     >
                         <option value="all">{t('changelog.allTypes', 'All Types')}</option>
-                        <option value="new">New Features</option>
-                        <option value="fix">Bug Fixes</option>
-                        <option value="improvement">Improvements</option>
+                        <option value="new">{t('changelog.newFeatures', 'New Features')}</option>
+                        <option value="fix">{t('changelog.bugFixes', 'Bug Fixes')}</option>
+                        <option value="improvement">{t('changelog.improvements', 'Improvements')}</option>
                     </select>
                 </div>
             </div>

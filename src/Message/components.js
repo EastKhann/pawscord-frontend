@@ -1,7 +1,7 @@
 ﻿// Message/components.js
 // Sub-components and utilities extracted from Message.js
 
-import React, { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import styles from './styles';
@@ -25,7 +25,7 @@ export const LazyVideo = memo(({ src, style }) => {
     const videoRef = useRef(null);
     const [shouldLoad, setShouldLoad] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const containerStyle = {
         minHeight: '200px',
         ...style,

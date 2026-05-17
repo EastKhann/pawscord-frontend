@@ -1,5 +1,5 @@
 ﻿// frontend/src/ChatUserList.js
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -191,49 +191,8 @@ const ChatUserList = ({
                 )}
             </div>
 
-            {/* QUICK ACCESS & LOGO */}
+            {/* QUICK ACCESS & LOGO — 🔥 English/Crypto quick-access butonları kaldırıldı */}
             <div style={styles.quickAccessSection}>
-                {currentUserProfile?.is_whitelistd && (
-                    <>
-                        <div style={styles.quickAccessHeader}>
-                            {t('chat.quickAccess', 'HİZLI ERİŞİM')}
-                        </div>
-                        <button
-                            onClick={() => navigate('/eng-learn')}
-                            style={styles.quickAccessButton}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow =
-                                    '0 4px 12px rgba(88, 101, 242, 0.4)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow =
-                                    '0 2px 8px rgba(88, 101, 242, 0.3)';
-                            }}
-                        >
-                            <span>📚</span>
-                            <span>📚 {t('chat.learnEnglish', 'İngilizce Öğren')}</span>
-                        </button>
-                        <button
-                            onClick={() => navigate('/crypto-analysis')}
-                            style={_st1006}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow =
-                                    '0 4px 12px rgba(243, 156, 18, 0.4)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow =
-                                    '0 2px 8px rgba(243, 156, 18, 0.3)';
-                            }}
-                        >
-                            <span>📊</span>
-                            <span>📊 {t('crypto.title', 'Kripto Sinyalleri')}</span>
-                        </button>
-                    </>
-                )}
                 <div style={styles.pawscordLogo}>
                     <div>🐾</div>
                     <div>PAWSCORD</div>

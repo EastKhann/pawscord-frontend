@@ -2,7 +2,7 @@
 import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/CustomStatusModal.js
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -103,7 +103,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
 
     const [statusType, setStatusType] = useState('custom');
 
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
 
     const [emoji, setEmoji] = useState('✨');
 
@@ -276,7 +276,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                 {/* Status Type Selector */}
 
                 <div style={styles.section}>
-                    <label style={styles.label}>Durum Tipi</label>
+                    <label style={styles.label}>{t('customStatusModal.statusType', 'Status Type')}</label>
 
                     <div style={styles.typeGrid}>
                         {STATUS_TYPES.map((type) => {
@@ -308,7 +308,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                 {/* Custom Emoji */}
 
                 <div style={styles.section}>
-                    <label style={styles.label}>Emoji</label>
+                    <label style={styles.label}>{t('customStatusModal.emoji', 'Emoji')}</label>
 
                     <input
                         type="text"
@@ -323,7 +323,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                 {/* Status Text */}
 
                 <div style={styles.section}>
-                    <label style={styles.label}>Durum Metni</label>
+                    <label style={styles.label}>{t('customStatusModal.statusText', 'Status Text')}</label>
 
                     <input
                         type="text"
@@ -341,7 +341,7 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
                 {/* Expiry */}
 
                 <div style={styles.section}>
-                    <label style={styles.label}>Otomatik Temizle</label>
+                    <label style={styles.label}>{t('customStatusModal.autoClear', 'Auto Clear')}</label>
 
                     <div style={styles.expiryRow}>
                         {EXPIRY_OPTIONS.map((opt) => {

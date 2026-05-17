@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaCheck, FaTimes } from '../utils/iconOptimization';
@@ -20,7 +20,7 @@ const _st1067 = styles.listHeader;
 const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRespond }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     return (
         <div style={styles.listContainer}>
             <h4 style={styles.listHeader}>

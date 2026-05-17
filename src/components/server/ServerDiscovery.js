@@ -13,7 +13,7 @@ const S = {
 
 const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         servers,
         searchQuery,

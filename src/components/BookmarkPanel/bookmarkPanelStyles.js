@@ -1,4 +1,4 @@
-﻿export const styles = {
+﻿const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -221,3 +221,6 @@
         fontWeight: '600',
     },
 };
+
+export { styles };
+export default styles;

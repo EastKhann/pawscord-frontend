@@ -25,7 +25,7 @@ import LanguageTab from '../components/UserSettingsModal/tabs/LanguageTab';
  * Routes the active tab to the correct tab component with appropriate props.
  */
 const ProfileTabContent = ({ activeTab, api, isOwnProfile, user }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     switch (activeTab) {
         case 'profile':
             return (

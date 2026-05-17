@@ -67,6 +67,11 @@ export // --- STİLLER ---
             padding: '0 16px',
             flexShrink: 0,
             zIndex: 10,
+            // 🔥 FIX: mobile'da sidebar açıkken chat header butonları (Üye paneli aç vb.)
+            // chatArea'nın daraltılmış genişliğinin dışına taşıp viewport'tan çıkıyordu.
+            // overflow:hidden taşmayı engeller; içerideki minWidth:0 layout'u yeniden flow eder.
+            overflow: 'hidden',
+            minWidth: 0,
         },
 
         messageBox: {

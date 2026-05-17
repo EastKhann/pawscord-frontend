@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import toast from '../utils/toast';
 import logger from '../utils/logger';
 
-const LOCK_THRESHOLD = 140; // px upward slide to lock (higher = harder to accidentally lock)
-const LOCK_DELAY_MS = 500; // ms after recording starts before lock gesture is active
-const CANCEL_THRESHOLD = 80; // px left slide to cancel
+const LOCK_THRESHOLD = 140;
+const LOCK_DELAY_MS = 500;
+const CANCEL_THRESHOLD = 80;
 
-const useVoiceRecording = (onFileUpload) => {
+const useVoiceRecording = (onFileUpload?: (file: File) => void) => {
     const [isRecording, setIsRecording] = useState(false);
     const [isRecordingLocked, setIsRecordingLocked] = useState(false);
     const [recordingTime, setRecordingTime] = useState(0);
@@ -17,16 +17,15 @@ const useVoiceRecording = (onFileUpload) => {
     const [cancelProgress, setCancelProgress] = useState(0);
     const { t } = useTranslation();
 
-    const mediaRecorderRef = useRef(null);
-    const recordingTimerRef = useRef(null);
-    const micButtonRef = useRef(null);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const micButtonRef = useRef<HTMLElement | null>(null);
     const isRecordingRef = useRef(false);
     const isRecordingLockedRef = useRef(false);
     const touchStartYRef = useRef(0);
     const touchStartXRef = useRef(0);
     const recordingStartTimeRef = useRef(0);
 
-    // Keep refs in sync with state (for document-level event listeners)
     useEffect(() => {
         isRecordingRef.current = isRecording;
     }, [isRecording]);
@@ -34,18 +33,16 @@ const useVoiceRecording = (onFileUpload) => {
         isRecordingLockedRef.current = isRecordingLocked;
     }, [isRecordingLocked]);
 
-    // Document-level mouse/touch event handlers for slide-to-lock gesture
     useEffect(() => {
         if (!isRecording || isRecordingLocked) return;
 
-        const handleDocMouseMove = (e) => {
+        const handleDocMouseMove = (e: MouseEvent) => {
             if (!isRecordingRef.current || isRecordingLockedRef.current) return;
             if (Date.now() - recordingStartTimeRef.current < LOCK_DELAY_MS) return;
             const startY = touchStartYRef.current;
             const startX = touchStartXRef.current;
             const deltaY = startY - e.clientY;
-            const deltaX = startX - e.clientX; // positive = moved left
-            // Cancel gesture takes priority over lock
+            const deltaX = startX - e.clientX;
             if (deltaX > 0 && deltaX > Math.abs(deltaY)) {
                 const cp = Math.min(deltaX / CANCEL_THRESHOLD, 1);
                 setCancelProgress(cp);
@@ -73,7 +70,7 @@ const useVoiceRecording = (onFileUpload) => {
             setCancelProgress(0);
         };
 
-        const handleDocTouchMove = (e) => {
+        const handleDocTouchMove = (e: TouchEvent) => {
             if (!isRecordingRef.current || isRecordingLockedRef.current) return;
             if (Date.now() - recordingStartTimeRef.current < LOCK_DELAY_MS) return;
             const currentY = e.touches[0].clientY;
@@ -119,15 +116,16 @@ const useVoiceRecording = (onFileUpload) => {
             document.removeEventListener('touchmove', handleDocTouchMove);
             document.removeEventListener('touchend', handleDocTouchEnd);
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isRecording, isRecordingLocked]);
 
     const startRecording = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorderRef.current = new MediaRecorder(stream);
-            const chunks = [];
+            const chunks: BlobPart[] = [];
 
-            mediaRecorderRef.current.ondataavailable = (e) => chunks.push(e.data);
+            mediaRecorderRef.current.ondataavailable = (e: BlobEvent) => chunks.push(e.data);
             mediaRecorderRef.current.onstop = () => {
                 const blob = new Blob(chunks, { type: 'audio/webm' });
                 const file = new File([blob], `voice-${Date.now()}.webm`, { type: 'audio/webm' });
@@ -156,54 +154,50 @@ const useVoiceRecording = (onFileUpload) => {
             mediaRecorderRef.current.stop();
             setIsRecording(false);
             setIsRecordingLocked(false);
-            clearInterval(recordingTimerRef.current);
+            if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
         }
     };
 
     const cancelRecording = () => {
         if (mediaRecorderRef.current && isRecordingRef.current) {
             const stream = mediaRecorderRef.current.stream;
-            mediaRecorderRef.current.onstop = null; // Prevent file upload
+            mediaRecorderRef.current.onstop = null;
             mediaRecorderRef.current.stop();
             stream.getTracks().forEach((track) => track.stop());
-            // Faz 2.3: Haptic feedback — cancel pattern
             if (typeof navigator !== 'undefined' && navigator.vibrate)
                 navigator.vibrate([30, 50, 30]);
             setIsRecording(false);
             setIsRecordingLocked(false);
-            clearInterval(recordingTimerRef.current);
+            if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
         }
     };
 
-    const handleMicMouseDown = (e) => {
+    const handleMicMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
         touchStartYRef.current = e.clientY;
         touchStartXRef.current = e.clientX;
         setSlideProgress(0);
         setCancelProgress(0);
-        // Faz 2.3: Haptic feedback — short buzz on record start
         if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(20);
         startRecording();
     };
 
-    const handleMicTouchStart = (e) => {
+    const handleMicTouchStart = (e: React.TouchEvent) => {
         e.preventDefault();
         touchStartYRef.current = e.touches[0].clientY;
         touchStartXRef.current = e.touches[0].clientX;
         setSlideProgress(0);
         setCancelProgress(0);
-        // Faz 2.3: Haptic feedback — short buzz on record start
         if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(20);
         startRecording();
     };
 
-    const formatTime = (seconds) => {
+    const formatTime = (seconds: number): string => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    // Cleanup on unmount — stop recording and clear interval
     useEffect(() => {
         return () => {
             if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);

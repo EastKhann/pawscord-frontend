@@ -1,5 +1,4 @@
 /* eslint-disable no-prototype-builtins */
-import React from 'react';
 import { getApiBase } from '../utils/apiEndpoints';
 import logger from '../utils/logger';
 // frontend/src/utils/resourceHints.js

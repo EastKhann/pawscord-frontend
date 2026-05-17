@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 // frontend/src/components/KanbanBoard.js
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { FaPlus, FaTrash, FaEllipsisH, FaPencilAlt } from 'react-icons/fa';
@@ -76,13 +76,27 @@ const S = {
         gap: '15px',
         backgroundColor: '#17191c',
     },
+    addCardBtn: {
+        width: '100%',
+        padding: '8px',
+        background: 'transparent',
+        border: 'none',
+        color: '#949ba4',
+        cursor: 'pointer',
+        textAlign: 'left',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '5px',
+        marginTop: '5px',
+        borderRadius: '4px',
+    },
 };
 
 const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
     const { t } = useTranslation();
     const [columns, setColumns] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [newCardContent, setNewCardContent] = useState('');
     const [addingToCol, setAddingToCol] = useState(null); // Hangi kolona addniyor?
 
@@ -96,11 +110,16 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
     }, [roomSlug]);
 
     const fetchBoard = async () => {
-        const res = await fetchWithAuth(`${apiBaseUrl}/kanban/${roomSlug}/`);
-        if (res.ok) {
-            const data = await res.json();
-            // Backend'den { board_id, title, columns } gelir
-            setColumns(data.columns || []);
+        setIsLoading(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/kanban/${roomSlug}/`);
+            if (res.ok) {
+                const data = await res.json();
+                // Backend'den { board_id, title, columns } gelir
+                setColumns(data.columns || []);
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -257,6 +276,14 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
         }
     };
 
+    if (isLoading) {
+        return (
+            <div style={{ ...S.flex, alignItems: 'center', justifyContent: 'center' }} role="status" aria-label={t('common.loading')}>
+                <div style={{ width: 32, height: 32, border: '3px solid var(--accent, #5865f2)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+            </div>
+        );
+    }
+
     return (
         <div style={S.flex}>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -319,6 +346,11 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                                 padding: '2px',
                                                             }}
                                                         >
+                                                            {(col.cards || []).length === 0 && !snapshot.isDraggingOver && (
+                                                                <div style={{ padding: '8px 4px', color: '#4e5058', fontSize: '0.8em', textAlign: 'center', userSelect: 'none' }}>
+                                                                    {t('kanban.noCards', 'No cards in this column yet.')}
+                                                                </div>
+                                                            )}
                                                             {(col.cards || []).map(
                                                                 (card, cardIndex) => (
                                                                     <Draggable
@@ -507,23 +539,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                             setAddingToCol(col.id);
                                                             setNewCardContent('');
                                                         }}
-                                                        style={{
-                                                            width: '100%',
-                                                            padding: '8px',
-                                                            background: 'transparent',
-                                                            border: 'none',
-                                                            color: '#949ba4',
-                                                            cursor: 'pointer',
-                                                            textAlign: 'left',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            gap: '5px',
-                                                            marginTop: '5px',
-                                                            borderRadius: '4px',
-                                                            ':hover': {
-                                                                backgroundColor: '#35373c',
-                                                            },
-                                                        }}
+                                                        style={S.addCardBtn}
                                                     >
                                                         <FaPlus /> Kart Ekle
                                                     </button>

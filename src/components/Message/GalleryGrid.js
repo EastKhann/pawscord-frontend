@@ -41,7 +41,7 @@ const getGridStyle = (count) => {
 
 export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, absoluteHostUrl }) => {
   const { t } = useTranslation();
-  const [error, setError] = useState(null);
+  const [_error, _setError] = useState(null);
   const imageItems = galleryGroup.filter(m => isImageItem(m) || isVideoItem(m));
   const fileItems = galleryGroup.filter(m => !isImageItem(m) && !isVideoItem(m));
   const count = imageItems.length;

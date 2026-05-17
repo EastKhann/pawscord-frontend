@@ -11,7 +11,7 @@ import { STORE_PURCHASES_ENABLED } from '../../constants/featureFlags';
 
 const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const s = useAvatarStudio(fetchWithAuth, apiBaseUrl);
 
     return (

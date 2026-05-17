@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 // frontend/src/ImageModal.js
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import useModalA11y from '../hooks/useModalA11y';

@@ -202,7 +202,7 @@ export const ProfileCardEditor = memo(({ onClose, onSave }) => {
 
                             <div className="form-group">
 
-                                <label>Banner URL</label>
+                                <label>{t('profileCard.bannerUrl', 'Banner URL')}</label>
 
                                 <input
 

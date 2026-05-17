@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import './Reminders.css';
 import toast from '../../utils/toast';
@@ -192,8 +192,12 @@ const Reminders = ({ userId, onReminderDue }) => {
         { label: t('ui.yarin'), value: '1d' }
     ];
 
-    const activeReminders = reminders.filter(r => !r.notified);
-    const pastReminders = reminders.filter(r => r.notified);
+    const activeReminders = useMemo(() => reminders.filter(r => !r.notified), [reminders]);
+    const pastReminders = useMemo(() => reminders.filter(r => r.notified), [reminders]);
+    const sortedActiveReminders = useMemo(
+        () => [...activeReminders].sort((a, b) => a.time - b.time),
+        [activeReminders]
+    );
 
     return (
         <div className="reminders-container">
@@ -247,8 +251,7 @@ const Reminders = ({ userId, onReminderDue }) => {
                             </button>
                         )}
                     </div>
-                    {activeReminders
-                        .sort((a, b) => a.time - b.time)
+                    {sortedActiveReminders
                         .map(reminder => (
                             <ReminderItem
                                 key={reminder.id}

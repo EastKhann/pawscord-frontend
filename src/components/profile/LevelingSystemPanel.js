@@ -8,7 +8,7 @@ import LeaderboardSection from '../LevelingSystemPanel/LeaderboardSection';
 import './LevelingSystemPanel.css';
 
 const LevelingSystemPanel = ({ serverId, onClose }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const {
         config,

@@ -61,7 +61,7 @@ const AppsTab = ({ o }) => {
                         />
                     </div>
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>Kapsam</label>
+                        <label style={styles.label}>{t('oauth.scopes', 'Scopes')}</label>
                         <div style={styles.scopesGrid}>
                             {o.availableScopes.map((scope) => (
                                 <label key={scope} style={styles.scopeCheckbox}>
@@ -123,7 +123,7 @@ const AppsTab = ({ o }) => {
                                     </button>
                                 </div>
                                 <div style={styles.detail}>
-                                    <strong>Kapsam:</strong> {app.scopes?.join(', ') || 'Yok'}
+                                    <strong>{t('oauth.scopes', 'Scopes')}:</strong> {app.scopes?.join(', ') || t('common.none', 'None')}
                                 </div>
                                 <div style={styles.detail}>
                                     <strong>Redirect URIs:</strong>

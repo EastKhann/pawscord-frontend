@@ -12,7 +12,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
     const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
     const handleStartCreating = useCallback(() => w.setCreating(true), [w.setCreating]);
     const handleCancelCreating = useCallback(() => w.setCreating(false), [w.setCreating]);
-    const handleCancelEditing = useCallback(() => w.setEditingWebhook(null), [w.setEditingWebhook]);
+    const handleCancelEditing = useCallback(() => w.cancelEditing(), [w.cancelEditing]);
     const handleCloseLogs = useCallback(() => w.setViewingLogs(null), [w.setViewingLogs]);
     const handleNameChange = useCallback(
         (e) => w.setNewWebhook((prev) => ({ ...prev, name: e.target.value })),
@@ -33,7 +33,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                 <div className="webhooks-panel">
                     <div className="loading-state">
                         <div className="spinner" />
-                        <p>Webhook'lar y�kleniyor...</p>
+                        <p>{t('webhooks.loading', 'Loading webhooks...')}</p>
                     </div>
                 </div>
             </div>
@@ -56,9 +56,13 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <div className="webhooks-header">
-                    <h2>?? Webhook Y�netimi</h2>
-                    <button aria-label={t('common.close', 'Close')} className="close-btn" onClick={onClose}>
-                        �
+                    <h2>🔗 {t('webhooks.management', 'Webhook Management')}</h2>
+                    <button
+                        aria-label={t('common.close', 'Close')}
+                        className="close-btn"
+                        onClick={onClose}
+                    >
+                        ✕
                     </button>
                 </div>
 
@@ -69,15 +73,15 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                             className="create-webhook-btn"
                             onClick={handleStartCreating}
                         >
-                            ? Yeni Webhook Olustur
+                            ➕ {t('webhooks.createNew', 'Create New Webhook')}
                         </button>
                     )}
 
                     {w.creating && (
                         <div className="create-webhook-form">
-                            <h3>Yeni Webhook</h3>
+                            <h3>{t('webhooks.newWebhook', 'New Webhook')}</h3>
                             <div className="form-group">
-                                <label>Webhook Adi *</label>
+                                <label>{t('webhooks.webhookNameRequired', 'Webhook Name *')}</label>
                                 <input
                                     type="text"
                                     placeholder={t('webhooksPanel.webhookName', 'e.g. GitHub Bot')}
@@ -87,7 +91,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Kanal *</label>
+                                <label>{t('webhooks.channelRequired', 'Channel *')}</label>
                                 <select
                                     value={w.newWebhook.channel_id}
                                     onChange={handleChannelChange}
@@ -101,10 +105,13 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label>Avatar URL (Opsiyonel)</label>
+                                <label>{t('webhooks.avatarUrlOptional', 'Avatar URL (Optional)')}</label>
                                 <input
                                     type="text"
-                                    placeholder={t('webhooksPanel.webhookAvatarUrl', 'https://example.com/avatar.png')}
+                                    placeholder={t(
+                                        'webhooksPanel.webhookAvatarUrl',
+                                        'https://example.com/avatar.png'
+                                    )}
                                     value={w.newWebhook.avatar_url}
                                     onChange={handleAvatarChange}
                                     aria-label={t('webhooks.avatarInput', 'Avatar URL')}
@@ -123,7 +130,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                                     className="submit-btn"
                                     onClick={w.createWebhook}
                                 >
-                                    Olustur
+                                    {t('common.create', 'Create')}
                                 </button>
                             </div>
                         </div>
@@ -136,20 +143,36 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                                     {w.editingWebhook === wh.id ? (
                                         <div className="edit-webhook-form">
                                             <div className="form-group">
-                                                <label>Webhook Adi</label>
+                                                <label>{t('webhooks.nameInput', 'Webhook Name')}</label>
                                                 <input
                                                     type="text"
-                                                    defaultValue={wh.name}
-                                                    id={`edit-name-${wh.id}`}
-                                                    aria-label={t('webhooks.editName', 'Webhook name')}
+                                                    value={w.editDraft.name}
+                                                    onChange={(e) =>
+                                                        w.setEditDraft((prev) => ({
+                                                            ...prev,
+                                                            name: e.target.value,
+                                                        }))
+                                                    }
+                                                    aria-label={t(
+                                                        'webhooks.editName',
+                                                        'Webhook name'
+                                                    )}
                                                 />
                                             </div>
                                             <div className="form-group">
-                                                <label>Kanal</label>
+                                                <label>{t('webhooks.channel', 'Channel')}</label>
                                                 <select
-                                                    defaultValue={wh.channel_id}
-                                                    id={`edit-channel-${wh.id}`}
-                                                    aria-label={t('webhooks.editChannel', 'Select channel')}
+                                                    value={w.editDraft.channel_id}
+                                                    onChange={(e) =>
+                                                        w.setEditDraft((prev) => ({
+                                                            ...prev,
+                                                            channel_id: e.target.value,
+                                                        }))
+                                                    }
+                                                    aria-label={t(
+                                                        'webhooks.editChannel',
+                                                        'Select channel'
+                                                    )}
                                                 >
                                                     {w.channels.map((ch) => (
                                                         <option key={ch.id} value={ch.id}>
@@ -159,12 +182,20 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                                                 </select>
                                             </div>
                                             <div className="form-group">
-                                                <label>Avatar URL</label>
+                                                <label>{t('webhooks.avatarUrl', 'Avatar URL')}</label>
                                                 <input
                                                     type="text"
-                                                    defaultValue={wh.avatar_url || ''}
-                                                    id={`edit-avatar-${wh.id}`}
-                                                    aria-label={t('webhooks.editAvatar', 'Avatar URL')}
+                                                    value={w.editDraft.avatar_url}
+                                                    onChange={(e) =>
+                                                        w.setEditDraft((prev) => ({
+                                                            ...prev,
+                                                            avatar_url: e.target.value,
+                                                        }))
+                                                    }
+                                                    aria-label={t(
+                                                        'webhooks.editAvatar',
+                                                        'Avatar URL'
+                                                    )}
                                                 />
                                                 <button
                                                     aria-label={t('common.cancel', 'Cancel')}
@@ -175,17 +206,8 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                                                 </button>
                                                 <button
                                                     aria-label={t('common.save', 'Save')}
-                                                    onClick={() => w.updateWebhook(wh.id, {
-                                                        name: document.getElementById(
-                                                            `edit-name-${wh.id}`
-                                                        ).value,
-                                                        channel_id: document.getElementById(
-                                                            `edit-channel-${wh.id}`
-                                                        ).value,
-                                                        avatar_url: document.getElementById(
-                                                            `edit-avatar-${wh.id}`
-                                                        ).value,
-                                                    })
+                                                    onClick={() =>
+                                                        w.updateWebhook(wh.id, w.editDraft)
                                                     }
                                                 >
                                                     {t('common.save')}
@@ -199,7 +221,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                                                     {wh.avatar_url ? (
                                                         <img src={wh.avatar_url} alt={wh.name} />
                                                     ) : (
-                                                        <div className="default-avatar">??</div>
+                                                        <div className="default-avatar">🔗</div>
                                                     )}
                                                 </div>
                                                 <div className="webhook-details">
@@ -213,174 +235,180 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                                                 </div>
                                             </div>
                                             <div className="webhook-url">
-                                                <label>Webhook URL:</label>
+                                                <label>{t('webhooks.webhookUrl', 'Webhook URL')}:</label>
                                                 <div className="url-display">
                                                     <code>{`${w.apiBaseUrl}/webhooks/${wh.id}/${wh.token}`}</code>
                                                     <button
-                                                        aria-label={t('webhooks.copyUrl', 'Copy webhook URL')}
+                                                        aria-label={t(
+                                                            'webhooks.copyUrl',
+                                                            'Copy webhook URL'
+                                                        )}
                                                         className="copy-btn"
                                                         onClick={() => w.copyWebhookUrl(wh)}
-                                                        title="URL'yi kopyala"
+                                                        title={t('webhooks.copyUrl', 'Copy URL')}
                                                     >
-                                                        ??
+                                                        📋
                                                     </button>
                                                 </div>
                                             </div>
                                             <div className="webhook-actions">
                                                 <button
-                                                    aria-label={t('webhooks.testWebhook', 'Send test message')}
+                                                    aria-label={t(
+                                                        'webhooks.testWebhook',
+                                                        'Send test message'
+                                                    )}
                                                     className="action-btn test-btn"
                                                     onClick={() => w.testWebhook(wh.id)}
-                                                    title="Test mesaji g�nder"
+                                                    title={t('webhooks.testWebhook', 'Send test message')}
                                                 >
-                                                    ?? Test
+                                                    🧪 {t('webhooks.test', 'Test')}
                                                 </button>
                                                 <button
                                                     aria-label={t('webhooks.viewLogs', 'View logs')}
                                                     className="action-btn logs-btn"
                                                     onClick={() => w.fetchWebhookLogs(wh.id)}
-                                                    title="Loglari g�r�nt�le"
+                                                    title={t('webhooks.viewLogs', 'View logs')}
                                                 >
-                                                    ?? Loglar
+                                                    📋 {t('webhooks.logs', 'Logs')}
                                                 </button>
                                                 <button
                                                     aria-label={t('common.edit')}
                                                     className="action-btn edit-btn"
-                                                    onClick={() => w.setEditingWebhook(wh.id)}
+                                                    onClick={() => w.startEditing(wh)}
                                                     title={t('common.edit')}
                                                 >
-                                                    ??
+                                                    ✏️
                                                 </button>
                                                 <button
-                                                    aria-label={t('webhooks.regenerateToken', 'Regenerate token')}
+                                                    aria-label={t(
+                                                        'webhooks.regenerateToken',
+                                                        'Regenerate token'
+                                                    )}
                                                     className="action-btn regenerate-btn"
                                                     onClick={() => w.regenerateToken(wh.id)}
-                                                    title="Token yenile"
+                                                    title={t('webhooks.regenerateToken', 'Regenerate token')}
                                                 >
-                                                    ??
+                                                    🔄
                                                 </button>
                                                 <button
                                                     aria-label={t('common.delete', 'Delete')}
                                                     className="action-btn delete-btn"
                                                     onClick={() => w.deleteWebhook(wh.id)}
-                                                    title="Sil"
+                                                    title={t('common.delete', 'Delete')}
                                                 >
-                                                    ???
+                                                    🗑️
                                                 </button>
                                             </div>
                                             <div className="webhook-stats">
                                                 <div className="stat">
                                                     <span className="stat-label">
-                                                        Toplam �agri:
+                                                        {t('webhooks.totalCalls', 'Total Calls:')}
                                                     </span>
                                                     <span className="stat-value">
                                                         {wh.total_calls || 0}
                                                     </span>
                                                 </div>
                                                 <div className="stat">
-                                                    <span className="stat-label">Basarili:</span>
+                                                    <span className="stat-label">{t('webhooks.successful', 'Successful:')}</span>
                                                     <span className="stat-value success">
                                                         {wh.successful_calls || 0}
                                                     </span>
                                                 </div>
                                                 <div className="stat">
-                                                    <span className="stat-label">Basarisiz:</span>
+                                                    <span className="stat-label">{t('webhooks.failed', 'Failed:')}</span>
                                                     <span className="stat-value error">
                                                         {wh.failed_calls || 0}
                                                     </span>
                                                 </div>
                                                 <div className="stat">
-                                                    <span className="stat-label">Son �agri:</span>
+                                                    <span className="stat-label">{t('webhooks.lastCall', 'Last Call:')}</span>
                                                     <span className="stat-value">
                                                         {wh.last_call
                                                             ? new Date(wh.last_call).toLocaleString(
-                                                                'tr-TR'
-                                                            )
-                                                            : 'Hi�bir zaman'}
+                                                                  'tr-TR'
+                                                              )
+                                                            : t('admin.logs.never', 'Never')}
                                                     </span>
                                                 </div>
                                             </div>
                                         </>
                                     )}
                                 </div>
-                            ))
-                            }
-                        </div >
+                            ))}
+                        </div>
                     ) : (
                         !w.creating && (
                             <div className="empty-state">
-                                <div className="empty-icon">??</div>
-                                <h3>Hen�z webhook yok</h3>
-                                <p>Dis uygulamalardan mesaj almak i�in webhook olusturun</p>
+                                <div className="empty-icon">🔗</div>
+                                <h3>{t('webhooks.noWebhooksYet', 'No webhooks yet')}</h3>
+                                <p>{t('webhooks.createToReceive', 'Create a webhook to receive messages from external apps')}</p>
                             </div>
                         )
                     )}
 
-                    {
-                        w.viewingLogs && (
+                    {w.viewingLogs && (
+                        <div
+                            className="logs-modal"
+                            role="button"
+                            tabIndex={0}
+                            onClick={handleCloseLogs}
+                            onKeyDown={(e) =>
+                                (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
+                            }
+                        >
                             <div
-                                className="logs-modal"
+                                className="logs-content"
                                 role="button"
                                 tabIndex={0}
-                                onClick={handleCloseLogs}
+                                onClick={handleStopPropagation}
                                 onKeyDown={(e) =>
                                     (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
                                 }
                             >
-                                <div
-                                    className="logs-content"
-                                    role="button"
-                                    tabIndex={0}
-                                    onClick={handleStopPropagation}
-                                    onKeyDown={(e) =>
-                                        (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
-                                    }
-                                >
-                                    <div className="logs-header">
-                                        <h3>?? Webhook Kayitlari</h3>
-                                        <button
-                                            aria-label={t('common.close', 'Close')}
-                                            className="close-btn"
-                                            onClick={handleCloseLogs}
-                                        >
-                                            �
-                                        </button>
-                                    </div>
-                                    <div className="logs-list">
-                                        {w.logs.length > 0 ? (
-                                            w.logs.map((log, i) => (
-                                                <div
-                                                    key={`item-${i}`}
-                                                    className={`log-item ${log.status}`}
-                                                >
-                                                    <div className="log-time">
-                                                        {new Date(log.timestamp).toLocaleString(
-                                                            'tr-TR'
-                                                        )}
-                                                    </div>
-                                                    <div className="log-status">
-                                                        {log.status === 'success' ? '?' : '?'}{' '}
-                                                        {log.status}
-                                                    </div>
-                                                    <div className="log-message">{log.message}</div>
-                                                    {log.error && (
-                                                        <div className="log-error">
-                                                            Error: {log.error}
-                                                        </div>
+                                <div className="logs-header">
+                                    <h3>📋 {t('webhooks.webhookLogs', 'Webhook Logs')}</h3>
+                                    <button
+                                        aria-label={t('common.close', 'Close')}
+                                        className="close-btn"
+                                        onClick={handleCloseLogs}
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                                <div className="logs-list">
+                                    {w.logs.length > 0 ? (
+                                        w.logs.map((log, i) => (
+                                            <div
+                                                key={`item-${i}`}
+                                                className={`log-item ${log.status}`}
+                                            >
+                                                <div className="log-time">
+                                                    {new Date(log.timestamp).toLocaleString(
+                                                        'tr-TR'
                                                     )}
                                                 </div>
-                                            ))
-                                        ) : (
-                                            <p className="empty-state">Hen�z kayit yok</p>
-                                        )}
-                                    </div>
+                                                <div className="log-status">
+                                                    {log.status === 'success' ? '✅' : '❌'}{' '}
+                                                    {log.status}
+                                                </div>
+                                                <div className="log-message">{log.message}</div>
+                                                {log.error && (
+                                                    <div className="log-error">
+                                                        Error: {log.error}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="empty-state">{t('webhooks.noLogsYet', 'No logs yet')}</p>
+                                    )}
                                 </div>
                             </div>
-                        )
-                    }
+                        </div>
+                    )}
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 

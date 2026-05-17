@@ -51,6 +51,7 @@ const GeneralTab = ({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     style={styles.input}
+                    aria-label={t('channel_name')}
                 />
             </div>
 
@@ -177,6 +178,7 @@ const GeneralTab = ({
                             value={bitrate}
                             onChange={(e) => setBitrate(parseInt(e.target.value))}
                             style={styles.input}
+                            aria-label={t('chanGeneral.bitrate', 'Audio bitrate')}
                         >
                             <option value={8}>{t('8_kbps_low')}</option>
                             <option value={32}>{t('32_kbps')}</option>

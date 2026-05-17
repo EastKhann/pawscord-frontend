@@ -41,7 +41,7 @@ const UserCardPopover = ({
     const handleStartDM = onStartDM || onMessage;
     const [show, setShow] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [pos, setPos] = useState({ top: 0, left: 0, side: 'right' });
     const triggerRef = useRef(null);
     const timerRef = useRef(null);
@@ -241,7 +241,7 @@ const UserCardPopover = ({
                         {/* Roles */}
                         {topRoles.length > 0 && (
                             <div style={S.section}>
-                                <span style={S.sectionLabel}>ROLLER</span>
+                                <span style={S.sectionLabel}>{t('userCard.roles', 'ROLES')}</span>
                                 <div style={S.rolesWrap}>
                                     {topRoles.map((role, i) => {
                                         const roleBadgeStyle = { ...S.roleBadge, borderColor: role.color || '#5865f2' };

@@ -45,9 +45,11 @@ export const RTL_LANGUAGES = ['ar', 'he', 'fa'];
 // All supported languages with metadata
 export const SUPPORTED_LANGUAGES = [
     { code: 'en', name: 'English', flag: '🇬🇧', dir: 'ltr' },
-    { code: 'tr', name: 'Turkish', flag: '🇹🇷', dir: 'ltr' },
+    // 🔥 FIX: Dil seçenekleri her dilin KENDİ adıyla görünmeli (endonym).
+    // Önceki: "Turkish" / "French" — Türk ve Fransız kullanıcılara İngilizce isim gözüküyordu.
+    { code: 'tr', name: 'Türkçe', flag: '🇹🇷', dir: 'ltr' },
     { code: 'de', name: 'Deutsch', flag: '🇩🇪', dir: 'ltr' },
-    { code: 'fr', name: 'French', flag: '🇫🇷', dir: 'ltr' },
+    { code: 'fr', name: 'Français', flag: '🇫🇷', dir: 'ltr' },
     { code: 'es', name: 'Español', flag: '🇪🇸', dir: 'ltr' },
     { code: 'pt', name: 'Português', flag: '🇧🇷', dir: 'ltr' },
     { code: 'it', name: 'Italiano', flag: '🇮🇹', dir: 'ltr' },
@@ -124,9 +126,10 @@ i18n.use(LanguageDetector)
             ensureLocaleLoaded(resolved).then(() => {
                 // Trigger a re-render once translations are available.
                 i18n.changeLanguage(resolved);
-            });
+            }).catch((err) => console.error('Failed to load locale:', err));
         }
-    });
+    })
+    .catch((err) => console.error('Failed to initialize i18n:', err));
 
 // Patch changeLanguage so callers automatically pull the locale chunk first.
 const __origChangeLanguage = i18n.changeLanguage.bind(i18n);

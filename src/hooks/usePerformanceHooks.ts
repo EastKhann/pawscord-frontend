@@ -4,16 +4,14 @@
  * React hooks for performance optimization
  */
 
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import logger from '../utils/logger';
 
 /**
  * Debounce hook - rapid fire events için
- * @param {any} value - Debounce edilecek değer
- * @param {number} delay - Gecikme (ms)
  */
-export function useDebounce(value, delay = 500) {
-    const [debouncedValue, setDebouncedValue] = useState(value);
+export function useDebounce<T>(value: T, delay = 500): T {
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -30,14 +28,15 @@ export function useDebounce(value, delay = 500) {
 
 /**
  * Throttle hook - rate limiting için
- * @param {Function} callback - Throttle edilecek fonksiyon
- * @param {number} delay - Minimum gecikme (ms)
  */
-export function useThrottle(callback, delay = 1000) {
+export function useThrottle<T extends (...args: unknown[]) => unknown>(
+    callback: T,
+    delay = 1000
+): T {
     const lastRun = useRef(Date.now());
 
     return useCallback(
-        (...args) => {
+        (...args: unknown[]) => {
             const now = Date.now();
 
             if (now - lastRun.current >= delay) {
@@ -46,16 +45,15 @@ export function useThrottle(callback, delay = 1000) {
             }
         },
         [callback, delay]
-    );
+    ) as T;
 }
 
 /**
  * Intersection Observer hook - lazy loading için
- * @param {Object} options - Observer options
  */
-export function useIntersectionObserver(options = {}) {
+export function useIntersectionObserver(options: IntersectionObserverInit = {}) {
     const [isIntersecting, setIsIntersecting] = useState(false);
-    const [ref, setRef] = useState(null);
+    const [ref, setRef] = useState<Element | null>(null);
 
     useEffect(() => {
         if (!ref) return;
@@ -78,14 +76,13 @@ export function useIntersectionObserver(options = {}) {
         };
     }, [ref, options]);
 
-    return [setRef, isIntersecting];
+    return [setRef, isIntersecting] as const;
 }
 
 /**
  * Idle callback hook - background tasks için
- * @param {Function} callback - Idle zamanında çalışacak
  */
-export function useIdleCallback(callback) {
+export function useIdleCallback(callback: () => void) {
     useEffect(() => {
         if (!window.requestIdleCallback) {
             // Fallback for Safari
@@ -103,9 +100,8 @@ export function useIdleCallback(callback) {
 
 /**
  * Media query hook - responsive design için
- * @param {string} query - Media query string
  */
-export function useMediaQuery(query) {
+export function useMediaQuery(query: string): boolean {
     const [matches, setMatches] = useState(false);
 
     useEffect(() => {
@@ -126,14 +122,12 @@ export function useMediaQuery(query) {
 
 /**
  * Local storage hook - persistent state için
- * @param {string} key - Storage key
- * @param {any} initialValue - Default value
  */
-export function useLocalStorage(key, initialValue) {
-    const [storedValue, setStoredValue] = useState(() => {
+export function useLocalStorage<T>(key: string, initialValue: T): [T, (v: T | ((prev: T) => T)) => void] {
+    const [storedValue, setStoredValue] = useState<T>(() => {
         try {
             const item = window.localStorage.getItem(key);
-            return item ? JSON.parse(item) : initialValue;
+            return item ? (JSON.parse(item) as T) : initialValue;
         } catch (error) {
             logger.error('useLocalStorage error:', error);
             return initialValue;
@@ -141,7 +135,7 @@ export function useLocalStorage(key, initialValue) {
     });
 
     const setValue = useCallback(
-        (value) => {
+        (value: T | ((prev: T) => T)) => {
             try {
                 const valueToStore = value instanceof Function ? value(storedValue) : value;
                 setStoredValue(valueToStore);
@@ -158,10 +152,9 @@ export function useLocalStorage(key, initialValue) {
 
 /**
  * Previous value hook - değişim tracking için
- * @param {any} value - Track edilecek değer
  */
-export function usePrevious(value) {
-    const ref = useRef();
+export function usePrevious<T>(value: T): T | undefined {
+    const ref = useRef<T | undefined>(undefined);
 
     useEffect(() => {
         ref.current = value;
@@ -173,7 +166,7 @@ export function usePrevious(value) {
 /**
  * Mount status hook - memory leak prevention için
  */
-export function useIsMounted() {
+export function useIsMounted(): () => boolean {
     const isMounted = useRef(false);
 
     useEffect(() => {
@@ -189,10 +182,11 @@ export function useIsMounted() {
 
 /**
  * Async effect hook - cleanup için
- * @param {Function} effect - Async effect function
- * @param {Array} deps - Dependencies
  */
-export function useAsyncEffect(effect, deps) {
+export function useAsyncEffect(
+    effect: (isCancelled: () => boolean) => Promise<void>,
+    deps: React.DependencyList
+) {
     useEffect(() => {
         let cancelled = false;
 
@@ -205,6 +199,7 @@ export function useAsyncEffect(effect, deps) {
         return () => {
             cancelled = true;
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, deps);
 }
 
@@ -235,7 +230,7 @@ export function useWindowSize() {
 /**
  * Online status hook - network monitoring için
  */
-export function useOnlineStatus() {
+export function useOnlineStatus(): boolean {
     const [isOnline, setIsOnline] = useState(navigator.onLine);
 
     useEffect(() => {
@@ -254,18 +249,36 @@ export function useOnlineStatus() {
     return isOnline;
 }
 
+interface BatteryStatus {
+    level: number;
+    charging: boolean;
+    chargingTime: number;
+    dischargingTime: number;
+}
+
+/** Minimal interface for the Battery Status API (not in standard TS lib). */
+interface BatteryManager extends BatteryStatus {
+    addEventListener(type: string, listener: () => void): void;
+    removeEventListener(type: string, listener: () => void): void;
+}
+
+interface NavigatorWithBattery extends Navigator {
+    getBattery(): Promise<BatteryManager>;
+}
+
 /**
  * Battery status hook - power-aware apps için
  */
-export function useBatteryStatus() {
-    const [battery, setBattery] = useState(null);
+export function useBatteryStatus(): BatteryStatus | null {
+    const [battery, setBattery] = useState<BatteryStatus | null>(null);
 
     useEffect(() => {
-        if (!navigator.getBattery) {
+        const nav = navigator as NavigatorWithBattery;
+        if (typeof nav.getBattery !== 'function') {
             return;
         }
 
-        navigator.getBattery().then((batteryManager) => {
+        nav.getBattery().then((batteryManager: BatteryManager) => {
             const updateBattery = () => {
                 setBattery({
                     level: batteryManager.level,
@@ -292,9 +305,8 @@ export function useBatteryStatus() {
 
 /**
  * Render count hook - performance debugging için
- * @param {string} componentName - Component adı
  */
-export function useRenderCount(componentName = 'Component') {
+export function useRenderCount(_componentName = 'Component'): number {
     const renderCount = useRef(0);
 
     useEffect(() => {
@@ -306,10 +318,8 @@ export function useRenderCount(componentName = 'Component') {
 
 /**
  * Update effect hook - ilk render'da çalışmaz
- * @param {Function} effect - Effect function
- * @param {Array} deps - Dependencies
  */
-export function useUpdateEffect(effect, deps) {
+export function useUpdateEffect(effect: () => void | (() => void), deps: React.DependencyList) {
     const isFirstMount = useRef(true);
 
     useEffect(() => {
@@ -319,16 +329,15 @@ export function useUpdateEffect(effect, deps) {
         }
 
         return effect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, deps);
 }
 
 /**
  * Timeout hook - declarative setTimeout
- * @param {Function} callback - Callback function
- * @param {number} delay - Delay in ms
  */
-export function useTimeout(callback, delay) {
-    const savedCallback = useRef(callback);
+export function useTimeout(callback: () => void, delay: number | null) {
+    const savedCallback = useRef<(() => void) | null>(null);
 
     useEffect(() => {
         savedCallback.current = callback;
@@ -339,7 +348,7 @@ export function useTimeout(callback, delay) {
             return;
         }
 
-        const id = setTimeout(() => savedCallback.current(), delay);
+        const id = setTimeout(() => savedCallback.current?.(), delay);
 
         return () => clearTimeout(id);
     }, [delay]);
@@ -347,11 +356,9 @@ export function useTimeout(callback, delay) {
 
 /**
  * Interval hook - declarative setInterval
- * @param {Function} callback - Callback function
- * @param {number} delay - Delay in ms
  */
-export function useInterval(callback, delay) {
-    const savedCallback = useRef(callback);
+export function useInterval(callback: () => void, delay: number | null) {
+    const savedCallback = useRef<(() => void) | null>(null);
 
     useEffect(() => {
         savedCallback.current = callback;
@@ -362,7 +369,7 @@ export function useInterval(callback, delay) {
             return;
         }
 
-        const id = setInterval(() => savedCallback.current(), delay);
+        const id = setInterval(() => savedCallback.current?.(), delay);
 
         return () => clearInterval(id);
     }, [delay]);

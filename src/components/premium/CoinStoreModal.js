@@ -12,7 +12,7 @@ const S = {
 };
 
 const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Coin Store' });
     const { packages, loading, selectedPackage, handlePurchase } = useCoinStore(
         onPurchaseComplete,

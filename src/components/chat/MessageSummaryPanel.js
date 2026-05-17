@@ -198,9 +198,9 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                     value={timeRange}
                                     onChange={(e) => setTimeRange(e.target.value)}
                                 >
-                                    <option value="1h">Son 1 Saat</option>
-                                    <option value="6h">Son 6 Saat</option>
-                                    <option value="24h">Son 24 Saat</option>
+                                    <option value="1h">{t('summary.last1h')}</option>
+                                    <option value="6h">{t('summary.last6h')}</option>
+                                    <option value="24h">{t('summary.last24h')}</option>
                                     <option value="7d">{t('common.last7days', 'Last 7 Days')}</option>
                                     <option value="30d">{t('common.last30days', 'Last 30 Days')}</option>
                                 </select>
@@ -213,10 +213,10 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                     value={messageCount}
                                     onChange={(e) => setMessageCount(Number(e.target.value))}
                                 >
-                                    <option value={50}>50 mesaj</option>
-                                    <option value={100}>100 mesaj</option>
-                                    <option value={250}>250 mesaj</option>
-                                    <option value={500}>500 mesaj</option>
+                                    <option value={50}>50 {t('common.messages', 'messages')}</option>
+                                    <option value={100}>100 {t('common.messages', 'messages')}</option>
+                                    <option value={250}>250 {t('common.messages', 'messages')}</option>
+                                    <option value={500}>500 {t('common.messages', 'messages')}</option>
                                 </select>
                             </div>
                             <button
@@ -258,7 +258,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                             )
                                         }
                                     >
-                                        <FaCopy /> Kopyala
+                                        <FaCopy /> {t('summary.copy')}
                                     </button>
                                     <button
                                         aria-label={t('msgSummary.exportSummary', 'Export summary')}
@@ -267,7 +267,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                             exportSummary(currentSummary || summaries[0])
                                         }
                                     >
-                                        <FaDownload /> Aktar
+                                        <FaDownload /> {t('summary.export')}
                                     </button>
                                 </div>
                             </div>
@@ -306,7 +306,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                             </div>
 
                             <div className="summary-keywords">
-                                <span className="keywords-label">Anahtar Kelimeler:</span>
+                                <span className="keywords-label">{t('summary.keywords')}</span>
                                 {(currentSummary || summaries[0]).keywords.map((keyword, i) => (
                                     <span key={`item-${i}`} className="keyword-chip">
                                         {keyword}

@@ -25,7 +25,7 @@ const S = {
 const ConnectionQualityIndicator = ({ stats, username, compact = false, showDetails = false }) => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     if (!stats) return null;
 
     // Kalite hesaplama

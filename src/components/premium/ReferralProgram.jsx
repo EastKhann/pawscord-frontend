@@ -32,6 +32,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
             setReferralCount(profile.referral_count || 0);
         } catch (error) {
             logger.error('Failed to load referral data:', error);
+            toast.error(t('referral.loadFailed', { defaultValue: 'Referral verileri yüklenemedi' }));
         }
     };
 
@@ -61,19 +62,25 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
 
     const claimReward = useCallback(async () => {
         try {
-            const response = await axios.post('/api/referral/claim/');
+            const res = await authFetch('/api/referral/claim/', { method: 'POST' });
+            const body = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                toast.error(
+                    body.error ||
+                    t('referral.claimFailed', { defaultValue: 'Failed to claim reward' })
+                );
+                return;
+            }
             toast.success(
                 t('referral.claimReward', {
-                    reward: response.data.reward,
-                    defaultValue: `Reward claimed! You got ${response.data.reward}`,
+                    reward: body.reward,
+                    defaultValue: `Reward claimed! You got ${body.reward}`,
                 })
             );
             loadReferralData();
         } catch (error) {
-            toast.error(
-                error.response?.data?.error ||
-                t('referral.claimFailed', { defaultValue: 'Failed to claim reward' })
-            );
+            logger.error('claimReward failed', error);
+            toast.error(t('referral.claimFailed', { defaultValue: 'Failed to claim reward' }));
         }
     }, [t]);
 
@@ -222,7 +229,7 @@ const ReferralProgram = memo(function ReferralProgram({ user }) {
                 <div className="progress-bar">
                     <div
                         className="progress-fill"
-                        style={_s({ width: `${Math.min((referralCount / 10) * 100, 100)}%` })}
+                        style={{ width: `${Math.min((referralCount / 10) * 100, 100)}%` }}
                     >
                         <span>{referralCount} / 10</span>
                     </div>

@@ -145,13 +145,13 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                             <div style={styles.summary}>
                                 <div style={styles.summaryItem}>
                                     <div style={styles.summaryValue}>{invites.length}</div>
-                                    <div style={styles.summaryLabel}>Toplam Davetler</div>
+                                    <div style={styles.summaryLabel}>{t('inviteExport.totalInvites', 'Total Invites')}</div>
                                 </div>
                                 <div style={styles.summaryItem}>
                                     <div style={styles.summaryValue}>
                                         {invites.filter((i) => !i.revoked && !i.is_expired).length}
                                     </div>
-                                    <div style={styles.summaryLabel}>Active</div>
+                                    <div style={styles.summaryLabel}>{t('invite.active', 'Active')}</div>
                                 </div>
                                 <div style={styles.summaryItem}>
                                     <div style={styles.summaryValue}>
@@ -189,11 +189,11 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                                         </div>
                                         <div style={styles.inviteStatus}>
                                             {invite.revoked ? (
-                                                <span style={revokedStatusBadgeStyle}>Revoked</span>
+                                                <span style={revokedStatusBadgeStyle}>{t('invite.revoked', 'Revoked')}</span>
                                             ) : invite.is_expired ? (
-                                                <span style={expiredStatusBadgeStyle}>Expired</span>
+                                                <span style={expiredStatusBadgeStyle}>{t('ban.expired', 'Expired')}</span>
                                             ) : (
-                                                <span style={activeStatusBadgeStyle}>Active</span>
+                                                <span style={activeStatusBadgeStyle}>{t('invite.active', 'Active')}</span>
                                             )}
                                         </div>
                                     </div>

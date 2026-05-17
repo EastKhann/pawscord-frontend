@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes, FaSignInAlt, FaSignOutAlt, FaDownload } from 'react-icons/fa';
 import { toast } from '../../utils/toast';
@@ -74,10 +74,12 @@ const JoinLeaveLogsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
         }
     };
 
-    const filteredLogs = logs.filter((log) => {
-        if (filter === 'all') return true;
-        return log.action === filter;
-    });
+    const filteredLogs = useMemo(
+        () => logs.filter((log) => filter === 'all' || log.action === filter),
+        [logs, filter]
+    );
+    const joinCount = useMemo(() => logs.filter((l) => l.action === 'joined').length, [logs]);
+    const leaveCount = useMemo(() => logs.filter((l) => l.action === 'left').length, [logs]);
 
     return (
         <div style={styles.overlay}>
@@ -97,10 +99,10 @@ const JoinLeaveLogsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                         All ({logs.length})
                     </button>
                     <button aria-label={t('joinLeaveLogs.filterJoined', 'Joins only')} onClick={() => setFilter('joined')} style={_st1178}>
-                        🟢 Joins ({logs.filter((l) => l.action === 'joined').length})
+                        🟢 Joins ({joinCount})
                     </button>
                     <button aria-label={t('joinLeaveLogs.filterLeft', 'Leaves only')} onClick={() => setFilter('left')} style={_st1179}>
-                        🔴 Leaves ({logs.filter((l) => l.action === 'left').length})
+                        🔴 Leaves ({leaveCount})
                     </button>
                     <button
                         aria-label={t('joinLeaveLogs.exportLogs', 'Export logs')}

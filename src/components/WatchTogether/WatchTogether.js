@@ -93,7 +93,7 @@ const WatchTogether = ({ roomId, onClose }) => {
             {/* Header */}
             <div className="watch-header">
                 <div className="watch-title">
-                    <span className="live-badge">CANLI</span>
+                    <span className="live-badge">{t('watchTogether.live', 'LIVE')}</span>
                     <h3>{w.party.video_title || 'Watch Party'}</h3>
                 </div>
                 <div className="watch-viewers">

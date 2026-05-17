@@ -4,7 +4,7 @@
 // 📹 Voice chat video card - Orchestrator
 // Sub-components: useVideoAudio, VideoDisplay, UserOverlay, HoverControls
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useVideoAudio from './UserVideoCard/useVideoAudio';

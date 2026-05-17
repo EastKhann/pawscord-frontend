@@ -212,7 +212,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
 
                 <div className="autoroles-content">
                     <div className="create-autorole-section">
-                        <h3>Yeni Otomatik Rol Ekle</h3>
+                        <h3>{t('autoRoles.addNew', 'Add New Auto Role')}</h3>
 
                         <div className="create-form">
                             <div className="form-row">
@@ -237,7 +237,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Trigger</label>
+                                    <label>{t('autoRoles.trigger', 'Trigger')}</label>
                                     <select
                                         value={newAutoRole.trigger_type}
                                         onChange={(e) =>
@@ -275,7 +275,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
 
                                 {newAutoRole.trigger_type === 'on_level' && (
                                     <div className="form-group">
-                                        <label>Gerekli Level</label>
+                                        <label>{t('autoRoles.requiredLevel', 'Required Level')}</label>
                                         <input
                                             type="number"
                                             min="1"
@@ -292,7 +292,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
 
                                 {newAutoRole.trigger_type === 'on_invites' && (
                                     <div className="form-group">
-                                        <label>Gerekli Davet</label>
+                                        <label>{t('autoRoles.requiredInvites', 'Required Invites')}</label>
                                         <input
                                             type="number"
                                             min="1"
@@ -309,7 +309,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
 
                                 {newAutoRole.trigger_type === 'on_messages' && (
                                     <div className="form-group">
-                                        <label>Gerekli Mesaj</label>
+                                        <label>{t('autoRoles.requiredMessages', 'Required Messages')}</label>
                                         <input
                                             type="number"
                                             min="1"

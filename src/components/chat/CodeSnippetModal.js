@@ -25,7 +25,7 @@ const CodeSnippetModal = ({ onClose, onSend }) => {
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kod Share' });
     const [title, setTitle] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const [language, setLanguage] = useState('javascript');
     const [code, setCode] = useState('');
 
@@ -54,11 +54,13 @@ const CodeSnippetModal = ({ onClose, onSend }) => {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             style={styles.input}
+                            aria-label={t('codeSnippet.title', 'Snippet title')}
                         />
                         <select
                             value={language}
                             onChange={(e) => setLanguage(e.target.value)}
                             style={styles.select}
+                            aria-label={t('codeSnippet.language', 'Programming language')}
                         >
                             {LANGUAGES.map((lang) => (
                                 <option key={lang} value={lang}>
@@ -73,6 +75,7 @@ const CodeSnippetModal = ({ onClose, onSend }) => {
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
                         style={styles.textarea}
+                        aria-label={t('codeSnippet.codeBody', 'Code body')}
                     />
 
                     <button

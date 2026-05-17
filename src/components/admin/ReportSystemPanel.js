@@ -20,7 +20,7 @@ const S = {
 
 const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => {
     const { t } = useTranslation();
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const {
         reports,
         filter,
@@ -111,9 +111,9 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                             style={styles.filterSelect}
                         >
                             <option value="all">{t('common.allTypes', 'All Types')}</option>
-                            <option value="message">Mesajlar</option>
+                            <option value="message">{t('common.messages', 'Messages')}</option>
                             <option value="user">{t('admin.users', 'Users')}</option>
-                            <option value="server">Sunucu</option>
+                            <option value="server">{t('common.server', 'Server')}</option>
                         </select>
                     </div>
                 </div>
@@ -147,7 +147,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                             {report.reason || `${report.report_type} Report`}
                                         </div>
                                         <div style={styles.reportMeta}>
-                                            <span>By: {report.reporter_username || 'Unknown'}</span>
+                                            <span>{t('reportSystem.reportedBy', 'By')}: {report.reporter_username || t('common.unknown', 'Unknown')}</span>
                                             <span>•</span>
                                             <span>
                                                 {new Date(report.created_at).toLocaleString()}

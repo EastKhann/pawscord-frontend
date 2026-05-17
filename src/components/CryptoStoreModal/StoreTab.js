@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FaLock } from 'react-icons/fa';
 import styles from './cryptoStoreStyles';

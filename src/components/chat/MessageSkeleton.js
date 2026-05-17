@@ -1,6 +1,6 @@
 // frontend/src/components/MessageSkeleton.js
 // Faz 2.4: Skeleton loading placeholders for chat messages
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 

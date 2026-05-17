@@ -83,7 +83,7 @@ const MessageSchedulePicker = ({ onSchedule, onClose }) => {
                 <div style={S.header}>
                     <div style={S.headerTitle}>
                         <FaClock className="icon-primary" />
-                        <span>Mesaj Zamanlama</span>
+                        <span>{t('schedulePicker.title', 'Schedule Message')}</span>
                     </div>
                     <button aria-label={t('common.close', 'Close')} style={S.closeBtn} onClick={onClose}>
                         <FaTimes />

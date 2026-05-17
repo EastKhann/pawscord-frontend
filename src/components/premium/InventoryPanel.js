@@ -95,7 +95,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaCube className="icon-primary-mr10" />
-                        <h2 style={styles.title}>Inventory</h2>
+                        <h2 style={styles.title}>{t('inventory.title', 'Inventory')}</h2>
                     </div>
                     <button aria-label={t('common.close', 'Close')} onClick={onClose} style={styles.closeButton}>
                         <FaTimes />

@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaTimes, FaCoins, FaGift } from 'react-icons/fa';

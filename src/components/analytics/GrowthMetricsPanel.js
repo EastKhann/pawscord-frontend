@@ -12,7 +12,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
     const [timeRange, setTimeRange] = useState('7d');
 
     const timeRanges = [
-        { value: '24h', label: 'Son 24 Saat' },
+        { value: '24h', label: t('common.last24h', 'Last 24 Hours') },
         { value: '7d', label: t('common.last7days', 'Last 7 Days') },
         { value: '30d', label: t('common.last30days', 'Last 30 Days') },
         { value: '90d', label: t('common.last90days', 'Last 90 Days') },
@@ -65,7 +65,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaChartLine className="icon-primary-mr10" />
-                        <h2 style={styles.title}>{t('growth_metrics')}</h2>
+                        <h2 style={styles.title}>{t('analytics.growthMetricsTitle', 'Growth Metrics')}</h2>
                     </div>
                     <button onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
@@ -88,9 +88,9 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
                 <div style={styles.content}>
                     {loading ? (
-                        <div style={styles.loading}>{t('loading_metrics')}</div>
+                        <div style={styles.loading}>{t('analytics.loadingMetrics', 'Loading metrics...')}</div>
                     ) : !metrics ? (
-                        <div style={styles.empty}>{t('no_metrics_available')}</div>
+                        <div style={styles.empty}>{t('analytics.noMetrics', 'No metrics available')}</div>
                     ) : (
                         <div>
                             <div style={styles.statsGrid}>
@@ -99,14 +99,14 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                         <FaUsers className="text-5865-24" />
                                     </div>
                                     <div style={styles.statInfo}>
-                                        <div style={styles.statLabel}>{t('total_members')}</div>
+                                        <div style={styles.statLabel}>{t('analytics.totalMembers', 'Total Members')}</div>
                                         <div style={styles.statValue}>
                                             {formatNumber(metrics.total_members || 0)}
                                         </div>
                                         {metrics.member_growth !== undefined && (
                                             <div style={memberGrowthStyle}>
                                                 <FaArrowUp style={memberArrowStyle} />
-                                                {Math.abs(metrics.member_growth)}% this period
+                                                {Math.abs(metrics.member_growth)}% {t('analytics.thisPeriod', 'this period')}
                                             </div>
                                         )}
                                     </div>
@@ -117,7 +117,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                         <FaChartLine className="icon-success" />
                                     </div>
                                     <div style={styles.statInfo}>
-                                        <div style={styles.statLabel}>{t('active_members')}</div>
+                                        <div style={styles.statLabel}>{t('analytics.activeMembers', 'Active Members')}</div>
                                         <div style={styles.statValue}>
                                             {formatNumber(metrics.active_members || 0)}
                                         </div>
@@ -129,7 +129,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                                     100
                                                 ).toFixed(1)
                                                 : 0}
-                                            % of total
+                                            % {t('analytics.ofTotal', 'of total')}
                                         </div>
                                     </div>
                                 </div>
@@ -139,14 +139,14 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                         <span className="fs-24">💬</span>
                                     </div>
                                     <div style={styles.statInfo}>
-                                        <div style={styles.statLabel}>{t('messages_sent')}</div>
+                                        <div style={styles.statLabel}>{t('analytics.messagesSent', 'Messages Sent')}</div>
                                         <div style={styles.statValue}>
                                             {formatNumber(metrics.messages_sent || 0)}
                                         </div>
                                         {metrics.message_growth !== undefined && (
                                             <div style={messageGrowthStyle}>
                                                 <FaArrowUp style={messageArrowStyle} />
-                                                {Math.abs(metrics.message_growth)}% this period
+                                                {Math.abs(metrics.message_growth)}% {t('analytics.thisPeriod', 'this period')}
                                             </div>
                                         )}
                                     </div>
@@ -157,13 +157,13 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                         <FaCalendar className="text-f0b-24" />
                                     </div>
                                     <div style={styles.statInfo}>
-                                        <div style={styles.statLabel}>{t('new_joins')}</div>
+                                        <div style={styles.statLabel}>{t('analytics.newJoins', 'New Joins')}</div>
                                         <div style={styles.statValue}>
                                             {formatNumber(metrics.new_joins || 0)}
                                         </div>
                                         <div style={styles.statSubtext}>
                                             {metrics.retention_rate
-                                                ? `${metrics.retention_rate}% retention`
+                                                ? `${metrics.retention_rate}% ${t('analytics.retention', 'retention')}`
                                                 : ''}
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
                             {metrics.daily_stats && (
                                 <div style={styles.chartSection}>
-                                    <h3 style={styles.sectionTitle}>{t('daily_activity')}</h3>
+                                    <h3 style={styles.sectionTitle}>{t('analytics.dailyActivity', 'Daily Activity')}</h3>
                                     <div style={styles.chart}>
                                         {metrics.daily_stats.map((day, idx) => {
                                             const barFillStyle = {
@@ -197,7 +197,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
                             {metrics.top_contributors && (
                                 <div style={styles.section}>
-                                    <h3 style={styles.sectionTitle}>{t('top_contributors')}</h3>
+                                    <h3 style={styles.sectionTitle}>{t('analytics.topContributors', 'Top Contributors')}</h3>
                                     <div style={styles.contributorsList}>
                                         {metrics.top_contributors.slice(0, 10).map((user, idx) => (
                                             <div key={`item-${idx}`} style={styles.contributorCard}>
@@ -207,7 +207,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                                         {user.username}
                                                     </div>
                                                     <div style={styles.contributorStat}>
-                                                        {formatNumber(user.message_count)} messages
+                                                        {formatNumber(user.message_count)} {t('analytics.messages', 'messages')}
                                                     </div>
                                                 </div>
                                             </div>

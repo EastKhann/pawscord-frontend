@@ -8,8 +8,7 @@ import ChallengeCard from '../WeeklyChallengesPanel/ChallengeCard';
 import { useTranslation } from 'react-i18next';
 
 const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [_error, _setError] = useState(null);
     const { t } = useTranslation();
     const { challenges, userProgress, loading, activeTab, setActiveTab, timeRemaining } =
         useChallenges(fetchWithAuth, apiBaseUrl);
@@ -36,7 +35,7 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
                     <FaTrophy size={24} color="#f0b232" />
                     <div>
                         <h2 style={styles.title}>{t('challenges.title', 'Weekly Challenges')}</h2>
-                        <p style={styles.subtitle}>Complete challenges, earn rewards!</p>
+                        <p style={styles.subtitle}>{t('challenges.subtitle', 'Complete challenges, earn rewards!')}</p>
                     </div>
                 </div>
                 <div style={styles.timer}>
@@ -139,7 +138,7 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
             <div style={styles.summaryCard}>
                 <div style={styles.summaryHeader}>
                     <FaGem size={16} color="#e91e63" />
-                    <span>Bu Hafta</span>
+                    <span>{t('common.thisWeek', 'This Week')}</span>
                 </div>
                 <div style={styles.summaryStats}>
                     {[

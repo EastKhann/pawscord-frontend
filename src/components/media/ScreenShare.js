@@ -224,7 +224,7 @@ const ScreenShare = ({ serverId, onClose }) => {
 
                                     <div className="settings-grid">
                                         <div className="setting-group">
-                                            <label>Kalite</label>
+                                            <label>{t('screenShare.quality', 'Quality')}</label>
                                             <select
                                                 value={shareSettings.quality}
                                                 onChange={(e) =>

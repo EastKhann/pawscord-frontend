@@ -53,7 +53,7 @@ const CryptoChartModal = ({ symbol, onClose }) => {
         <div aria-label={t('aria.cryptoChartModal', 'Crypto Chart')} style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
-                    <h3>?? {rawSymbol} Chart</h3>
+                    <h3>📊 {rawSymbol} Grafik</h3>
                     <button onClick={onClose} style={styles.closeBtn} aria-label={t('common.close')}>
                         <FaTimes />
                     </button>

@@ -1,7 +1,7 @@
 ﻿// frontend/src/VoiceChatPanel.js
 // 🎤 PROFESYONEL SESLİ SOHBET PANELİ - Discord/Zoom Tarzı
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
